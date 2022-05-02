@@ -47,3 +47,5 @@ targetCustomizations:
                     storage: 20Gi
                 volumeMode: Filesystem
           type: pvc
+dependsOn:
+  - name: rancher-monitoring-crd
