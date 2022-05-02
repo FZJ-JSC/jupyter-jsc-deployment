@@ -48,4 +48,4 @@ targetCustomizations:
                 volumeMode: Filesystem
           type: pvc
 dependsOn:
-  - name: rancher-monitoring-crd
+  - name: basics-k3d-01-rancher-monitoring-rancher-monitoring-crd
