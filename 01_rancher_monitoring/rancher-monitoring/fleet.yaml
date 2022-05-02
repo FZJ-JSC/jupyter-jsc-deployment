@@ -11,7 +11,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: dev
-        provider: k3d
+        provider.cattle.io: k3s
     helm:
       grafana:  
         persistence:
