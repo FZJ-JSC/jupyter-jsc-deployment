@@ -1,0 +1,49 @@
+defaultNamespace: cattle-monitoring-system
+helm:
+  releaseName: rancher-monitoring
+  repo: https://charts.rancher.io
+  chart: rancher-monitoring
+  version: 100.1.2+up19.0.3
+  valuesFiles:
+    - values_k3s.yaml
+targetCustomizations:
+  - name: k3d
+    clusterSelector:
+      matchLabels:
+        stage: dev
+        provider: k3d
+    helm:
+      grafana:  
+        persistence:
+          accessModes:
+            - ReadWriteOnce
+          enabled: true
+          size: 5Gi
+          storageClassName: null
+      k3sControllerManager:
+        enabled: true
+      k3sProxy:
+        enabled: true
+      k3sScheduler:
+        enabled: true
+      k3sServer:
+        enabled: true
+      prometheus:
+        prometheusSpec:
+          evaluationInterval: 1m
+          resources:
+            requests:
+              memory: 1500Mi
+          retention: 7d
+          retentionSize: 20GiB
+          scrapeInterval: 1m
+          storageSpec:
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 20Gi
+                volumeMode: Filesystem
+          type: pvc
