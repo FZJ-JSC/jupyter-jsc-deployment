@@ -1,0 +1,8 @@
+defaultNamespace: jupyterjsc
+helm:
+  releaseName: ceticadminer
+  repo: https://cetic.github.io/helm-charts
+  chart: adminer
+  values:
+    service:
+      type: ClusterIP

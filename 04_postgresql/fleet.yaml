@@ -1,0 +1,43 @@
+defaultNamespace: jupyterjsc
+helm:
+  releaseName: postgresql
+  repo: https://charts.bitnami.com/bitnami
+  chart: postgresql
+  values:
+    auth:
+      existingSecret: "postgresql-auth"
+    primary:
+      extraEnvVarsSecret: "postgresql-users"
+      initdb:
+        scripts:
+          test_init_script.sh: |
+            #!/bin/sh
+            export PGPASSWORD=${POSTGRES_PASSWORD}
+
+            export JUPYTERHUB_SETUP=${JUPYTERHUB_SETUP:-"false"}
+            if [[ ${JUPYTERHUB_SETUP} == "true" ]]; then
+              psql -U postgres -c "CREATE DATABASE ${JUPYTERHUB_DATABASE};"
+              psql -U postgres -c "CREATE USER ${JUPYTERHUB_USER} WITH ENCRYPTED PASSWORD '${JUPYTERHUB_PASSWORD}';"
+              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${JUPYTERHUB_DATABASE} TO ${JUPYTERHUB_USER};"
+            fi
+
+            export UNICOREMGR_SETUP=${UNICOREMGR_SETUP:-"false"}
+            if [[ ${UNICOREMGR_SETUP} == "true" ]]; then
+              psql -U postgres -c "CREATE DATABASE ${UNICOREMGR_DATABASE};"
+              psql -U postgres -c "CREATE USER ${UNICOREMGR_USER} WITH ENCRYPTED PASSWORD '${UNICOREMGR_PASSWORD}';"
+              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${UNICOREMGR_DATABASE} TO ${UNICOREMGR_USER};"
+            fi
+
+            export TUNNEL_SETUP=${TUNNEL_SETUP:-"false"}
+            if [[ ${TUNNEL_SETUP} == "true" ]]; then
+              psql -U postgres -c "CREATE DATABASE ${TUNNEL_DATABASE};"
+              psql -U postgres -c "CREATE USER ${TUNNEL_USER} WITH ENCRYPTED PASSWORD '${TUNNEL_PASSWORD}';"
+              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${TUNNEL_DATABASE} TO ${TUNNEL_USER};"
+            fi
+
+            export K8SMGR_SETUP=${K8SMGR_SETUP:-"false"}
+            if [[ ${K8SMGR_SETUP} == "true" ]]; then
+              psql -U postgres -c "CREATE DATABASE ${K8SMGR_DATABASE};"
+              psql -U postgres -c "CREATE USER ${K8SMGR_USER} WITH ENCRYPTED PASSWORD '${K8SMGR_PASSWORD}';"
+              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${K8SMGR_DATABASE} TO ${K8SMGR_USER};"
+            fi
