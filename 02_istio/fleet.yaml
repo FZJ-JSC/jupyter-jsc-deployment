@@ -6,6 +6,6 @@ helm:
   version: 100.1.2+up1.11.7
   values:
     ingressGateways:
-      enbaled: false
+      enabled: false
     pilot:
       enabled: false
