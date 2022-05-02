@@ -1,0 +1,6 @@
+defaultNamespace: istio-system
+helm:
+  releaseName: rancher-istio
+  repo: https://charts.rancher.io
+  chart: rancher-istio
+  version: 100.1.2+up1.11.7
