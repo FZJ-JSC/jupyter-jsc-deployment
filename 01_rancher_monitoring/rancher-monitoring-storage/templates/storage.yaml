@@ -39,15 +39,3 @@ spec:
     server: {{ .Values.prometheus.server }}
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Retain
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ include "rancher-monitoring-storage.name" . }}-prometheus-pvc
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: {{ .Values.prometheus.size }}
-  volumeName: {{ include "rancher-monitoring-storage.name" . }}-prometheus-pv
