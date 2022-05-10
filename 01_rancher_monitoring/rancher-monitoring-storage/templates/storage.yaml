@@ -11,6 +11,7 @@ spec:
     path: {{ .Values.grafana.path }}
     server: {{ .Values.grafana.server }}
   volumeMode: Filesystem
+  storageClassName: nfs
   persistentVolumeReclaimPolicy: Retain
 ---
 apiVersion: v1
@@ -23,6 +24,7 @@ spec:
   resources:
     requests:
       storage: {{ .Values.grafana.size }}
+  storageClassName: nfs
   volumeName: {{ include "rancher-monitoring-storage.name" . }}-grafana-pv
 ---
 apiVersion: v1
@@ -40,4 +42,5 @@ spec:
     path: {{ .Values.prometheus.path }}
     server: {{ .Values.prometheus.server }}
   volumeMode: Filesystem
+  storageClassName: nfs
   persistentVolumeReclaimPolicy: Retain
