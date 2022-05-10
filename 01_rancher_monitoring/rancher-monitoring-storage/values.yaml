@@ -2,6 +2,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+nameOverride: "rancher-monitoring-storage"
+
 grafana:
   size: 40Gi
   path: /mnt/storage/monitoring/grafana
