@@ -43,4 +43,4 @@ helm:
             fi
 
 dependsOn:
-  - name: basics-staging-03-storageclass-longhorn
+  - name: basics-staging-03-storageclass-crd
