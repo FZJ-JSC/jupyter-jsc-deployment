@@ -1,0 +1,193 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "drf-unicoremgr.name" . }}
+  labels:
+    {{- include "drf-unicoremgr.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "drf-unicoremgr.name" . }}
+      {{- include "drf-unicoremgr.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "drf-unicoremgr.name" . }}
+        {{- include "drf-unicoremgr.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: prepare-shared-data
+          image: alpine:3.14
+          env:
+            - name: GIT_BRANCH
+              value: "{{ .Values.gitconfig.branch }}"
+            - name: GIT_REPO
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: REPOSITORY
+            - name: GIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: USERNAME
+              value: "{{ .Values.gitconfig.username }}"
+            - name: GIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: PASSWORD
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args:
+          - -c
+          - >-
+               apk add git && mkdir -p /mnt/shared-data/certs && mkdir -p /mnt/shared-data/files && cp -rp /mnt/volumes_certs/certs/..data/tls.key /mnt/shared-data/certs/unicoremgr.key && cp -rp /mnt/volumes_certs/certs/..data/tls.crt /mnt/shared-data/certs/unicoremgr.crt && cp -rp /mnt/volumes_files/files/..data/* /mnt/shared-data/files/. && chmod 400 /mnt/shared-data/certs/* && chmod 400 /mnt/shared-data/files/* && chown -R 1000:100 /mnt/shared-data/certs && chown -R 1000:100 /mnt/shared-data/files && export GIT_REPO_SHORT=${GIT_REPO#"https://"} && cd /mnt/shared-data && git clone --single-branch --branch ${GIT_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config || true
+          volumeMounts:
+            - name: certs
+              mountPath: /mnt/volumes_certs/certs
+            - name: files
+              mountPath: /mnt/volumes_files/files
+            - name: shared-data
+              mountPath: /mnt/shared-data
+      containers:
+        - name: main
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          {{- if .Values.devel }}
+          image: "{{ .Values.image.repository }}:devel"
+          {{- else }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          {{- end }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          #command: ["/bin/sh"]
+          #args:
+          #- -c
+          #- >-
+          #     while true; do sleep 30; done
+          envFrom:
+            - secretRef:
+                name: "{{ .Values.secrets.passwds }}"
+            - secretRef:
+                name: "{{ .Values.secrets.databaseGeneral }}"
+          env:
+            {{- if .Values.debug }}
+            - name: DEBUG
+              value: "true"
+            {{- end }}
+            - name: CONFIG_PATH
+              value: "/mnt/shared-data/files/config.json"
+            - name: GUNICORN_SSL_CRT
+              value: "/mnt/shared-data/certs/unicoremgr.crt"
+            - name: GUNICORN_SSL_KEY
+              value: "/mnt/shared-data/certs/unicoremgr.key"
+            - name: GUNICORN_PROCESSES
+              value: "4"
+            - name: GUNICORN_THREADS
+              value: "1"
+            - name: SQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.secrets.databaseUsers }}"
+                  key: UNICOREMGR_USER
+            - name: SQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.secrets.databaseUsers }}"
+                  key: UNICOREMGR_PASSWORD
+            - name: SQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.secrets.databaseUsers }}"
+                  key: UNICOREMGR_DATABASE
+          ports:
+            - name: https
+              containerPort: 8443
+              protocol: TCP
+          #livenessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: shared-data
+              mountPath: /mnt/shared-data
+        - name: mount-watch
+          image: alpine:3.14
+          imagePullPolicy: Always
+          env:
+            - name: GIT_BRANCH
+              value: "{{ .Values.gitconfig.branch }}"
+            - name: GIT_REPO
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: REPOSITORY
+            - name: GIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: USERNAME
+              value: "{{ .Values.gitconfig.username }}"
+            - name: GIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: PASSWORD
+          command: ["/bin/sh"]
+          args:
+          - -c
+          - >-
+              apk add bash git && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
+          volumeMounts:
+            - name: mount-watch
+              mountPath: /mnt/volumes_mw/mount_watch
+            - name: certs
+              mountPath: /mnt/volumes_certs/certs
+            - name: files
+              mountPath: /mnt/volumes_files/files
+            - name: shared-data
+              mountPath: /mnt/shared-data
+      volumes:
+      - name: shared-data
+        emptyDir: {}
+      - name: mount-watch
+        configMap:
+          defaultMode: 400
+          name: {{ include "drf-unicoremgr.name" . }}-mw
+      - name: files
+        configMap:
+          defaultMode: 400
+          name: {{ include "drf-unicoremgr.name" . }}-files
+      - name: certs
+        secret:
+          defaultMode: 400
+          secretName: {{ include "drf-unicoremgr.name" . }}-certs
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

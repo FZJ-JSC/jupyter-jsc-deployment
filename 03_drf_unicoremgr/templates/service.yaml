@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "drf-unicoremgr.name" . }}
+  labels:
+    {{- include "drf-unicoremgr.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "drf-unicoremgr.selectorLabels" . | nindent 4 }}

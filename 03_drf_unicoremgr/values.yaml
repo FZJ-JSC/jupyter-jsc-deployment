@@ -1,55 +1,30 @@
-# Default values for drf-tunnel.
+# Default values for drf-unicoremgr.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-nameOverride: "drf-tunnel"
-
-# Allows interactive start via VSCode to debug code
 devel: False
-
-# passed on to Django as DEBUG env variable
 debug: False
 
-# Public Keys from external sources (like hpc systems)
-authorized_keys:
-  - "abc1"
-  - "abc2"
-  - "abc3"
-
-cluster_internal_publickeys: []
-
-ssh_config_hosts_defaults:
-  serverAliveInterval: 60
-  serverAliveCountMax: 5
-  strictHostKeyChecking: "no"
-  usersKnownHostsFile: "/dev/null"
-  controlMaster: "auto"
-  controlPersist: 0
-
-ssh_config_hosts:
-  - name: "demo_site"
-    user: "ljupyter"
-    hostname: "unicore-abc.devel.svc"
-  - name: "k8smgr_hdfcloud"
-    user: "k8smgr"
-    port: 2222
-    hostname: "k8smgr-abc.devel.svc"
-
 image:
-  repository: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/tunneling-relaunch
+  repository: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/backend-relaunch
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.0.3-9"
-
+  tag: "1.0.4-3"
 
 secrets:
-  keypairs: "drf-tunnel-keypairs"
-  passwds: "drf-tunnel-passwds"
+  passwds: "drf-unicoremgr-passwds"
   databaseGeneral: "postgresql-general-jupyterjsc"
   databaseUsers: "postgresql-users-jupyterjsc"
 
-imagePullSecrets: 
+gitconfig:
+  branch: "unicoremgr-dev"
+  secret: "jupyter-jsc-config-jupyterjsc"
+
+imagePullSecrets:
   - name: "gitlab-registry-jupyterjsc"
+nameOverride: "unicoremgr"
+
+podAnnotations: {}
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -64,12 +39,23 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  ports:
-    https: 443
-    ssh: 2222
-  targetPorts:
-    https: 8443
-    ssh: 2222
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -82,6 +68,13 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
 
