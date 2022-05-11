@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "drf-tunnel.name" . }}-files
+  labels:
+    app: {{ template "drf-tunnel.name" . }}
+    chart: {{ template "drf-tunnel.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  authorized_keys: |
+    {{- range $auth_key := .Values.authorized_keys }}
+    {{ $auth_key }}
+    {{- end }}
+  config: |
+    Host *
+        ServerAliveInterval {{ default 60 .Values.ssh_config_hosts_defaults.serverAliveInterval }}
+        ServerAliveCountMax {{ default 5 .Values.ssh_config_hosts_defaults.serverAliveCountMax }}
+        StrictHostKeyChecking {{ default "no" .Values.ssh_config_hosts_defaults.strictHostKeyChecking }}
+        UserKnownHostsFile {{ default "/dev/null" .Values.ssh_config_hosts_defaults.usersKnownHostsFile }}
+        ControlMaster {{ default "auto" .Values.ssh_config_hosts_defaults.controlMaster }}
+        ControlPersist {{ default 0 .Values.ssh_config_hosts_defaults.controlPersist }}
+    {{- range $host := .Values.ssh_config_hosts }}
+    
+    Host tunnel_{{ $host.name }}
+        User {{ $host.user }}
+        Port {{ default 22 $host.port }}
+        HostName {{ $host.hostname }}
+        IdentityFile /home/tunnel/.ssh/tunnel
+        ControlPath /tmp/control_tunnel_{{ $host.name }}
+    
+    Host remote_{{ $host.name }}
+        User {{ $host.user }}
+        Port {{ default 22 $host.port }}
+        HostName {{ $host.hostname }}
+        IdentityFile /home/tunnel/.ssh/remote
+        ControlPath /tmp/control_remote_{{ $host.name }}
+    {{- end }}
