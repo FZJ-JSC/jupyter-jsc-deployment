@@ -45,11 +45,11 @@ image:
 secrets:
   keypairs: "tunnel-keypair-random"
   passwds: "tunnel-passwds-random"
-  databaseGeneral: "postgresql-general"
-  databaseUsers: "postgresql-users-random"
+  databaseGeneral: "postgresql-general-jupyterjsc"
+  databaseUsers: "postgresql-users-jupyterjsc"
 
 imagePullSecrets: 
-  - name: "gitlab-registry"
+  - name: "gitlab-registry-jupyterjsc"
 
 podSecurityContext: {}
   # fsGroup: 2000
