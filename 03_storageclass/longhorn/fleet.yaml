@@ -1,0 +1,29 @@
+defaultNamespace: longhorn-system
+helm:
+  releaseName: longhorn
+  repo: https://charts.rancher.io
+  chart: longhorn
+  version: 100.1.2+up1.2.4
+  values:
+    csi:
+      attacherReplicaCount: 2
+      provisionerReplicaCount: 2
+      resizerReplicaCount: 2
+      snapshotterReplicaCount: 2
+    image:
+      defaultImage: true
+    longhorn:
+      default_setting: true
+    longhornDriver:
+      nodeSelector:
+        worker: "true"
+    longhornManager:
+      nodeSelector:
+        worker: "true"
+    longhornUI:
+      nodeSelector:
+        worker: "true"
+    persistence:
+      defaultClassReplicaCount: 2
+dependsOn:
+  - name: basics-staging-03-storageclass-crd
