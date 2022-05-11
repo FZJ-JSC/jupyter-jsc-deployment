@@ -1,0 +1,135 @@
+defaultNamespace: cattle-monitoring-system
+helm:
+  releaseName: rancher-monitoring
+  repo: https://charts.rancher.io
+  chart: rancher-monitoring
+  version: 100.1.2+up19.0.3
+  grafana:
+    grafana.ini:
+      smtp:
+        enabled: true
+        from_address: jupyter.jsc@fz-juelich.de
+        from_name: Jupyter-JSC Monitoring
+        host: mail.fz-juelich.de:25
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: dev
+        provider.cattle.io: rke
+    helm:
+      alertmanager:
+        alertmanagerSpec:
+          configSecret: alertmanager-rancher-monitoring-alertmanager
+          nodeSelector:
+            monitoring: "true"
+          useExistingSecret: true
+      grafana:
+        nodeSelector:
+          monitoring: "true"
+        persistence:
+          enabled: true
+          existingClaim: rancher-monitoring-storage-grafana-pvc
+          subPath: null
+          type: null
+      ingressNginx:
+        enabled: true
+      kube-state-metrics:
+        nodeSelector:
+          monitoring: "true"
+      prometheus:
+        prometheusSpec:
+          evaluationInterval: 1m
+          nodeSelector:
+            monitoring: "true"
+          retentionSize: 50GiB
+          scrapeInterval: 1m
+          storageSpec:
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                - ReadWriteMany
+                resources:
+                  requests:
+                    storage: 50Gi
+                storageClassName: nfs
+                volumeMode: Filesystem
+                volumeName: rancher-monitoring-storage-prometheus-pv
+      prometheus-adapter:
+        nodeSelector:
+          monitoring: "true"
+      prometheusOperator:
+        admissionWebhooks:
+          patch:
+            nodeSelector:
+              monitoring: "true"
+        nodeSelector:
+          monitoring: "true"
+      rkeControllerManager:
+        enabled: true
+        proxy:
+          nodeSelector:
+            monitoring: "true"
+      rkeEtcd:
+        enabled: true
+        proxy:
+          nodeSelector:
+            monitoring: "true"
+      rkeIngressNginx:
+        clients:
+          nodeSelector:
+            monitoring: "true"
+      rkeProxy:
+        enabled: true
+        proxy:
+          nodeSelector:
+            monitoring: "true"
+      rkeScheduler:
+        enabled: true
+        proxy:
+          nodeSelector:
+            monitoring: "true"
+  - name: k3d
+    clusterSelector:
+      matchLabels:
+        stage: dev
+        provider.cattle.io: k3s
+    helm:
+      alertmanager:
+        enabled: false
+      grafana:  
+        persistence:
+          accessModes:
+            - ReadWriteOnce
+          enabled: true
+          size: 5Gi
+          storageClassName: null
+      k3sControllerManager:
+        enabled: true
+      k3sProxy:
+        enabled: true
+      k3sScheduler:
+        enabled: true
+      k3sServer:
+        enabled: true
+      prometheus:
+        prometheusSpec:
+          evaluationInterval: 1m
+          resources:
+            requests:
+              memory: 1500Mi
+          retention: 7d
+          retentionSize: 20GiB
+          scrapeInterval: 1m
+          storageSpec:
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 20Gi
+                volumeMode: Filesystem
+dependsOn:
+  - name: basics-staging-01-monitor-crd
+  - name: basics-staging-01-monitor-storage

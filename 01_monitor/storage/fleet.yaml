@@ -1,0 +1,19 @@
+defaultNamespace: cattle-monitoring-system
+helm:
+  grafana:
+    path: /mnt/storage/monitoring/grafana
+  prometheus:
+    path: /mnt/storage/monitoring/prometheus
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: dev
+        provider.cattle.io: rke
+    helm:
+      grafana:
+        size: 20Gi
+        server: 10.0.94.174
+      prometheus:
+        size: 40Gi
+        server: 10.0.94.174
