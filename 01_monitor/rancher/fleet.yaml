@@ -15,7 +15,7 @@ targetCustomizations:
   - name: staging
     clusterSelector:
       matchLabels:
-        stage: dev
+        stage: staging
         provider.cattle.io: rke
     helm:
       alertmanager:
