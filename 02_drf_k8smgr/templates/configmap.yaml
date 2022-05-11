@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "k8smgr.name" . }}-files
+  labels:
+    app: {{ template "k8smgr.name" . }}
+    chart: {{ template "k8smgr.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  authorized_keys: |
+    {{- range $auth_key := .Values.authorized_keys }}
+    {{ $auth_key }}
+    {{- end }}
+  manage_tunnel.sh: |
+    #!/bin/bash
+    while getopts ":a:" opt; do
+        case $opt in
+            a) ACTION="$OPTARG"
+            ;;
+            \?) exit 255
+            ;;
+        esac
+    done
+
+
+    HOSTNAME_="{{ include "k8smgr.name" . }}-jupyterhub-forward"
+    LOCAL_PORT=56789
+
+    PRIVATE_KEY="/mnt/shared-data/keypairs/k8smgr"
+    TUNNEL_SSH_PORT={{ .Values.tunnel.port }}
+    TUNNEL_SSH_USER={{ .Values.tunnel.user }}
+    TUNNEL_SSH_HOST={{ .Values.tunnel.host }}
+
+    JUPYTERHUB_HOST={{ .Values.jupyterhub.host }}
+    JUPYTERHUB_PORT={{ .Values.jupyterhub.port }}
+
+    FORWARD_BLOCK="${HOSTNAME_}:${LOCAL_PORT}:${JUPYTERHUB_HOST}:${JUPYTERHUB_PORT}" 
+    FORWARD_OPTIONS="-oLogLevel=ERROR -oUserKnownHostsFile=/dev/null -oServerAliveInterval=30 -oExitOnForwardFailure=yes -oStrictHostKeyChecking=no"
+
+    get_pid () {
+        pgrep -f $FORWARD_BLOCK
+    }
+
+    check_tunnel () {
+        PID=$(get_pid)
+        if [[ -n $PID ]]; then
+            # Process is running, try to call it with curl, if curl's available
+            which curl &> /dev/null
+            if [[ $? -eq 0 ]]; then
+                STATUS_CODE=$(curl --write-out '%{http_code}' --silent --output /dev/null http://${HOSTNAME_}:${LOCAL_PORT}/hub/api)
+                if [[ ${STATUS_CODE} -eq 200 ]]; then
+                    return 217
+                else
+                    return 218
+                fi
+            else
+                # Curl not available, return 217 (running)
+                return 217
+            fi
+        else
+            return 218
+        fi
+    }
+
+    start_tunnel () {
+        ssh -p ${TUNNEL_SSH_PORT} -i ${PRIVATE_KEY} ${FORWARD_OPTIONS} -L${FORWARD_BLOCK} ${TUNNEL_SSH_USER}@${TUNNEL_SSH_HOST} -f -N
+    }
+
+    stop_tunnel () {
+        PID=$(get_pid)
+        if [[ -n $PID ]]; then
+            kill -9 ${PID}
+        fi
+    }
+
+    START="0aca3fdbc4023500b5e2bb254f95f55932785e6dc33c4f12011f25f3d47403875343a985c07de18e6a568c9fcc04ef8a1400cf2e3118dfb28ace4b58ead3c962"
+    STATUS="2eca457db671091b7ac46ba48bea07d541f379523a0bdf232bc2261198bbe9289774a9ba7d0d1cf69a3c235762e266927158e8a23f0f1a3e50acc529948df01d"
+    STOP="deb7ef7b249b1df1352525c37b8bbe3d1f6c8f36c6993e4dd6a7f87de38b8ac3dec37ee87d53024fdfa0aeeea7fc43a6147cb6df42431cc1ee66028838bfac39"
+
+    if [[ ${ACTION} == ${START} ]]; then
+        check_tunnel
+        if [[ $? -eq 217 ]]; then
+            exit 217
+        else
+            start_tunnel
+        fi
+    elif [[ ${ACTION} == ${STOP} ]]; then
+        stop_tunnel
+    elif [[ ${ACTION} == ${STATUS} ]]; then
+        :;
+    else
+        exit 255
+    fi
+
+    check_tunnel
+    exit $?
+  config.json: |
+    {
+      "services": {
+        "base": "/tmp/services",
+        "yaml_filename": "service.yaml",
+        "descriptions": "/mnt/shared-data/git_config",
+        "deployment_main_name_prefix": "depl-",
+        "container_main_name": "main",
+        "replace_indicators": ["<",">"],
+        "replace_drfid_keyword": "id",
+        "replace_uniqueuserid_keyword": "unique_user_id",
+        "replace_secretname_keyword": "secret_name",
+        "replace_secretcertsname_keyword": "secret_certs_name",
+        "replace_namespace_keyword": "namespace",
+        "replace_quotavo_keyword": "quotavo",
+        "env": {
+            "JUPYTERHUB_API_URL": "http://{{ include "k8smgr.name" . }}-jupyterhub-forward:56789/hub/api"
+        },
+        "ssl": {
+            "enabled": true
+        }
+      },
+      "userhomes": {
+        "base": "/tmp/userhomes",
+        "skel": "/mnt/shared-data/git_config/userhomes_skel"
+      },
+      "tunnel": {
+        "k8smgr_hostname": "{{ include "k8smgr.name" . }}",
+        "restart_url": "http://{{ .Values.jupyterhub.host }}:{{ .Values.jupyterhub.port }}/hub/api/restarttunnel",
+        "credentials_env_name": "TUNNEL_BASIC",
+        "timeout": 10,
+        {{- if .Values.secrets.tunnel_certs }}
+        "certificate_path": "/mnt/shared-data/certs_tunnel/tunnel.crt"
+        {{- else }}
+        "certificate_path": false
+        {{- end }}
+      }
+    }
+

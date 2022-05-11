@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "k8smgr.name" . }}-mw
+  labels:
+    app: {{ template "k8smgr.name" . }}
+    chart: {{ template "k8smgr.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  run.sh: |
+    #!/bin/bash
+    while true;
+    do
+      sleep 60
+      /bin/bash /mnt/volumes_mw/mount_watch/..data/compare.sh
+    done
+  compare.sh: |
+    #!/bin/bash
+    compare () {
+      if [[ ! -f $1 ]]; then
+        echo "$(date) $1 does not exist. Exit 1"
+        exit 1
+      fi
+      if [[ ! -f $2 ]]; then
+        echo "$(date) $2 does not exist. Create it."
+        cp -rp $1 $2
+      fi
+      cmp -s $1 $2
+      EC=$?
+      if [[ ! $EC -eq 0 ]]; then
+        # File has changed. It's important, that the files have the correct ownership 
+        echo "$(date) $1 changed"
+        filename=$(basename $1)
+        cp $1 /tmp/$filename
+        chown 1000:100 /tmp/$filename
+        chmod 400 /tmp/$filename
+        cp -rp /tmp/$filename $2 && rm /tmp/$filename
+      fi
+    }
+    cd /mnt/shared-data/git_config
+    echo "$(date) Compare configmaps with current files"
+    {{- if .Values.secrets.tunnel_certs }}
+    compare "/mnt/volumes_tunnel_certs/certs/..data/tls.crt" "/mnt/shared-data/certs_tunnel/tunnel.crt"
+    {{- end }}
+    compare "/mnt/volumes_certs/certs/..data/tls.crt" "/mnt/shared-data/certs/tunnel.crt"
+    compare "/mnt/volumes_certs/certs/..data/tls.key" "/mnt/shared-data/certs/tunnel.key"
+    compare "/mnt/volumes_files/files/..data/manage_tunnel.sh" "/mnt/shared-data/files/manage_tunnel.sh"
+    compare "/mnt/volumes_keypairs/keypairs/..data/tunnel" "/mnt/shared-data/keypairs/tunnel"
+    compare "/mnt/volumes_keypairs/keypairs/..data/remote" "/mnt/shared-data/keypairs/remote"
+    cp /mnt/volumes_files/files/..data/authorized_keys /tmp/authorized_keys
+    {{- if .Values.cluster_internal_publickeys }}
+    {{- range $secretname := .Values.cluster_internal_publickeys }}
+    PUBLICKEY=$(cat /mnt/volumes_{{ $secretname }}/..data/ssh-publickey)
+    echo "restrict,port-forwarding,command=\"/bin/echo No commands allowed\" ${PUBLICKEY}" >> /tmp/authorized_keys
+    {{- end }}
+    {{- end }}
+    compare "/tmp/authorized_keys" "/mnt/shared-data/files/authorized_keys"
+    git pull origin {{ .Values.gitconfig.branch }}

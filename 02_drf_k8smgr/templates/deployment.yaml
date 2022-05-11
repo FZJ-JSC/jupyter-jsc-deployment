@@ -1,0 +1,247 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8smgr.name" . }}
+  labels:
+    {{- include "k8smgr.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "k8smgr.name" . }}
+      {{- include "k8smgr.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "k8smgr.name" . }}
+        {{- include "k8smgr.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "k8smgr.name" . }}-svc-acc
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: prepare-shared-data
+          image: alpine:3.14
+          env:
+            - name: GIT_BRANCH
+              value: "{{ .Values.gitconfig.branch }}"
+            - name: GIT_REPO
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: REPOSITORY
+            - name: GIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: USERNAME
+              value: "{{ .Values.gitconfig.username }}"
+            - name: GIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: PASSWORD
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args:
+          - -c
+          - >-
+            apk add git && mkdir -p /mnt/shared-data/certs && mkdir -p /mnt/shared-data/files && mkdir -p /mnt/shared-data/keypairs && cp -rp /mnt/volumes_certs/certs/..data/tls.key /mnt/shared-data/certs/k8smgr.key && cp -rp /mnt/volumes_certs/certs/..data/tls.crt /mnt/shared-data/certs/k8smgr.crt && cp -rp /mnt/volumes_files/files/..data/* /mnt/shared-data/files/. && cp -rp /mnt/volumes_keypairs/keypairs/..data/* /mnt/shared-data/keypairs/. && chmod 400 /mnt/shared-data/certs/* && chmod 400 /mnt/shared-data/files/* && chmod 400 /mnt/shared-data/keypairs/* && chown -R 1000:100 /mnt/shared-data/certs && chown -R 1000:100 /mnt/shared-data/files && chown -R 1000:100 /mnt/shared-data/keypairs && cd /mnt/shared-data && export GIT_REPO_SHORT=${GIT_REPO#"https://"} && git clone --single-branch --branch ${GIT_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config || true
+          volumeMounts:
+            - name: certs
+              mountPath: /mnt/volumes_certs/certs
+            - name: files
+              mountPath: /mnt/volumes_files/files
+            - name: keypairs
+              mountPath: /mnt/volumes_keypairs/keypairs
+            - name: shared-data
+              mountPath: /mnt/shared-data
+            {{- if .Values.cluster_internal_publickeys }}
+            {{- range $secretname := .Values.cluster_internal_publickeys }}
+            - name: {{ $secretname }}
+              mountPath: /mnt/volumes_{{ $secretname }}/{{ $secretname }}
+            {{- end }}
+            {{- end }}
+      containers:
+        - name: main
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          {{- if .Values.devel }}
+          image: "{{ .Values.image.repository }}:devel"
+          {{- else }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          {{- end }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "echo \"$POD_IP {{ include "k8smgr.name" . }}-jupyterhub-forward\" >> /etc/hosts"]
+          envFrom:
+            - secretRef:
+                name: "{{ .Values.secrets.passwds }}"
+            - secretRef:
+                name: "{{ .Values.secrets.databaseGeneral }}"
+          env:
+            {{- if .Values.debug }}
+            - name: DEBUG
+              value: "true"
+            {{- end }}
+            - name: AUTHORIZED_KEYS_PATH
+              value: "/mnt/shared-data/files"
+            - name: CONFIG_PATH
+              value: "/mnt/shared-data/files/config.json"
+            - name: GUNICORN_SSL_CRT
+              value: "/mnt/shared-data/certs/k8smgr.crt"
+            - name: GUNICORN_SSL_KEY
+              value: "/mnt/shared-data/certs/k8smgr.key"
+            - name: GUNICORN_PROCESSES
+              value: "4"
+            - name: GUNICORN_THREADS
+              value: "1"
+            {{- if .Values.secrets.tunnelpasswds }}
+            - name: TUNNELSVC_K8SMGR_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.secrets.tunnelpasswds }}"
+                  key: K8SMGR_USER_PASS
+            {{- end }}
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: SQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.secrets.databaseUsers }}"
+                  key: K8SMGR_USER
+            - name: SQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.secrets.databaseUsers }}"
+                  key: K8SMGR_PASSWORD
+            - name: SQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.secrets.databaseUsers }}"
+                  key: K8SMGR_DATABASE
+            - name: DEPLOYMENT_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['app']
+            - name: DEPLOYMENT_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - name: https
+              containerPort: 8443
+              protocol: TCP
+            - name: ssh
+              containerPort: 2222
+              protocol: TCP
+          # livenessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: shared-data
+              mountPath: /mnt/shared-data
+        - name: mount-watch
+          image: alpine:3.14
+          imagePullPolicy: Always
+          env:
+            - name: GIT_BRANCH
+              value: "{{ .Values.gitconfig.branch }}"
+            - name: GIT_REPO
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: REPOSITORY
+            - name: GIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: USERNAME
+              value: "{{ .Values.gitconfig.username }}"
+            - name: GIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.gitconfig.secret }}"
+                  key: PASSWORD
+          command: ["/bin/sh"]
+          args:
+          - -c
+          - >-
+              apk add bash git && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
+          volumeMounts:
+            - name: mount-watch
+              mountPath: /mnt/volumes_mw/mount_watch
+            - name: certs
+              mountPath: /mnt/volumes_certs/certs
+            - name: files
+              mountPath: /mnt/volumes_files/files
+            - name: keypairs
+              mountPath: /mnt/volumes_keypairs/keypairs
+            - name: shared-data
+              mountPath: /mnt/shared-data
+            {{- if .Values.cluster_internal_publickeys }}
+            {{- range $secretname := .Values.cluster_internal_publickeys }}
+            - name: {{ $secretname }}
+              mountPath: /mnt/volumes_{{ $secretname }}/{{ $secretname }}
+            {{- end }}
+            {{- end }}
+      volumes:
+      - name: shared-data
+        emptyDir: {}
+      - name: mount-watch
+        configMap:
+          defaultMode: 400
+          name: {{ include "k8smgr.name" . }}-mw
+      - name: files
+        configMap:
+          defaultMode: 400
+          name: {{ include "k8smgr.name" . }}-files
+      - name: certs
+        secret:
+          defaultMode: 400
+          secretName: {{ include "k8smgr.name" . }}-certs
+      - name: keypairs
+        secret:
+          defaultMode: 400
+          secretName: "{{ .Values.secrets.keypairs }}"
+      {{- if .Values.cluster_internal_publickeys }}
+      {{- range $secretname := .Values.cluster_internal_publickeys }}
+      - name: {{ $secretname }}
+        secret:
+          defaultMode: 400
+          secretName: "{{ $secretname }}"
+      {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
