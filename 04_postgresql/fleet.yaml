@@ -3,6 +3,7 @@ helm:
   releaseName: postgresql
   repo: https://charts.bitnami.com/bitnami
   chart: postgresql
+  version: 11.1.28
   values:
     auth:
       existingSecret: "postgresql-auth"
@@ -41,6 +42,10 @@ helm:
               psql -U postgres -c "CREATE USER ${K8SMGR_USER} WITH ENCRYPTED PASSWORD '${K8SMGR_PASSWORD}';"
               psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${K8SMGR_DATABASE} TO ${K8SMGR_USER};"
             fi
-
+      nodeSelector:
+        worker: "true"
+      persistence:
+        storageClass: "longhorn"
+        size: 4Gi
 dependsOn:
   - name: basics-staging-03-storageclass-crd
