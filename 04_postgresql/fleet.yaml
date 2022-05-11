@@ -41,3 +41,6 @@ helm:
               psql -U postgres -c "CREATE USER ${K8SMGR_USER} WITH ENCRYPTED PASSWORD '${K8SMGR_PASSWORD}';"
               psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${K8SMGR_DATABASE} TO ${K8SMGR_USER};"
             fi
+
+dependsOn:
+  - name: basics-staging-03-storageclass-longhorn
