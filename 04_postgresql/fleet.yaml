@@ -1,4 +1,4 @@
-defaultNamespace: jupyterjsc
+defaultNamespace: database
 helm:
   releaseName: postgresql
   repo: https://charts.bitnami.com/bitnami

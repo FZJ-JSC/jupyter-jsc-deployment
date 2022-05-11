@@ -1,4 +1,4 @@
-defaultNamespace: jupyterjsc
+defaultNamespace: database
 helm:
   releaseName: ceticadminer
   repo: https://cetic.github.io/helm-charts
