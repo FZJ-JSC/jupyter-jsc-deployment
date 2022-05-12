@@ -1,5 +1,6 @@
 defaultNamespace: ingress-nginx
 helm:
+  releaseName: ingress-nginx
   chart: https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.1.1/ingress-nginx-4.1.1.tgz
   values:
     controller:
@@ -11,7 +12,7 @@ helm:
         use-proxy-protocol: "true"
       kind: DaemonSet
       metrics:
-        enabled: false
+        enabled: true
         serviceMonitor:
           additionalLabels:
             release: prometheus-stack
@@ -32,3 +33,5 @@ targetCustomizations:
         controller:
           service:
             loadBalancerIP: 134.94.199.199
+dependsOn:
+  - name: basics-staging-02-monitor-crd

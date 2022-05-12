@@ -1,0 +1,13 @@
+defaultNamespace: kube-system
+helm:
+  releaseName: cinder
+  chart: https://github.com/kubernetes/cloud-provider-openstack/releases/download/openstack-cinder-csi-1.4.9/openstack-cinder-csi-1.4.9.tgz
+  values:
+    storageClass:
+      retain:
+        isDefault: true
+        allowVolumeExpansion: false
+    secret:
+      enabled: true
+      name: cloud-config
+

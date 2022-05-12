@@ -45,7 +45,7 @@ helm:
       nodeSelector:
         worker: "true"
       persistence:
-        storageClass: "longhorn"
+        storageClass: ""
         size: 4Gi
 dependsOn:
   - name: basics-staging-04-storageclass-crd
