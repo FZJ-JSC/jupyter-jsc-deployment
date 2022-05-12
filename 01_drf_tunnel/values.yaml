@@ -63,13 +63,34 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
+  annotations: {}
+  labels: {}
+  clusterIP: ""
+  ## List of IP addresses at which the tunneling  service is available
+  ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+  ##
+  externalIPs: []
+
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  servicePort: 443
+  # nodePort: 30000
   type: ClusterIP
-  ports:
-    https: 443
-    ssh: 2222
-  targetPorts:
-    https: 8443
-    ssh: 2222
+
+servicessh:
+  annotations: {}
+  labels: {}
+  clusterIP: ""
+  ## List of IP addresses at which the tunneling  service is available
+  ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+  ##
+  externalIPs: []
+
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  servicePort: 30022
+  type: "LoadBalancer"
+
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

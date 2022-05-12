@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+{{- if .Values.servicessh.annotations }}
+  annotations:
+{{ toYaml .Values.servicessh.annotations | indent 4 }}
+{{- end }}
+  labels:
+    {{- include "drf-tunnel.labels" . | nindent 4 }}
+{{- if .Values.servicessh.labels }}
+{{ toYaml .Values.servicessh.labels | indent 4 }}
+{{- end }}
+  name: {{ include "drf-tunnel.name" . }}-ssh
+spec:
+{{- if .Values.servicessh.clusterIP }}
+  clusterIP: {{ .Values.servicessh.clusterIP }}
+{{- end }}
+{{- if .Values.servicessh.externalIPs }}
+  externalIPs:
+{{ toYaml .Values.servicessh.externalIPs | indent 4 }}
+{{- end }}
+{{- if .Values.servicessh.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.servicessh.loadBalancerIP }}
+{{- end }}
+{{- if .Values.servicessh.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{- range $cidr := .Values.servicessh.loadBalancerSourceRanges }}
+    - {{ $cidr }}
+  {{- end }}
+{{- end }}
+  type: "{{ .Values.servicessh.type }}"
+  ports:
+    - port: {{ .Values.servicessh.servicePort }}
+      targetPort: {{ .Values.servicessh.targetPort }}
+      protocol: TCP
+      name: ssh
+    {{- if .Values.servicessh.nodePort }}
+      nodePort: {{ .Values.servicessh.nodePort }}
+    {{- end }}
+  selector:
+    {{- include "drf-tunnel.selectorLabels" . | nindent 4 }}
+
