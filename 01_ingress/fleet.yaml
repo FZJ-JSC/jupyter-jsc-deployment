@@ -1,0 +1,36 @@
+defaultNamespace: ingress-nginx
+helm:
+  releaseName: nginx-ingress
+  repo: https://git.rancher.io/partner-charts
+  chart: nginx-ingress
+  version: 0.13.0
+  values:
+    controller:
+      config:
+        compute-full-forwarded-for: "true"
+        proxy-real-ip-cidr: 0.0.0.0/0
+        real-ip-header: proxy_protocol
+        use-forwarded-headers: "true"
+        use-proxy-protocol: "true"
+      metrics:
+        enabled: true
+        serviceMonitor:
+          additionalLabels:
+            release: prometheus-stack
+          enabled: true
+          namespace: cattle-monitoring-system
+      service:
+        annotations:
+          loadbalancer.openstack.org/keep-floatingip: true
+          loadbalancer.openstack.org/proxy-protocol: "true"
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+        provider.cattle.io: rke
+    helm:
+      values:
+        controller:
+          service:
+            loadBalancerIP: 134.94.199.231

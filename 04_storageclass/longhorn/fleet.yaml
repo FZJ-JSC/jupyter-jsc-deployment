@@ -26,4 +26,4 @@ helm:
     persistence:
       defaultClassReplicaCount: 2
 dependsOn:
-  - name: basics-staging-03-storageclass-crd
+  - name: basics-staging-04-storageclass-crd

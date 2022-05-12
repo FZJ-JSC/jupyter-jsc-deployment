@@ -134,5 +134,6 @@ targetCustomizations:
                       storage: 20Gi
                   volumeMode: Filesystem
 dependsOn:
-  - name: basics-staging-01-monitor-crd
-  - name: basics-staging-01-monitor-storage
+  - name: basics-staging-01-ingress
+  - name: basics-staging-02-monitor-crd
+  - name: basics-staging-02-monitor-storage
