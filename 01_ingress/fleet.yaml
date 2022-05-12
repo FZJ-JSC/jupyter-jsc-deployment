@@ -1,8 +1,8 @@
 defaultNamespace: ingress-nginx
 helm:
   releaseName: nginx-ingress
-  repo: https://git.rancher.io
-  chart: partner-charts/nginx-ingress
+  repo: https://helm.nginx.com/stable
+  chart: nginx-ingress
   version: 0.13.0
   values:
     controller:
