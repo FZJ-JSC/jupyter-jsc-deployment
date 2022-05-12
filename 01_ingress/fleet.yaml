@@ -10,7 +10,6 @@ helm:
         real-ip-header: proxy_protocol
         use-forwarded-headers: "true"
         use-proxy-protocol: "true"
-      kind: DaemonSet
       metrics:
         enabled: true
         serviceMonitor:
