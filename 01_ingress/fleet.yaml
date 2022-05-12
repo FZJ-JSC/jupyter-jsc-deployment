@@ -33,4 +33,4 @@ targetCustomizations:
       values:
         controller:
           service:
-            loadBalancerIP: 134.94.199.14
+            loadBalancerIP: 134.94.199.199
