@@ -8,6 +8,6 @@ helm:
         isDefault: true
         allowVolumeExpansion: false
     secret:
-      enabled: true
+      enabled: false
       name: cloud-config
 
