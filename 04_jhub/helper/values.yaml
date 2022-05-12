@@ -14,7 +14,7 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-  tls: []
+  tls: 
     - secretName: jupyterhub-local
       hosts:
         - jupyterhub.local
