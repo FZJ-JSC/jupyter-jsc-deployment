@@ -48,4 +48,4 @@ helm:
         storageClass: ""
         size: 4Gi
 dependsOn:
-  - name: basics-staging-04-storageclass-crd
+  - name: basics-storageclass

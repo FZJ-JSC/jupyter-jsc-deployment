@@ -7,4 +7,4 @@ helm:
     service:
       type: ClusterIP
 dependsOn:
-  - name: basics-staging-05-postgresql
+  - name: basics-postgresql

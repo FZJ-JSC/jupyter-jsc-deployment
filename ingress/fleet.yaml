@@ -34,4 +34,4 @@ targetCustomizations:
           service:
             loadBalancerIP: 134.94.199.199
 dependsOn:
-  - name: basics-staging-02-monitor-crd
+  - name: basics-monitor-crd
