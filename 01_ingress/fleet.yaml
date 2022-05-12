@@ -1,7 +1,7 @@
 defaultNamespace: ingress-nginx
 helm:
   releaseName: test2
-  repo: https://github.com/kubernetes/ingress-nginx.git?ref=helm-chart-4.1.1 
+  repo: github.com/kubernetes/ingress-nginx.git?ref=helm-chart-4.1.1 
   chart: charts/ingress-nginx
   values:
     controller:
