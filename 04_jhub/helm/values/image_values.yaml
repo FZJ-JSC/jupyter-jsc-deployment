@@ -1,0 +1,6 @@
+hub:
+  image:
+    pullSecrets:
+      - "gitlab-registry-jupyterjsc"
+    name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jupyterhub-relaunch
+    tag: "latest"

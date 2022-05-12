@@ -1,0 +1,33 @@
+hub:
+  extraEnv:
+    - name: LOGGING_CONFIG_FILE
+      value: "/mnt/persistent/logging.json"
+    - name: SQL_HOST
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-general-jupyterjsc
+          key: SQL_HOST
+    - name: SQL_PORT
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-general-jupyterjsc
+          key: SQL_PORT
+    - name: SQL_DATABASE
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-users-jupyterjsc
+          key: JUPYTERHUB_DATABASE
+    - name: SQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-users-jupyterjsc
+          key: JUPYTERHUB_PASSWORD
+    - name: SQL_USER
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-users-jupyterjsc
+          key: JUPYTERHUB_USER
+    - name: DEPLOYMENT_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace

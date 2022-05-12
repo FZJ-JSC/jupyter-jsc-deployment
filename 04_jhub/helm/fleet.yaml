@@ -1,0 +1,42 @@
+defaultNamespace: jupyterjsc
+helm:
+  releaseName: jupyterhub
+  repo: https://jupyterhub.github.io/helm-chart/
+  chart: jupyterhub
+  values:
+    hub:
+      nodeSelector:
+        worker: "true"
+  valuesFiles:
+    - values/config_values.yaml
+    - values/env_values.yaml
+    - values/image_values.yaml
+    - values/initcontainer_values.yaml
+    - values/proxy_values.yaml
+    - values/ssl_values.yaml
+    - values/volumes_values.yaml
+
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        hub:
+          labels:
+            stage: dev
+          livenessProbe:
+            enabled: False
+          readinessProbe:
+            enabled: False
+          command: ["/bin/bash"]
+          args:
+            - -c
+            - >-
+              rm -rf /mnt/shared-data/tmp-internal-ssl/* && /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+          extraConfig:
+            stagingConfig: |-
+              c.JupyterHub.trusted_alt_names = [
+                "DNS:jupyterhub.local"
+              ]

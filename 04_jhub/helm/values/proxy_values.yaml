@@ -1,0 +1,15 @@
+proxy:
+  service:
+    type: ClusterIP
+  chp:
+    extraPodSpec:
+      initContainers:
+        - name: test
+          image: alpine:3.14
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - >-
+              mkdir -p /mnt/persistent/jhub
+              #while true; do sleep 30; done

@@ -1,0 +1,96 @@
+{
+    "proxy-api-ca": {
+        "serial": 0,
+        "is_ca": true,
+        "parent_ca": "",
+        "signees": {
+            "proxy-api": 1
+        },
+        "files": {
+            "key": "internal-ssl/proxy-api-ca/proxy-api-ca.key",
+            "cert": "internal-ssl/proxy-api-ca/proxy-api-ca.crt",
+            "ca": ""
+        }
+    },
+    "notebooks-ca": {
+        "serial": 0,
+        "is_ca": true,
+        "parent_ca": "",
+        "signees": null,
+        "files": {
+            "key": "internal-ssl/notebooks-ca/notebooks-ca.key",
+            "cert": "internal-ssl/notebooks-ca/notebooks-ca.crt",
+            "ca": ""
+        }
+    },
+    "hub-ca": {
+        "serial": 0,
+        "is_ca": true,
+        "parent_ca": "",
+        "signees": {
+            "hub-internal": 1
+        },
+        "files": {
+            "key": "internal-ssl/hub-ca/hub-ca.key",
+            "cert": "internal-ssl/hub-ca/hub-ca.crt",
+            "ca": ""
+        }
+    },
+    "services-ca": {
+        "serial": 0,
+        "is_ca": true,
+        "parent_ca": "",
+        "signees": null,
+        "files": {
+            "key": "internal-ssl/services-ca/services-ca.key",
+            "cert": "internal-ssl/services-ca/services-ca.crt",
+            "ca": ""
+        }
+    },
+    "proxy-client-ca": {
+        "serial": 0,
+        "is_ca": true,
+        "parent_ca": "",
+        "signees": {
+            "proxy-client": 1
+        },
+        "files": {
+            "key": "internal-ssl/proxy-client-ca/proxy-client-ca.key",
+            "cert": "internal-ssl/proxy-client-ca/proxy-client-ca.crt",
+            "ca": ""
+        }
+    },
+    "hub-internal": {
+        "serial": 0,
+        "is_ca": false,
+        "parent_ca": "hub-ca",
+        "signees": null,
+        "files": {
+            "key": "internal-ssl/hub-internal/hub-internal.key",
+            "cert": "internal-ssl/hub-internal/hub-internal.crt",
+            "ca": "internal-ssl/hub-ca/hub-ca.crt"
+        }
+    },
+    "proxy-api": {
+        "serial": 0,
+        "is_ca": false,
+        "parent_ca": "proxy-api-ca",
+        "signees": null,
+        "files": {
+            "key": "internal-ssl/proxy-api/proxy-api.key",
+            "cert": "internal-ssl/proxy-api/proxy-api.crt",
+            "ca": "internal-ssl/proxy-api-ca/proxy-api-ca.crt"
+        }
+    },
+    "proxy-client": {
+        "serial": 0,
+        "is_ca": false,
+        "parent_ca": "proxy-client-ca",
+        "signees": null,
+        "files": {
+            "key": "internal-ssl/proxy-client/proxy-client.key",
+            "cert": "internal-ssl/proxy-client/proxy-client.crt",
+            "ca": "internal-ssl/proxy-client-ca/proxy-client-ca.crt"
+        }
+    }
+}

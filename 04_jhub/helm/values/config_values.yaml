@@ -1,0 +1,195 @@
+cull:
+  enabled: false
+hub:
+  config:
+    JupyterHub:
+      cleanup_proxy: false
+      default_url: /hub/home
+      # hub_ip: 0.0.0.0
+      # hub_port: 8000
+      init_spawners_timeout: 0
+      jinja_environment_options:
+        extensions:
+          - jinja2.ext.do
+          - jinja2.ext.loopcontrols
+      last_activity_interval: 60
+  db:
+    # type: postgres
+    type: sqlite-memory
+  extraConfig:
+    customConfig: |-
+      import os
+      import sys
+
+      custom_path = "/src/jupyterhub-custom"
+      sys.path.insert(1, custom_path)
+
+      namespace = os.environ.get("POD_NAMESPACE", "default")
+      jupyterhub_host = get_name("hub")
+      local_https_port = 46933
+      unity_host = f"unity.jupyterjsc.svc:{local_https_port}"
+      jupyterhub_local_host = "proxy-public.jupyterjsc.svc"
+
+      from apihandler import ForwardTunnelRestartAPIHandler
+      from apihandler import JHubLogLevelAPIHandler
+      from apihandler import SpawnNotificationAPIHandler
+      from apihandler import SpawnProgressStatusAPIHandler
+      from apihandler import SpawnProgressUpdateAPIHandler
+      from apihandler import SpawnStopNotificationAPIHandler
+      from apihandler import SpawnUpdateOptionsAPIHandler
+      from apihandler import twoFA
+      from apihandler import UserRandomServerAPIHandler
+      from apihandler import user_cancel_message
+      from apihandler import vo
+      from customauthenticator import CustomGenericOAuthenticator
+      from handler import page_handlers
+      from spawner import BackendSpawner
+      from logs import create_extra_handlers
+
+      c.JupyterHub.log_level = 10
+      c.JupyterHub.custom_config_file = "/mnt/persistent/jupyterhub_custom_config.json"
+      c.JupyterHub.extra_log_handlers = create_extra_handlers()
+      db_host = os.environ.get("SQL_HOST")
+      db_port = os.environ.get("SQL_PORT")
+      db_user = os.environ.get("SQL_USER")
+      db_password = os.environ.get("SQL_PASSWORD")
+      db_database = os.environ.get("SQL_DATABASE")
+      # c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
+      c.JupyterHub.pid_file = "/mnt/persistent/jupyterhub.pid"
+      c.JupyterHub.cookie_secret_file = "/mnt/persistent/jupyterhub_cookie_secret"
+
+      c.JupyterHub.allow_named_servers = True
+      c.JupyterHub.internal_ssl = True
+      c.JupyterHub.external_ssl_authorities = {
+        "services-ca": {
+          "key": "/mnt/persistent/internal-ssl/services-ca/services-ca.key",
+          "cert": "/mnt/persistent/internal-ssl/services-ca/services-ca.crt",
+          "ca": "/mnt/persistent/internal-ssl/services-ca_trust.crt"
+        },
+        "proxy-client-ca": {
+          "key": "/mnt/persistent/internal-ssl/proxy-client-ca/proxy-client-ca.key",
+          "cert": "/mnt/persistent/internal-ssl/proxy-client-ca/proxy-client-ca.crt",
+          "ca": "/mnt/persistent/internal-ssl/proxy-client-ca_trust.crt"
+        },
+        "proxy-api-ca": {
+          "key": "/mnt/persistent/internal-ssl/proxy-api-ca/proxy-api-ca.key",
+          "cert": "/mnt/persistent/internal-ssl/proxy-api-ca/proxy-api-ca.crt",
+          "ca": "/mnt/persistent/internal-ssl/proxy-api-ca_trust.crt"
+        },
+        "notebooks-ca": {
+          "key": "/mnt/persistent/internal-ssl/notebooks-ca/notebooks-ca.key",
+          "cert": "/mnt/persistent/internal-ssl/notebooks-ca/notebooks-ca.crt",
+          "ca": "/mnt/persistent/internal-ssl/notebooks-ca_trust.crt"
+        },
+        "hub-ca": {
+          "key": "/mnt/persistent/internal-ssl/hub-ca/hub-ca.key",
+          "cert": "/mnt/persistent/internal-ssl/hub-ca/hub-ca.crt",
+          "ca": "/mnt/persistent/internal-ssl/hub-ca_trust.crt"
+        }
+      }
+      c.JupyterHub.internal_certs_location = "/mnt/shared-data/tmp-internal-ssl"
+      #c.JupyterHub.trusted_alt_names = [
+      #  "DNS:jupyterhub.local",
+      #  f"DNS:{jupyterhub_host}"
+      #]
+      #  "DNS:hdfcloud-jupyterhub-forward",
+      #  "DNS:demo-site-login-01",
+      #]
+      c.JupyterHub.ssl_cert = "/mnt/persistent/internal-ssl/hub-internal/hub-internal.crt"
+      c.JupyterHub.ssl_key = "/mnt/persistent/internal-ssl/hub-internal/hub-internal.key"
+      c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
+      c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
+      c.JupyterHub.hub_connect_url = (
+        f'https://{get_name("hub")}:{get_name_env("hub", "_SERVICE_PORT")}'
+      )
+      # TODO override cull service. cull --url http:// instead of https://
+      c.JupyterHub.concurrent_spawn_limit = 7
+
+      c.JupyterHub.spawner_class = BackendSpawner
+      c.BackendSpawner.http_timeout = 900
+      c.BackendSpawner.poll_interval = 10
+      c.BackendSpawner.poll_interval_randomizer = 20
+      c.BackendSpawner.ssl_alt_names = [f"DNS:{jupyterhub_host}"]
+      # See https://github.com/jupyterhub/jupyterhub/issues/1222#issuecomment-415264385
+      c.JupyterHub.tornado_settings = {"slow_spawn_timeout": 0}
+
+      c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
+
+      c.CustomGenericOAuthenticator.custom_config_file = (
+          "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
+      )
+      c.CustomGenericOAuthenticator.enable_auth_state = True
+      c.CustomGenericOAuthenticator.client_id = "oauth-client"
+      c.CustomGenericOAuthenticator.client_secret = "oauth-pass1"
+      c.CustomGenericOAuthenticator.oauth_callback_url = (
+          f"https://{jupyterhub_local_host}:{local_https_port}/hub/oauth_callback"
+      )
+      c.CustomGenericOAuthenticator.authorize_url = (
+          f"https://{unity_host}/oauth2-as/oauth2-authz"
+      )
+      c.CustomGenericOAuthenticator.token_url = (
+          f"https://{unity_host}/oauth2/token"
+      )
+      c.CustomGenericOAuthenticator.tokeninfo_url = (
+          f"https://{unity_host}/oauth2/tokeninfo"
+      )
+      c.CustomGenericOAuthenticator.userdata_url = (
+          f"https://{unity_host}/oauth2/userinfo"
+      )
+      c.CustomGenericOAuthenticator.username_key = "email"
+      c.CustomGenericOAuthenticator.scope = "single-logout;hpc_infos;x500;authenticator;eduperson_entitlement;username;profile".split(
+          ";"
+      )
+      c.CustomGenericOAuthenticator.tls_verify = False
+
+
+      # def foo():
+      #    ret = {"key1": ["value1", "value2"]}
+      #    return ret
+
+
+      # c.CustomGenericOAuthenticator.extra_params_allowed_runtime = foo
+      # http://localhost:8000/hub/oauth_login?extra_param_key1=value1
+
+
+      c.JupyterHub.template_paths = ["/src/jupyterhub-static/templates"]
+      c.JupyterHub.template_vars = {
+          "spawn_progress_update_url": "users/progress/update",
+          "user_cancel_message": user_cancel_message,
+          "hostname": "default",
+      }
+      c.JupyterHub.data_files_path = "/src/jupyterhub-static"
+
+      c.JupyterHub.extra_handlers = [
+          # PageHandlers
+          (r"/links", page_handlers.LinksHandler),
+          (r"/2FA", page_handlers.TwoFAHandler),
+          (r"/imprint", page_handlers.ImprintHandler),
+          (r"/privacy", page_handlers.DPSHandler),
+          (r"/terms", page_handlers.ToSHandler),
+          (r"/groups", page_handlers.VOHandler),
+          (r"/logging", page_handlers.LoggingHandler),
+          (r"/logging", page_handlers.LoggingHandler),
+          # APIHandlers
+          (r"/api/users/([^/]+)/random/server", UserRandomServerAPIHandler),
+          (r"/api/users/([^/]+)/server/update", SpawnUpdateOptionsAPIHandler),
+          (r"/api/users/([^/]+)/servers/([^/]*)/update", SpawnUpdateOptionsAPIHandler),
+          (r"/api/users/progress/update/([^/]+)", SpawnProgressUpdateAPIHandler),
+          (r"/api/users/progress/update/([^/]+)/([^/]+)", SpawnProgressUpdateAPIHandler),
+          (r"/api/users/progress/status/([^/]+)", SpawnProgressStatusAPIHandler),
+          (r"/api/users/progress/status/([^/]+)/([^/]+)", SpawnProgressStatusAPIHandler),
+          (r"/api/users/([^/]+)/notifications/spawners/spawn", SpawnNotificationAPIHandler),
+          (
+              r"/api/users/([^/]+)/notifications/spawners/stop",
+              SpawnStopNotificationAPIHandler,
+          ),
+          (r"/api/restarttunnel", ForwardTunnelRestartAPIHandler),
+          (r"/api/2FA", twoFA.TwoFAAPIHandler),
+          (r"/2FA/([^/]+)", twoFA.TwoFACodeHandler),
+          (r"/api/vo/([^/]+)", vo.VOAPIHandler),
+          (r"/api/votoken/([^/]+)", vo.VOTokenAPIHandler),
+          (r"/api/logs/jhub/handler", JHubLogLevelAPIHandler),
+          (r"/api/logs/jhub/handler/([^/]+)", JHubLogLevelAPIHandler),
+          (r"/api/logs/([^/]+)/handler", JHubLogLevelAPIHandler),
+          (r"/api/logs/([^/]+)/handler/([^/]+)", JHubLogLevelAPIHandler),
+      ]
