@@ -30,10 +30,12 @@ targetCustomizations:
           nodeSelector:
             monitoring: "true"
           persistence:
+            accessModes:
+              - ReadWriteOnce
+            storageClassName: csi-cinder-sc-retain
+            size: 40Gi
+            type: pvc
             enabled: true
-            existingClaim: rancher-monitoring-storage-grafana-pvc
-            subPath: null
-            type: null
         ingressNginx:
           enabled: true
         kube-state-metrics:
@@ -50,13 +52,15 @@ targetCustomizations:
               volumeClaimTemplate:
                 spec:
                   accessModes:
-                  - ReadWriteMany
+                    - ReadWriteOnce
                   resources:
                     requests:
                       storage: 50Gi
-                  storageClassName: nfs
+                  selector:
+                    matchExpressions: []
+                    matchLabels: {}
                   volumeMode: Filesystem
-                  volumeName: rancher-monitoring-storage-prometheus-pv
+                  storageClassName: csi-cinder-sc-retain
         prometheus-adapter:
           nodeSelector:
             monitoring: "true"
@@ -136,4 +140,3 @@ targetCustomizations:
 dependsOn:
   - name: basics-ingress
   - name: basics-monitor-crd
-  - name: basics-monitor-storage

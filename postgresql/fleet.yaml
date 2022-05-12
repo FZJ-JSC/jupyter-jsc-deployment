@@ -45,7 +45,9 @@ helm:
       nodeSelector:
         worker: "true"
       persistence:
-        storageClass: ""
+        accessModes:
+          - ReadWriteOnce
+        storageClass: csi-cinder-sc-retain
         size: 4Gi
 dependsOn:
   - name: basics-storageclass
