@@ -1,0 +1,6 @@
+*.swp
+04_jhub/certs/venv
+04_jhub/certs/jupyterhub.sqlite
+04_jhub/certs/jupyterhub_cookie_secret
+04_jhub/certs/secret.yaml
+04_jhub/certs/internal-ssl
