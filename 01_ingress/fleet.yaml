@@ -1,6 +1,6 @@
 defaultNamespace: ingress-nginx
 helm:
-  repo: https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.1.1/ingress-nginx-4.1.1.tgz
+  chart: https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.1.1/ingress-nginx-4.1.1.tgz
   values:
     controller:
       config:
