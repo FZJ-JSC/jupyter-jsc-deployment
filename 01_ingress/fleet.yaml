@@ -7,11 +7,15 @@ helm:
   values:
     controller:
       config:
+        error-log-level: debug
         compute-full-forwarded-for: "true"
         proxy-real-ip-cidr: 0.0.0.0/0
         real-ip-header: proxy_protocol
         use-forwarded-headers: "true"
         use-proxy-protocol: "true"
+      kind: daemonset
+      logLevel: 99
+      nginxDebug: true
       metrics:
         enabled: true
         serviceMonitor:
