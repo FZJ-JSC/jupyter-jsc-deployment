@@ -10,7 +10,7 @@ helm:
         use-forwarded-headers: "true"
         use-proxy-protocol: "true"
       metrics:
-        enabled: true
+        enabled: false
         serviceMonitor:
           additionalLabels:
             release: prometheus-stack
