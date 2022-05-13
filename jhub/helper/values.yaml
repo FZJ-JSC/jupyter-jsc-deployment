@@ -11,6 +11,8 @@ ingress:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
   hosts:
     - host: jupyterhub.local
+      svcName: proxy-public
+      svcPort: 443
       paths:
         - path: /
           pathType: Prefix

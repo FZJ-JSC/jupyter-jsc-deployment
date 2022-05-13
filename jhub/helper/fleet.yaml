@@ -2,3 +2,23 @@ defaultNamespace: jupyterjsc
 helm:
   values:
     nameOverride: "jhub-helper"
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+        provider.cattle.io: rke
+    helm:
+      values:
+        ingress:
+          hosts:
+            - host: jupyter-jsc-staging.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: proxy-public
+              svcPort: 443
+          tls:
+            - secretName: jupyter-jsc-staging.fz-juelich.de
+              hosts:
+                - jupyter-jsc-staging.fz-juelich.de
