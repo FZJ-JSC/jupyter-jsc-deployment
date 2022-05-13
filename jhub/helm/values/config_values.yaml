@@ -124,16 +124,16 @@ hub:
           f"https://{jupyterhub_local_host}/hub/oauth_callback"
       )
       c.CustomGenericOAuthenticator.authorize_url = (
-          f"https://{unity_host}/oauth2-as/oauth2-authz"
+          f"https://{unity_host}/jupyter-oauth2-as/oauth2-authz"
       )
       c.CustomGenericOAuthenticator.token_url = (
-          f"https://{unity_host}/oauth2/token"
+          f"https://{unity_host}/jupyter-oauth2/token"
       )
       c.CustomGenericOAuthenticator.tokeninfo_url = (
-          f"https://{unity_host}/oauth2/tokeninfo"
+          f"https://{unity_host}/jupyter-oauth2/tokeninfo"
       )
       c.CustomGenericOAuthenticator.userdata_url = (
-          f"https://{unity_host}/oauth2/userinfo"
+          f"https://{unity_host}/jupyter-oauth2/userinfo"
       )
       c.CustomGenericOAuthenticator.username_key = "email"
       c.CustomGenericOAuthenticator.scope = "single-logout;hpc_infos;x500;authenticator;eduperson_entitlement;username;profile".split(
