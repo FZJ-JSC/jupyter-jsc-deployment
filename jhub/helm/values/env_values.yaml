@@ -2,6 +2,16 @@ hub:
   extraEnv:
     - name: LOGGING_CONFIG_FILE
       value: "/mnt/persistent/logging.json"
+    - name: OAUTH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: hub-custom
+          key: OAUTH_CLIENT_ID
+    - name: OAUTH_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: hub-custom
+          key: OAUTH_CLIENT_SECRET
     - name: SQL_HOST
       valueFrom:
         secretKeyRef:

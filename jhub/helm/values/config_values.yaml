@@ -118,8 +118,8 @@ hub:
           "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
       )
       c.CustomGenericOAuthenticator.enable_auth_state = True
-      c.CustomGenericOAuthenticator.client_id = "oauth-client"
-      c.CustomGenericOAuthenticator.client_secret = "oauth-pass1"
+      c.CustomGenericOAuthenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
+      c.CustomGenericOAuthenticator.client_secret = os.environ.get("OAUTH_CLIENT_SECRET")
       c.CustomGenericOAuthenticator.oauth_callback_url = (
           f"https://{jupyterhub_local_host}/hub/oauth_callback"
       )
