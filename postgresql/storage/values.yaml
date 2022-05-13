@@ -3,5 +3,5 @@
 # Declare variables to be passed into your templates.
 
 storageClassName: "csi-cinder-sc-retain"
-size: "5G"
+size: "5Gi"
 name: "data-postgresql"
