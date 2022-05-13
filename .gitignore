@@ -1,6 +1,6 @@
 *.swp
-04_jhub/certs/venv
-04_jhub/certs/jupyterhub.sqlite
-04_jhub/certs/jupyterhub_cookie_secret
-04_jhub/certs/secret.yaml
-04_jhub/certs/internal-ssl
+jhub/certs/venv
+jhub/certs/jupyterhub.sqlite
+jhub/certs/jupyterhub_cookie_secret
+jhub/certs/secret.yaml
+jhub/certs/internal-ssl
