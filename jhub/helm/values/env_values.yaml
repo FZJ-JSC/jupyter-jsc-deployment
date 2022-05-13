@@ -6,12 +6,12 @@ hub:
       valueFrom:
         secretKeyRef:
           name: hub-custom
-          key: OAUTH_CLIENT_ID
+          key: oauth_client_id_password
     - name: OAUTH_CLIENT_SECRET
       valueFrom:
         secretKeyRef:
           name: hub-custom
-          key: OAUTH_CLIENT_SECRET
+          key: oauth_client_secret_password
     - name: SQL_HOST
       valueFrom:
         secretKeyRef:
