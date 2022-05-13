@@ -27,7 +27,7 @@ hub:
       namespace = os.environ.get("POD_NAMESPACE", "default")
       jupyterhub_host = get_name("hub")
       unity_host = "unity-jsc.fz-juelich.de"
-      jupyterhub_local_host = "proxy-public.jupyterjsc.svc"
+      jupyterhub_local_host = "jupyterhub.local"
 
       from apihandler import ForwardTunnelRestartAPIHandler
       from apihandler import JHubLogLevelAPIHandler
