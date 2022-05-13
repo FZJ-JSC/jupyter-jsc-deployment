@@ -4,10 +4,10 @@
 
 grafana:
   storageClassName: "csi-cinder-sc-retain"
-  size: "40G"
+  size: "40Gi"
   name: "grafana-pvc"
 
 prometheus:
   storageClassName: "csi-cinder-sc-retain"
-  size: "50G"
+  size: "50Gi"
   name: "prometheus-prometheus-operator-prometheus-db-prometheus-prometheus-operator-prometheus-0"
