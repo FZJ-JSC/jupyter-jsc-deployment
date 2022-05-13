@@ -9,3 +9,5 @@ helm:
       enabled: false
     pilot:
       enabled: false
+dependsOn:
+  - name: basics-monitor-crd
