@@ -10,4 +10,4 @@ grafana:
 prometheus:
   storageClassName: "csi-cinder-sc-retain"
   size: "50Gi"
-  name: "prometheus-prometheus-operator-prometheus-db-prometheus-prometheus-operator-prometheus-0"
+  name: "prometheus-rancher-monitoring-prometheus-db-prometheus-rancher-monitoring-prometheus-0"
