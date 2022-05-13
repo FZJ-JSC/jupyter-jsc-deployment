@@ -45,9 +45,6 @@ helm:
       nodeSelector:
         worker: "true"
       persistence:
-        accessModes:
-          - ReadWriteOnce
-        storageClass: csi-cinder-sc-retain
-        size: 4Gi
+        existingClaim: "data-postgresql"
 dependsOn:
-  - name: basics-storageclass
+  - name: basics-postgresql-storage

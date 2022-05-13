@@ -30,12 +30,8 @@ targetCustomizations:
           nodeSelector:
             monitoring: "true"
           persistence:
-            accessModes:
-              - ReadWriteOnce
-            storageClassName: csi-cinder-sc-retain
-            size: 40Gi
-            type: pvc
             enabled: true
+            existingClaim: grafana-pvc
         ingressNginx:
           enabled: true
         kube-state-metrics:
@@ -46,20 +42,14 @@ targetCustomizations:
             evaluationInterval: 1m
             nodeSelector:
               monitoring: "true"
-            retentionSize: 50GiB
+            retentionSize: 45GiB
             scrapeInterval: 1m
             storageSpec:
               volumeClaimTemplate:
                 spec:
-                  accessModes:
-                    - ReadWriteOnce
                   resources:
                     requests:
                       storage: 50Gi
-                  selector:
-                    matchExpressions: []
-                    matchLabels: {}
-                  volumeMode: Filesystem
                   storageClassName: csi-cinder-sc-retain
         prometheus-adapter:
           nodeSelector:
@@ -140,3 +130,4 @@ targetCustomizations:
 dependsOn:
   - name: basics-ingress
   - name: basics-monitor-crd
+  - name: basics-monitor-storage

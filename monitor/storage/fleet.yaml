@@ -1,0 +1,3 @@
+defaultNamespace: cattle-monitoring-system
+dependsOn:
+  - name: basics-storageclass

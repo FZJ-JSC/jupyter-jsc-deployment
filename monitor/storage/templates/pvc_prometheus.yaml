@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.prometheus.name }}
+  labels:
+    app: prometheus
+    prometheus: prometheus-operator-prometheus
+spec:
+  storageClassName: {{ .Values.prometheus.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.prometheus.size }}
+  accessModes:
+    - ReadWriteOnce
