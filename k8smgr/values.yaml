@@ -32,6 +32,7 @@ secrets:
   passwds: "drf-k8smgr-passwds"
   databaseGeneral: "postgresql-general"
   databaseUsers: "postgresql-users-jupyterjsc"
+  tunnelpasswds: "drf-tunnel-passwds"
 
 extraVolumes: []
 extraVolumeMounts: []
