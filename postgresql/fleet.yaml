@@ -46,5 +46,8 @@ helm:
         worker: "true"
       persistence:
         existingClaim: "data-postgresql"
+      podAnnotations:
+        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
 dependsOn:
   - name: basics-postgresql-storage
+  - name: basics-istio
