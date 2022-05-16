@@ -4,19 +4,11 @@ hub:
       mountPath: /mnt/shared-data
     - name: persistent
       mountPath: /mnt/persistent
-  extraVolumes:
-    - name: shared-data
-      emptyDir: {}
-    - name: persistent
-      emptyDir: {}
-    - name: mount-watch
-      configMap:
-        defaultMode: 400
-        name: jupyterhub-mw
-    - name: cleanup-sql
-      configMap:
-        defaultMode: 400
-        name: jupyterhub-cleanup-sql
-    - name: internal-ssl
-      secret:
-        secretName: internal-ssl
+    - name: drf-tunnel-certs
+      mountPath: /mnt/tunnel_certs
+    - name: drf-unicoremgr-certs
+      mountPath: /mnt/unicoremgr_certs
+    - name: drf-k8smgr-certs
+      mountPath: /mnt/k8smgr_certs
+    - name: unity-jsc-certs
+      mountPath: /mnt/unity_certs

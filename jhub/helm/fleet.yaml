@@ -24,6 +24,36 @@ targetCustomizations:
     helm:
       values:
         hub:
+          extraVolumes:
+            - name: shared-data
+              emptyDir: {}
+            - name: persistent
+              nfs:
+                path: /mnt/storage/jupyterhub
+                server: 10.0.94.174
+            - name: mount-watch
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-mw
+            - name: cleanup-sql
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-cleanup-sql
+            - name: internal-ssl
+              secret:
+                secretName: internal-ssl
+            - name: drf-tunnel-certs
+              secret:
+                secretName: drf-tunnel-certs
+            - name: drf-unicoremgr-certs
+              secret:
+                secretName: drf-unicoremgr-certs
+            - name: drf-k8smgr-certs
+              secret:
+                secretName: drf-k8smgr-certs
+            - name: unity-jsc-certs
+              secret:
+                secretName: unity-jsc-certs
           labels:
             stage: staging
           livenessProbe:
