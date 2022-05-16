@@ -7,6 +7,14 @@ helm:
     hub:
       nodeSelector:
         worker: "true"
+    prePuller:
+      hook:
+        enabled: false
+      continuous:
+        enabled: false
+    scheduling:
+      userScheduler:
+        enabled: false
   valuesFiles:
     - values/config_values.yaml
     - values/env_values.yaml
@@ -24,11 +32,6 @@ targetCustomizations:
     helm:
       values:
         hub:
-          command: ["/bin/sh"]
-          args:
-            - -c
-            - >-
-              while true; do sleep 30; done
           extraVolumes:
             - name: shared-data
               emptyDir: {}
@@ -70,6 +73,7 @@ targetCustomizations:
             - -c
             - >-
               rm -rf /mnt/shared-data/tmp-internal-ssl/* && /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+              # while true; do sleep 30; done
           extraConfig:
             stagingConfig: |-
               c.JupyterHub.trusted_alt_names = [
