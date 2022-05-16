@@ -10,6 +10,7 @@ metadata:
 data:
   run.sh: |
     #!/bin/bash
+    git config --global --add safe.directory /mnt/shared-data/git_config
     while true;
     do
       sleep 60
