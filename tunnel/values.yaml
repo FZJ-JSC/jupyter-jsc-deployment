@@ -12,11 +12,7 @@ debug: False
 
 # Public Keys from external sources (like hpc systems)
 authorized_keys:
-  - "abc1"
-  - "abc2"
-  - "abc3"
-
-cluster_internal_publickeys: []
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3hZ8/shyAE5BB38dha7eBAXovOMtCNUqm9ChJeMtxZ"
 
 ssh_config_hosts_defaults:
   serverAliveInterval: 60
@@ -33,7 +29,7 @@ ssh_config_hosts:
   - name: "k8smgr_hdfcloud"
     user: "k8smgr"
     port: 2222
-    hostname: "k8smgr-abc.devel.svc"
+    hostname: "drf-k8smgr.userlabs.svc"
 
 image:
   repository: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/tunneling-relaunch

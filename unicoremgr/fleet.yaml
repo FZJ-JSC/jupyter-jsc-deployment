@@ -6,6 +6,8 @@ helm:
     nameOverride: "drf-unicoremgr"
     nodeSelector:
       worker: "true"
+    podAnnotations:
+      proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
 targetCustomizations:
   - name: staging
     clusterSelector:

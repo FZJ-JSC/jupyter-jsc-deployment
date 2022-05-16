@@ -10,7 +10,7 @@ metadata:
 data:
   authorized_keys: |
     {{- range $auth_key := .Values.authorized_keys }}
-    {{ $auth_key }}
+    restrict,port-forwarding,command="/bin/echo No commands allowed" {{ $auth_key }}
     {{- end }}
   config: |
     Host *
