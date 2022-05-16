@@ -40,3 +40,6 @@ targetCustomizations:
               c.JupyterHub.trusted_alt_names = [
                 "DNS:hub", "DNS:jupyter-jsc-staging.fz-juelich.de"
               ]
+              c.CustomGenericOAuthenticator.oauth_callback_url = (
+                  "https://jupyter-jsc-staging.fz-juelich.de/hub/oauth_callback"
+              )

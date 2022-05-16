@@ -27,7 +27,6 @@ hub:
       namespace = os.environ.get("POD_NAMESPACE", "default")
       jupyterhub_host = get_name("hub")
       unity_host = "unity-jsc.fz-juelich.de"
-      jupyterhub_local_host = "jupyterhub.local"
 
       from apihandler import ForwardTunnelRestartAPIHandler
       from apihandler import JHubLogLevelAPIHandler
@@ -120,9 +119,6 @@ hub:
       c.CustomGenericOAuthenticator.enable_auth_state = True
       c.CustomGenericOAuthenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
       c.CustomGenericOAuthenticator.client_secret = os.environ.get("OAUTH_CLIENT_SECRET")
-      c.CustomGenericOAuthenticator.oauth_callback_url = (
-          f"https://{jupyterhub_local_host}/hub/oauth_callback"
-      )
       c.CustomGenericOAuthenticator.authorize_url = (
           f"https://{unity_host}/jupyter-oauth2-as/oauth2-authz"
       )
