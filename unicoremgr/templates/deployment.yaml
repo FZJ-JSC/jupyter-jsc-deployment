@@ -160,6 +160,9 @@ spec:
               mountPath: /mnt/volumes_certs/certs
             - name: shared-data
               mountPath: /mnt/shared-data
+            {{- with .Values.extraVolumeMounts }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
       volumes:
       - name: shared-data
         emptyDir: {}
@@ -171,6 +174,9 @@ spec:
         secret:
           defaultMode: 400
           secretName: {{ include "drf-unicoremgr.name" . }}-certs
+      {{- with .Values.extraVolumes }}
+      {{- . | toYaml | nindent 6 }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

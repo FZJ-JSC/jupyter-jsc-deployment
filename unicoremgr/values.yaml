@@ -29,6 +29,9 @@ podAnnotations: {}
 podSecurityContext: {}
   # fsGroup: 2000
 
+extraVolumes: []
+extraVolumeMounts: []
+
 securityContext: {}
   # capabilities:
   #   drop:

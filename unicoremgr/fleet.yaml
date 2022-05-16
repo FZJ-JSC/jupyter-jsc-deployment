@@ -15,3 +15,12 @@ targetCustomizations:
       values:
         gitconfig:
           branch: "unicoremgr-staging"
+        extraVolumes:
+          - name: persistent
+            nfs:
+              path: /mnt/storage/unicoremgr
+              server: 10.0.94.174
+        extraVolumeMounts:
+          - name: persistent
+            mountPath: /mnt/persistent
+
