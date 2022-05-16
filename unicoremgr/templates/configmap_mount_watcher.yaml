@@ -30,8 +30,8 @@ data:
     git config --global --add safe.directory /mnt/shared-data/git_config
     while true;
     do
-      sleep 60
       /bin/bash /mnt/volumes_mw/mount_watch/..data/compare.sh
+      sleep 60
     done
   compare.sh: |
     #!/bin/bash

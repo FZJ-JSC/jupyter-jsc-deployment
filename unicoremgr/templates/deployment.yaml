@@ -152,7 +152,7 @@ spec:
           args:
           - -c
           - >-
-              sleep 5; apk add bash curl git && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
+              sleep 60; apk add bash curl git && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
           volumeMounts:
             - name: mount-watch
               mountPath: /mnt/volumes_mw/mount_watch
