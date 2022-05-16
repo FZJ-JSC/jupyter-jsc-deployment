@@ -99,7 +99,7 @@ spec:
             - name: AUTHORIZED_KEYS_PATH
               value: "/mnt/shared-data/files"
             - name: CONFIG_PATH
-              value: "/mnt/shared-data/files/config.json"
+              value: "/mnt/shared-data/git_config/config.json"
             - name: GUNICORN_SSL_CRT
               value: "/mnt/shared-data/certs/k8smgr.crt"
             - name: GUNICORN_SSL_KEY
