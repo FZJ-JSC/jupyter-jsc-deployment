@@ -6,6 +6,8 @@ helm:
     nameOverride: "drf-unicoremgr"
     nodeSelector:
       worker: "true"
+    service:
+      port: 443
 targetCustomizations:
   - name: staging
     clusterSelector:
