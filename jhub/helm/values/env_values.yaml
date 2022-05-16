@@ -2,6 +2,11 @@ hub:
   extraEnv:
     - name: LOGGING_CONFIG_FILE
       value: "/mnt/persistent/logging.json"
+    - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: drf-k8smgr-passwds
+          key: oauth_client_id_password
     - name: OAUTH_CLIENT_ID
       valueFrom:
         secretKeyRef:
