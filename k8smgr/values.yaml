@@ -31,7 +31,7 @@ secrets:
   keypairs: "drf-k8smgr-keypairs"
   passwds: "drf-k8smgr-passwds"
   databaseGeneral: "postgresql-general"
-  databaseUsers: "postgresql-users"
+  databaseUsers: "postgresql-users-jupyterjsc"
 
 extraVolumes: []
 extraVolumeMounts: []

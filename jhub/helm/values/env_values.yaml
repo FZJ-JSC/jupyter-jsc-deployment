@@ -25,17 +25,17 @@ hub:
     - name: SQL_DATABASE
       valueFrom:
         secretKeyRef:
-          name: postgresql-users
+          name: postgresql-users-jupyterjsc
           key: JUPYTERHUB_DATABASE
     - name: SQL_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: postgresql-users
+          name: postgresql-users-jupyterjsc
           key: JUPYTERHUB_PASSWORD
     - name: SQL_USER
       valueFrom:
         secretKeyRef:
-          name: postgresql-users
+          name: postgresql-users-jupyterjsc
           key: JUPYTERHUB_USER
     - name: DEPLOYMENT_NAMESPACE
       valueFrom:

@@ -14,7 +14,7 @@ image:
 secrets:
   passwds: "drf-unicoremgr-passwds"
   databaseGeneral: "postgresql-general"
-  databaseUsers: "postgresql-users"
+  databaseUsers: "postgresql-users-jupyterjsc"
 
 gitconfig:
   branch: "unicoremgr-dev"
