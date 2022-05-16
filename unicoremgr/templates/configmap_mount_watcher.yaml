@@ -42,5 +42,4 @@ data:
     echo "$(date) Compare configmaps with current files"
     compare "/mnt/volumes_certs/certs/..data/tls.crt" "/mnt/shared-data/certs/unicore.crt"
     compare "/mnt/volumes_certs/certs/..data/tls.key" "/mnt/shared-data/certs/unicore.key"
-    compare "/mnt/volumes_files/files/..data/config.json" "/mnt/shared-data/files/config.json"
     git pull origin {{ .Values.gitconfig.branch }}

@@ -53,12 +53,10 @@ spec:
           args:
           - -c
           - >-
-               apk add git && mkdir -p /mnt/shared-data/certs && mkdir -p /mnt/shared-data/files && cp -rp /mnt/volumes_certs/certs/..data/tls.key /mnt/shared-data/certs/unicoremgr.key && cp -rp /mnt/volumes_certs/certs/..data/tls.crt /mnt/shared-data/certs/unicoremgr.crt && cp -rp /mnt/volumes_files/files/..data/* /mnt/shared-data/files/. && chmod 400 /mnt/shared-data/certs/* && chmod 400 /mnt/shared-data/files/* && chown -R 1000:100 /mnt/shared-data/certs && chown -R 1000:100 /mnt/shared-data/files && export GIT_REPO_SHORT=${GIT_REPO#"https://"} && cd /mnt/shared-data && git clone --single-branch --branch ${GIT_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config || true
+            apk add git && mkdir -p /mnt/shared-data/certs && cp -rp /mnt/volumes_certs/certs/..data/tls.key /mnt/shared-data/certs/unicoremgr.key && cp -rp /mnt/volumes_certs/certs/..data/tls.crt /mnt/shared-data/certs/unicoremgr.crt && chmod 400 /mnt/shared-data/certs/* && chown -R 1000:100 /mnt/shared-data/certs && export GIT_REPO_SHORT=${GIT_REPO#"https://"} && cd /mnt/shared-data && git clone --single-branch --branch ${GIT_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config && chown -R 1000:100 /mnt/shared-data
           volumeMounts:
             - name: certs
               mountPath: /mnt/volumes_certs/certs
-            - name: files
-              mountPath: /mnt/volumes_files/files
             - name: shared-data
               mountPath: /mnt/shared-data
       containers:
@@ -87,7 +85,7 @@ spec:
               value: "true"
             {{- end }}
             - name: CONFIG_PATH
-              value: "/mnt/shared-data/files/config.json"
+              value: "/mnt/shared-data/git_config/config.json"
             - name: GUNICORN_SSL_CRT
               value: "/mnt/shared-data/certs/unicoremgr.crt"
             - name: GUNICORN_SSL_KEY
@@ -160,8 +158,6 @@ spec:
               mountPath: /mnt/volumes_mw/mount_watch
             - name: certs
               mountPath: /mnt/volumes_certs/certs
-            - name: files
-              mountPath: /mnt/volumes_files/files
             - name: shared-data
               mountPath: /mnt/shared-data
       volumes:
@@ -171,10 +167,6 @@ spec:
         configMap:
           defaultMode: 400
           name: {{ include "drf-unicoremgr.name" . }}-mw
-      - name: files
-        configMap:
-          defaultMode: 400
-          name: {{ include "drf-unicoremgr.name" . }}-files
       - name: certs
         secret:
           defaultMode: 400
