@@ -24,6 +24,11 @@ targetCustomizations:
     helm:
       values:
         hub:
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - >-
+              while true; do sleep 30; done
           extraVolumes:
             - name: shared-data
               emptyDir: {}
