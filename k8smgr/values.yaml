@@ -33,6 +33,9 @@ secrets:
   databaseGeneral: "postgresql-general-userlabs"
   databaseUsers: "postgresql-users-userlabs"
 
+extraVolumes: []
+extraVolumeMounts: []
+
 image:
   repository: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/k8s-service-manager
   pullPolicy: IfNotPresent

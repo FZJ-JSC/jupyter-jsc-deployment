@@ -10,7 +10,7 @@ metadata:
 data:
   authorized_keys: |
     {{- range $auth_key := .Values.authorized_keys }}
-    {{ $auth_key }}
+    restrict,port-forwarding,command="/bin/echo No commands allowed" {{ $auth_key }}
     {{- end }}
   manage_tunnel.sh: |
     #!/bin/bash
@@ -95,42 +95,3 @@ data:
 
     check_tunnel
     exit $?
-  config.json: |
-    {
-      "services": {
-        "base": "/tmp/services",
-        "yaml_filename": "service.yaml",
-        "descriptions": "/mnt/shared-data/git_config",
-        "deployment_main_name_prefix": "depl-",
-        "container_main_name": "main",
-        "replace_indicators": ["<",">"],
-        "replace_drfid_keyword": "id",
-        "replace_uniqueuserid_keyword": "unique_user_id",
-        "replace_secretname_keyword": "secret_name",
-        "replace_secretcertsname_keyword": "secret_certs_name",
-        "replace_namespace_keyword": "namespace",
-        "replace_quotavo_keyword": "quotavo",
-        "env": {
-            "JUPYTERHUB_API_URL": "http://{{ include "k8smgr.name" . }}-jupyterhub-forward:56789/hub/api"
-        },
-        "ssl": {
-            "enabled": true
-        }
-      },
-      "userhomes": {
-        "base": "/tmp/userhomes",
-        "skel": "/mnt/shared-data/git_config/userhomes_skel"
-      },
-      "tunnel": {
-        "k8smgr_hostname": "{{ include "k8smgr.name" . }}",
-        "restart_url": "http://{{ .Values.jupyterhub.host }}:{{ .Values.jupyterhub.port }}/hub/api/restarttunnel",
-        "credentials_env_name": "TUNNEL_BASIC",
-        "timeout": 10,
-        {{- if .Values.secrets.tunnel_certs }}
-        "certificate_path": "/mnt/shared-data/certs_tunnel/tunnel.crt"
-        {{- else }}
-        "certificate_path": false
-        {{- end }}
-      }
-    }
-

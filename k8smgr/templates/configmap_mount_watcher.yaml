@@ -43,8 +43,8 @@ data:
     {{- if .Values.secrets.tunnel_certs }}
     compare "/mnt/volumes_tunnel_certs/certs/..data/tls.crt" "/mnt/shared-data/certs_tunnel/tunnel.crt"
     {{- end }}
-    compare "/mnt/volumes_certs/certs/..data/tls.crt" "/mnt/shared-data/certs/tunnel.crt"
-    compare "/mnt/volumes_certs/certs/..data/tls.key" "/mnt/shared-data/certs/tunnel.key"
+    compare "/mnt/volumes_certs/certs/..data/tls.crt" "/mnt/shared-data/certs/k8smgr.crt"
+    compare "/mnt/volumes_certs/certs/..data/tls.key" "/mnt/shared-data/certs/k8smgr.key"
     compare "/mnt/volumes_files/files/..data/manage_tunnel.sh" "/mnt/shared-data/files/manage_tunnel.sh"
     compare "/mnt/volumes_keypairs/keypairs/..data/tunnel" "/mnt/shared-data/keypairs/tunnel"
     compare "/mnt/volumes_keypairs/keypairs/..data/remote" "/mnt/shared-data/keypairs/remote"
