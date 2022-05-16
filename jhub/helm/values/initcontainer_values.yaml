@@ -11,17 +11,17 @@ hub:
         - name: GIT_REPO
           valueFrom:
             secretKeyRef:
-              name: "jupyter-jsc-config-jupyterjsc"
+              name: "jupyter-jsc-config"
               key: REPOSITORY
         - name: GIT_USERNAME
           valueFrom:
             secretKeyRef:
-              name: "jupyter-jsc-config-jupyterjsc"
+              name: "jupyter-jsc-config"
               key: USERNAME
         - name: GIT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: "jupyter-jsc-config-jupyterjsc"
+              name: "jupyter-jsc-config"
               key: PASSWORD
       command: ["/bin/sh"]
       args:

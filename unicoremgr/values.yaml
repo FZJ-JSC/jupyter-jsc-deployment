@@ -13,15 +13,15 @@ image:
 
 secrets:
   passwds: "drf-unicoremgr-passwds"
-  databaseGeneral: "postgresql-general-jupyterjsc"
-  databaseUsers: "postgresql-users-jupyterjsc"
+  databaseGeneral: "postgresql-general"
+  databaseUsers: "postgresql-users"
 
 gitconfig:
   branch: "unicoremgr-dev"
-  secret: "jupyter-jsc-config-jupyterjsc"
+  secret: "jupyter-jsc-config"
 
 imagePullSecrets:
-  - name: "gitlab-registry-jupyterjsc"
+  - name: "gitlab-registry"
 nameOverride: "unicoremgr"
 
 podAnnotations: {}
