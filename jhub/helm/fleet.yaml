@@ -38,5 +38,5 @@ targetCustomizations:
           extraConfig:
             stagingConfig: |-
               c.JupyterHub.trusted_alt_names = [
-                "DNS:hub"
+                "DNS:hub", "DNS:jupyter-jsc-staging.fz-juelich.de"
               ]
