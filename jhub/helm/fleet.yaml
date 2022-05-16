@@ -25,7 +25,7 @@ targetCustomizations:
       values:
         hub:
           labels:
-            stage: dev
+            stage: staging
           livenessProbe:
             enabled: False
           readinessProbe:
@@ -38,5 +38,5 @@ targetCustomizations:
           extraConfig:
             stagingConfig: |-
               c.JupyterHub.trusted_alt_names = [
-                "DNS:jupyterhub.local"
+                "DNS:hub"
               ]
