@@ -3,11 +3,9 @@ helm:
   releaseName: rancher-istio
   repo: https://charts.rancher.io
   chart: rancher-istio
-  version: 100.1.2+up1.11.7
+  version: 100.2.0+up1.12.6
   values:
     ingressGateways:
-      enabled: false
-    pilot:
       enabled: false
 dependsOn:
   - name: basics-monitor-crd
