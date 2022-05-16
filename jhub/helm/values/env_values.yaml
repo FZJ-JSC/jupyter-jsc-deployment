@@ -6,7 +6,7 @@ hub:
       valueFrom:
         secretKeyRef:
           name: drf-k8smgr-passwds
-          key: oauth_client_id_password
+          key: JUPYTERHUB_USER_PASS
     - name: OAUTH_CLIENT_ID
       valueFrom:
         secretKeyRef:
