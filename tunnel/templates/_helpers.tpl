@@ -46,6 +46,7 @@ Generate certificates for drf tunnel service
 {{- $cert := genSignedCert ( include "drf-tunnel.name" . ) nil $altNames 1825 $ca -}}
 tls.crt: {{ $cert.Cert | b64enc }}
 tls.key: {{ $cert.Key | b64enc }}
+tls.ca: {{ $ca.Cert | b64enc }}
 {{- end -}}
 
 
