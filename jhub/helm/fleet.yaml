@@ -61,7 +61,7 @@ targetCustomizations:
                 secretName: drf-k8smgr-certs
                 items:
                   - key: tls.ca
-                    path: ca
+                    path: ca.pem
             - name: unity-jsc-certs
               secret:
                 secretName: unity-jsc-certs
