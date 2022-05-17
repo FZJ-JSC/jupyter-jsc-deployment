@@ -13,9 +13,6 @@ hub:
           - jinja2.ext.do
           - jinja2.ext.loopcontrols
       last_activity_interval: 60
-  db:
-    # type: postgres
-    type: sqlite-memory
   extraConfig:
     customConfig: |-
       import os
@@ -52,7 +49,7 @@ hub:
       db_user = os.environ.get("SQL_USER")
       db_password = os.environ.get("SQL_PASSWORD")
       db_database = os.environ.get("SQL_DATABASE")
-      # c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
+      c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
       c.JupyterHub.pid_file = "/mnt/persistent/jupyterhub.pid"
       c.JupyterHub.cookie_secret_file = "/mnt/persistent/jupyterhub_cookie_secret"
 
