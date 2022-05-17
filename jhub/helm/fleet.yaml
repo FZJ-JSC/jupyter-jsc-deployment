@@ -72,7 +72,7 @@ targetCustomizations:
           args:
             - -c
             - >-
-              export K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN=${K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN:-$(echo -n "jupyterhub:${K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS}" | base64 -w 0)} && rm -rf /mnt/shared-data/tmp-internal-ssl/* && /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+              while true; do sleep 30; done && export K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN=${K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN:-$(echo -n "jupyterhub:${K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS}" | base64 -w 0)} && rm -rf /mnt/shared-data/tmp-internal-ssl/* && /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
               # while true; do sleep 30; done
           extraConfig:
             stagingConfig: |-
