@@ -24,7 +24,6 @@ OAUTH_CLIENT_ID=$(skj get secret hub-custom -o jsonpath='{.data.oauth_client_id_
 OAUTH_CLIENT_SECRET=$(skj get secret hub-custom -o jsonpath='{.data.oauth_client_secret_password}' | base64 -d)
 OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET//\"/\\\"}
 OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET//\\/\\\\\\}
-echo ${OAUTH_CLIENT_SECRET}
 
 SQL_USER=$(skj get secret postgresql-users-jupyterjsc -o jsonpath='{.data.JUPYTERHUB_USER}' | base64 -d)
 SQL_DATABASE=$(skj get secret postgresql-users-jupyterjsc -o jsonpath='{.data.JUPYTERHUB_DATABASE}' | base64 -d)
