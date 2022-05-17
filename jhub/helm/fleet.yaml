@@ -53,9 +53,15 @@ targetCustomizations:
             - name: drf-tunnel-certs
               secret:
                 secretName: drf-tunnel-certs
+                items:
+                  - key: tls.ca
+                    path: ca.pem
             - name: drf-unicoremgr-certs
               secret:
                 secretName: drf-unicoremgr-certs
+                items:
+                  - key: tls.ca
+                    path: ca.pem
             - name: drf-k8smgr-certs
               secret:
                 secretName: drf-k8smgr-certs
