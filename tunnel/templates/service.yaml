@@ -33,7 +33,7 @@ spec:
     - port: {{ .Values.service.servicePort }}
       targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
-      name: http
+      name: https
     {{- if .Values.service.nodePort }}
       nodePort: {{ .Values.service.nodePort }}
     {{- end }}
