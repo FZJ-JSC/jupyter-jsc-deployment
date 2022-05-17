@@ -3,4 +3,4 @@ hub:
     pullSecrets:
       - "gitlab-registry"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jupyterhub-relaunch
-    tag: "devel"
+    tag: "latest"
