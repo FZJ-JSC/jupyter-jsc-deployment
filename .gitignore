@@ -1,4 +1,10 @@
 *.swp
+jhub/devel/devel
+jhub/devel/devel.pub
+jhub/devel/launch.json
+jhub/k8smgr/devel
+jhub/k8smgr/devel.pub
+jhub/k8smgr/launch.json
 jhub/certs/venv
 jhub/certs/jupyterhub.sqlite
 jhub/certs/jupyterhub_cookie_secret

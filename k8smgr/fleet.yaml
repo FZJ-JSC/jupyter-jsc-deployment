@@ -2,7 +2,8 @@ defaultNamespace: jupyterjsc
 helm:
   values:
     image:
-      tag: "1.0.4-2"
+      # tag: "1.0.4-2"
+      tag: "devel"
     nameOverride: "drf-k8smgr"
     nodeSelector:
       worker: "true"

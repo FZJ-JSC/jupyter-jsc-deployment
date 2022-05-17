@@ -1,0 +1,38 @@
+{
+  "version": "1.4.2",
+  "configurations": [
+    {
+      "name": "JupyterHub",
+      "type": "python",
+      "request": "launch",
+      "program": "/usr/bin/jupyterhub",
+      "args": [
+        "-f",
+        "/usr/local/etc/jupyterhub/jupyterhub_config.py"
+      ],
+      "env": {
+        "JUPYTERHUB_CRYPT_KEY": "06e35ed347ec42859d52198b1773af86",
+        "PYTHONPATH": "/src/jupyterhub-patched:/src/jupyterhub-custom",
+        "RESERVATIONS_PATH": "/home/jupyterhub/reservations.json",
+        "MAINTENANCE_PATH": "/mnt/shared-data/maintenance-check/maintenance.json",
+        "PROXY_API_SERVICE_HOST": "<PROXY_API_SERVICE_HOST>",
+        "PROXY_API_SERVICE_PORT": "<PROXY_API_SERVICE_PORT>",
+        "HUB_SERVICE_PORT": "<HUB_SERVICE_PORT>",
+        "UNICOREMGR_AUTHENTICATION_TOKEN": "Basic <UNICOREMGR_JHUB_BASIC>",
+        "K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN": "Basic <K8SMGR_JHUB_BASIC>",
+        "TUNNEL_AUTHENTICATION_TOKEN": "Basic <TUNNEL_JHUB_BASIC>",
+        "LOGGING_CONFIG_FILE": "/mnt/persistent/logging.json",
+        "OAUTH_CLIENT_SECRET": "<OAUTH_CLIENT_SECRET>",
+        "OAUTH_CLIENT_ID": "<OAUTH_CLIENT_ID>",
+        "SQL_PASSWORD": "<SQL_PASSWORD>",
+        "SQL_DATABASE": "<SQL_DATABASE>",
+        "SQL_HOST": "<SQL_HOST>",
+        "SQL_PORT": "<SQL_PORT>",
+        "SQL_USER": "<SQL_USER>",
+        "DEPLOYMENT_NAMESPACE": "jupyterjsc",
+        "CONFIGPROXY_AUTH_TOKEN": "<CONFIGPROXY_AUTH_TOKEN>",
+        "TUNNEL_DEPLOYMENT_NAMESPACE": "jupyterjsc"
+      }
+    }
+  ]
+}
