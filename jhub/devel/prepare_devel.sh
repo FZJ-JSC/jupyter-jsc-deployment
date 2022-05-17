@@ -41,4 +41,4 @@ skj cp ${DIR}/settings.json ${POD_NAME}:/home/jovyan/.vscode/.
 skj cp ${DIR}/launch.json ${POD_NAME}:/home/jovyan/.vscode/.
 skj cp ${DIR}/tasks.json ${POD_NAME}:/home/jovyan/.vscode/.
 
-echo "skj port-forward pod/${PODNAME} 2222:2222"
+echo "skj port-forward pod/${POD_NAME} 2222:2222"

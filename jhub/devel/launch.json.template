@@ -11,6 +11,7 @@
         "/usr/local/etc/jupyterhub/jupyterhub_config.py"
       ],
       "env": {
+        "CUSTOM_CONFIG_PATH": "/mnt/shared-data/git_config/jupyterhub_custom_config-devel.json",
         "JUPYTERHUB_CRYPT_KEY": "06e35ed347ec42859d52198b1773af86",
         "PYTHONPATH": "/src/jupyterhub-patched:/src/jupyterhub-custom",
         "RESERVATIONS_PATH": "/home/jupyterhub/reservations.json",

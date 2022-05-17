@@ -42,7 +42,8 @@ hub:
       from logs import create_extra_handlers
 
       c.JupyterHub.log_level = 10
-      c.JupyterHub.custom_config_file = "/mnt/persistent/jupyterhub_custom_config.json"
+      custom_config_path = os.environ.get("CUSTOM_CONFIG_PATH", "/mnt/shared-data/git_config/jupyterhub_custom_config.json")
+      c.JupyterHub.custom_config_file = custom_config_path
       c.JupyterHub.extra_log_handlers = create_extra_handlers()
       db_host = os.environ.get("SQL_HOST")
       db_port = os.environ.get("SQL_PORT")
@@ -110,9 +111,7 @@ hub:
 
       c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
 
-      c.CustomGenericOAuthenticator.custom_config_file = (
-          "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
-      )
+      c.CustomGenericOAuthenticator.custom_config_file = custom_config_path
       c.CustomGenericOAuthenticator.enable_auth_state = True
       c.CustomGenericOAuthenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
       c.CustomGenericOAuthenticator.client_secret = os.environ.get("OAUTH_CLIENT_SECRET")
