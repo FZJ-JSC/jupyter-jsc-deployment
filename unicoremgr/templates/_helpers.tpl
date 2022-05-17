@@ -42,4 +42,5 @@ Generate certificates for drf unicoremgr service
 {{- $cert := genSignedCert ( include "drf-unicoremgr.name" . ) nil $altNames 1825 $ca -}}
 tls.crt: {{ $cert.Cert | b64enc }}
 tls.key: {{ $cert.Key | b64enc }}
+tls.ca: {{ $ca.Cert | b64enc }}
 {{- end -}}
