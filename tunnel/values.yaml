@@ -8,7 +8,7 @@ nameOverride: "drf-tunnel"
 devel: False
 
 # passed on to Django as DEBUG env variable
-debug: False
+debug: True
 
 # Public Keys from external sources (like hpc systems)
 authorized_keys:
