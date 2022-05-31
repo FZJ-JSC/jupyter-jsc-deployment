@@ -9,6 +9,7 @@ helm:
       worker: "true"
     podAnnotations:
       proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      sidecar.istio.io/inject: "false"
 targetCustomizations:
   - name: staging
     clusterSelector:
