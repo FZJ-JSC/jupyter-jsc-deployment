@@ -30,7 +30,6 @@ Selector labels
 {{- define "k8smgr.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "k8smgr.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-sidecar.istio.io/inject: false 
 {{- end }}
 
 
