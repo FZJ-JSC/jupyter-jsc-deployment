@@ -9,7 +9,6 @@ ingress:
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-    sidecar.istio.io/inject: "false"
   hosts:
     - host: jupyterhub.local
       svcName: proxy-public
