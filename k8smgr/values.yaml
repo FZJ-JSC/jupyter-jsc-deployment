@@ -8,7 +8,7 @@ nameOverride: "k8smgr"
 devel: False
 
 # passed on to Django as DEBUG env variable
-debug: False
+debug: True
 
 authoried_keys: []
 
