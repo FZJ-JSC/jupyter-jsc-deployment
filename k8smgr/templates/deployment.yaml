@@ -147,6 +147,9 @@ spec:
             - name: ssh
               containerPort: 2222
               protocol: TCP
+            - name: forward
+              containerPort: 56789
+              protocol: TCP
           # livenessProbe:
           #  httpGet:
           #    path: /

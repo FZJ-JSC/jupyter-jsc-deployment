@@ -11,8 +11,7 @@ devel: False
 debug: True
 
 # Public Keys from external sources (like hpc systems)
-authorized_keys:
-  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3hZ8/shyAE5BB38dha7eBAXovOMtCNUqm9ChJeMtxZ"
+authorized_keys: []
 
 ssh_config_hosts_defaults:
   serverAliveInterval: 60

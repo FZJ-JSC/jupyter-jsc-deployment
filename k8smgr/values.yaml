@@ -65,6 +65,14 @@ service:
   type: ClusterIP
   port: 443
 
+servicessh:
+  type: ClusterIP
+  port: 2222
+
+servicefwd:
+  type: ClusterIP
+  port: 56789
+
 ingress:
   enabled: false
   className: ""
