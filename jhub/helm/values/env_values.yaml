@@ -2,6 +2,16 @@ hub:
   extraEnv:
     - name: LOGGING_CONFIG_FILE
       value: "/mnt/persistent/logging.json"
+    - name: TUNNEL_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: drf-tunnel-passwds
+          key: JUPYTERHUB_USER_PASS
+    - name: UNICOREMGR_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: drf-unicoremgr-passwds
+          key: JUPYTERHUB_USER_PASS
     - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
