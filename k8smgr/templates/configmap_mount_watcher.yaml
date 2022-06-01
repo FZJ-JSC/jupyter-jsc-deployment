@@ -46,7 +46,7 @@ data:
     compare "/mnt/volumes_certs/certs/..data/tls.crt" "/mnt/shared-data/certs/k8smgr.crt"
     compare "/mnt/volumes_certs/certs/..data/tls.key" "/mnt/shared-data/certs/k8smgr.key"
     compare "/mnt/volumes_files/files/..data/manage_tunnel.sh" "/mnt/shared-data/files/manage_tunnel.sh"
-    compare "/mnt/volumes_keypairs/keypairs/..data/tunnel" "/mnt/shared-data/keypairs/tunnel"
-    compare "/mnt/volumes_keypairs/keypairs/..data/remote" "/mnt/shared-data/keypairs/remote"
+    compare "/mnt/volumes_keypairs/keypairs/..data/ssh-privatekey" "/mnt/shared-data/keypairs/ssh-privatekey"
+    compare "/mnt/volumes_keypairs/keypairs/..data/ssh-publickey" "/mnt/shared-data/keypairs/ssh-publickey"
     compare "/mnt/volumes_files/files/..data/authorized_keys" "/mnt/shared-data/files/authorized_keys"
     git pull origin {{ .Values.gitconfig.branch }}
