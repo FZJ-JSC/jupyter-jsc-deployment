@@ -48,12 +48,5 @@ data:
     compare "/mnt/volumes_files/files/..data/manage_tunnel.sh" "/mnt/shared-data/files/manage_tunnel.sh"
     compare "/mnt/volumes_keypairs/keypairs/..data/tunnel" "/mnt/shared-data/keypairs/tunnel"
     compare "/mnt/volumes_keypairs/keypairs/..data/remote" "/mnt/shared-data/keypairs/remote"
-    cp /mnt/volumes_files/files/..data/authorized_keys /tmp/authorized_keys
-    {{- if .Values.cluster_internal_publickeys }}
-    {{- range $secretname := .Values.cluster_internal_publickeys }}
-    PUBLICKEY=$(cat /mnt/volumes_{{ $secretname }}/..data/ssh-publickey)
-    echo "restrict,port-forwarding,command=\"/bin/echo No commands allowed\" ${PUBLICKEY}" >> /tmp/authorized_keys
-    {{- end }}
-    {{- end }}
-    compare "/tmp/authorized_keys" "/mnt/shared-data/files/authorized_keys"
+    compare "/mnt/volumes_files/files/..data/authorized_keys" "/mnt/shared-data/files/authorized_keys"
     git pull origin {{ .Values.gitconfig.branch }}

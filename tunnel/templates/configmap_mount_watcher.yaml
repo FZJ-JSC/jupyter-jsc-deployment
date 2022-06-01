@@ -32,10 +32,10 @@ data:
         # File has changed. It's important, that the files have the correct ownership 
         echo "$(date) $1 changed"
         filename=$(basename $1)
-        cp $1 /tmp/$filename.tmp
-        chown 1000:100 /tmp/$filename.tmp
-        chmod 400 /tmp/$filename.tmp
-        cp -rp /tmp/$filename.tmp $2 && rm /tmp/$filename.tmp
+        cp $1 /tmp/$filename
+        chown 1000:100 /tmp/$filename
+        chmod 400 /tmp/$filename
+        cp -rp /tmp/$filename $2 && rm /tmp/$filename
       fi
     }
     while true;
@@ -47,12 +47,5 @@ data:
       compare "/mnt/volumes_files/files/..data/config" "/mnt/shared-data/files/config"
       compare "/mnt/volumes_keypairs/keypairs/..data/tunnel" "/mnt/shared-data/keypairs/tunnel"
       compare "/mnt/volumes_keypairs/keypairs/..data/remote" "/mnt/shared-data/keypairs/remote"
-      cp /mnt/volumes_files/files/..data/authorized_keys /tmp/authorized_keys
-      {{- if .Values.cluster_internal_publickeys }}
-      {{- range $secretname := .Values.cluster_internal_publickeys }}
-        PUBLICKEY=$(cat /mnt/volumes_{{ $secretname }}/..data/ssh-publickey)
-        echo "restrict,port-forwarding,command=\"/bin/echo No commands allowed\" ${PUBLICKEY}" >> /tmp/authorized_keys
-      {{- end }}
-      {{- end }}
-      compare "/tmp/authorized_keys" "/mnt/shared-data/files/authorized_keys"
+      compare "/mnt/volumes_files/files/..data/authorized_keys" "/mnt/shared-data/files/authorized_keys"
     done

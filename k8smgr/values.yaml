@@ -12,8 +12,6 @@ debug: True
 
 authoried_keys: []
 
-cluster_internal_publickeys: []
-
 deploymentNamespace: "userlabs"
 
 tunnel:

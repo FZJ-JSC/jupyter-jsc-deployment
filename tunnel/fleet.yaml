@@ -16,7 +16,7 @@ targetCustomizations:
     helm:
       values:
         authorized_keys:
-          - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3hZ8/shyAE5BB38dha7eBAXovOMtCNUqm9ChJeMtxZ"
+          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3hZ8/shyAE5BB38dha7eBAXovOMtCNUqm9ChJeMtxZ'
         servicessh:
           loadBalancerIP: "134.94.199.67"
         ssh_config_hosts: 

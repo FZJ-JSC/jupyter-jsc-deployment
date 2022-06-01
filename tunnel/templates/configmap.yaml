@@ -10,7 +10,7 @@ metadata:
 data:
   authorized_keys: |
     {{- range $auth_key := .Values.authorized_keys }}
-    restrict,port-forwarding,command="/bin/echo No commands allowed" {{ $auth_key }}
+    {{ $auth_key }}
     {{- end }}
   config: |
     Host *
@@ -26,13 +26,13 @@ data:
         User {{ $host.user }}
         Port {{ default 22 $host.port }}
         HostName {{ $host.hostname }}
-        IdentityFile /home/tunnel/.ssh/tunnel
+        IdentityFile /mnt/shared-data/keypairs/tunnel
         ControlPath /tmp/control_tunnel_{{ $host.name }}
     
     Host remote_{{ $host.name }}
         User {{ $host.user }}
         Port {{ default 22 $host.port }}
         HostName {{ $host.hostname }}
-        IdentityFile /home/tunnel/.ssh/remote
+        IdentityFile /mnt/shared-data/keypairs/remote
         ControlPath /tmp/control_remote_{{ $host.name }}
     {{- end }}
