@@ -10,7 +10,7 @@ metadata:
 data:
   authorized_keys: |
     {{- range $auth_key := .Values.authorized_keys }}
-    restrict,port-forwarding,command="/bin/echo No commands allowed" {{ $auth_key }}
+    {{ $auth_key }}
     {{- end }}
   manage_tunnel.sh: |
     #!/bin/bash
