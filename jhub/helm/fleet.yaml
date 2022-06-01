@@ -81,8 +81,8 @@ targetCustomizations:
           args:
             - -c
             - >-
-              while true; do sleep 30; done
-              # /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+              /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+              # while true; do sleep 30; done
           containerSecurityContext:
             runAsUser: 0
             runAsGroup: 0
