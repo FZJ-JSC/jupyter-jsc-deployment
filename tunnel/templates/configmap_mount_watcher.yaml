@@ -32,10 +32,10 @@ data:
         # File has changed. It's important, that the files have the correct ownership 
         echo "$(date) $1 changed"
         filename=$(basename $1)
-        cp $1 /tmp/$filename
-        chown 1000:100 /tmp/$filename
-        chmod 400 /tmp/$filename
-        cp -rp /tmp/$filename $2 && rm /tmp/$filename
+        cp $1 /tmp/$filename.tmp
+        chown 1000:100 /tmp/$filename.tmp
+        chmod 400 /tmp/$filename.tmp
+        cp -rp /tmp/$filename.tmp $2 && rm /tmp/$filename.tmp
       fi
     }
     while true;
