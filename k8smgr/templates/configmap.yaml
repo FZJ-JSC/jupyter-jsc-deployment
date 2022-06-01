@@ -27,7 +27,7 @@ data:
     HOSTNAME_="{{ include "k8smgr.name" . }}-jupyterhub-forward"
     LOCAL_PORT=56789
 
-    PRIVATE_KEY="/mnt/shared-data/keypairs/k8smgr"
+    PRIVATE_KEY="/mnt/shared-data/keypairs/ssh-privatekey"
     TUNNEL_SSH_PORT={{ .Values.tunnel.port }}
     TUNNEL_SSH_USER={{ .Values.tunnel.user }}
     TUNNEL_SSH_HOST={{ .Values.tunnel.host }}

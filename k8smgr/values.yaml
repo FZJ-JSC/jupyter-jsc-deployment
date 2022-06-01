@@ -20,8 +20,8 @@ tunnel:
   host: drf-tunnel.jupyterjsc.svc
 
 jupyterhub:
-  host: jhub-proxy
-  port: 8080
+  host: proxy-public
+  port: 443
 
 gitconfig:
   branch: "k8smgr-dev"

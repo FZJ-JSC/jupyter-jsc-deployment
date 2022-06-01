@@ -92,7 +92,8 @@ targetCustomizations:
               c.JupyterHub.trusted_alt_names = [
                 "DNS:hub",
                 "DNS:proxy-public",
-                "DNS:jupyter-jsc-staging.fz-juelich.de"
+                "DNS:jupyter-jsc-staging.fz-juelich.de",
+                "DNS:drf-k8smgr-jupyterhub-forward"
               ]
               c.CustomGenericOAuthenticator.oauth_callback_url = (
                   "https://jupyter-jsc-staging.fz-juelich.de/hub/oauth_callback"
