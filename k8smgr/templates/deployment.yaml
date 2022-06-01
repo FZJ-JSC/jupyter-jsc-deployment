@@ -139,9 +139,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.labels['app']
             - name: DEPLOYMENT_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
+              value: "{{ .Values.deploymentNamespace }}"
           ports:
             - name: https
               containerPort: 8443
