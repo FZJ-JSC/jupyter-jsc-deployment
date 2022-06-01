@@ -37,7 +37,7 @@ spec:
           args:
           - -c
           - >-
-              mkdir -p /mnt/shared-data/certs && mkdir -p /mnt/shared-data/files && mkdir -p /mnt/shared-data/keypairs && cp -rp /mnt/volumes_certs/certs/..data/tls.key /mnt/shared-data/certs/tunnel.key && cp -rp /mnt/volumes_certs/certs/..data/tls.crt /mnt/shared-data/certs/tunnel.crt && cp -rp /mnt/volumes_files/files/..data/* /mnt/shared-data/files/. && cp -rp /mnt/volumes_keypairs/keypairs/..data/* /mnt/shared-data/keypairs/. && chmod 400 /mnt/shared-data/certs/* && chmod 400 /mnt/shared-data/files/* && chmod 400 /mnt/shared-data/keypairs/* && chown -R 1000:100 /mnt/shared-data/certs && chown -R 1000:100 /mnt/shared-data/files && chown -R 1000:100 /mnt/shared-data/keypairs
+              mkdir -p /mnt/shared-data/certs && mkdir -p /mnt/shared-data/files && mkdir -p /mnt/shared-data/keypairs && cp -rp /mnt/volumes_certs/certs/..data/tls.key /mnt/shared-data/certs/tunnel.key && cp -rp /mnt/volumes_certs/certs/..data/tls.crt /mnt/shared-data/certs/tunnel.crt && cp -rp /mnt/volumes_files/files/..data/* /mnt/shared-data/files/. && cp -rp /mnt/volumes_keypairs/keypairs/..data/* /mnt/shared-data/keypairs/. && chmod 400 /mnt/shared-data/certs/* && chmod 400 /mnt/shared-data/files/* && chmod 400 /mnt/shared-data/keypairs/* && chown -R 1000:100 /mnt/shared-data && chmod 755 /mnt/shared-data
           volumeMounts:
             - name: certs
               mountPath: /mnt/volumes_certs/certs
@@ -74,7 +74,7 @@ spec:
               value: "true"
             {{- end }}
             - name: AUTHORIZED_KEYS_PATH
-              value: "/mnt/shared-data/files"
+              value: "/mnt/shared-data/files/authorized_keys"
             - name: SSHCONFIGFILE
               value: "/mnt/shared-data/files/config"
             - name: GUNICORN_SSL_CRT
