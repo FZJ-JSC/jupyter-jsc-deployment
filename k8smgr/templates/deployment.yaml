@@ -56,7 +56,7 @@ spec:
           args:
           - -c
           - >-
-            apk add git && mkdir -p /mnt/shared-data/certs && mkdir -p /mnt/shared-data/files && mkdir -p /mnt/shared-data/keypairs && cp -rp /mnt/volumes_certs/certs/..data/tls.key /mnt/shared-data/certs/k8smgr.key && cp -rp /mnt/volumes_certs/certs/..data/tls.crt /mnt/shared-data/certs/k8smgr.crt && cp -rp /mnt/volumes_files/files/..data/* /mnt/shared-data/files/. && cp -rp /mnt/volumes_keypairs/keypairs/..data/* /mnt/shared-data/keypairs/. && chmod 400 /mnt/shared-data/certs/* && chmod 400 /mnt/shared-data/files/* && chmod 400 /mnt/shared-data/keypairs/* && chown -R 1000:100 /mnt/shared-data/certs && chown -R 1000:100 /mnt/shared-data/files && chown -R 1000:100 /mnt/shared-data/keypairs && cd /mnt/shared-data && export GIT_REPO_SHORT=${GIT_REPO#"https://"} && git clone --single-branch --branch ${GIT_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config && chown -R 1000:100 /mnt/shared-data
+            apk add git && mkdir -p /mnt/shared-data/certs && mkdir -p /mnt/shared-data/files && mkdir -p /mnt/shared-data/keypairs && cp -rp /mnt/volumes_certs/certs/..data/tls.key /mnt/shared-data/certs/k8smgr.key && cp -rp /mnt/volumes_certs/certs/..data/tls.crt /mnt/shared-data/certs/k8smgr.crt && cp -rp /mnt/volumes_files/files/..data/* /mnt/shared-data/files/. && cp -rp /mnt/volumes_keypairs/keypairs/..data/* /mnt/shared-data/keypairs/. && chmod 400 /mnt/shared-data/certs/* && chmod 400 /mnt/shared-data/files/* && chmod 400 /mnt/shared-data/keypairs/* && chown -R 1000:100 /mnt/shared-data/certs && chown -R 1000:100 /mnt/shared-data/files && chown -R 1000:100 /mnt/shared-data/keypairs && cd /mnt/shared-data && export GIT_REPO_SHORT=${GIT_REPO#"https://"} && git clone --single-branch --branch ${GIT_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config && chown -R 1000:100 /mnt/shared-data && chmod 755 /mnt/shared-data
           volumeMounts:
             - name: certs
               mountPath: /mnt/volumes_certs/certs
@@ -97,7 +97,7 @@ spec:
               value: "true"
             {{- end }}
             - name: AUTHORIZED_KEYS_PATH
-              value: "/mnt/shared-data/files"
+              value: "/mnt/shared-data/files/authorized_keys"
             - name: CONFIG_PATH
               value: "/mnt/shared-data/git_config/config.json"
             - name: GUNICORN_SSL_CRT
