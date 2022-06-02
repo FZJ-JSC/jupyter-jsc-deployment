@@ -24,7 +24,7 @@ data:
     done
 
 
-    HOSTNAME_="{{ include "k8smgr.name" . }}-jupyterhub-forward"
+    HOSTNAME_="{{ include "k8smgr.name" . }}-jupyterhub-forward.jupyterjsc.svc"
     LOCAL_PORT=56789
 
     PRIVATE_KEY="/mnt/shared-data/keypairs/ssh-privatekey"
@@ -48,7 +48,7 @@ data:
             # Process is running, try to call it with curl, if curl's available
             which curl &> /dev/null
             if [[ $? -eq 0 ]]; then
-                STATUS_CODE=$(curl --write-out '%{http_code}' --silent --output /dev/null http://${HOSTNAME_}:${LOCAL_PORT}/hub/api)
+                STATUS_CODE=$(curl -k --write-out '%{http_code}' --silent --output /dev/null https://${HOSTNAME_}:${LOCAL_PORT}/hub/api)
                 if [[ ${STATUS_CODE} -eq 200 ]]; then
                     return 217
                 else
