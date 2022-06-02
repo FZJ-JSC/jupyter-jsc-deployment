@@ -82,10 +82,6 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/sh", "-c", "echo \"$POD_IP {{ include "k8smgr.name" . }}-jupyterhub-forward\" >> /etc/hosts"]
           envFrom:
             - secretRef:
                 name: "{{ .Values.secrets.passwds }}"
@@ -115,10 +111,6 @@ spec:
                   name: "{{ .Values.secrets.tunnelpasswds }}"
                   key: K8SMGR_USER_PASS
             {{- end }}
-            - name: POD_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
             - name: SQL_USER
               valueFrom:
                 secretKeyRef:
