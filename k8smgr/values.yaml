@@ -17,7 +17,7 @@ deploymentNamespace: "userlabs"
 tunnel:
   port: 2222
   user: tunnel
-  host: drf-tunnel.jupyterjsc.svc
+  host: drf-tunnel-ssh.jupyterjsc.svc
 
 jupyterhub:
   host: proxy-public
