@@ -1,27 +1,5 @@
-
 c.JupyterHub.internal_ssl=True
-c.JupyterHub.external_ssl_authorities = {
-    "hub-ca": {
-        "key": "ca_certs/hub-ca/hub-ca.key",
-        "cert": "ca_certs/hub-ca/hub-ca.crt",
-    },
-    "notebooks-ca": {
-        "key": "ca_certs/nootebooks-ca/notebooks-ca.key",
-        "cert": "ca_certs/notebooks-ca/notebooks-ca.crt",
-    },
-    "proxy-api-ca": {
-        "key": "ca_certs/proxy-api-ca/proxy-api-ca.key",
-        "cert": "ca_certs/proxy-api-ca/proxy-api-ca.crt",
-    },
-    "proxy-client-ca": {
-        "key": "ca_certs/proxy-client-ca/proxy-client-ca.key",
-        "cert": "ca_certs/proxy-client-ca/proxy-client-ca.crt",
-    },
-    "services-ca": {
-        "key": "ca_certs/services-ca/services-ca.key",
-        "cert": "ca_certs/services-ca/services-ca.crt",
-    }
-}
+c.JupyterHub.internal_certs_location = "new_ca_certs"
 c.JupyterHub.trusted_alt_names = [
   "DNS:proxy-api",
   "DNS:hub",
