@@ -1,7 +1,7 @@
 hub:
   extraEnv:
     - name: LOGGING_CONFIG_FILE
-      value: "/mnt/persistent/logging.json"
+      value: "/mnt/shared-data/git_config/logging.json"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
       value: "jupyterjsc"
     - name: TUNNEL_JUPYTERHUB_USER_PASS
