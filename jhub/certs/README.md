@@ -16,3 +16,35 @@ When JuypterLab tries to communicate to JupyterHub, it uses the Remote Tunnel op
 
 # Adding new Login Nodes / Systems
 As mentioned in the bullet point above, the proxy-client certificate must support all bind addresses. So we have to create a new proxy-client certificate and restart the proxy pod. It is important to reuse the ca certificates. They are stored in our Vault instance at "jupyterhub-ca_certs-dir". Use this secret value to create a ca_certs.tar.gz file, which includes all used ca certificates. An update for the JupyterLabs or JupyterHub is not necessary.
+
+```
+echo -n "<vault_secret_jupyterhub-ca_certs-dir>" | base64 -d > ca_certs.tar.gz
+tar -xzf ca_certs.tar.gz
+# Update jupyterhub_config.py - add DNS names to your liking
+jupyterhub -f jupyterhub_config.py  # JupyterHub>2.1.1 must be installed
+# Stop JupyterHub after "[...] JupyterHub is now running at http://:8000"
+bash internal-ssh_to_secret.sh > secret.yaml
+kubectl -n jupyterjsc apply -f secret.yaml
+kubectl -n juypterjsc rollout restart proxy
+```
+
+# Create new Certificate Authorities
+Only required every 5 years!
+Requires a stop of all JupyterLabs and other JupyterHub-sub-services, because JupyterHub will not be trusted by the running JupyterLabs anymore.
+```
+# Update jupyterhub_config_create_new_cas.py - add DNS names to your liking
+jupyterhub -f jupyterhub_config_create_new_cas.py
+# Stop JupyterHub after "[...] JupyterHub is now running at http://:8000"
+rm -rf new_ca_certs/certipy.json
+rm -rf new_ca_certs/hub-internal
+mkdir internal-ssl
+mv new_ca_certs/proxy-api internal-ssl/proxy-api
+mv new_ca_certs/proxy-client internal-ssl/proxy-client
+mv new_ca_certs ca_certs
+bash internal-ssh_to_secret.sh > secret.yaml
+kubectl -n jupyterjsc apply -f secret.yaml
+kubectl -n juypterjsc rollout restart proxy
+```
+
+You then have to restart everything JupyterHub related and update the proxy-client-ca.crt for all services. Remember to update service_descriptions in k8smgr and unicoremgr.
+
