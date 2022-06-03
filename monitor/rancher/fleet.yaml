@@ -5,86 +5,122 @@ helm:
   chart: rancher-monitoring
   version: 100.1.2+up19.0.3
   values:
+    alertmanager:
+      alertmanagerSpec:
+        configSecret: alertmanager-rancher-monitoring-alertmanager
+        nodeSelector:
+          monitoring: "true"
+        useExistingSecret: true
+        tolerations:
+          - key: "monitoring"
+            value: "true"
+            effect: "NoExecute"
     grafana:
+      nodeSelector:
+        monitoring: "true"
+      persistence:
+        enabled: true
+        existingClaim: grafana-pvc
       grafana.ini:
         smtp:
           enabled: true
           from_address: jupyter.jsc@fz-juelich.de
           from_name: Jupyter-JSC Monitoring
           host: mail.fz-juelich.de:25
-targetCustomizations:
-  - name: staging
-    clusterSelector:
-      matchLabels:
-        stage: staging
-        provider.cattle.io: rke
-    helm:
-      values:
-        alertmanager:
-          alertmanagerSpec:
-            configSecret: alertmanager-rancher-monitoring-alertmanager
-            nodeSelector:
-              monitoring: "true"
-            useExistingSecret: true
-        grafana:
+    ingressNginx:
+      enabled: true
+    kube-state-metrics:
+      nodeSelector:
+        monitoring: "true"
+      tolerations:
+        - key: "monitoring"
+          value: "true"
+          effect: "NoExecute"
+    prometheus:
+      prometheusSpec:
+        evaluationInterval: 1m
+        nodeSelector:
+          monitoring: "true"
+        tolerations:
+          - key: "monitoring"
+            value: "true"
+            effect: "NoExecute"
+        retentionSize: 45GiB
+        scrapeInterval: 1m
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              resources:
+                requests:
+                  storage: 50Gi
+              storageClassName: csi-cinder-sc-retain
+    prometheus-adapter:
+      nodeSelector:
+        monitoring: "true"
+      tolerations:
+        - key: "monitoring"
+          value: "true"
+          effect: "NoExecute"
+    prometheusOperator:
+      admissionWebhooks:
+        patch:
           nodeSelector:
             monitoring: "true"
-          persistence:
-            enabled: true
-            existingClaim: grafana-pvc
-        ingressNginx:
-          enabled: true
-        kube-state-metrics:
-          nodeSelector:
-            monitoring: "true"
-        prometheus:
-          prometheusSpec:
-            evaluationInterval: 1m
-            nodeSelector:
-              monitoring: "true"
-            retentionSize: 45GiB
-            scrapeInterval: 1m
-            storageSpec:
-              volumeClaimTemplate:
-                spec:
-                  resources:
-                    requests:
-                      storage: 50Gi
-                  storageClassName: csi-cinder-sc-retain
-        prometheus-adapter:
-          nodeSelector:
-            monitoring: "true"
-        prometheusOperator:
-          admissionWebhooks:
-            patch:
-              nodeSelector:
-                monitoring: "true"
-          nodeSelector:
-            monitoring: "true"
-        rkeControllerManager:
-          enabled: true
-          proxy:
-            nodeSelector:
-              monitoring: "true"
-        rkeEtcd:
-          enabled: true
-          proxy:
-            nodeSelector:
-              monitoring: "true"
-        rkeIngressNginx:
-          clients:
-            nodeSelector:
-              monitoring: "true"
-        rkeProxy:
-          enabled: true
-          proxy:
-            nodeSelector:
-              monitoring: "true"
-        rkeScheduler:
-          enabled: true
-          proxy:
-            nodeSelector:
-              monitoring: "true"
+          tolerations:
+            - key: "monitoring"
+              value: "true"
+              effect: "NoExecute"
+      nodeSelector:
+        monitoring: "true"
+      tolerations:
+        - key: "monitoring"
+          value: "true"
+          effect: "NoExecute"
+    rkeControllerManager:
+      enabled: true
+      proxy:
+        nodeSelector:
+          monitoring: "true"
+        tolerations:
+          - key: "monitoring"
+            value: "true"
+            effect: "NoExecute"
+    rkeEtcd:
+      enabled: true
+      proxy:
+        nodeSelector:
+          monitoring: "true"
+        tolerations:
+          - key: "monitoring"
+            value: "true"
+            effect: "NoExecute"
+    rkeIngressNginx:
+      clients:
+        nodeSelector:
+          monitoring: "true"
+        tolerations:
+          - key: "monitoring"
+            value: "true"
+            effect: "NoExecute"
+    rkeProxy:
+      enabled: true
+      proxy:
+        nodeSelector:
+          monitoring: "true"
+        tolerations:
+          - key: "monitoring"
+            value: "true"
+            effect: "NoExecute"
+    rkeScheduler:
+      enabled: true
+      proxy:
+        nodeSelector:
+          monitoring: "true"
+        tolerations:
+          - key: "monitoring"
+            value: "true"
+            effect: "NoExecute"
+targetustomizations:
   - name: k3d
     clusterSelector:
       matchLabels:
