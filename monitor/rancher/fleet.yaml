@@ -18,6 +18,10 @@ helm:
     grafana:
       nodeSelector:
         monitoring: "true"
+      tolerations:
+        - key: "monitoring"
+          value: "true"
+          effect: "NoExecute"
       persistence:
         enabled: true
         existingClaim: grafana-pvc
