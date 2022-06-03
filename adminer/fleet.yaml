@@ -6,5 +6,7 @@ helm:
   values:
     service:
       type: ClusterIP
+    nodeSelector:
+      worker: "true"
 dependsOn:
   - name: basics-postgresql
