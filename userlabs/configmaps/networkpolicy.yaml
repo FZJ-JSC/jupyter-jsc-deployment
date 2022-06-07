@@ -7,19 +7,7 @@ spec:
     matchLabels:
       user-jupyterlab: "true"
   policyTypes:
-    - Ingress
     - Egress
-  ingress:
-    - from:
-      - namespaceSelector:
-          matchLabels:
-            name: jupyterjsc
-      - podSelector:
-          matchLabels:
-            app: drf-k8smgr
-      ports:
-        - protocol: TCP
-          port: 443
   egress:
     - to:
       - namespaceSelector:
@@ -31,6 +19,16 @@ spec:
       ports:
         - protocol: TCP
           port: 443
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: jupyterjsc
+      - podSelector:
+          matchLabels:
+            app: drf-k8smgr
+      ports:
+        - protocol: TCP
+          port: 56789
     - to:
         - namespaceSelector: {}
           podSelector:
