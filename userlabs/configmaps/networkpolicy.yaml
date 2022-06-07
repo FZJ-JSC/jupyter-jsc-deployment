@@ -30,7 +30,7 @@ spec:
             app: drf-k8smgr
       ports:
         - protocol: TCP
-          port: 56789
+          port: 443
     - to:
         - namespaceSelector: {}
           podSelector:
