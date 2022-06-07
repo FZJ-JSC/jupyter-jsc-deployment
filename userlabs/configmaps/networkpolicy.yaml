@@ -16,7 +16,7 @@ spec:
             name: jupyterjsc
       - podSelector:
           matchLabels:
-            instance: jupyterjsc-k8smgr
+            app: drf-k8smgr
       ports:
         - protocol: TCP
           port: 443
@@ -27,7 +27,7 @@ spec:
             name: jupyterjsc
       - podSelector:
           matchLabels:
-            instance: jupyterjsc-k8smgr
+            app: drf-k8smgr
       ports:
         - protocol: TCP
           port: 56789
