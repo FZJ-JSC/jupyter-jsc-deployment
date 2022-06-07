@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: userlabs-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      user-jupyterlab: "true"
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: jupyterjsc
+      - podSelector:
+          matchLabels:
+            instance: jupyterjsc-k8smgr
+      ports:
+        - protocol: TCP
+          port: 443
+  egress:
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: jupyterjsc
+      - podSelector:
+          matchLabels:
+            instance: jupyterjsc-k8smgr
+      ports:
+        - protocol: TCP
+          port: 56789
