@@ -8,6 +8,15 @@ helm:
       worker: "true"
     podAnnotations:
       proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+    ssh_config_hosts: 
+      - name: "k8smgr_hdfcloud"
+        user: "k8smgr"
+        port: 2222
+        hostname: "drf-k8smgr-ssh.jupyterjsc.svc"
+      - name: "deep01"
+        user: "ljupyter"
+        port: 22
+        hostname: "deep.fz-juelich.de"
 targetCustomizations:
   - name: staging
     clusterSelector:
@@ -19,8 +28,3 @@ targetCustomizations:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3hZ8/shyAE5BB38dha7eBAXovOMtCNUqm9ChJeMtxZ'
         servicessh:
           loadBalancerIP: "134.94.199.67"
-        ssh_config_hosts: 
-          - name: "k8smgr_hdfcloud"
-            user: "k8smgr"
-            port: 2222
-            hostname: "drf-k8smgr-ssh.jupyterjsc.svc"

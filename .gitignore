@@ -1,4 +1,5 @@
 *.swp
+jhub/keys
 jhub/devel/devel
 jhub/devel/devel.pub
 jhub/devel/launch.json
