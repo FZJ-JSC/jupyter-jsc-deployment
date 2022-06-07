@@ -25,6 +25,7 @@ targetCustomizations:
     helm:
       values:
         authorized_keys:
-          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3hZ8/shyAE5BB38dha7eBAXovOMtCNUqm9ChJeMtxZ'
+          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3hZ8/shyAE5BB38dha7eBAXovOMtCNUqm9ChJeMtxZ hdfcloud'
+          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgksSrTiiruGg1m7EzwMiTM9AFhUNBgeMBcCxfgfH7i deep'
         servicessh:
           loadBalancerIP: "134.94.199.67"
