@@ -85,6 +85,7 @@ servicessh:
   loadBalancerIP: ""
   loadBalancerSourceRanges: []
   servicePort: 7002
+  targetPort: 2222
   type: "LoadBalancer"
 
 
