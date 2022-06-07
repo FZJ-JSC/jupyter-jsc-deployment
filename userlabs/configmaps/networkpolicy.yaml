@@ -10,12 +10,14 @@ spec:
     - Egress
   egress:
     - to:
-      - namespaceSelector:
-        matchLabels:
-          name: jupyterjsc
-        podSelector:
-          matchLabels:
-            app: drf-k8smgr
+        - namespaceSelector:
+            matchLabels:
+              name: jupyterjsc
+          podSelector:
+            matchLabels:
+              app: drf-k8smgr
+      ports:
+        - port: 56789
     - to:
         - namespaceSelector: {}
           podSelector:
