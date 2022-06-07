@@ -15,7 +15,7 @@ authoried_keys: []
 deploymentNamespace: "userlabs"
 
 tunnel:
-  port: 2222
+  port: 7002
   user: tunnel
   host: drf-tunnel-ssh.jupyterjsc.svc
 
