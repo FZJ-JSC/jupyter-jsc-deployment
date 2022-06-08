@@ -15,3 +15,5 @@ jhub/certs/node_modules
 jhub/certs/package-lock.json
 jhub/certs/package.json
 jhub/certs/internal-ssl
+# MacOS
+.DS_Store

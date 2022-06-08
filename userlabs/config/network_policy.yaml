@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: userlabs-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      user-jupyterlab: "true"
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: jupyterjsc
+          podSelector:
+            matchLabels:
+              app: drf-k8smgr
+      ports:
+        - port: 8443
+  egress:
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: UDP
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: jupyterjsc
+          podSelector:
+            matchLabels:
+              app: drf-k8smgr
+      ports:
+        - port: 56789
+        - port: 443
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
