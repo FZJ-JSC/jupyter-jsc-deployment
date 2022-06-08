@@ -33,8 +33,8 @@ hub:
         #     pip install requests psycopg2-binary &&
         #     python3 -u /tmp/cleanup_sql.py
         - >-
+            /tmp/create_auth_tokens.sh &&
             pip install requests psycopg2-binary &&
-            /bin/bash /tmp/create_auth_tokens.sh &&
             sleep infinity
       env:
         - name: CUSTOM_CONFIG_PATH
