@@ -31,7 +31,7 @@ hub:
         - -c
         - >-
             pip install requests psycopg2-binary &&
-            source /tmp/run_cleanup.sh &&
+            source /tmp/run_cleanup.sh
       env:
         - name: CUSTOM_CONFIG_PATH
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
