@@ -3,13 +3,14 @@ hub:
     - name: maintenance-check
       image: python:3.9-alpine3.16
       imagePullPolicy: Always
-      command: ["bin/sh"]
+      command: ["/bin/sh"]
       args:
         - -c
-        - >-
-            pip install jsonformatter python-dateutil requests &&
-            mkdir -p $OUTPUT_DIR &&
-            python3 -u /tmp/maintenance_check.py
+        - sleep infinity
+        # - >-
+        #     pip install jsonformatter python-dateutil requests &&
+        #     mkdir -p $OUTPUT_DIR &&
+        #     python3 -u /tmp/maintenance_check.py
       env:
         - name: CUSTOM_CONFIG_PATH
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
