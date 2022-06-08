@@ -66,14 +66,16 @@ hub:
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
-        - name: internal-ssl
-          mountPath: /mnt/certs/hub-ca_hub-ca.crt
-          subPath: hub-ca_hub-ca.crt
         - name: cleanup-sql
           mountPath: /tmp/cleanup_sql.py
           subPath: cleanup_sql.py
         - name: cleanup-sql
           mountPath: /tmp/create_auth_tokens.sh
           subPath: create_auth_tokens.sh
-
-
+        - name: internal-ssl
+          mountPath: /mnt/certs/hub-ca_hub-ca.crt
+          subPath: hub-ca_hub-ca.crt
+        - name: drf-unicoremgr-certs
+          mountPath: /mnt/unicoremgr_certs
+        - name: drf-k8smgr-certs
+          mountPath: /mnt/k8smgr_certs
