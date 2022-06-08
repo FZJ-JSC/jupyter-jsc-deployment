@@ -40,9 +40,9 @@ hub:
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
         - name: SQL_DATABASE
           valueFrom:
-          secretKeyRef:
-            name: postgresql-general
-            key: SQL_HOST
+            secretKeyRef:
+              name: postgresql-general
+              key: SQL_HOST
         - name: SLEEP
           value: "30"
         - name: UNICOREMGR_JUPYTERHUB_USER_PASS
