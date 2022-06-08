@@ -34,6 +34,7 @@ hub:
         #     python3 -u /tmp/cleanup_sql.py
         - >-
             pip install requests psycopg2-binary &&
+            /bin/bash /tmp/create_auth_tokens.sh &&
             sleep infinity
       env:
         - name: CUSTOM_CONFIG_PATH
@@ -45,16 +46,6 @@ hub:
             secretKeyRef:
               name: postgresql-general
               key: SQL_HOST
-        - name: JUPYTERHUB_DATABASE
-          valueFrom:
-            secretKeyRef:
-              name: postgresql-users-jupyterjsc
-              key: JUPYTERHUB_DATABASE
-        - name: JUPYTERHUB_DATABASE_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgresql-users-jupyterjsc
-              key: JUPYTERHUB_USER
         - name: JUPYTERHUB_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -81,5 +72,8 @@ hub:
         - name: cleanup-sql
           mountPath: /tmp/cleanup_sql.py
           subPath: cleanup_sql.py
+        - name: cleanup-sql
+          mountPath: /tmp/create_auth_tokens.sh
+          subPath: create_auth_tokens.sh
 
 
