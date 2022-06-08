@@ -23,4 +23,48 @@ hub:
         - name: maintenance-check
           mountPath: /tmp/maintenance_check.py
           subPath: maintenance_check.py
+    - name: cleanup-sql
+      image: python:3.9-alpine3.16
+      imagePullPolicy: Always
+      command: ["/bin/sh"]
+      args:
+        - -c
+        # - >-
+        #     pip install requests &&
+        #     python3 -u /tmp/cleanup_sql.py
+        - >-
+            pip install requests &&
+            sleep infinity
+      env:
+        - name: CUSTOM_CONFIG_PATH
+          value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
+        - name: SQL_DATABASE
+          valueFrom:
+          secretKeyRef:
+            name: postgresql-general
+            key: SQL_HOST
+        - name: SLEEP
+          value: "30"
+        - name: UNICOREMGR_JUPYTERHUB_USER_PASS
+          valueFrom:
+            secretKeyRef:
+              name: drf-unicoremgr-passwds
+              key: JUPYTERHUB_USER_PASS
+              optional: false
+        - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+          valueFrom:
+            secretKeyRef:
+              name: drf-k8smgr-passwds 
+              key: JUPYTERHUB_USER_PASS
+              optional: false
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: internal-ssl
+          mountPath: /mnt/certs/hub-ca_hub-ca.crt
+          subPath: hub-ca_hub-ca.crt
+        - name: cleanup-sql
+          mountPath: /tmp/cleanup_sql.py
+          subPath: cleanup_sql.py
+
 
