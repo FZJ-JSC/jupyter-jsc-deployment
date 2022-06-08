@@ -14,7 +14,7 @@ data:
     export UNICOREMGR_AUTHENTICATION_TOKEN=${UNICOREMGR_AUTHENTICATION_TOKEN:-"Basic $(echo -n "jupyterhub:${UNICOREMGR_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
     fi
 
-    /usr/local/bin/python /tmp/cleanup_sql.py
+    /usr/local/bin/python3 -u /tmp/cleanup_sql.py
 
   cleanup_sql.py: |
     import datetime
@@ -128,7 +128,6 @@ data:
 
     if __name__ == "__main__":
         sleep_time = int(os.environ.get("SLEEP", 60))
-        db = os.environ.get("SQL_DATABASE", "/home/jupyterhub/jupyterhub.sqlite")
         grace_period = int(os.environ.get("START_DATE_GRACE_PERIOD_IN_MIN", 5))
         while True:
             print(f"{now()} {uuidcode} - Cleanup falsely running services ...")
