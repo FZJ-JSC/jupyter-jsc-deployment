@@ -4,7 +4,7 @@ metadata:
   name: jupyterhub-cleanup-sql
 data:
   create_auth_tokens.sh: |
-    #!/bin/bash
+    #!/bin/sh
     if [[ -n ${K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS} ]]; then
     export K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN=${K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN:-"Basic $(echo -n "jupyterhub:${K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
     fi
