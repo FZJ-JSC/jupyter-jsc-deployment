@@ -3,22 +3,26 @@ kind: ConfigMap
 metadata:
   name: jupyterhub-cleanup-sql
 data:
-  create_auth_tokens.sh: |
+  run_cleanup.sh: |
     #!/bin/sh
+
     if [[ -n ${K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS} ]]; then
     export K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN=${K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN:-"Basic $(echo -n "jupyterhub:${K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
     fi
+
     if [[ -n ${UNICOREMGR_JUPYTERHUB_USER_PASS} ]]; then
     export UNICOREMGR_AUTHENTICATION_TOKEN=${UNICOREMGR_AUTHENTICATION_TOKEN:-"Basic $(echo -n "jupyterhub:${UNICOREMGR_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
     fi
+
+    /usr/local/bin/python /tmp/cleanup_sql.py
 
   cleanup_sql.py: |
     import datetime
     import json
     import os
-    import sqlite3 as sql
     import time
 
+    import psycopg2
     import requests
 
     custom_conf_file = os.environ.get(
@@ -38,8 +42,13 @@ data:
         return datetime.datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
 
 
-    def get_jhub_server(db):
-        connection = sql.connect(db)
+    def get_jhub_server():
+        connection = psycopg2.connect(
+            host=os.environ.get("SQL_HOST", "postgresql.database.svc"),
+            database=os.environ.get("JUPYTERHUB_DATABASE", "jupyterhub"),
+            user=os.environ.get("JUPYTERHUB_DATABASE_USER", "jupyterhub"),
+            password=os.environ.get("JUPYTERHUB_DATABASE_PASSWORD", None),
+        )
         query = "SELECT spawners.name FROM spawners WHERE spawners.started IS NOT NULL"
         cur = connection.cursor()
         cur.execute(query)
@@ -122,15 +131,10 @@ data:
         db = os.environ.get("SQL_DATABASE", "/home/jupyterhub/jupyterhub.sqlite")
         grace_period = int(os.environ.get("START_DATE_GRACE_PERIOD_IN_MIN", 5))
         while True:
-            if os.path.exists(db):
-                break
-            print(f"{now()} {uuidcode} - Wait for {db}")
-            time.sleep(5)
-        while True:
             print(f"{now()} {uuidcode} - Cleanup falsely running services ...")
             with open(custom_conf_file, "r") as f:
                 custom_conf = json.load(f)
-            jhub_server = get_jhub_server(db)
+            jhub_server = get_jhub_server()
             cleanup_drf_services(jhub_server, custom_conf, grace_period)
             print(f"{now()} {uuidcode} - Cleanup falsely running services ... done")
             time.sleep(sleep_time)

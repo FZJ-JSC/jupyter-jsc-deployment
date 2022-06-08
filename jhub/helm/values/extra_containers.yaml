@@ -31,9 +31,8 @@ hub:
         - -c
         # - >-
         #     pip install requests psycopg2-binary &&
-        #     python3 -u /tmp/cleanup_sql.py
+        #     source /tmp/run_cleanup.sh &&
         - >-
-            source /tmp/create_auth_tokens.sh &&
             pip install requests psycopg2-binary &&
             sleep infinity
       env:
@@ -70,8 +69,8 @@ hub:
           mountPath: /tmp/cleanup_sql.py
           subPath: cleanup_sql.py
         - name: cleanup-sql
-          mountPath: /tmp/create_auth_tokens.sh
-          subPath: create_auth_tokens.sh
+          mountPath: /tmp/run_cleanup.sh
+          subPath: run_cleanup.sh
         - name: internal-ssl
           mountPath: /mnt/certs/hub-ca_hub-ca.crt
           subPath: hub-ca_hub-ca.crt
