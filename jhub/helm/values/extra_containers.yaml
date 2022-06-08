@@ -29,12 +29,9 @@ hub:
       command: ["/bin/sh"]
       args:
         - -c
-        # - >-
-        #     pip install requests psycopg2-binary &&
-        #     source /tmp/run_cleanup.sh &&
         - >-
             pip install requests psycopg2-binary &&
-            sleep infinity
+            source /tmp/run_cleanup.sh &&
       env:
         - name: CUSTOM_CONFIG_PATH
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
