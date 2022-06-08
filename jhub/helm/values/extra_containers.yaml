@@ -20,7 +20,7 @@ hub:
       volumeMounts:
         - name: shared-data
           mountPath: /tmp/shared-data
-        - name: files
+        - name: maintenance-check
           mountPath: /tmp/maintenance-check.py
           subPath: maintenance-check.py
 
