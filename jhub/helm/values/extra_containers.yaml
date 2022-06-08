@@ -30,21 +30,36 @@ hub:
       args:
         - -c
         # - >-
-        #     pip install requests &&
+        #     pip install requests psycopg2-binary &&
         #     python3 -u /tmp/cleanup_sql.py
         - >-
-            pip install requests &&
+            pip install requests psycopg2-binary &&
             sleep infinity
       env:
         - name: CUSTOM_CONFIG_PATH
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
-        - name: SQL_DATABASE
+        - name: SLEEP
+          value: "30"
+        - name: SQL_HOST
           valueFrom:
             secretKeyRef:
               name: postgresql-general
               key: SQL_HOST
-        - name: SLEEP
-          value: "30"
+        - name: JUPYTERHUB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-users-jupyterjsc
+              key: JUPYTERHUB_DATABASE
+        - name: JUPYTERHUB_DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-users-jupyterjsc
+              key: JUPYTERHUB_USER
+        - name: JUPYTERHUB_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-users-jupyterjsc
+              key: JUPYTERHUB_PASSWORD
         - name: UNICOREMGR_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:
