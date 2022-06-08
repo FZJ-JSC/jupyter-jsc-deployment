@@ -23,6 +23,7 @@ helm:
     - values/proxy_values.yaml
     - values/ssl_values.yaml
     - values/volumes_values.yaml
+    - values/extra_containers.yaml
 
 targetCustomizations:
   - name: staging
@@ -47,6 +48,10 @@ targetCustomizations:
               configMap:
                 defaultMode: 400
                 name: jupyterhub-cleanup-sql
+            - name: maintenance-check
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-maintenance-check
             - name: internal-ssl
               secret:
                 secretName: internal-ssl
