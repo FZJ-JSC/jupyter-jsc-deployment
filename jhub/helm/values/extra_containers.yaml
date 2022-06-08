@@ -9,7 +9,7 @@ hub:
         - >-
             pip install jsonformatter python-dateutil requests &&
             mkdir -p $OUTPUT_DIR &&
-            python3 -u /tmp/maintenance-check.py
+            python3 -u /tmp/maintenance_check.py
       env:
         - name: CUSTOM_CONFIG_PATH
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
@@ -21,6 +21,6 @@ hub:
         - name: shared-data
           mountPath: /tmp/shared-data
         - name: maintenance-check
-          mountPath: /tmp/maintenance-check.py
-          subPath: maintenance-check.py
+          mountPath: /tmp/maintenance_check.py
+          subPath: maintenance_check.py
 
