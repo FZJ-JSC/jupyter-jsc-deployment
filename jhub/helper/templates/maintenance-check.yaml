@@ -74,7 +74,7 @@ data:
 
     def setup_next_maintenance(system, id, all_incidents, next_maintenance, output_dir):
         system_incidents = [
-            x for x in all_incidents if id in x.get("affected_services", [])
+            x for x in all_incidents if int(id) in x.get("affected_services", [])
         ]
         next_maintenance_incident = [
             x
