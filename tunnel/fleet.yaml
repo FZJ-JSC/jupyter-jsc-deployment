@@ -17,6 +17,86 @@ helm:
         user: "ljupyter"
         port: 22
         hostname: "deep.fz-juelich.de"
+      - name: "jwlogin00i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels00.fz-juelich.de"
+      - name: "jwlogin01i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels01.fz-juelich.de"
+      - name: "jwlogin02i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels02.fz-juelich.de"
+      - name: "jwlogin03i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels03.fz-juelich.de"
+      - name: "jwlogin04i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels04.fz-juelich.de"
+      - name: "jwlogin05i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels05.fz-juelich.de"
+      - name: "jwlogin06i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels06.fz-juelich.de"
+      - name: "jwlogin07i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels07.fz-juelich.de"
+      - name: "jwlogin08i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels08.fz-juelich.de"
+      - name: "jwlogin09i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels09.fz-juelich.de"
+      - name: "jwlogin10i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels10.fz-juelich.de"
+      - name: "jwlogin11i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels11.fz-juelich.de"
+      - name: "jwlogin21i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels21.fz-juelich.de"
+      - name: "jwlogin22i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels22.fz-juelich.de"
+      - name: "jwlogin23i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels23.fz-juelich.de"
+      - name: "jwlogin24i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwels24.fz-juelich.de"
+      - name: "jwvis00i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwelsvis00.fz-juelich.de"
+      - name: "jwvis01i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwelsvis01.fz-juelich.de"
+      - name: "jwvis02i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwelsvis02.fz-juelich.de"
+      - name: "jwvis03i"
+        user: "ljupyter"
+        port: 22
+        hostname: "juwelsvis03.fz-juelich.de"
 targetCustomizations:
   - name: staging
     clusterSelector:
