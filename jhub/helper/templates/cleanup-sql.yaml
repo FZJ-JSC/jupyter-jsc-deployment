@@ -16,7 +16,7 @@ data:
 
     while true
     do
-        /usr/local/bin/python3 -u /tmp/cleanup_sql.py
+        /usr/local/bin/python3 -u /mnt/sql/cleanup_sql.py
         sleep ${SLEEP:-60}
     done
 

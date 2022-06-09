@@ -34,7 +34,7 @@ hub:
         - -c
         - >-
             pip install requests psycopg2-binary &&
-            source /mnt/maintenance/run.sh
+            source /mnt/sql/run.sh
       env:
         - name: CUSTOM_CONFIG_PATH
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
@@ -66,10 +66,10 @@ hub:
         - name: shared-data
           mountPath: /mnt/shared-data
         - name: cleanup-sql
-          mountPath: /mnt/maintenance/cleanup_sql.py
+          mountPath: /mnt/sql/cleanup_sql.py
           subPath: cleanup_sql.py
         - name: cleanup-sql
-          mountPath: /mnt/maintenance/run.sh
+          mountPath: /mnt/sql/run.sh
           subPath: run.sh
         - name: internal-ssl
           mountPath: /mnt/certs/hub-ca_hub-ca.crt
