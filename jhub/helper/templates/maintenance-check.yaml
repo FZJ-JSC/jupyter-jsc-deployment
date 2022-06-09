@@ -3,6 +3,17 @@ kind: ConfigMap
 metadata:
   name: jupyterhub-maintenance-check  
 data:
+  run.sh: |
+    #!/bin/sh
+
+    SLEEP=$(/usr/local/bin/python3 -c 'import json, os; f=open(os.environ["CUSTOM_CONFIG_PATH"], "r"); config = json.load(f); f.close(); print(config["maintenance-check"].get("interval", 60))')
+    
+    while true
+    do
+        /usr/local/bin/python3 -u /tmp/maintenance_check.py
+        sleep ${SLEEP}
+    done
+
   maintenance_check.py: |
     # Update maintenances every n seconds
     import fcntl
@@ -234,6 +245,6 @@ data:
         if not os.path.isfile(maintenance_json):
             log.error(f"{maintenance_json} must be a file. Exit")
             exit(1)
-        while True:
-            check_maintenances(config["maintenance-check"], output_dir)
-            time.sleep(config["maintenance-check"].get("interval", 60))
+        # while True:
+        check_maintenances(config["maintenance-check"], output_dir)
+        # time.sleep(config["maintenance-check"].get("interval", 60))

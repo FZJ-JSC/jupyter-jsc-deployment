@@ -9,7 +9,7 @@ hub:
         - >-
             pip install jsonformatter python-dateutil requests &&
             mkdir -p $OUTPUT_DIR &&
-            python3 -u /tmp/maintenance_check.py
+            source /mnt/maintenance/run.sh
       env:
         - name: CUSTOM_CONFIG_PATH
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
@@ -21,8 +21,11 @@ hub:
         - name: shared-data
           mountPath: /mnt/shared-data
         - name: maintenance-check
-          mountPath: /tmp/maintenance_check.py
+          mountPath: /mnt/maintenance/maintenance_check.py
           subPath: maintenance_check.py
+        - name: maintenance-check
+          mountPath: /mnt/maintenance/run.sh
+          subPath: run.sh
     - name: cleanup-sql
       image: python:3.9-alpine3.16
       imagePullPolicy: Always
@@ -31,7 +34,7 @@ hub:
         - -c
         - >-
             pip install requests psycopg2-binary &&
-            source /tmp/run_cleanup.sh
+            source /mnt/maintenance/run.sh
       env:
         - name: CUSTOM_CONFIG_PATH
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
@@ -63,11 +66,11 @@ hub:
         - name: shared-data
           mountPath: /mnt/shared-data
         - name: cleanup-sql
-          mountPath: /tmp/cleanup_sql.py
+          mountPath: /mnt/maintenance/cleanup_sql.py
           subPath: cleanup_sql.py
         - name: cleanup-sql
-          mountPath: /tmp/run_cleanup.sh
-          subPath: run_cleanup.sh
+          mountPath: /mnt/maintenance/run.sh
+          subPath: run.sh
         - name: internal-ssl
           mountPath: /mnt/certs/hub-ca_hub-ca.crt
           subPath: hub-ca_hub-ca.crt
@@ -75,3 +78,26 @@ hub:
           mountPath: /mnt/unicoremgr_certs
         - name: drf-k8smgr-certs
           mountPath: /mnt/k8smgr_certs
+    # - name: mount-watch
+    #   image: python:3.9-alpine3.16
+    #   imagePullPolicy: Always
+    #   command: ["/bin/sh"]
+    #   args:
+    #     - -c
+    #     - >-
+    #         pip install jsonformatter python-dateutil requests &&
+    #         mkdir -p $OUTPUT_DIR &&
+    #         python3 -u /tmp/maintenance_check.py
+    #   env:
+    #     - name: CUSTOM_CONFIG_PATH
+    #       value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
+    #     - name: OUTPUT_DIR
+    #       value: "/mnt/shared-data/maintenance-check"
+    #     - name: LOGGER_NAME
+    #       value: "MaintenanceCheck"
+    #   volumeMounts:
+    #     - name: shared-data
+    #       mountPath: /mnt/shared-data
+    #     - name: maintenance-check
+    #       mountPath: /tmp/maintenance_check.py
+    #       subPath: maintenance_check.py
