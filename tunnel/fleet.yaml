@@ -145,6 +145,30 @@ helm:
         user: "ljupyter"
         port: 22
         hostname: "jureca12.fz-juelich.de"
+      - name: "hdfmll01i"
+        user: "ljupyter"
+        port: 22
+        hostname: "hdfmll01.fz-juelich.de"
+      - name: "hdfmll02i"
+        user: "ljupyter"
+        port: 22
+        hostname: "hdfmll02.fz-juelich.de"
+      - name: "jsfl01i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jusuf1.fz-juelich.de"
+      - name: "jsfl02i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jusuf2.fz-juelich.de"
+      - name: "jsfl03i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jusuf3.fz-juelich.de"
+      - name: "jsfl04i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jusuf4.fz-juelich.de"
 targetCustomizations:
   - name: staging
     clusterSelector:
@@ -157,5 +181,7 @@ targetCustomizations:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgksSrTiiruGg1m7EzwMiTM9AFhUNBgeMBcCxfgfH7i deep'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH52ebnIybYxQllwfUnOhVfVuDNs6EdaVo7x6MYo3lUE juwels'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLrGzMMx/vAHIdhCotONtPKlIKMiMkdrMSFRCt1gt/e jureca'
+          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAuOxijmL537nNcNIzD0Kms/jNyEvkJDlpdfw1tRyXkp hdfml'
+          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKDP9utiItuy9tQxM8fXJJ++JBXCl0KOdSazkUHFd67d jusuf'
         servicessh:
           loadBalancerIP: "134.94.199.67"
