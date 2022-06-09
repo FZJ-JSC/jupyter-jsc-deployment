@@ -85,7 +85,7 @@ hub:
       args:
         - -c
         - >-
-            apk add bash && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
+            apk add bash git && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
