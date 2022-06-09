@@ -79,7 +79,7 @@ hub:
         - name: drf-k8smgr-certs
           mountPath: /mnt/k8smgr_certs
     - name: mount-watch
-      image: alpine3.14
+      image: alpine:3.14
       imagePullPolicy: Always
       command: ["/bin/sh"]
       args:
