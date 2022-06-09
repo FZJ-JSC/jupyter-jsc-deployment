@@ -31,5 +31,5 @@ service:
   port: 443
 
 gitconfig:
-  branch: "jupyterjsc-staging"
+  branch: "jupyterhub-staging"
   secret: "jupyter-jsc-config"
