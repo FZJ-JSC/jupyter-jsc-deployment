@@ -97,6 +97,54 @@ helm:
         user: "ljupyter"
         port: 22
         hostname: "juwelsvis03.fz-juelich.de"
+      - name: "jrlogin01i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca01.fz-juelich.de"
+      - name: "jrlogin02i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca02.fz-juelich.de"
+      - name: "jrlogin03i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca03.fz-juelich.de"
+      - name: "jrlogin04i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca04.fz-juelich.de"
+      - name: "jrlogin05i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca05.fz-juelich.de"
+      - name: "jrlogin06i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca06.fz-juelich.de"
+      - name: "jrlogin07i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca07.fz-juelich.de"
+      - name: "jrlogin08i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca08.fz-juelich.de"
+      - name: "jrlogin09i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca09.fz-juelich.de"
+      - name: "jrlogin10i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca10.fz-juelich.de"
+      - name: "jrlogin11i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca11.fz-juelich.de"
+      - name: "jrlogin12i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca12.fz-juelich.de"
 targetCustomizations:
   - name: staging
     clusterSelector:
@@ -108,5 +156,6 @@ targetCustomizations:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3hZ8/shyAE5BB38dha7eBAXovOMtCNUqm9ChJeMtxZ hdfcloud'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgksSrTiiruGg1m7EzwMiTM9AFhUNBgeMBcCxfgfH7i deep'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH52ebnIybYxQllwfUnOhVfVuDNs6EdaVo7x6MYo3lUE juwels'
+          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLrGzMMx/vAHIdhCotONtPKlIKMiMkdrMSFRCt1gt/e jureca'
         servicessh:
           loadBalancerIP: "134.94.199.67"
