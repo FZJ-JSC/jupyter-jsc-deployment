@@ -33,9 +33,6 @@ targetCustomizations:
     helm:
       values:
         hub:
-          extraEnv:
-            - name: JUPYTERHUB_STAGE
-              value: "staging"
           extraVolumes:
             - name: shared-data
               emptyDir: {}
