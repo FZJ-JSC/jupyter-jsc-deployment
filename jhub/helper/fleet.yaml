@@ -22,3 +22,5 @@ targetCustomizations:
             - secretName: jupyter-jsc-staging.fz-juelich.de
               hosts:
                 - jupyter-jsc-staging.fz-juelich.de
+          gitconfig:
+            branch: "jupyterjsc-staging"
