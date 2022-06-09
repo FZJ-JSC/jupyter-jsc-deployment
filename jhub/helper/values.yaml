@@ -29,3 +29,7 @@ podAnnotations:
 service:
   name: "proxy-public"
   port: 443
+
+gitconfig:
+  branch: "jupyterhub-staging"
+  secret: "jupyter-jsc-config"
