@@ -5,6 +5,8 @@ helm:
   chart: jupyterhub
   values:
     hub:
+      annotations:
+        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
       nodeSelector:
         worker: "true"
     prePuller:
