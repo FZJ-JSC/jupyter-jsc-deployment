@@ -4,6 +4,8 @@ hub:
       value: "staging"
     - name: LOGGING_CONFIG_FILE
       value: "/mnt/shared-data/git_config/logging.json"
+    - name: MAINTENANCE_PATH
+      value: "/mnt/shared-data/maintenance-check"
     - name: MAINTENANCE_FILE
       value: "/mnt/shared-data/maintenance-check/maintenance.json"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
