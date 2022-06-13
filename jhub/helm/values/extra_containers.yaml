@@ -91,3 +91,16 @@ hub:
           mountPath: /mnt/shared-data
         - name:  mount-watch
           mountPath: /mnt/volumes_mw/mount_watch
+    - name: static-files
+      image: nginx:1.22
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 80
+          name: hub-static
+          protocol: TCP
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: hub-nginx-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: nginx.conf

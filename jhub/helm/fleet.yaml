@@ -5,6 +5,9 @@ helm:
   chart: jupyterhub
   values:
     hub:
+      extraVolumes:
+        - name: shared-data-test
+          emptyDir: {}
       annotations:
         proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
       nodeSelector:
@@ -88,7 +91,7 @@ targetCustomizations:
           args:
             - -c
             - >-
-              /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+              cp -rp /src/jupyterhub-static/static /mnt/shared-data/hub-static; /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
               # while true; do sleep 30; done
           containerSecurityContext:
             runAsUser: 0
