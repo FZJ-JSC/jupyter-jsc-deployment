@@ -1,0 +1,8 @@
+hub:
+  annotations:
+    proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+  nodeSelector:
+    worker: "true"
+  networkPolicy:
+    allowedIngressPorts:
+      - 8070

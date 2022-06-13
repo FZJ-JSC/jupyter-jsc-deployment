@@ -4,25 +4,6 @@ helm:
   repo: https://jupyterhub.github.io/helm-chart/
   chart: jupyterhub
   values:
-    hub:
-      extraVolumes:
-        - name: shared-data-test
-          emptyDir: {}
-      annotations:
-        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
-      nodeSelector:
-        worker: "true"
-      networkPolicy:
-        allowedIngressPorts:
-          - 8070
-    prePuller:
-      hook:
-        enabled: false
-      continuous:
-        enabled: false
-    scheduling:
-      userScheduler:
-        enabled: false
   valuesFiles:
     - values/hub/config.yaml
     - values/hub/extraConfig.yaml
@@ -31,9 +12,9 @@ helm:
     - values/hub/extraVolumeMounts.yaml
     - values/hub/image.yaml
     - values/hub/initContainers.yaml
+    - values/hub/others.yaml
     - values/common.yaml
     - values/proxy.yaml
-
 targetCustomizations:
   - name: staging
     clusterSelector:
