@@ -5,9 +5,9 @@ metadata:
 spec:
   ports:
   - name: hub-static
-    port: 80
+    port: 8070
     protocol: TCP
-    targetPort: 80
+    targetPort: 8070
   selector:
     app: jupyterhub
     component: hub

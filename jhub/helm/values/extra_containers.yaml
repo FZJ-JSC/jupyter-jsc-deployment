@@ -95,8 +95,7 @@ hub:
       image: nginx:1.22
       imagePullPolicy: Always
       ports:
-        - containerPort: 80
-          name: hub-static
+        - containerPort: 8070
           protocol: TCP
       volumeMounts:
         - name: shared-data
