@@ -5,11 +5,10 @@ metadata:
 spec:
   ports:
   - name: hub-static
-    port: 8090
+    port: 80
     protocol: TCP
-    targetPort: hub-static
+    targetPort: 80
   selector:
     app: jupyterhub
-    component: static-files
-    release: jupyterhub
+    component: hub
   type: ClusterIP
