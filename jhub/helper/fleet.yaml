@@ -22,3 +22,11 @@ targetCustomizations:
             - secretName: jupyter-jsc-staging.fz-juelich.de
               hosts:
                 - jupyter-jsc-staging.fz-juelich.de
+        ingress2:
+          hosts:
+            - host: jupyter-jsc-staging.fz-juelich.de
+              paths:
+                - path: /hub/static
+                  pathType: Prefix
+              svcName: hub-static-files
+              svcPort: 8070

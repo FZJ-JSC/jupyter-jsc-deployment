@@ -21,6 +21,17 @@ ingress:
       hosts:
         - jupyterhub.local
 
+ingress2:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - host: jupyterhub.local
+      svcName: hub-static-files
+      svcPort: 8070
+      paths:
+        - path: /hub/static
+          pathType: Prefix
+
 labels: {}
 
 podAnnotations:
@@ -29,6 +40,10 @@ podAnnotations:
 service:
   name: "proxy-public"
   port: 443
+
+serviceStatic:
+  name: "hub-static-files"
+  port: 8070
 
 gitconfig:
   branch: "jupyterhub-staging"

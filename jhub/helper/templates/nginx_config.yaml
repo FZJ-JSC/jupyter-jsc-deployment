@@ -10,9 +10,10 @@ data:
 
         access_log  /var/log/nginx/host.access.log  main;
 
-        location / {
-            root   /usr/share/nginx/html;
-            index  index.html index.htm;
+        location /hub/static {
+            alias  /mnt/shared-data/hub-static/;
+            # root   /usr/share/nginx/html;
+            # index  index.html index.htm;
         }
 
         #error_page  404              /404.html;
