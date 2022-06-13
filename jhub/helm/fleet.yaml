@@ -24,14 +24,15 @@ helm:
       userScheduler:
         enabled: false
   valuesFiles:
-    - values/config_values.yaml
-    - values/env_values.yaml
-    - values/image_values.yaml
-    - values/initcontainer_values.yaml
-    - values/proxy_values.yaml
-    - values/ssl_values.yaml
-    - values/volumes_values.yaml
-    - values/extra_containers.yaml
+    - values/hub/config.yaml
+    - values/hub/extraConfig.yaml
+    - values/hub/extraContainers.yaml
+    - values/hub/extraEnv.yaml
+    - values/hub/extraVolumeMounts.yaml
+    - values/hub/image.yaml
+    - values/hub/initContainers.yaml
+    - values/common.yaml
+    - values/proxy.yaml
 
 targetCustomizations:
   - name: staging
