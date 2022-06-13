@@ -81,6 +81,10 @@ targetCustomizations:
             - name: unity-jsc-certs
               secret:
                 secretName: unity-jsc-certs
+            - name: hub-nginx-config
+              configMap:
+                defaultMode: 400
+                name: hub-nginx-config
           labels:
             stage: staging
           livenessProbe:
