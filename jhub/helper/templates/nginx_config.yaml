@@ -9,7 +9,7 @@ data:
         listen  [::]:80;
         # server_name  localhost;
         location /hub/static {
-            alias  /mnt/shared-data/static/;
+            alias  /mnt/shared-data/hub-static/;
         }
         # redirect server error pages to the static page /50x.html
         #
