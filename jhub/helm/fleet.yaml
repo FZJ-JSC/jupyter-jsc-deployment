@@ -12,6 +12,9 @@ helm:
         proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
       nodeSelector:
         worker: "true"
+      networkPolicy:
+        allowedIngressPorts:
+          - 8070
     prePuller:
       hook:
         enabled: false
