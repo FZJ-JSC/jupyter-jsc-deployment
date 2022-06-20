@@ -253,7 +253,7 @@ data:
                 configuration["address"] = tuple(value)
         handler = supported_handler_classes[handler_name](configuration)
         formatter = supported_formatter_classes[formatter_name](
-            supported_formatter_kwargs[formatter_name]
+            **supported_formatter_kwargs[formatter_name]
         )
         handler.name = handler_name
         handler.setLevel(level)
