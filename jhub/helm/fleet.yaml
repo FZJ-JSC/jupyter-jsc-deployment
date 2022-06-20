@@ -45,6 +45,9 @@ targetCustomizations:
             - name: internal-ssl
               secret:
                 secretName: internal-ssl
+            - name: reservation-keypair
+              secret:
+                secretName: reservation-keypair
             - name: drf-tunnel-certs
               secret:
                 secretName: drf-tunnel-certs
