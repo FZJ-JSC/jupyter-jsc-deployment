@@ -105,7 +105,7 @@ hub:
         - name: hub-nginx-config
           mountPath: /etc/nginx/conf.d/default.conf
           subPath: nginx.conf
-    - name: reservation-checks
+    - name: reservation-check
       image: python:3.9-alpine3.14
       imagePullPolicy: Always
       command: ["/bin/sh"]
