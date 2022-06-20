@@ -6,7 +6,7 @@ data:
   run.sh: |
     #!/bin/sh
 
-    SLEEP=$(/usr/local/bin/python3 -c 'import json, os; f=open(os.environ["CUSTOM_CONFIG_PATH"], "r"); config = json.load(f); f.close(); print(config.get("reservation-check", {}).get("interval", 300))')
+    SLEEP=$(/usr/local/bin/python3 -c 'import json, os; f=open("/mnt/shared-data/git_config/jupyterhub_custom_config.json", "r"); config = json.load(f); f.close(); print(config.get("reservation-check", {}).get("interval", 300))')
     
     while true
     do
@@ -24,7 +24,7 @@ data:
     reservation_key = "/mnt/ssh/reservation"
     reservation_timeout = 5
     output_path = "/mnt/shared-data/reservation-check/reservation.json"
-    config_path = "/mnt/shared-data/git_config/jupyterhub_config_custom.json"
+    config_path = "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
     regex_pattern = "([\\S]+)=([\\S]+)"
 
     with open(config_path, "r") as f:
