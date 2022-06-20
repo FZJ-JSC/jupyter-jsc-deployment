@@ -78,6 +78,7 @@ data:
                 ret = json.load(f)
         except:
             log.exception(f"Could not read from file {filename}")
+            ret = None
         finally:
             releaseLock(lock_fd)
         return ret
