@@ -16,6 +16,7 @@ data:
 
   reservation_check.py: |
     # Update reservations every n seconds
+    import copy
     import json
     import re
     from subprocess import check_output
