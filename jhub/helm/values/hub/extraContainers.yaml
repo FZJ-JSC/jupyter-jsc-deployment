@@ -104,14 +104,14 @@ hub:
           mountPath: /etc/nginx/conf.d/default.conf
           subPath: nginx.conf
     - name: reservation-checks
-      image: alpine:3.14
+      image: python:3.9-alpine3.14
       imagePullPolicy: Always
       command: ["/bin/sh"]
       args:
         - -c
         - >-
-            while true; do sleep 30; done
-            # apk add bash git && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
+            apk add bash openssh && mkdir -p /mnt/ssh && cp -rp /mnt/reservation-keypair/..data/* /mnt/ssh/. && chmod 400 /mnt/ssh/* && while true; do sleep 30; done
+            # apk add bash openssh && mkdir -p /mnt/ssh && cp -rp /mnt/reservation-keypair/..data/* /mnt/ssh/. && chmod 400 /mnt/ssh/* && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
