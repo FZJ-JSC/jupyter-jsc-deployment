@@ -252,7 +252,7 @@ data:
                     configuration["socktype"] = socket.SOCK_DGRAM
             elif key == "address":
                 configuration["address"] = tuple(value)
-        handler = supported_handler_classes[handler_name](configuration)
+        handler = supported_handler_classes[handler_name](**configuration)
         formatter = supported_formatter_classes[formatter_name](
             **supported_formatter_kwargs[formatter_name]
         )
