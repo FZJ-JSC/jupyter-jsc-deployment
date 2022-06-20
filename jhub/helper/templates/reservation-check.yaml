@@ -53,4 +53,4 @@ data:
           output_dict[system][reservation_key_values_dict["ReservationName"]] = copy.deepcopy(reservation_key_values_dict)
 
     with open(output_path, "w") as f:
-      json.dump(data, output_dict, sort_keys=True, indent=2)
+      json.dump(output_dict, f, sort_keys=True, indent=2)
