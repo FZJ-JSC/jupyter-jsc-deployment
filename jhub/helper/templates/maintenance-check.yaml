@@ -175,7 +175,7 @@ data:
 
 
     def update_status(system, output_dir, svc, systems_status_list, static_dir):
-        if svc["health"] != systems_status_list[system.upper()]:
+        if svc["health"] != systems_status_list.get(system.upper(), None):
             update_status_file(system, output_dir, svc["health"])
             update_status_image(system, static_dir, svc["health"])
 
@@ -275,7 +275,8 @@ data:
         for json_file in [maintenance_json, status_json]:
             if not os.path.exists(json_file):
                 with open(json_file, "w") as f:
-                    f.write(json.dumps([]))
+                    dump = [] if json_file == maintenance_json else {}
+                    f.write(json.dumps(dump))
             if not os.path.isfile(json_file):
                 log.error(f"{json_file} must be a file. Exit")
                 exit(1)
