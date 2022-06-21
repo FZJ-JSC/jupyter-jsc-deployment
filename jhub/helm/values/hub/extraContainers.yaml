@@ -112,7 +112,7 @@ hub:
       args:
         - -c
         - >-
-            apk add bash openssh && mkdir -p /mnt/ssh && cp -rp /mnt/reservation-keypair/..data/* /mnt/ssh/. && chmod 400 /mnt/ssh/* && mkdir -p /mnt/shared-data/reservation-check && while true; do sleep 30; done && source /mnt/reservation/run.sh
+            apk add bash openssh && mkdir -p /mnt/ssh && cp -rp /mnt/reservation-keypair/..data/* /mnt/ssh/. && chmod 400 /mnt/ssh/* && mkdir -p /mnt/shared-data/reservation-check && source /mnt/reservation/..data/run.sh
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
