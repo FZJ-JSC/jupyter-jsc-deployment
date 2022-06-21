@@ -10,7 +10,7 @@ data:
     
     while true
     do
-        /usr/local/bin/python3 -u /mnt/reservation/reservation_check.py
+        /usr/local/bin/python3 -u /mnt/reservation/..data/reservation_check.py
         sleep ${SLEEP}
     done
 
