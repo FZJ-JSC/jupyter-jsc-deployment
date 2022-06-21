@@ -14,12 +14,11 @@ data:
     export UNICOREMGR_AUTHENTICATION_TOKEN=${UNICOREMGR_AUTHENTICATION_TOKEN:-"Basic $(echo -n "jupyterhub:${UNICOREMGR_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
     fi
 
-    # while true
-    # do
-    #     /usr/local/bin/python3 -u /mnt/sql/cleanup_sql.py
-    #     sleep ${SLEEP:-60}
-    # done
-    /usr/local/bin/python3 -u /mnt/sql/cleanup_sql.py
+    while true
+    do
+        /usr/local/bin/python3 -u /mnt/sql/cleanup_sql.py
+        sleep ${SLEEP:-60}
+    done
 
   cleanup_sql.py: |
     import datetime
@@ -134,11 +133,11 @@ data:
     if __name__ == "__main__":
         sleep_time = int(os.environ.get("SLEEP", 60))
         grace_period = int(os.environ.get("START_DATE_GRACE_PERIOD_IN_MIN", 5))
-        while True:
-            print(f"{now()} {uuidcode} - Cleanup falsely running services ...")
-            with open(custom_conf_file, "r") as f:
-                custom_conf = json.load(f)
-            jhub_server = get_jhub_server()
-            cleanup_drf_services(jhub_server, custom_conf, grace_period)
-            print(f"{now()} {uuidcode} - Cleanup falsely running services ... done")
-            time.sleep(sleep_time)
+        # while True:
+        print(f"{now()} {uuidcode} - Cleanup falsely running services ...")
+        with open(custom_conf_file, "r") as f:
+            custom_conf = json.load(f)
+        jhub_server = get_jhub_server()
+        cleanup_drf_services(jhub_server, custom_conf, grace_period)
+        print(f"{now()} {uuidcode} - Cleanup falsely running services ... done")
+        # time.sleep(sleep_time)

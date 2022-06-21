@@ -8,13 +8,12 @@ data:
 
     while [ ! -d /mnt/shared-data/hub-static ]; do sleep 5; done
 
-    # SLEEP=$(/usr/local/bin/python3 -c 'import json, os; f=open(os.environ["CUSTOM_CONFIG_PATH"], "r"); config = json.load(f); f.close(); print(config["maintenance-check"].get("interval", 60))')
-    # while true
-    # do
-    #     /usr/local/bin/python3 -u /mnt/maintenance/maintenance_check.py
-    #     sleep ${SLEEP}
-    # done
-    /usr/local/bin/python3 -u /mnt/maintenance/maintenance_check.py
+    SLEEP=$(/usr/local/bin/python3 -c 'import json, os; f=open(os.environ["CUSTOM_CONFIG_PATH"], "r"); config = json.load(f); f.close(); print(config["maintenance-check"].get("interval", 60))')
+    while true
+    do
+        /usr/local/bin/python3 -u /mnt/maintenance/maintenance_check.py
+        sleep ${SLEEP}
+    done
 
   maintenance_check.py: |
     # Update maintenances every n seconds
@@ -33,7 +32,7 @@ data:
 
     LOGGER_NAME = os.environ.get("LOGGER_NAME", "MaintenanceCheck")
     log = logging.getLogger(LOGGER_NAME)
-    log.level = 10
+    log.level = 20
 
 
     def acquireReadLock(filename):
@@ -283,6 +282,6 @@ data:
             if not os.path.isfile(json_file):
                 log.error(f"{json_file} must be a file. Exit")
                 exit(1)
-        while True:
-            check_maintenances(config["maintenance-check"], output_dir, static_dir)
-            time.sleep(config["maintenance-check"].get("interval", 60))
+        # while True:
+        check_maintenances(config["maintenance-check"], output_dir, static_dir)
+        # time.sleep(config["maintenance-check"].get("interval", 60))
