@@ -39,7 +39,7 @@ data:
       li = [ "ssh", "-i", reservation_key, "-oLogLevel=ERROR", "-oStrictHostKeyChecking=no", "-oUserKnownHostsFile=/dev/null", "{}@{}".format(infos.get("user", "ljupyter"), infos.get("host", "")), "-T"]
 
       def null_to_empty(key, value, infos):
-        if key in infos.get("null_replace_keys", ["Accounts", "Users"]) and value == infos.get("null_string", "(null)"):
+        if key in infos.get("null_replace_keys", ["Accounts", "Users", "PartitionName"]) and value == infos.get("null_string", "(null)"):
           return ""
         return value
 
