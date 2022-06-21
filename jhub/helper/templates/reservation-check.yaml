@@ -35,7 +35,7 @@ data:
 
     for system, infos in config.get("reservation-check", {}).get("systems", {}).items():
       if system not in output_dict.keys():
-        output_dict[system] = {}
+        output_dict[system] = []
       li = [ "ssh", "-i", reservation_key, "-oLogLevel=ERROR", "-oStrictHostKeyChecking=no", "-oUserKnownHostsFile=/dev/null", "{}@{}".format(infos.get("user", "ljupyter"), infos.get("host", "")), "-T"]
 
       def null_to_empty(key, value, infos):
@@ -50,7 +50,7 @@ data:
         reservation_key_values_list = re.findall(regex_pattern, reservation_string)
         reservation_key_values_dict = { x[0]: null_to_empty(x[0], x[1], infos) for x in reservation_key_values_list }
         if "ReservationName" in reservation_key_values_dict.keys():
-          output_dict[system][reservation_key_values_dict["ReservationName"]] = copy.deepcopy(reservation_key_values_dict)
+          output_dict[system].append(copy.deepcopy(reservation_key_values_dict))
 
     with open(output_path, "w") as f:
       json.dump(output_dict, f, sort_keys=True, indent=2)
