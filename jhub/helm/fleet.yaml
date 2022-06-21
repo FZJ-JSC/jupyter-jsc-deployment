@@ -42,6 +42,10 @@ targetCustomizations:
               configMap:
                 defaultMode: 400
                 name: jupyterhub-maintenance-check
+            - name: reservation-check
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-reservation-check
             - name: internal-ssl
               secret:
                 secretName: internal-ssl
