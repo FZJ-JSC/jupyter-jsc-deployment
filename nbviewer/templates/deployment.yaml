@@ -36,7 +36,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.github.secretname }}
-                  key: github_api_token
+                  key: GITHUB_API_TOKEN
           {{- end }}
           ports:
             - name: http
