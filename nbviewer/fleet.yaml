@@ -23,3 +23,7 @@ targetCustomizations:
                   pathType: Prefix
               svcName: nbviewer
               svcPort: 8080
+          tls:
+            - secretName: jupyter-jsc-staging.fz-juelich.de
+              hosts:
+                - jupyter-jsc-staging.fz-juelich.de
