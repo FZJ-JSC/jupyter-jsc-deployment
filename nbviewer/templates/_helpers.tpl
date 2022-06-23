@@ -12,11 +12,6 @@ Create chart name and version as used by the chart label.
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
-{{- /* configmap name */}}
-{{- define "nbviewer.cm.name" -}}
-    {{- include "nbviewer.name" . }}-cm
-{{- end }}
-
 
 {{/*
 Common labels

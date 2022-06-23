@@ -38,9 +38,6 @@ spec:
                   name: {{ .Values.github.secretname }}
                   key: github_api_token
           {{- end }}
-          envFrom:
-          - configMapRef:
-              name: {{ include "nbviewer.cm.name" . }}
           ports:
             - name: http
               containerPort: 8080
