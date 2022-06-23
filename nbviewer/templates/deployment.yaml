@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "nbviewer.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "nbviewer.selectorLabels" . | nindent 6 }}
