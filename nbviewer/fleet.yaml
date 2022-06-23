@@ -7,3 +7,19 @@ helm:
       worker: "true"
     podAnnotations:
       proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+        provider.cattle.io: rke
+    helm:
+      values:
+        ingress:
+          hosts:
+            - host: docs.jupyter-jsc-staging.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: nbviewer
+              svcPort: 8080

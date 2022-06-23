@@ -33,6 +33,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
+  name: "nbviewer"
   type: ClusterIP
   port: 8080
 
@@ -53,3 +54,14 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - host: jupyterhub.local
+      svcName: nbviewer
+      svcPort: 8080
+      paths:
+        - path: /
+          pathType: Prefix
