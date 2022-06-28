@@ -97,7 +97,7 @@ hub:
 
       c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
       # c.Authenticator.admin_users = {'a.grosch@fz-juelich.de', 't.kreuzer@fz-juelich.de'}
-      c.Authenticator.admin_users = {'a.grosch@fz-juelich.de', 'a.grosch%40fz-juelich.de'}
+      # c.Authenticator.admin_users = {'a.grosch.fz-juelich.de', 't.kreuzer.fz-juelich.de'}
 
       c.CustomGenericOAuthenticator.custom_config_file = custom_config_path
       c.CustomGenericOAuthenticator.enable_auth_state = True
