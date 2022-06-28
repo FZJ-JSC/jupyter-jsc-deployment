@@ -33,7 +33,8 @@
         "DEPLOYMENT_NAMESPACE": "jupyterjsc",
         "CONFIGPROXY_AUTH_TOKEN": "<CONFIGPROXY_AUTH_TOKEN>",
         "TUNNEL_DEPLOYMENT_NAMESPACE": "jupyterjsc"
-      }
+      },
+      "preLaunchTask": "delete-tmp-internal-ssl"
     }
   ]
 }
