@@ -2,7 +2,7 @@ defaultNamespace: jupyterjsc
 helm:
   values:
     image:
-      tag: "1.1.0-1"
+      tag: "1.1.0-2"
     nameOverride: "drf-tunnel"
     nodeSelector:
       worker: "true"
