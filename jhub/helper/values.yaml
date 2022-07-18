@@ -27,6 +27,8 @@ ingressuser:
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header      Upgrade "websocket";
@@ -36,7 +38,7 @@ ingressuser:
       svcName: proxy-public
       svcPort: 443
       paths:
-        - path: "/user/([^/])/([^/])/api/([^/]+)/"
+        - path: "/user/([^/]+)/([^/]+)/api/([^/]+)/"
           pathType: Prefix
   tls:
     - secretName: jupyterhub-local
