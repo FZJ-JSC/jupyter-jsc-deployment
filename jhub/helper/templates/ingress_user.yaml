@@ -1,5 +1,4 @@
 {{- if .Values.ingressuser.enabled -}}
-{{- $fullName := proxy-public-user-websockets -}}
 {{- $svcPort := .Values.serviceStatic.port -}}
 {{- if and .Values.ingressuser.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingressuser.annotations "kubernetes.io/ingress.class") }}
@@ -15,7 +14,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: proxy-public-user-websockets
   labels:
     {{- include "helper.labels" . | nindent 4 }}
   {{- with .Values.ingressuser.annotations }}
