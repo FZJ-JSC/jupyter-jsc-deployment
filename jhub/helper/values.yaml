@@ -36,7 +36,7 @@ ingressuser:
       svcName: proxy-public
       svcPort: 443
       paths:
-        - path: "/user/([^/])/([^/])/*"
+        - path: "/user/([^/])/([^/])/api/([^/]+)/"
           pathType: Prefix
   tls:
     - secretName: jupyterhub-local
