@@ -22,7 +22,19 @@ targetCustomizations:
             - secretName: jupyter-jsc-staging.fz-juelich.de
               hosts:
                 - jupyter-jsc-staging.fz-juelich.de
-        ingress2:
+        ingressuser:
+          hosts:
+            - host: jupyter-jsc-staging.fz-juelich.de
+              paths:
+                - path: /user/([^/]+)/([^/]+)/*
+                  pathType: Prefix
+              svcName: proxy-public
+              svcPort: 443
+          tls:
+            - secretName: jupyter-jsc-staging.fz-juelich.de
+              hosts:
+                - jupyter-jsc-staging.fz-juelich.de
+        ingresshubstatic:
           hosts:
             - host: jupyter-jsc-staging.fz-juelich.de
               paths:

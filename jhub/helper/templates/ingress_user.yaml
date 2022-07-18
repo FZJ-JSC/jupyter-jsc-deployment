@@ -1,9 +1,9 @@
-{{- if .Values.ingresshubstatic.enabled -}}
+{{- if .Values.ingressuser.enabled -}}
 {{- $fullName := .Values.serviceStatic.name -}}
 {{- $svcPort := .Values.serviceStatic.port -}}
-{{- if and .Values.ingresshubstatic.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
-  {{- if not (hasKey .Values.ingresshubstatic.annotations "kubernetes.io/ingress.class") }}
-  {{- $_ := set .Values.ingresshubstatic.annotations "kubernetes.io/ingress.class" .Values.ingresshubstatic.className}}
+{{- if and .Values.ingressuser.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+  {{- if not (hasKey .Values.ingressuser.annotations "kubernetes.io/ingress.class") }}
+  {{- $_ := set .Values.ingressuser.annotations "kubernetes.io/ingress.class" .Values.ingressuser.className}}
   {{- end }}
 {{- end }}
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -18,17 +18,17 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "helper.labels" . | nindent 4 }}
-  {{- with .Values.ingresshubstatic.annotations }}
+  {{- with .Values.ingressuser.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.ingresshubstatic.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
-  ingressClassName: {{ .Values.ingresshubstatic.className }}
+  {{- if and .Values.ingressuser.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.ingressuser.className }}
   {{- end }}
-  {{- if .Values.ingresshubstatic.tls }}
+  {{- if .Values.ingressuser.tls }}
   tls:
-    {{- range .Values.ingresshubstatic.tls }}
+    {{- range .Values.ingressuser.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -37,7 +37,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range $hosti := .Values.ingresshubstatic.hosts }}
+    {{- range $hosti := .Values.ingressuser.hosts }}
     - host: {{ $hosti.host | quote }}
       http:
         paths:

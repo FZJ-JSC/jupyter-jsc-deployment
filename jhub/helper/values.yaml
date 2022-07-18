@@ -21,7 +21,30 @@ ingress:
       hosts:
         - jupyterhub.local
 
-ingress2:
+ingressuser:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_http_version    1.1;
+      proxy_set_header      Upgrade "websocket";
+      proxy_set_header      Connection "Upgrade";
+      proxy_read_timeout    86400;
+  hosts:
+    - host: jupyterhub.local
+      svcName: proxy-public
+      svcPort: 443
+      paths:
+        - path: "/user/([^/])/([^/])/*"
+          pathType: Prefix
+  tls:
+    - secretName: jupyterhub-local
+      hosts:
+        - jupyterhub.local
+
+ingresshubstatic:
   enabled: true
   className: "nginx"
   hosts:
