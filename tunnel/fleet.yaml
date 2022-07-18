@@ -17,10 +17,6 @@ helm:
         user: "ljupyter"
         port: 22
         hostname: "deep.fz-juelich.de"
-      - name: "jwlogin00i"
-        user: "ljupyter"
-        port: 22
-        hostname: "juwels00.fz-juelich.de"
       - name: "jwlogin01i"
         user: "ljupyter"
         port: 22
