@@ -1,5 +1,5 @@
 {{- if .Values.ingressuser.enabled -}}
-{{- $fullName := .Values.serviceStatic.name -}}
+{{- $fullName := proxy-public-user-websockets -}}
 {{- $svcPort := .Values.serviceStatic.port -}}
 {{- if and .Values.ingressuser.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingressuser.annotations "kubernetes.io/ingress.class") }}
