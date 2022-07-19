@@ -12,6 +12,7 @@ hub:
       unity_host = "unity-jsc.fz-juelich.de"
 
       from apihandler import ForwardTunnelRestartAPIHandler
+      from apihandler import DRFServiceLogLevelAPIHandler
       from apihandler import JHubLogLevelAPIHandler
       from apihandler import SpawnNotificationAPIHandler
       from apihandler import SpawnProgressStatusAPIHandler
@@ -169,6 +170,6 @@ hub:
           (r"/api/votoken/([^/]+)", vo.VOTokenAPIHandler),
           (r"/api/logs/jhub/handler", JHubLogLevelAPIHandler),
           (r"/api/logs/jhub/handler/([^/]+)", JHubLogLevelAPIHandler),
-          (r"/api/logs/([^/]+)/handler", JHubLogLevelAPIHandler),
-          (r"/api/logs/([^/]+)/handler/([^/]+)", JHubLogLevelAPIHandler),
+          (r"/api/logs/([^/]+)/handler", DRFServiceLogLevelAPIHandler),
+          (r"/api/logs/([^/]+)/handler/([^/]+)", DRFServiceLogLevelAPIHandler),
       ]
