@@ -31,6 +31,9 @@ ingressuser:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
     nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header      Upgrade "websocket";
+      proxy_set_header      Connection "Upgrade";
   hosts:
     - host: jupyterhub.local
       svcName: proxy-public
