@@ -9,6 +9,10 @@ ingress:
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
   hosts:
     - host: jupyterhub.local
       svcName: proxy-public
@@ -26,19 +30,17 @@ ingressuser:
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      proxy_set_header      Upgrade "websocket";
-      proxy_set_header      Connection "Upgrade";
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/use-regex: "true"
   hosts:
     - host: jupyterhub.local
       svcName: proxy-public
       svcPort: 443
       paths:
-        - path: "/user/([^/]+)/([^/]+)/api/([^/]+)/"
+        - path: "/user/([^/]+)/([^/]+)/(api/kernels|terminals)/"
           pathType: Prefix
   tls:
     - secretName: jupyterhub-local
