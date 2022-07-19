@@ -26,7 +26,7 @@ targetCustomizations:
           hosts:
             - host: jupyter-jsc-staging.fz-juelich.de
               paths:
-                - path: /user/([^/]+)/([^/]+)/api/([^/]+)/
+                - path: /user/([^/]+)/([^/]+)/api/(api/kernels|terminals)/
                   pathType: Prefix
               svcName: proxy-public
               svcPort: 443
