@@ -57,7 +57,7 @@ ingress:
         - path: /
           pathType: Prefix
   tls:
-    - secretName: drf-unicoremgr-certs-ssl
+    - secretName: drf-unicoremgr-certs
       hosts:
         - drf-unicoremgr.svc
 

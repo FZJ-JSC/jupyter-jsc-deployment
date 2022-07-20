@@ -174,16 +174,16 @@ targetCustomizations:
       values:
         ingress:
           hosts:
-            - host: drf-tunnel.jupyter-jsc-staging.fz-juelich.de
+            - host: drf-tunnel.staging.svc
               paths:
                 - path: /
                   pathType: Prefix
               svcName: drf-tunnel
               svcPort: 443
           tls:
-            - secretName: jupyter-jsc-staging.fz-juelich.de
+            - secretName: drf-tunnel-certs
               hosts:
-                - jupyter-jsc-staging.fz-juelich.de
+                - drf-tunnel.staging.svc
         authorized_keys:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3hZ8/shyAE5BB38dha7eBAXovOMtCNUqm9ChJeMtxZ hdfcloud'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgksSrTiiruGg1m7EzwMiTM9AFhUNBgeMBcCxfgfH7i deep'

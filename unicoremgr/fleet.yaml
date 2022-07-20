@@ -24,7 +24,7 @@ targetCustomizations:
               svcName: drf-unicoremgr
               svcPort: 443
           tls:
-            - secretName: drf-unicoremgr-certs-ssl
+            - secretName: drf-unicoremgr-certs
               hosts:
                 - drf-unicoremgr.staging.svc
         gitconfig:

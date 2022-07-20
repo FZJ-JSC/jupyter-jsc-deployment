@@ -77,16 +77,16 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
   hosts:
-    - host: drf-k8smgr.jupyter-jsc.fz-juelich.de
+    - host: drf-k8smgr.svc
       svcName: drf-k8smgr
       svcPort: 443
       paths:
         - path: /
           pathType: Prefix
   tls:
-    - secretName: jupyterhub-local
+    - secretName: drf-k8smgr-certs
       hosts:
-        - jupyterhub.local
+        - drf-k8smgr.svc
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
