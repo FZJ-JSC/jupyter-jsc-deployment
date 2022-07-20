@@ -87,7 +87,7 @@ targetCustomizations:
           args:
             - -c
             - >-
-              cp -rp /src/jupyterhub-static/static /mnt/shared-data/hub-static; /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+              /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
               # while true; do sleep 30; done
           containerSecurityContext:
             runAsUser: 0

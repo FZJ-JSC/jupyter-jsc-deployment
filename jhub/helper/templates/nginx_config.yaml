@@ -11,7 +11,7 @@ data:
         access_log  /var/log/nginx/host.access.log  main;
 
         location /hub/static {
-            alias  /mnt/shared-data/hub-static/;
+            alias  /mnt/shared-data/static-files/;
             # root   /usr/share/nginx/html;
             # index  index.html index.htm;
         }

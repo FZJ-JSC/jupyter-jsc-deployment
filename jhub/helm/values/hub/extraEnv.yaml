@@ -1,5 +1,7 @@
 hub:
   extraEnv:
+    - name: JUPYTERHUB_VERSION
+      value: "2.1.1"
     - name: JUPYTERHUB_STAGE
       value: "staging"
     - name: LOGGING_CONFIG_FILE

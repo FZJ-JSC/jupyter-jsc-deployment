@@ -8,6 +8,7 @@ hub:
       sys.path.insert(1, custom_path)
 
       namespace = os.environ.get("POD_NAMESPACE", "default")
+      jupyterhub_version = os.environ.get("JUPYTERHUB_VERSION", "2.1.1")
       jupyterhub_host = get_name("hub")
       unity_host = "unity-jsc.fz-juelich.de"
 
@@ -132,7 +133,7 @@ hub:
       # http://localhost:8000/hub/oauth_login?extra_param_key1=value1
 
 
-      c.JupyterHub.template_paths = ["/src/jupyterhub-static/templates"]
+      c.JupyterHub.template_paths = [f"/mnt/shared-data/jhub_files/{jupyterhub_version}/templates"]
       c.JupyterHub.template_vars = {
           "spawn_progress_update_url": "users/progress/update",
           "user_cancel_message": user_cancel_message,

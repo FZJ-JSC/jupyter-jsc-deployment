@@ -88,6 +88,9 @@ hub:
         - -c
         - >-
             apk add bash git && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
+      env:
+        - name: JUPYTERHUB_VERSION
+          value: "2.1.1"
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
