@@ -139,7 +139,7 @@ hub:
           "user_cancel_message": user_cancel_message,
           "hostname": "default",
       }
-      c.JupyterHub.data_files_path = "/src/jupyterhub-static"
+      c.JupyterHub.data_files_path = f"/mnt/shared-data/jhub_files/{jupyterhub_version}"
 
       c.JupyterHub.extra_handlers = [
           # PageHandlers
