@@ -17,16 +17,16 @@ targetCustomizations:
       values:
         ingress:
           hosts:
-            - host: drf-unicoremgr.jupyter-jsc-staging.fz-juelich.de
+            - host: drf-unicoremgr.staging.svc
               paths:
                 - path: /
                   pathType: Prefix
               svcName: drf-unicoremgr
               svcPort: 443
           tls:
-            - secretName: jupyter-jsc-staging.fz-juelich.de
+            - secretName: drf-unicoremgr-certs-ssl
               hosts:
-                - jupyter-jsc-staging.fz-juelich.de
+                - drf-unicoremgr.staging.svc
         gitconfig:
           branch: "unicoremgr-staging"
         extraVolumes:
