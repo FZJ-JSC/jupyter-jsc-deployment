@@ -73,6 +73,23 @@ service:
   # nodePort: 30000
   type: ClusterIP
 
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  hosts:
+    - host: drf-tunnel.jupyter-jsc.fz-juelich.de
+      svcName: drf-tunnel
+      svcPort: 443
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: jupyterhub-local
+      hosts:
+        - jupyterhub.local
+
 servicessh:
   annotations: {}
   labels: {}
