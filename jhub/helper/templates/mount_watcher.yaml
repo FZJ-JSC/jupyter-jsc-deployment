@@ -7,6 +7,7 @@ data:
     #!/bin/bash
     git config --global --add safe.directory /mnt/shared-data/git_config
     git config --global --add safe.directory /mnt/shared-data/jhub_files
+    git config --global pull.ff only
     while true;
     do
       sleep 60
