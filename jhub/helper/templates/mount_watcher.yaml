@@ -6,6 +6,7 @@ data:
   run.sh: |
     #!/bin/bash
     git config --global --add safe.directory /mnt/shared-data/git_config
+    git config --global --add safe.directory /mnt/shared-data/jhub_files
     while true;
     do
       sleep 60
