@@ -8,5 +8,5 @@ prePuller:
 scheduling:
   userScheduler:
     enabled: false
-nameOverride: "hub-juniq"
-fullnameOverride: "hub-juniq"
+nameOverride: "juniq"
+fullnameOverride: "juniq"
