@@ -133,7 +133,7 @@ hub:
           "user_cancel_message": user_cancel_message,
           "hostname": jhub_hostname,
           # where Jinja2's `extends` and `includes` should look for templates 
-          "template_path": "juniq-staging.fz-juelich.de"
+          "template_path": jhub_hostname
       }
       c.JupyterHub.data_files_path = f"/mnt/shared-data/jhub_files/{jupyterhub_version}"
 
