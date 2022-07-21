@@ -14,7 +14,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: proxy-public-user-websockets
+  name: {{ .Values.ingressuser.name }}
   labels:
     {{- include "helper.labels" . | nindent 4 }}
   {{- with .Values.ingressuser.annotations }}
