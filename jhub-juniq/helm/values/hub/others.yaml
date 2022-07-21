@@ -7,5 +7,3 @@ hub:
   networkPolicy:
     allowedIngressPorts:
       - 8070
-  nameOverride: "hub-juniq"
-  fullnameOverride: "hub-juniq"
