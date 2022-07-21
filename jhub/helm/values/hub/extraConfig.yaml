@@ -139,6 +139,8 @@ hub:
           "spawn_progress_update_url": "users/progress/update",
           "user_cancel_message": user_cancel_message,
           "hostname": jhub_hostname,
+          # where Jinja2's `extends` and `includes` should look for templates 
+          "template_path": "default"
       }
       c.JupyterHub.data_files_path = f"/mnt/shared-data/jhub_files/{jupyterhub_version}"
 
