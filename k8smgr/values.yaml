@@ -75,6 +75,10 @@ servicefwd:
   type: ClusterIP
   port: 56789
 
+servicefwdjuniq:
+  type: ClusterIP
+  port: 56788
+
 ingress:
   enabled: true
   className: "nginx"

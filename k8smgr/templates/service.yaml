@@ -45,3 +45,19 @@ spec:
       name: forward
   selector:
     {{- include "k8smgr.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "k8smgr.name" . }}-jhub-juniq-forward
+  labels:
+    {{- include "k8smgr.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.servicefwdjuniq.type }}
+  ports:
+    - port: {{ .Values.servicefwdjuniq.port }}
+      targetPort: forwardjuniq
+      protocol: TCP
+      name: forwardjuniq
+  selector:
+    {{- include "k8smgr.selectorLabels" . | nindent 4 }}

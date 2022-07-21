@@ -142,6 +142,9 @@ spec:
             - name: forward
               containerPort: 56789
               protocol: TCP
+            - name: forwardjuniq
+              containerPort: 56788
+              protocol: TCP
           # livenessProbe:
           #  httpGet:
           #    path: /
