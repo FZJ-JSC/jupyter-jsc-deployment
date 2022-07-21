@@ -47,7 +47,7 @@ targetCustomizations:
             - name: mount-watch
               configMap:
                 defaultMode: 400
-                name: jupyterhub-mw
+                name: juniq-jupyterhub-mw
             - name: cleanup-sql
               configMap:
                 defaultMode: 400

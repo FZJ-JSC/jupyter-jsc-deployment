@@ -1,0 +1,44 @@
+defaultNamespace: jupyterjsc
+helm:
+  values:
+    nameOverride: "juniq-jhub-helper"
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+        provider.cattle.io: rke
+    helm:
+      values:
+        ingress:
+          hosts:
+            - host: juniq-staging.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: juniq-proxy-public
+              svcPort: 443
+          tls:
+            - secretName: juniq-staging.fz-juelich.de
+              hosts:
+                - juniq-staging.fz-juelich.de
+        ingressuser:
+          hosts:
+            - host: juniq-staging.fz-juelich.de
+              paths:
+                - path: /user/([^/]+)/([^/]+)/
+                  pathType: Prefix
+              svcName: juniq-proxy-public
+              svcPort: 443
+          tls:
+            - secretName: juniq-staging.fz-juelich.de
+              hosts:
+                - juniq-staging.fz-juelich.de
+        ingresshubstatic:
+          hosts:
+            - host: juniq-staging.fz-juelich.de
+              paths:
+                - path: /hub/static
+                  pathType: Prefix
+              svcName: juniq-static-files
+              svcPort: 8070
