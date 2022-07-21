@@ -132,12 +132,13 @@ hub:
       # c.CustomGenericOAuthenticator.extra_params_allowed_runtime = foo
       # http://localhost:8000/hub/oauth_login?extra_param_key1=value1
 
+      jhub_hostname = os.environ.get("JUPYTERHUB_HOSTNAME", "default")
 
       c.JupyterHub.template_paths = [f"/mnt/shared-data/jhub_files/{jupyterhub_version}/templates"]
       c.JupyterHub.template_vars = {
           "spawn_progress_update_url": "users/progress/update",
           "user_cancel_message": user_cancel_message,
-          "hostname": "default",
+          "hostname": jhub_hostname,
       }
       c.JupyterHub.data_files_path = f"/mnt/shared-data/jhub_files/{jupyterhub_version}"
 

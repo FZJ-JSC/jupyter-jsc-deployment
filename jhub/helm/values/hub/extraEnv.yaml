@@ -8,6 +8,10 @@ hub:
       valueFrom:
         fieldRef:
           fieldPath: metadata.labels['jhub_version']
+    - name: JUPYTERHUB_HOSTNAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['hostname']
     - name: LOGGING_CONFIG_FILE
       value: "/mnt/shared-data/git_config/logging.json"
     - name: MAINTENANCE_PATH
