@@ -62,7 +62,7 @@ targetCustomizations:
                 name: jupyterhub-reservation-check
             - name: internal-ssl
               secret:
-                secretName: internal-ssl
+                secretName: internal-ssl-juniq
             - name: reservation-keypair
               secret:
                 secretName: reservation-keypair
