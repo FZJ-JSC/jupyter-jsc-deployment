@@ -31,6 +31,7 @@ targetCustomizations:
         authorized_keys:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFEXIKTu6X7EjP7tq07wNb9S1P7Qwm2+E0I9kEtIgQyw'
           - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHakYLgiGwEPU7iyxo3anl+IwS1JvVhkhK61jTkQaQPi'
+          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_juniq.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8g9Bp0LCnkGIdNosPzYVYIngMdkwKCLpqzlyovGunW'
         gitconfig:
           branch: "k8smgr-staging"
         extraVolumes:
