@@ -1,7 +1,0 @@
-hub:
-  image:
-    pullPolicy: "Always"
-    pullSecrets:
-      - "gitlab-registry"
-    name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
-    tag: "dev"
