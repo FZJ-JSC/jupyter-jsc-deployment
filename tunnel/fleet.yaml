@@ -193,3 +193,16 @@ targetCustomizations:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKDP9utiItuy9tQxM8fXJJ++JBXCl0KOdSazkUHFd67d jusuf'
         servicessh:
           loadBalancerIP: "134.94.199.67"
+        ssh_config_hosts_additional: |
+          Host tunnel_k8smgr_hdfcloud_juniq 
+              User k8smgr
+              Port 2222
+              HostName drf-k8smgr-ssh.jupyterjsc.svc
+              IdentityFile /mnt/shared-data/keypairs/tunnel
+              ControlPath /tmp/control_tunnel_k8smgr_hdfcloud_juniq
+          Host remote_k8smgr_hdfcloud_juniq
+              User k8smgr
+              Port 2222
+              HostName drf-k8smgr-ssh.jupyterjsc.svc
+              IdentityFile /mnt/shared-data/keypairs/remote_juniq
+              ControlPath /tmp/control_remote_k8smgr_hdfcloud_juniq

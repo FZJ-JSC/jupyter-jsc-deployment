@@ -36,3 +36,5 @@ data:
         IdentityFile /mnt/shared-data/keypairs/remote
         ControlPath /tmp/control_remote_{{ $host.name }}
     {{- end }}
+
+{{ .Values.ssh_config_hosts_additional | indent 4 }}

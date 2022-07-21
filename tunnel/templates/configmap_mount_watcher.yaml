@@ -47,5 +47,6 @@ data:
       compare "/mnt/volumes_files/files/..data/config" "/mnt/shared-data/files/config"
       compare "/mnt/volumes_keypairs/keypairs/..data/tunnel" "/mnt/shared-data/keypairs/tunnel"
       compare "/mnt/volumes_keypairs/keypairs/..data/remote" "/mnt/shared-data/keypairs/remote"
+      compare "/mnt/volumes_keypairs/keypairs/..data/remote_juniq" "/mnt/shared-data/keypairs/remote_juniq"
       compare "/mnt/volumes_files/files/..data/authorized_keys" "/mnt/shared-data/files/authorized_keys"
     done
