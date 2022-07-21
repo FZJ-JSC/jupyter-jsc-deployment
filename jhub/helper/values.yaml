@@ -40,7 +40,7 @@ ingressuser:
       svcName: proxy-public
       svcPort: 443
       paths:
-        - path: "/user/([^/]+)/([^/]+)/(api/kernels|terminals)/"
+        - path: "/user/([^/]+)/([^/]+)/"
           pathType: Prefix
   tls:
     - secretName: jupyterhub-local
@@ -73,8 +73,6 @@ serviceStatic:
 
 gitconfig:
   branch: "jupyterhub-staging"
-  secret: "jupyter-jsc-config"
 
 jhubfiles:
-  branch: "jupyterhub-staging"
-  secret: "jupyter-jsc-config"
+  branch: "jupyterhub-files-staging"

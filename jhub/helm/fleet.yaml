@@ -38,12 +38,12 @@ targetCustomizations:
       values:
         hub:
           extraVolumes:
-            - name: shared-data
-              emptyDir: {}
             - name: persistent
               nfs:
                 path: /mnt/storage/jupyterhub
                 server: 10.0.94.174
+            - name: shared-data
+              emptyDir: {}
             - name: mount-watch
               configMap:
                 defaultMode: 400
@@ -93,6 +93,7 @@ targetCustomizations:
                 name: hub-nginx-config
           labels:
             stage: staging
+            jhub_version: "2.1.1"
           extraConfig:
             stagingConfig: |-
               c.JupyterHub.trusted_alt_names = [

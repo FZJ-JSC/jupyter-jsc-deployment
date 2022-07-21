@@ -5,7 +5,9 @@ hub:
       imagePullPolicy: Always
       env:
         - name: JUPYTERHUB_VERSION
-          value: "2.1.1"
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['jhub_version']
         - name: GIT_BRANCH
           valueFrom:
             fieldRef:
