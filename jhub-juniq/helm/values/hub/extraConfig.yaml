@@ -175,8 +175,8 @@ hub:
         "DNS:juniq-hub",
         "DNS:juniq-proxy-public",
         f"DNS:{jhub_hostname}",
-        "DNS:drf-k8smgr-jupyterhub-forward.jupyterjsc.svc",
-        "DNS:drf-k8smgr-jupyterhub-forward.userlabs.svc",
+        "DNS:drf-k8smgr-jhub-juniq-forward.jupyterjsc.svc",
+        "DNS:drf-k8smgr-jhub-juniq-forward.userlabs.svc",
       ]
       c.CustomGenericOAuthenticator.oauth_callback_url = (
           f"https://{jhub_hostname}/hub/oauth_callback"
