@@ -38,6 +38,7 @@ spec:
               app: drf-k8smgr
       ports:
         - port: 56789
+        - port: 56788
         - port: 443
     - to:
         - ipBlock:
