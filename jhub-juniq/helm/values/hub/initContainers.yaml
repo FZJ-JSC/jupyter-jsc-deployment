@@ -1,0 +1,42 @@
+hub:
+  initContainers:
+    - name: prepare-shared-data
+      image: alpine:3.14
+      imagePullPolicy: Always
+      env:
+        - name: JUPYTERHUB_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['jhub_version']
+        - name: JUPYTERHUB_STAGE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['stage']
+        - name: GIT_REPO
+          valueFrom:
+            secretKeyRef:
+              name: "jupyter-jsc-config"
+              key: REPOSITORY
+        - name: GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: "jupyter-jsc-config"
+              key: USERNAME
+        - name: GIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "jupyter-jsc-config"
+              key: PASSWORD
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - >-
+          apk add bash git && mkdir -p /mnt/shared-data/tmp-internal-ssl && echo -n "IyEvYmluL2Jhc2gKClNSQz0iL21udC9pbnRlcm5hbF9zc2wvKiIKREVTVD0iL21udC9wZXJzaXN0ZW50L2ludGVybmFsLXNzbCIKCm1rZGlyIC1wICRERVNUCgpmb3IgZiBpbiAkU1JDCmRvCiAgZmlsZW5hbWU9JChiYXNlbmFtZSAkZikKICBpZiBbWyAke2ZpbGVuYW1lfSA9IGNlcnRpcHkuanNvbiBdXTsgdGhlbgogICAgY3AgJGYgJHtERVNUfS8ke2ZpbGVuYW1lfQogIGVsaWYgW1sgISAke2ZpbGVuYW1lfSA9ICpfdHJ1c3QuY3J0IF1dOyB0aGVuCiAgICBkaXJuYW1lPSR7ZmlsZW5hbWUlJV8qfQogICAgbWtkaXIgLXAgJHtERVNUfS8ke2Rpcm5hbWV9CiAgICBmaWxlbmFtZT0ke2ZpbGVuYW1lIyMqX30KICAgIGNwICRmICR7REVTVH0vJHtkaXJuYW1lfS8ke2ZpbGVuYW1lfQogIGVsc2UKICAgIGNwICRmICR7REVTVH0vJHtmaWxlbmFtZX0KICBmaQpkb25lCg==" | base64 -d > /tmp/secret_to_internal-ssl.sh && bash /tmp/secret_to_internal-ssl.sh && export GIT_REPO_SHORT=${GIT_REPO#"https://"} && cd /mnt/shared-data && git clone --single-branch --branch jupyterhub-juniq-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config && git clone --single-branch --branch jupyterhub-files-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} jhub_files && cp -r /mnt/shared-data/jhub_files/${JUPYTERHUB_VERSION}/static /mnt/shared-data/static-files && chown -R 1000:100 /mnt/shared-data && chown -R 1000:100 /mnt/persistent
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: persistent
+          mountPath: /mnt/persistent
+        - name: internal-ssl
+          mountPath: /mnt/internal_ssl
+          readOnly: true

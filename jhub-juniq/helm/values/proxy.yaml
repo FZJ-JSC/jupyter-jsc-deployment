@@ -1,0 +1,40 @@
+proxy:
+  service:
+    type: ClusterIP
+  chp:
+    defaultTarget: "https://hub:8081"
+    errorTarget: "https://hub:8081/hub/error"
+    extraCommandLineFlags:
+     - "--api-ssl-key=/etc/chp/tls/proxy-api_proxy-api.key"
+     - "--api-ssl-cert=/etc/chp/tls/proxy-api_proxy-api.crt"
+     - "--api-ssl-ca=/etc/chp/tls/proxy-api-ca_trust.crt"
+     - "--api-ssl-request-cert"
+     - "--api-ssl-reject-unauthorized"
+     - "--client-ssl-key=/etc/chp/tls/proxy-client_proxy-client.key"
+     - "--client-ssl-cert=/etc/chp/tls/proxy-client_proxy-client.crt"
+     - "--client-ssl-ca=/etc/chp/tls/proxy-client-ca_trust.crt"
+     - "--client-ssl-request-cert"
+     - "--client-ssl-reject-unauthorized"
+     # - "--log-level=debug"
+    extraPodSpec:
+      initContainers:
+        - name: test
+          image: alpine:3.14
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - >-
+              mkdir -p /mnt/persistent/jhub
+              # while true; do sleep 30; done
+    nodeSelector:
+      worker: "true"
+  https:
+    enabled: true
+    type: secret
+    secret:
+      name: internal-ssl-juniq
+      key: proxy-client_proxy-client.key
+      crt: proxy-client_proxy-client.crt
+      #key: hub-internal_hub-internal.key
+      #crt: hub-internal_hub-internal.crt

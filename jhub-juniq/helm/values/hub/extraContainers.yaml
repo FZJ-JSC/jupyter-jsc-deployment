@@ -1,0 +1,131 @@
+hub:
+  extraContainers:
+    - name: maintenance-check
+      image: python:3.9-alpine3.16
+      imagePullPolicy: Always
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - >-
+            pip install jsonformatter python-dateutil requests &&
+            mkdir -p $OUTPUT_DIR &&
+            source /mnt/maintenance/run.sh
+      env:
+        - name: CUSTOM_CONFIG_PATH
+          value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
+        - name: OUTPUT_DIR
+          value: "/mnt/shared-data/maintenance-check"
+        - name: STATIC_IMG_DIR
+          value: "/mnt/shared-data/hub-static/default/images/footer"
+        - name: LOGGER_NAME
+          value: "MaintenanceCheck"
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: maintenance-check
+          mountPath: /mnt/maintenance/maintenance_check.py
+          subPath: maintenance_check.py
+        - name: maintenance-check
+          mountPath: /mnt/maintenance/run.sh
+          subPath: run.sh
+    - name: cleanup-sql
+      image: python:3.9-alpine3.16
+      imagePullPolicy: Always
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - >-
+            pip install requests psycopg2-binary &&
+            source /mnt/sql/run.sh
+      env:
+        - name: CUSTOM_CONFIG_PATH
+          value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
+        - name: SLEEP
+          value: "30"
+        - name: SQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-general
+              key: SQL_HOST
+        - name: JUPYTERHUB_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-users-jupyterjsc
+              key: JUPYTERHUB_JUNIQ_PASSWORD
+        - name: UNICOREMGR_JUPYTERHUB_USER_PASS
+          valueFrom:
+            secretKeyRef:
+              name: drf-unicoremgr-passwds
+              key: JUPYTERHUB_JUNIQ_USER_PASS
+              optional: false
+        - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+          valueFrom:
+            secretKeyRef:
+              name: drf-k8smgr-passwds 
+              key: JUPYTERHUB_JUNIQ_USER_PASS
+              optional: false
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: cleanup-sql
+          mountPath: /mnt/sql/cleanup_sql.py
+          subPath: cleanup_sql.py
+        - name: cleanup-sql
+          mountPath: /mnt/sql/run.sh
+          subPath: run.sh
+        - name: internal-ssl
+          mountPath: /mnt/certs/hub-ca_hub-ca.crt
+          subPath: hub-ca_hub-ca.crt
+        - name: drf-unicoremgr-certs
+          mountPath: /mnt/unicoremgr_certs
+        - name: drf-k8smgr-certs
+          mountPath: /mnt/k8smgr_certs
+    - name: mount-watch
+      image: alpine:3.14
+      imagePullPolicy: Always
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - >-
+            apk add bash git && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
+      env:
+        - name: JUPYTERHUB_STAGE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['stage']
+        - name: JUPYTERHUB_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['jhub_version']
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name:  mount-watch
+          mountPath: /mnt/volumes_mw/mount_watch
+    - name: static-files
+      image: nginx:1.22
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 8070
+          protocol: TCP
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: hub-nginx-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: nginx.conf
+    - name: reservation-check
+      image: python:3.9-alpine3.14
+      imagePullPolicy: Always
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - >-
+            apk add bash openssh && mkdir -p /mnt/ssh && cp -rp /mnt/reservation-keypair/..data/* /mnt/ssh/. && chmod 400 /mnt/ssh/* && mkdir -p /mnt/shared-data/reservation-check && source /mnt/reservation/..data/run.sh
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: reservation-keypair
+          mountPath: /mnt/reservation-keypair
+        - name: reservation-check
+          mountPath: /mnt/reservation

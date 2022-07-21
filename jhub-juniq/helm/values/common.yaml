@@ -1,0 +1,12 @@
+cull:
+  enabled: false
+prePuller:
+  hook:
+    enabled: false
+  continuous:
+    enabled: false
+scheduling:
+  userScheduler:
+    enabled: false
+nameOverride: "hub-juniq"
+fullnameOverride: "hub-juniq"
