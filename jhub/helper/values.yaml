@@ -72,7 +72,7 @@ serviceStatic:
   port: 8070
 
 gitconfig:
-  branch: "jupyterhub-"
+  branch: "jupyterhub"
 
 jhubfiles:
-  branch: "jupyterhub-files-"
+  branch: "jupyterhub-files"
