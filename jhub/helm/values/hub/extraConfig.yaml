@@ -137,7 +137,7 @@ hub:
       c.JupyterHub.template_vars = {
           "spawn_progress_update_url": "users/progress/update",
           "user_cancel_message": user_cancel_message,
-          "hostname": "default",
+          "hostname": "jupyter-jsc-staging.fz-juelich.de",
       }
       c.JupyterHub.data_files_path = f"/mnt/shared-data/jhub_files/{jupyterhub_version}"
 
