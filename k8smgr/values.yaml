@@ -23,6 +23,10 @@ jupyterhub:
   host: proxy-public
   port: 443
 
+jupyterhubjuniq:
+  host: juniq-proxy-public
+  port: 443
+
 gitconfig:
   branch: "k8smgr-dev"
   secret: "jupyter-jsc-config"
