@@ -44,7 +44,7 @@ helm:
       prometheusSpec:
         resources:
           limits:
-            memory: 1500Mi
+            memory: 2500Mi
             cpu: 1000m
           requests:
             memory: 750Mi
@@ -161,7 +161,7 @@ targetustomizations:
             evaluationInterval: 1m
             resources:
               limits:
-                memory: 1500Mi
+                memory: 2500Mi
                 cpu: 1000m
               requests:
                 memory: 750Mi
