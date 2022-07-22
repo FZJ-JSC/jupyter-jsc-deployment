@@ -46,6 +46,9 @@ helm:
           limits:
             memory: 1500Mi
             cpu: 1000m
+          requests:
+            memory: 750Mi
+            cpu: 750m
         evaluationInterval: 1m
         nodeSelector:
           monitoring: "true"
@@ -157,8 +160,12 @@ targetustomizations:
           prometheusSpec:
             evaluationInterval: 1m
             resources:
-              requests:
+              limits:
                 memory: 1500Mi
+                cpu: 1000m
+              requests:
+                memory: 750Mi
+                cpu: 750m
             retention: 7d
             retentionSize: 20GiB
             scrapeInterval: 1m
