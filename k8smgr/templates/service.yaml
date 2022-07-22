@@ -29,35 +29,24 @@ spec:
       name: ssh
   selector:
     {{- include "k8smgr.selectorLabels" . | nindent 4 }}
+{{- if .Values.jupyterhubs }}
+{{- $labels := include "k8smgr.labels" . -}}
+{{- $selectorLabels := include "k8smgr.selectorLabels" . -}}
+{{- range $jupyterhub := .Values.jupyterhubs }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "k8smgr.name" . }}-jupyterhub-forward
+  name: {{ .forwardService.name }}
   labels:
-    {{- include "k8smgr.labels" . | nindent 4 }}
+    {{- $labels | nindent 4 }}
 spec:
-  type: {{ .Values.servicefwd.type }}
+  type: {{ .forwardService.type }}
   ports:
-    - port: {{ .Values.servicefwd.port }}
-      targetPort: forward
+    - port: {{ .forwardService.port }}
+      targetPort: {{ .forwardService.port }}
       protocol: TCP
-      name: forward
   selector:
-    {{- include "k8smgr.selectorLabels" . | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "k8smgr.name" . }}-jhub-juniq-forward
-  labels:
-    {{- include "k8smgr.labels" . | nindent 4 }}
-spec:
-  type: {{ .Values.servicefwdjuniq.type }}
-  ports:
-    - port: {{ .Values.servicefwdjuniq.port }}
-      targetPort: forwardjuniq
-      protocol: TCP
-      name: forwardjuniq
-  selector:
-    {{- include "k8smgr.selectorLabels" . | nindent 4 }}
+    {{- $selectorLabels | nindent 4 }}
+{{- end }}
+{{- end }}

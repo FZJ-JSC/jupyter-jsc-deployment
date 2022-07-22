@@ -139,12 +139,12 @@ spec:
             - name: ssh
               containerPort: 2222
               protocol: TCP
-            - name: forward
-              containerPort: 56789
+            {{- if .Values.jupyterhubs }}
+            {{- range $jupyterhub := .Values.jupyterhubs }}
+            - containerPort: {{ $jupyterhub.forwardService.port }}
               protocol: TCP
-            - name: forwardjuniq
-              containerPort: 56788
-              protocol: TCP
+            {{- end }}
+            {{- end }}
           # livenessProbe:
           #  httpGet:
           #    path: /

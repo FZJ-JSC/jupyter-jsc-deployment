@@ -19,13 +19,25 @@ tunnel:
   user: tunnel
   host: drf-tunnel-ssh.jupyterjsc.svc
 
-jupyterhub:
-  host: proxy-public
-  port: 443
-
-jupyterhubjuniq:
-  host: juniq-proxy-public
-  port: 443
+jupyterhubs:
+  default:
+    host: proxy-public
+    port: 443
+    forwardService:
+      name: drf-k8smgr-jupyterhub-forward
+      type: ClusterIP
+      port: 56789
+    remote:
+      scriptName: manage_tunnel.sh
+  juniq:
+    host: juniq-proxy-public
+    port: 443
+    forwardService:
+      name: drf-k8smgr-jhub-juniq-forward
+      type: ClusterIP
+      port: 56788
+    remote:
+      scriptName: manage_tunnel_juniq.sh
 
 gitconfig:
   branch: "k8smgr-dev"
@@ -70,14 +82,6 @@ service:
 servicessh:
   type: ClusterIP
   port: 2222
-
-servicefwd:
-  type: ClusterIP
-  port: 56789
-
-servicefwdjuniq:
-  type: ClusterIP
-  port: 56788
 
 ingress:
   enabled: true
