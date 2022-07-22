@@ -6,7 +6,7 @@ data:
   run.sh: |
     #!/bin/sh
 
-    while [ ! -d /mnt/shared-data/hub-static ]; do sleep 5; done
+    while [ ! -d ${STATIC_IMG_DIR} ]; do echo "Waiting for ${STATIC_IMG_DIR} ..." ; sleep 5; done
 
     SLEEP=$(/usr/local/bin/python3 -c 'import json, os; f=open(os.environ["CUSTOM_CONFIG_PATH"], "r"); config = json.load(f); f.close(); print(config["maintenance-check"].get("interval", 60))')
     while true

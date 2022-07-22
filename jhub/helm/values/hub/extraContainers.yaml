@@ -16,7 +16,7 @@ hub:
         - name: OUTPUT_DIR
           value: "/mnt/shared-data/maintenance-check"
         - name: STATIC_IMG_DIR
-          value: "/mnt/shared-data/hub-static/default/images/footer"
+          value: "/mnt/shared-data/static-files/default/images/footer"
         - name: LOGGER_NAME
           value: "MaintenanceCheck"
       volumeMounts:
