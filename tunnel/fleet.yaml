@@ -51,7 +51,7 @@ helm:
             port: 22
             hostname: "juwels06.fz-juelich.de"
           - name: "jwlogin07i"
-            enabled: False
+            disabled: True
             user: "ljupyter"
             port: 22
             hostname: "juwels07.fz-juelich.de"
@@ -68,7 +68,7 @@ helm:
             port: 22
             hostname: "juwels10.fz-juelich.de"
           - name: "jwlogin11i"
-            enabled: False
+            disabled: True
             user: "ljupyter"
             port: 22
             hostname: "juwels11.fz-juelich.de"
@@ -173,7 +173,7 @@ helm:
             port: 22
             hostname: "jusuf3.fz-juelich.de"
           - name: "jsfl04i"
-            enabled: False
+            disabled: True
             user: "ljupyter"
             port: 22
             hostname: "jusuf4.fz-juelich.de"

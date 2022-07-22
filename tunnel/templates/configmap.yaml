@@ -22,8 +22,8 @@ data:
         ControlPersist {{ default 0 .Values.ssh_config_hosts_defaults.controlPersist }}
     {{- range $jupyterhub := .Values.jupyterhubs }}
     {{- range $host := .ssh_config_hosts }}
-    {{- if or (not (hasKey $jupyterhub "enabled")) (eq (coalesce $jupyterhub.enabled false) true) }} 
-    {{- if or (not (hasKey $host "enabled")) (eq (coalesce $host.enabled false) true) }}
+    {{- if not $jupyterhub.disabled }} 
+    {{- if not $host.disabled }}
 
     Host tunnel_{{ $host.name }}
         User {{ $host.user }}
