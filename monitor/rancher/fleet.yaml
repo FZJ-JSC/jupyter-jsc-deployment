@@ -42,6 +42,10 @@ helm:
           effect: "NoExecute"
     prometheus:
       prometheusSpec:
+        resources:
+          limits:
+            memory: 1500Mi
+            cpu: 1000m
         evaluationInterval: 1m
         nodeSelector:
           monitoring: "true"
