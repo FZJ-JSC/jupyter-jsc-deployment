@@ -24,6 +24,8 @@ hub:
       value: "jupyterhubjuniq"
     - name: LOGGING_CONFIG_FILE
       value: "/mnt/shared-data/git_config/logging.json"
+    - name: LOGGING_METRICS_LOGFILE
+      value: "/mnt/persistent/metrics.log"
     - name: SHOW_DRF_LOGS
       value: "false"
     - name: MAINTENANCE_PATH
