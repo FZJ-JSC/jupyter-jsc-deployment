@@ -43,7 +43,7 @@ hub:
         - name: CUSTOM_CONFIG_PATH
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
         - name: SLEEP
-          value: "30"
+          value: "1800"
         - name: SQL_HOST
           valueFrom:
             secretKeyRef:
