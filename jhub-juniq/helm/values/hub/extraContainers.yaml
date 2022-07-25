@@ -54,6 +54,14 @@ hub:
             secretKeyRef:
               name: postgresql-users-jupyterjsc
               key: JUPYTERHUB_JUNIQ_PASSWORD
+        - name: UNICOREMGR_JUPYTERHUB_USERNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['drf_username']
+        - name: K8SMGRHDFCLOUD_JUPYTERHUB_USERNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['drf_username']
         - name: UNICOREMGR_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:

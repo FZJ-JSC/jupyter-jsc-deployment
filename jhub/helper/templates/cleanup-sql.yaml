@@ -7,11 +7,11 @@ data:
     #!/bin/sh
 
     if [[ -n ${K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS} ]]; then
-    export K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN=${K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN:-"Basic $(echo -n "jupyterhub:${K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
+        export K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN=${K8SMGRHDFCLOUD_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${K8SMGRHDFCLOUD_JUPYTERHUB_USERNAME:-jupyterhub}:${K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
     fi
 
     if [[ -n ${UNICOREMGR_JUPYTERHUB_USER_PASS} ]]; then
-    export UNICOREMGR_AUTHENTICATION_TOKEN=${UNICOREMGR_AUTHENTICATION_TOKEN:-"Basic $(echo -n "jupyterhub:${UNICOREMGR_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
+        export UNICOREMGR_AUTHENTICATION_TOKEN=${UNICOREMGR_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${UNICOREMGR_JUPYTERHUB_USERNAME:-jupyterhub}:${UNICOREMGR_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
     fi
 
     while true
@@ -24,6 +24,7 @@ data:
     import datetime
     import json
     import os
+    import re
     import time
 
     import psycopg2
@@ -53,12 +54,43 @@ data:
             user=os.environ.get("JUPYTERHUB_DATABASE_USER", "jupyterhub"),
             password=os.environ.get("JUPYTERHUB_DATABASE_PASSWORD", None),
         )
-        query = "SELECT spawners.name FROM spawners WHERE spawners.started IS NOT NULL"
+        query = "SELECT spawners.user_id, spawners.name FROM spawners WHERE spawners.server_id IS NOT NULL"
         cur = connection.cursor()
         cur.execute(query)
         output = cur.fetchall()
-        ret = [x[0] for x in output]
-        return ret
+        return output
+
+    def get_jhub_server_tokens():
+        connection = psycopg2.connect(
+            host=os.environ.get("SQL_HOST", "postgresql.database.svc"),
+            database=os.environ.get("JUPYTERHUB_DATABASE", "jupyterhub"),
+            user=os.environ.get("JUPYTERHUB_DATABASE_USER", "jupyterhub"),
+            password=os.environ.get("JUPYTERHUB_DATABASE_PASSWORD", None),
+        )
+        query = "SELECT api_tokens.user_id, api_tokens.note, api_tokens.id FROM api_tokens WHERE api_tokens.note ~ 'Server at'"
+        cur = connection.cursor()
+        cur.execute(query)
+        output = cur.fetchall()
+        return output
+
+    def delete_unused_tokens(jhub_server, jhub_tokens):
+        s = "^Server at \/user\/([^\/]+)\/([^\/]+)\/$"
+        c = re.compile(s)
+        connection = psycopg2.connect(
+            host=os.environ.get("SQL_HOST", "postgresql.database.svc"),
+            database=os.environ.get("JUPYTERHUB_DATABASE", "jupyterhub"),
+            user=os.environ.get("JUPYTERHUB_DATABASE_USER", "jupyterhub"),
+            password=os.environ.get("JUPYTERHUB_DATABASE_PASSWORD", None),
+        )
+        for api_token in jhub_tokens:
+            matches = list(c.match(api_token[1]).groups())
+            if len(matches) == 2:
+                if not (api_token[0], matches[1]) in jhub_server:
+                    print(f"Delete token with id {api_token[2]} for server {matches}")
+                    query = "DELETE FROM api_tokens WHERE id = %s"
+                    cur = connection.cursor()
+                    cur.execute(query, (api_token[2], ))
+                    connection.commit()
 
 
     def started_n_minutes_ago(n, started):
@@ -70,7 +102,7 @@ data:
         return False
 
 
-    def cleanup_drf_services(jhub_server, custom_conf, grace_period):
+    def cleanup_drf_services(jhub_server_names, custom_conf, grace_period):
         drf_services = [
             k
             for k, v in custom_conf.get("drf-services", {}).items()
@@ -114,7 +146,7 @@ data:
                 x["servername"]
                 for x in r.json()
                 if started_n_minutes_ago(grace_period, x["start_date"])
-                and x["servername"] not in jhub_server
+                and x["servername"] not in jhub_server_names
             ]
             if not services_to_delete:
                 print(f"{now()} {uuidcode} - Nothing to cleanup for {drf_name}")
@@ -131,13 +163,15 @@ data:
 
 
     if __name__ == "__main__":
-        sleep_time = int(os.environ.get("SLEEP", 60))
         grace_period = int(os.environ.get("START_DATE_GRACE_PERIOD_IN_MIN", 5))
-        # while True:
         print(f"{now()} {uuidcode} - Cleanup falsely running services ...")
         with open(custom_conf_file, "r") as f:
             custom_conf = json.load(f)
         jhub_server = get_jhub_server()
-        cleanup_drf_services(jhub_server, custom_conf, grace_period)
+        jhub_server_names = [x[1] for x in jhub_server]
+        jhub_tokens = get_jhub_server_tokens()
+        cleanup_drf_services(jhub_server_names, custom_conf, grace_period)
         print(f"{now()} {uuidcode} - Cleanup falsely running services ... done")
-        # time.sleep(sleep_time)
+        print(f"{now()} {uuidcode} - Delete unused tokens ...")
+        delete_unused_tokens(jhub_server, jhub_tokens)
+        print(f"{now()} {uuidcode} - Delete unused tokens ... done")
