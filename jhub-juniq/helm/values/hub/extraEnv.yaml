@@ -12,6 +12,10 @@ hub:
       valueFrom:
         fieldRef:
           fieldPath: metadata.labels['hostname']
+    - name: LOGGER_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['logger_name']
     - name: K8SMGRHDFCLOUD_JUPYTERHUB_USERNAME
       value: "jupyterhubjuniq"
     - name: UNICOREMGR_JUPYTERHUB_USERNAME

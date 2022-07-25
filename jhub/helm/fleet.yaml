@@ -99,3 +99,4 @@ targetCustomizations:
             jhub_version: "2.1.1"
             hostname: "jupyter-jsc-staging.fz-juelich.de"
             drf_username: "jupyterhub"
+            logger_name: "JupyterHubStaging"

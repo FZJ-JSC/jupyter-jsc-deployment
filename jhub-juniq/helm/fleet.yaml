@@ -99,3 +99,4 @@ targetCustomizations:
             jhub_version: "2.1.1"
             hostname: "juniq-staging.fz-juelich.de"
             drf_username: "jupyterhubjuniq"
+            logger_name: "JupyterHubJUNIQStaging"
