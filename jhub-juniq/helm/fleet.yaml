@@ -91,6 +91,9 @@ targetCustomizations:
               configMap:
                 defaultMode: 400
                 name: hub-nginx-config
+            - name: tz-config
+              hostPath:
+                path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: staging
             jhub_version: "2.1.1"

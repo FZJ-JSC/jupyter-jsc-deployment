@@ -12,3 +12,5 @@ hub:
       mountPath: /mnt/k8smgr_certs
     - name: unity-jsc-certs
       mountPath: /mnt/unity_certs
+    - name: tz-config
+      mountPath: /etc/localtime
