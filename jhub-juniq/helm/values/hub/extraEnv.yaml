@@ -20,6 +20,8 @@ hub:
       value: "jupyterhubjuniq"
     - name: LOGGING_CONFIG_FILE
       value: "/mnt/shared-data/git_config/logging.json"
+    - name: SHOW_DRF_LOGS
+      value: false
     - name: MAINTENANCE_PATH
       value: "/mnt/shared-data/maintenance-check"
     - name: MAINTENANCE_FILE
