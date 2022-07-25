@@ -50,9 +50,13 @@ secrets:
   databaseUsers: "postgresql-users-jupyterjsc"
   tunnelpasswds: "drf-tunnel-passwds"
 
-extraVolumes: []
-extraVolumeMounts: []
-
+extraVolumes:
+  - name: tz-config
+    hostPath:
+      path: /usr/share/zoneinfo/Europe/Berlin
+extraVolumeMounts:
+  - name: tz-config
+    mountPath: /etc/localtime
 image:
   repository: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/drf-k8smgr
   pullPolicy: Always
