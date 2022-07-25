@@ -2,6 +2,8 @@ hub:
   annotations:
     proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
     kubectl.kubernetes.io/default-container: "hub"
+  db:
+    type: "postgres"
   nodeSelector:
     worker: "true"
   networkPolicy:

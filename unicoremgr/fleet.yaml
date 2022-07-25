@@ -37,4 +37,8 @@ targetCustomizations:
         extraVolumeMounts:
           - name: persistent
             mountPath: /mnt/persistent
+        loggerName: "UnicoreMgrStaging"
+        gunicorn:
+          processes: 4
+          threads: 1
 

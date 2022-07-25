@@ -48,4 +48,8 @@ targetCustomizations:
             mountPath: /mnt/persistent
           - name: userhomes
             mountPath: /mnt/userhomes
+        loggerName: "K8sMgrStaging"
+        gunicorn:
+          processes: 4
+          threads: 1
 

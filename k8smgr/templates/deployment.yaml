@@ -101,9 +101,9 @@ spec:
             - name: GUNICORN_SSL_KEY
               value: "/mnt/shared-data/certs/k8smgr.key"
             - name: GUNICORN_PROCESSES
-              value: "4"
+              value: "{{ .Values.gunicorn.processes }}"
             - name: GUNICORN_THREADS
-              value: "1"
+              value: "{{ .Values.gunicorn.threads }}"
             {{- if .Values.secrets.tunnelpasswds }}
             - name: TUNNELSVC_K8SMGR_USER_PASSWORD
               valueFrom:
@@ -132,6 +132,8 @@ spec:
                   fieldPath: metadata.labels['app']
             - name: DEPLOYMENT_NAMESPACE
               value: "{{ .Values.deploymentNamespace }}"
+            - name: LOGGER_NAME
+              value: "{{ .Values.loggerName }}"
           ports:
             - name: https
               containerPort: 8443

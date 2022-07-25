@@ -205,3 +205,7 @@ targetCustomizations:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKDP9utiItuy9tQxM8fXJJ++JBXCl0KOdSazkUHFd67d jusuf'
         servicessh:
           loadBalancerIP: "134.94.199.67"
+        loggerName: "TunnelStaging"
+        gunicorn:
+          processes: 4
+          threads: 1

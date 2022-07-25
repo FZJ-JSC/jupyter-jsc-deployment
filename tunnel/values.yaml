@@ -107,6 +107,11 @@ servicessh:
   targetPort: 2222
   type: "LoadBalancer"
 
+loggerName: "Tunnel"
+
+gunicorn:
+  processes: 4
+  threads: 1
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
