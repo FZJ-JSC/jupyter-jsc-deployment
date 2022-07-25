@@ -140,6 +140,8 @@ spec:
           volumeMounts:
             - name: shared-data
               mountPath: /mnt/shared-data
+            - name: tz-config
+              mountPath: /etc/localtime
         - name: remote-check
           image: alpine:3.14
           imagePullPolicy: Always
@@ -166,6 +168,8 @@ spec:
           volumeMounts:
             - name: shared-data
               mountPath: /mnt/shared-data
+            - name: tz-config
+              mountPath: /etc/localtime
         - name: mount-watch
           image: alpine:3.14
           imagePullPolicy: Always
@@ -185,6 +189,8 @@ spec:
               mountPath: /mnt/volumes_keypairs/keypairs
             - name: shared-data
               mountPath: /mnt/shared-data
+            - name: tz-config
+              mountPath: /etc/localtime
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -216,6 +222,9 @@ spec:
         secret:
           defaultMode: 400
           secretName: "{{ .Values.secrets.keypairs }}"
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/Europe/Berlin
       {{- if .Values.cluster_internal_publickeys }}
       {{- range $secretname := .Values.cluster_internal_publickeys }}
       - name: {{ $secretname }}

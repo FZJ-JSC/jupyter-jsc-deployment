@@ -128,6 +128,8 @@ spec:
           volumeMounts:
             - name: shared-data
               mountPath: /mnt/shared-data
+            - name: tz-config
+              mountPath: /etc/localtime
         - name: mount-watch
           image: alpine:3.14
           imagePullPolicy: Always
@@ -162,6 +164,8 @@ spec:
               mountPath: /mnt/volumes_certs/certs
             - name: shared-data
               mountPath: /mnt/shared-data
+            - name: tz-config
+              mountPath: /etc/localtime
             {{- with .Values.extraVolumeMounts }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
@@ -176,6 +180,9 @@ spec:
         secret:
           defaultMode: 400
           secretName: {{ include "drf-unicoremgr.name" . }}-certs
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/Europe/Berlin
       {{- with .Values.extraVolumes }}
       {{- . | toYaml | nindent 6 }}
       {{- end }}
