@@ -21,29 +21,16 @@ ssh_config_hosts_defaults:
   controlMaster: "auto"
   controlPersist: 0
 
-ssh_config_hosts:
-  - name: "demo_site"
-    user: "ljupyter"
-    hostname: "unicore-abc.devel.svc"
-  - name: "k8smgr_hdfcloud"
-    user: "k8smgr"
-    port: 2222
-    hostname: "drf-k8smgr.userlabs.svc"
-
-ssh_config_hosts_additional: |
-  Host tunnel_k8smgr_hdfcloud_juniq
-      User k8smgr
-      Port 2222
-      HostName drf-k8smgr-ssh.jupyterjsc.svc
-      IdentityFile /mnt/shared-data/keypairs/tunnel
-      ControlPath /tmp/control_tunnel_k8smgr_hdfcloud_juniq
-  Host remote_k8smgr_hdfcloud_juniq
-      User k8smgr
-      Port 2222
-      HostName drf-k8smgr-ssh.jupyterjsc.svc
-      IdentityFile /mnt/shared-data/keypairs/remote_juniq
-      ControlPath /tmp/control_remote_k8smgr_hdfcloud_juniq
- 
+jupyterhubs:
+  default:
+    ssh_config_hosts:
+    - name: "demo_site"
+      user: "ljupyter"
+      hostname: "unicore-abc.devel.svc"
+    - name: "k8smgr_hdfcloud"
+      user: "k8smgr"
+      port: 2222
+      hostname: "drf-k8smgr.userlabs.svc" 
 
 image:
   repository: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/drf-tunnel
@@ -120,6 +107,11 @@ servicessh:
   targetPort: 2222
   type: "LoadBalancer"
 
+loggerName: "Tunnel"
+
+gunicorn:
+  processes: 4
+  threads: 1
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

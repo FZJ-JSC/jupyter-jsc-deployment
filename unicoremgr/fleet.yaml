@@ -2,7 +2,7 @@ defaultNamespace: jupyterjsc
 helm:
   values:
     image:
-      tag: "1.1.2-asi"
+      tag: "1.1.3"
     nameOverride: "drf-unicoremgr"
     nodeSelector:
       worker: "true"
@@ -37,4 +37,8 @@ targetCustomizations:
         extraVolumeMounts:
           - name: persistent
             mountPath: /mnt/persistent
+        loggerName: "UnicoreMgrStaging"
+        gunicorn:
+          processes: 4
+          threads: 1
 

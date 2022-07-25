@@ -12,7 +12,9 @@ data:
     {{- range $auth_key := .Values.authorized_keys }}
     {{ $auth_key }}
     {{- end }}
-  manage_tunnel.sh: |
+{{- if .Values.jupyterhubs }}
+{{- range $jupyterhub := .Values.jupyterhubs }}
+  {{ $jupyterhub.remote.scriptName }}: |
     #!/bin/bash
     while getopts ":a:" opt; do
         case $opt in
@@ -24,16 +26,16 @@ data:
     done
 
 
-    HOSTNAME_="{{ include "k8smgr.name" . }}-jupyterhub-forward.jupyterjsc.svc"
-    LOCAL_PORT=56789
+    HOSTNAME_="{{ $jupyterhub.forwardService.name }}.jupyterjsc.svc"
+    LOCAL_PORT={{ $jupyterhub.forwardService.port }}
 
     PRIVATE_KEY="/mnt/shared-data/keypairs/ssh-privatekey"
-    TUNNEL_SSH_PORT={{ .Values.tunnel.port }}
-    TUNNEL_SSH_USER={{ .Values.tunnel.user }}
-    TUNNEL_SSH_HOST={{ .Values.tunnel.host }}
+    TUNNEL_SSH_PORT={{ $.Values.tunnel.port }}
+    TUNNEL_SSH_USER={{ $.Values.tunnel.user }}
+    TUNNEL_SSH_HOST={{ $.Values.tunnel.host }}
 
-    JUPYTERHUB_HOST={{ .Values.jupyterhub.host }}
-    JUPYTERHUB_PORT={{ .Values.jupyterhub.port }}
+    JUPYTERHUB_HOST={{ .host }}
+    JUPYTERHUB_PORT={{ .port }}
 
     FORWARD_BLOCK="0.0.0.0:${LOCAL_PORT}:${JUPYTERHUB_HOST}:${JUPYTERHUB_PORT}" 
     FORWARD_OPTIONS="-oLogLevel=ERROR -oUserKnownHostsFile=/dev/null -oServerAliveInterval=30 -oExitOnForwardFailure=yes -oStrictHostKeyChecking=no"
@@ -95,86 +97,5 @@ data:
 
     check_tunnel
     exit $?
-  manage_tunnel_juniq.sh: |
-    #!/bin/bash
-    while getopts ":a:" opt; do
-        case $opt in
-            a) ACTION="$OPTARG"
-            ;;
-            \?) exit 255
-            ;;
-        esac
-    done
-
-
-    HOSTNAME_="{{ include "k8smgr.name" . }}-jhub-juniq-forward.jupyterjsc.svc"
-    LOCAL_PORT=56788
-
-    PRIVATE_KEY="/mnt/shared-data/keypairs/ssh-privatekey"
-    TUNNEL_SSH_PORT={{ .Values.tunnel.port }}
-    TUNNEL_SSH_USER={{ .Values.tunnel.user }}
-    TUNNEL_SSH_HOST={{ .Values.tunnel.host }}
-
-    JUPYTERHUB_HOST={{ .Values.jupyterhubjuniq.host }}
-    JUPYTERHUB_PORT={{ .Values.jupyterhubjuniq.port }}
-
-    FORWARD_BLOCK="0.0.0.0:${LOCAL_PORT}:${JUPYTERHUB_HOST}:${JUPYTERHUB_PORT}" 
-    FORWARD_OPTIONS="-oLogLevel=ERROR -oUserKnownHostsFile=/dev/null -oServerAliveInterval=30 -oExitOnForwardFailure=yes -oStrictHostKeyChecking=no"
-
-    get_pid () {
-        pgrep -f $FORWARD_BLOCK
-    }
-
-    check_tunnel () {
-        PID=$(get_pid)
-        if [[ -n $PID ]]; then
-            # Process is running, try to call it with curl, if curl's available
-            which curl &> /dev/null
-            if [[ $? -eq 0 ]]; then
-                STATUS_CODE=$(curl -k --write-out '%{http_code}' --silent --output /dev/null https://${HOSTNAME_}:${LOCAL_PORT}/hub/api)
-                if [[ ${STATUS_CODE} -eq 200 ]]; then
-                    return 217
-                else
-                    return 218
-                fi
-            else
-                # Curl not available, return 217 (running)
-                return 217
-            fi
-        else
-            return 218
-        fi
-    }
-
-    start_tunnel () {
-        ssh -p ${TUNNEL_SSH_PORT} -i ${PRIVATE_KEY} ${FORWARD_OPTIONS} -L${FORWARD_BLOCK} ${TUNNEL_SSH_USER}@${TUNNEL_SSH_HOST} -f -N
-    }
-
-    stop_tunnel () {
-        PID=$(get_pid)
-        if [[ -n $PID ]]; then
-            kill -9 ${PID}
-        fi
-    }
-
-    START="0aca3fdbc4023500b5e2bb254f95f55932785e6dc33c4f12011f25f3d47403875343a985c07de18e6a568c9fcc04ef8a1400cf2e3118dfb28ace4b58ead3c962"
-    STATUS="2eca457db671091b7ac46ba48bea07d541f379523a0bdf232bc2261198bbe9289774a9ba7d0d1cf69a3c235762e266927158e8a23f0f1a3e50acc529948df01d"
-    STOP="deb7ef7b249b1df1352525c37b8bbe3d1f6c8f36c6993e4dd6a7f87de38b8ac3dec37ee87d53024fdfa0aeeea7fc43a6147cb6df42431cc1ee66028838bfac39"
-
-    if [[ ${ACTION} == ${START} ]]; then
-        check_tunnel
-        if [[ $? -eq 217 ]]; then
-            exit 217
-        else
-            start_tunnel
-        fi
-    elif [[ ${ACTION} == ${STOP} ]]; then
-        stop_tunnel
-    elif [[ ${ACTION} == ${STATUS} ]]; then
-        :;
-    else
-        exit 255
-    fi
-
-    check_tunnel
-    exit $?
+{{- end }}
+{{- end }}
