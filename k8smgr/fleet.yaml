@@ -48,6 +48,8 @@ targetCustomizations:
             nfs:
               path: /mnt/userhomes
               server: 10.0.94.174
+        tunnel:
+          host: drf-tunnel-ssh-staging.jupyterjsc.svc
         loggerName: "K8sMgrStaging"
         gunicorn:
           processes: 4
@@ -85,6 +87,8 @@ targetCustomizations:
             nfs:
               path: /mnt/userhomes
               server: 10.0.20.30
+        tunnel:
+          host: drf-tunnel-ssh-production.jupyterjsc.svc
         loggerName: "K8sMgrProduction"
         gunicorn:
           processes: 4

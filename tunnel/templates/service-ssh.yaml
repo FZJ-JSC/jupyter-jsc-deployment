@@ -10,7 +10,7 @@ metadata:
 {{- if .Values.servicessh.labels }}
 {{ toYaml .Values.servicessh.labels | indent 4 }}
 {{- end }}
-  name: {{ include "drf-tunnel.name" . }}-ssh
+  name: {{ include "drf-tunnel.name" . }}-ssh-{{ .Values.stage }}
 spec:
 {{- if .Values.servicessh.clusterIP }}
   clusterIP: {{ .Values.servicessh.clusterIP }}

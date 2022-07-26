@@ -42,6 +42,7 @@ targetCustomizations:
                   pathType: Prefix
               svcName: juniq-static-files
               svcPort: 8070
+          tls:
             - secretName: juniq-staging.fz-juelich.de
               hosts:
                 - juniq-staging.fz-juelich.de

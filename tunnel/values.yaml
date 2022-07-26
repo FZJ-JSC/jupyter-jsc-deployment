@@ -13,6 +13,8 @@ debug: False
 # Public Keys from external sources (like hpc systems)
 authorized_keys: []
 
+stage: "production"
+
 ssh_config_hosts_defaults:
   serverAliveInterval: 60
   serverAliveCountMax: 5
