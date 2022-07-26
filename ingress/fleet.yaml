@@ -33,5 +33,15 @@ targetCustomizations:
         controller:
           service:
             loadBalancerIP: 134.94.199.199
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+        provider.cattle.io: rke
+    helm:
+      values:
+        controller:
+          service:
+            loadBalancerIP: 134.94.199.54
 dependsOn:
   - name: basics-monitor-crd
