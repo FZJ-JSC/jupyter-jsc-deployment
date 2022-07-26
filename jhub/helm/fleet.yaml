@@ -99,3 +99,74 @@ targetCustomizations:
             jhub_version: "2.1.1"
             hostname: "jupyter-jsc-staging.fz-juelich.de"
             drf_username: "jupyterhub"
+            logger_name: "JupyterHubStaging"
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      values:
+        hub:
+          extraVolumes:
+            - name: persistent
+              nfs:
+                path: /mnt/storage/jupyterhub
+                server: 10.0.20.30
+            - name: shared-data
+              emptyDir: {}
+            - name: mount-watch
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-mw
+            - name: cleanup-sql
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-cleanup-sql
+            - name: maintenance-check
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-maintenance-check
+            - name: reservation-check
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-reservation-check
+            - name: internal-ssl
+              secret:
+                secretName: internal-ssl
+            - name: reservation-keypair
+              secret:
+                secretName: reservation-keypair
+            - name: drf-tunnel-certs
+              secret:
+                secretName: drf-tunnel-certs
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: drf-unicoremgr-certs
+              secret:
+                secretName: drf-unicoremgr-certs
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: drf-k8smgr-certs
+              secret:
+                secretName: drf-k8smgr-certs
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: unity-jsc-certs
+              secret:
+                secretName: unity-jsc-certs
+            - name: hub-nginx-config
+              configMap:
+                defaultMode: 400
+                name: hub-nginx-config
+            - name: tz-config
+              hostPath:
+                path: /usr/share/zoneinfo/Europe/Berlin
+          labels:
+            stage: production
+            jhub_version: "2.1.1"
+            hostname: "jupyter-jsc.fz-juelich.de"
+            drf_username: "jupyterhub"
+            logger_name: "JupyterHubProduction"

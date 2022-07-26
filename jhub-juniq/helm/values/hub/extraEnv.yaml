@@ -12,6 +12,10 @@ hub:
       valueFrom:
         fieldRef:
           fieldPath: metadata.labels['hostname']
+    - name: LOGGER_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['logger_name']
     - name: K8SMGRHDFCLOUD_JUPYTERHUB_USERNAME
       value: "jupyterhubjuniq"
     - name: UNICOREMGR_JUPYTERHUB_USERNAME
@@ -20,6 +24,8 @@ hub:
       value: "jupyterhubjuniq"
     - name: LOGGING_CONFIG_FILE
       value: "/mnt/shared-data/git_config/logging.json"
+    - name: LOGGING_METRICS_LOGFILE
+      value: "/mnt/persistent/metrics.log"
     - name: SHOW_DRF_LOGS
       value: "false"
     - name: MAINTENANCE_PATH
