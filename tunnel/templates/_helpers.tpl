@@ -41,7 +41,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Generate certificates for drf tunnel service 
 */}}
 {{- define "drf-tunnel.gen-certs" -}}
-{{- $altNames := list ( printf "%s" (include "drf-tunnel.name" .) ) ( printf "%s.%s" (include "drf-tunnel.name" .) .Release.Namespace ) ( printf "%s.%s.svc" (include "drf-tunnel.name" .) .Release.Namespace ) -}}
+{{- $altNames := list ( printf "drf-tunnel.svc" ) ( printf "drf-tunnel.staging.svc" ) ( printf "%s" (include "drf-tunnel.name" .) )  ( printf "%s.%s" (include "drf-tunnel.name" .) .Release.Namespace ) ( printf "%s.%s.svc" (include "drf-tunnel.name" .) .Release.Namespace ) -}}
 {{- $ca := genCA "drf-tunnel-ca" 1825 -}}
 {{- $cert := genSignedCert ( include "drf-tunnel.name" . ) nil $altNames 1825 $ca -}}
 tls.crt: {{ $cert.Cert | b64enc }}

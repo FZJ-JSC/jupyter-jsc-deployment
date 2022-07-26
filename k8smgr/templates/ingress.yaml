@@ -15,7 +15,7 @@ kind: Ingress
 metadata:
   name: drf-k8smgr
   labels:
-    {{- include "k8smgr.labels" . | nindent 4 }}
+    {{- include "drf-k8smgr.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

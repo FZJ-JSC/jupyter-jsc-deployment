@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "k8smgr.name" . }}
+  name: {{ include "drf-k8smgr.name" . }}
   labels:
-    {{- include "k8smgr.labels" . | nindent 4 }}
+    {{- include "drf-k8smgr.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "k8smgr.name" . }}
-      {{- include "k8smgr.selectorLabels" . | nindent 6 }}
+      app: {{ include "drf-k8smgr.name" . }}
+      {{- include "drf-k8smgr.selectorLabels" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
@@ -19,14 +19,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "k8smgr.name" . }}
-        {{- include "k8smgr.selectorLabels" . | nindent 8 }}
+        app: {{ include "drf-k8smgr.name" . }}
+        {{- include "drf-k8smgr.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "k8smgr.name" . }}-svc-acc
+      serviceAccountName: {{ include "drf-k8smgr.name" . }}-svc-acc
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
@@ -217,15 +217,15 @@ spec:
       - name: mount-watch
         configMap:
           defaultMode: 400
-          name: {{ include "k8smgr.name" . }}-mw
+          name: {{ include "drf-k8smgr.name" . }}-mw
       - name: files
         configMap:
           defaultMode: 400
-          name: {{ include "k8smgr.name" . }}-files
+          name: {{ include "drf-k8smgr.name" . }}-files
       - name: certs
         secret:
           defaultMode: 400
-          secretName: {{ include "k8smgr.name" . }}-certs
+          secretName: {{ include "drf-k8smgr.name" . }}-certs
       - name: keypairs
         secret:
           defaultMode: 400
