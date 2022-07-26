@@ -27,3 +27,22 @@ targetCustomizations:
             - secretName: jupyter-jsc-staging.fz-juelich.de
               hosts:
                 - jupyter-jsc-staging.fz-juelich.de
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+        provider.cattle.io: rke
+    helm:
+      values:
+        ingress:
+          hosts:
+            - host: docs.jupyter-jsc.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: nbviewer
+              svcPort: 8080
+          tls:
+            - secretName: jupyter-jsc.fz-juelich.de
+              hosts:
+                - jupyter-jsc.fz-juelich.de

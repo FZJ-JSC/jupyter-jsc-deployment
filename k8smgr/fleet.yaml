@@ -1,6 +1,11 @@
 defaultNamespace: jupyterjsc
 helm:
   values:
+    extraVolumeMounts:
+      - name: persistent
+        mountPath: /mnt/persistent
+      - name: userhomes
+        mountPath: /mnt/userhomes
     image:
       tag: "1.1.0-asi2"
       # tag: "devel"
@@ -43,12 +48,44 @@ targetCustomizations:
             nfs:
               path: /mnt/userhomes
               server: 10.0.94.174
-        extraVolumeMounts:
-          - name: persistent
-            mountPath: /mnt/persistent
-          - name: userhomes
-            mountPath: /mnt/userhomes
         loggerName: "K8sMgrStaging"
+        gunicorn:
+          processes: 4
+          threads: 1
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      values:
+        ingress:
+          hosts:
+            - host: drf-k8smgr.production.svc
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: drf-k8smgr
+              svcPort: 443
+          tls:
+            - secretName: drf-k8smgr-certs
+              hosts:
+                - drf-k8smgr.production.svc
+        authorized_keys:
+          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHnLGTKAdycdT/1zlvGGjvr4dvSIqeFW3Eehgldl8Bh0'
+          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG1F5LkftRlmRoE/IDiAOWRSL6KDpnRD73sGvgMbrjsf'
+          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_juniq.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPYkfio1ASJsxXWfHfZ63jj1fSEVaU5PHKDYI/oUlgzJ'
+        gitconfig:
+          branch: "k8smgr-production"
+        extraVolumes:
+          - name: persistent
+            nfs:
+              path: /mnt/storage/k8smgr
+              server: 10.0.20.30
+          - name: userhomes
+            nfs:
+              path: /mnt/userhomes
+              server: 10.0.20.30
+        loggerName: "K8sMgrProduction"
         gunicorn:
           processes: 4
           threads: 1
