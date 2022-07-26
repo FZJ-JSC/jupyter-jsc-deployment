@@ -36,9 +36,9 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Generate certificates for drf k8smgr service
 */}}
-{{- define "drf-k8smgr.gen-certs" -}}
-{{- $altNames := list ( printf "drf-k8smgr.svc" ) ( printf "drf-k8smgr.staging.svc" ) ( printf "%s" (include "drf-k8smgr.name" .) ) ( printf "%s.%s" (include "drf-k8smgr.name" .) .Release.Namespace ) ( printf "%s.%s.svc" (include "drf-k8smgr.name" .) .Release.Namespace ) -}}
-{{- $ca := genCA "drf-k8smgr-ca" 1825 -}}
+{{- define "drf-k8smgr.selectorLabels" -}}
+{{- $altNames := list ( printf "drf-k8smgr.svc" ) ( printf "drf-k8smgr.production.svc" ) ( printf "%s" (include "drf-k8smgr.name" .) ) ( printf "%s.%s" (include "drf-k8smgr.name" .) .Release.Namespace ) ( printf "%s.%s.svc" (include "drf-k8smgr.name" .) .Release.Namespace ) -}}
+{{- $ca := genCA "k8smgr-ca" 1825 -}}
 {{- $cert := genSignedCert ( include "drf-k8smgr.name" . ) nil $altNames 1825 $ca -}}
 tls.crt: {{ $cert.Cert | b64enc }}
 tls.key: {{ $cert.Key | b64enc }}
