@@ -205,6 +205,7 @@ targetCustomizations:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKDP9utiItuy9tQxM8fXJJ++JBXCl0KOdSazkUHFd67d jusuf'
         servicessh:
           loadBalancerIP: "134.94.199.67"
+        stage: staging
         loggerName: "TunnelStaging"
         gunicorn:
           processes: 4
@@ -236,6 +237,7 @@ targetCustomizations:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEvXZNie90rG85paBMAgL96L51BKHfBpr79MJ+kwrZ// jusuf'
         servicessh:
           loadBalancerIP: "134.94.199.16"
+        stage: production
         loggerName: "TunnelProduction"
         gunicorn:
           processes: 4
