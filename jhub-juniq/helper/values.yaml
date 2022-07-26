@@ -58,6 +58,10 @@ ingresshubstatic:
       paths:
         - path: /hub/static
           pathType: Prefix
+  tls:
+    - secretName: jupyterhub-local
+      hosts:
+        - jupyterhub.local
 
 labels: {}
 

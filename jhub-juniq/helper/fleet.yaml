@@ -42,6 +42,9 @@ targetCustomizations:
                   pathType: Prefix
               svcName: juniq-static-files
               svcPort: 8070
+            - secretName: juniq-staging.fz-juelich.de
+              hosts:
+                - juniq-staging.fz-juelich.de
   - name: production
     clusterSelector:
       matchLabels:
@@ -58,7 +61,7 @@ targetCustomizations:
               svcName: juniq-proxy-public
               svcPort: 443
           tls:
-            - secretName: juniq.fz-juelich.de
+            - secretName: juniq-certs
               hosts:
                 - juniq.fz-juelich.de
         ingressuser:
@@ -70,7 +73,7 @@ targetCustomizations:
               svcName: juniq-proxy-public
               svcPort: 443
           tls:
-            - secretName: juniq.fz-juelich.de
+            - secretName: juniq-certs
               hosts:
                 - juniq.fz-juelich.de
         ingresshubstatic:
@@ -81,3 +84,7 @@ targetCustomizations:
                   pathType: Prefix
               svcName: juniq-static-files
               svcPort: 8070
+          tls:
+            - secretName: juniq-certs
+              hosts:
+                - juniq.fz-juelich.de
