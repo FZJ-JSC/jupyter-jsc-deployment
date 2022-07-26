@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "k8smgr.name" . }}
+  name: {{ include "drf-k8smgr.name" . }}
   labels:
-    {{- include "k8smgr.labels" . | nindent 4 }}
+    {{- include "drf-k8smgr.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,14 +12,14 @@ spec:
       protocol: TCP
       name: https
   selector:
-    {{- include "k8smgr.selectorLabels" . | nindent 4 }}
+    {{- include "drf-k8smgr.selectorLabels" . | nindent 4 }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "k8smgr.name" . }}-ssh
+  name: {{ include "drf-k8smgr.name" . }}-ssh
   labels:
-    {{- include "k8smgr.labels" . | nindent 4 }}
+    {{- include "drf-k8smgr.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.servicessh.type }}
   ports:
@@ -28,10 +28,10 @@ spec:
       protocol: TCP
       name: ssh
   selector:
-    {{- include "k8smgr.selectorLabels" . | nindent 4 }}
+    {{- include "drf-k8smgr.selectorLabels" . | nindent 4 }}
 {{- if .Values.jupyterhubs }}
-{{- $labels := include "k8smgr.labels" . -}}
-{{- $selectorLabels := include "k8smgr.selectorLabels" . -}}
+{{- $labels := include "drf-k8smgr.labels" . -}}
+{{- $selectorLabels := include "drf-k8smgr.selectorLabels" . -}}
 {{- range $jupyterhub := .Values.jupyterhubs }}
 ---
 apiVersion: v1
