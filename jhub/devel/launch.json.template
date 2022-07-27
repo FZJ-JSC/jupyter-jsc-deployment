@@ -32,7 +32,8 @@
         "SQL_USER": "<SQL_USER>",
         "DEPLOYMENT_NAMESPACE": "jupyterjsc",
         "CONFIGPROXY_AUTH_TOKEN": "<CONFIGPROXY_AUTH_TOKEN>",
-        "TUNNEL_DEPLOYMENT_NAMESPACE": "jupyterjsc"
+        "TUNNEL_DEPLOYMENT_NAMESPACE": "jupyterjsc",
+        "JUPYTERHUB_HOSTNAME": "jupyter-jsc-staging.fz-juelich.de"
       },
       "preLaunchTask": "delete-tmp-internal-ssl"
     }
