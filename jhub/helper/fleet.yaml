@@ -19,7 +19,7 @@ targetCustomizations:
               svcName: proxy-public
               svcPort: 443
           tls:
-            - secretName: jupyter-jsc-staging.fz-juelich.de
+            - secretName: jupyter-jsc-certs
               hosts:
                 - jupyter-jsc-staging.fz-juelich.de
         ingressuser:
@@ -31,7 +31,7 @@ targetCustomizations:
               svcName: proxy-public
               svcPort: 443
           tls:
-            - secretName: jupyter-jsc-staging.fz-juelich.de
+            - secretName: jupyter-jsc-certs
               hosts:
                 - jupyter-jsc-staging.fz-juelich.de
         ingresshubstatic:
@@ -43,7 +43,7 @@ targetCustomizations:
               svcName: hub-static-files
               svcPort: 8070
           tls:
-            - secretName: jupyter-jsc-staging.fz-juelich.de
+            - secretName: jupyter-jsc-certs
               hosts:
                 - jupyter-jsc-staging.fz-juelich.de
   - name: production
