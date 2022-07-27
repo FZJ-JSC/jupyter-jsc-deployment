@@ -1,0 +1,9 @@
+defaultNamespace: jupyterjsc
+targetCustomizations:
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      values:
+        enabled: false

@@ -1,0 +1,45 @@
+nameOverride: ""
+fullnameOverride: ""
+
+enabled: false
+
+jobs:
+  # first cron
+  - name: 7days-metric
+    image:
+      repository: alpine
+      tag: 3.14
+      imagePullPolicy: Always
+    schedule: "0 2 * * MON"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 3
+    concurrencyPolicy: Allow
+    restartPolicy: Never
+    command: ["/bin/bash"]
+    args:
+      - -c
+      - >-
+          apk add bash git && /bin/bash /mnt/volumes/..data/metrics7dayhifis.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: GIT_REPO
+      value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
+    envFrom:
+    - secretRef:
+      name: cronjobs
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: persistent
+        nfs:
+          path: /mnt/storage/jupyterhub
+          server: "10.0.20.30"
+    volumeMounts:  
+      - name: persistent
+        mountPath: /mnt/persistent
