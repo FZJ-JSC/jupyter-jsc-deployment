@@ -4,7 +4,6 @@ metadata:
   name: {{ include "drf-unicoremgr.name" . }}
   labels:
     {{- include "drf-unicoremgr.labels" . | nindent 4 }}
-    stage: "{{ .Values.stage }}"
 spec:
   replicas: 1
   selector:
@@ -14,6 +13,7 @@ spec:
   template:
     metadata:
       {{- with .Values.podAnnotations }}
+      stage: "{{ .Values.stage }}"
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
