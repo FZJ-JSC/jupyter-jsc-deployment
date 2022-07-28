@@ -31,7 +31,7 @@ Selector labels
 {{- define "nbviewer.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "nbviewer.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-hostname: {{ default "jupyterhub.local" .Values.nbviewer.hostname  }}
+hostname: {{ default "jupyterhub.local" .Values.nbviewer.hostname }}
 {{- end }}
 
 {{/*
