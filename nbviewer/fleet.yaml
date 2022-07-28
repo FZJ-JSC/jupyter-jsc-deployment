@@ -24,7 +24,7 @@ targetCustomizations:
               svcName: nbviewer
               svcPort: 8080
           tls:
-            - secretName: jupyter-jsc-staging.fz-juelich.de
+            - secretName: jupyter-jsc-certs
               hosts:
                 - jupyter-jsc-staging.fz-juelich.de
   - name: production
@@ -43,6 +43,6 @@ targetCustomizations:
               svcName: nbviewer
               svcPort: 8080
           tls:
-            - secretName: jupyter-jsc.fz-juelich.de
+            - secretName: jupyter-jsc-certs
               hosts:
                 - jupyter-jsc.fz-juelich.de
