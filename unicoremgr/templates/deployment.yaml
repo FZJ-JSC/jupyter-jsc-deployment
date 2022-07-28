@@ -13,7 +13,6 @@ spec:
   template:
     metadata:
       {{- with .Values.podAnnotations }}
-      stage: "{{ .Values.stage }}"
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
