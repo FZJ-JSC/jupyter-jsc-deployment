@@ -4,6 +4,7 @@ metadata:
   name: {{ include "drf-unicoremgr.name" . }}
   labels:
     {{- include "drf-unicoremgr.labels" . | nindent 4 }}
+    stage: "{{ .Values.stage }}"
 spec:
   replicas: 1
   selector:
@@ -94,6 +95,10 @@ spec:
               value: "{{ .Values.gunicorn.processes }}"
             - name: GUNICORN_THREADS
               value: "{{ .Values.gunicorn.threads }}"
+            - name: STAGE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['stage']
             - name: SQL_USER
               valueFrom:
                 secretKeyRef:

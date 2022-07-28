@@ -5,6 +5,8 @@
 devel: False
 debug: False
 
+stage: "staging"
+
 image:
   repository: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/drf-unicoremgr
   pullPolicy: Always

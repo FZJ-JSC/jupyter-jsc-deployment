@@ -88,7 +88,7 @@ targetCustomizations:
               server: 10.0.20.30
         tunnel:
           host: drf-tunnel-ssh-production.jupyterjsc.svc
-        stage: "staging"
+        stage: "production"
         loggerName: "K8sMgrProduction"
         gunicorn:
           processes: 4

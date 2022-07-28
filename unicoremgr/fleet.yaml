@@ -67,6 +67,7 @@ targetCustomizations:
               path: /mnt/storage/unicoremgr
               server: 10.0.20.30
         loggerName: "UnicoreMgrProduction"
+        stage: "production"
         gunicorn:
           processes: 4
           threads: 1
