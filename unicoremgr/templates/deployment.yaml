@@ -130,6 +130,9 @@ spec:
               mountPath: /mnt/shared-data
             - name: tz-config
               mountPath: /etc/localtime
+            {{- with .Values.extraVolumeMounts }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
         - name: mount-watch
           image: alpine:3.14
           imagePullPolicy: Always
@@ -166,9 +169,6 @@ spec:
               mountPath: /mnt/shared-data
             - name: tz-config
               mountPath: /etc/localtime
-            {{- with .Values.extraVolumeMounts }}
-            {{- . | toYaml | nindent 12 }}
-            {{- end }}
       volumes:
       - name: shared-data
         emptyDir: {}
