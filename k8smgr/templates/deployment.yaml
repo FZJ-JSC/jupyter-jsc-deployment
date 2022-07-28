@@ -57,6 +57,7 @@ spec:
             - name: STAGE
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: metadata.labels['stage']
           imagePullPolicy: Always
           command: ["/bin/sh"]
