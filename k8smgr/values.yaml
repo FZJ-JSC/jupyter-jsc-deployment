@@ -9,6 +9,7 @@ devel: False
 
 # passed on to Django as DEBUG env variable
 debug: False
+stage: "staging"
 
 authoried_keys: []
 

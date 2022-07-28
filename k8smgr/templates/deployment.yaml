@@ -4,6 +4,7 @@ metadata:
   name: {{ include "drf-k8smgr.name" . }}
   labels:
     {{- include "drf-k8smgr.labels" . | nindent 4 }}
+    stage: "{{ .Values.stage }}"
 spec:
   replicas: 1
   selector:
@@ -51,6 +52,10 @@ spec:
                 secretKeyRef:
                   name: "{{ .Values.gitconfig.secret }}"
                   key: PASSWORD
+            - name: STAGE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['stage']
           imagePullPolicy: Always
           command: ["/bin/sh"]
           args:
