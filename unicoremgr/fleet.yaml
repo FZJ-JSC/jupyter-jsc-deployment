@@ -5,7 +5,7 @@ helm:
       - name: persistent
         mountPath: /mnt/persistent
     image:
-      tag: "1.1.3-ras3"
+      tag: "1.1.3-ras4"
     nameOverride: "drf-unicoremgr"
     nodeSelector:
       worker: "true"
