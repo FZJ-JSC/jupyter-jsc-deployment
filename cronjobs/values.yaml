@@ -40,6 +40,12 @@ jobs:
         nfs:
           path: /mnt/storage/jupyterhub
           server: "10.0.20.30"
-    volumeMounts:  
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
       - name: persistent
         mountPath: /mnt/persistent
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
