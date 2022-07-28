@@ -51,8 +51,6 @@ hub:
               key: SQL_HOST
         - name: JUPYTERHUB_DATABASE_USER
           value: "jupyterhubjuniq"
-        - name: JUPYTERHUB_DATABASE_USER
-          value: "jupyterhubjuniq"
         - name: JUPYTERHUB_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
