@@ -11,6 +11,8 @@ helm:
     nameOverride: "drf-k8smgr"
     nodeSelector:
       worker: "true"
+    podAnnotations:
+      proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
 targetCustomizations:
   - name: staging
     clusterSelector:
@@ -48,8 +50,7 @@ targetCustomizations:
         tunnel:
           host: drf-tunnel-ssh-staging.jupyterjsc.svc
         loggerName: "K8sMgrStaging"
-        podAnnotations:
-          proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+        labels:
           stage: "staging"
         gunicorn:
           processes: 4
@@ -90,8 +91,7 @@ targetCustomizations:
         tunnel:
           host: drf-tunnel-ssh-production.jupyterjsc.svc
         loggerName: "K8sMgrProduction"
-        podAnnotations:
-          proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+        labels:
           stage: "production"
         gunicorn:
           processes: 4

@@ -12,6 +12,8 @@ debug: False
 
 authoried_keys: []
 
+labels: {}
+
 deploymentNamespace: "userlabs"
 
 tunnel:

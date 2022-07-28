@@ -21,6 +21,9 @@ spec:
       labels:
         app: {{ include "drf-k8smgr.name" . }}
         {{- include "drf-k8smgr.selectorLabels" . | nindent 8 }}
+        {{- with .Values.labels }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
