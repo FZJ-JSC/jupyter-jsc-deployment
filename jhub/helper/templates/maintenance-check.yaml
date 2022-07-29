@@ -11,7 +11,9 @@ data:
     SLEEP=$(/usr/local/bin/python3 -c 'import json, os; f=open(os.environ["CUSTOM_CONFIG_PATH"], "r"); config = json.load(f); f.close(); print(config["maintenance-check"].get("interval", 60))')
     while true
     do
+        echo "$(date) - Run Maintenance check ..."
         /usr/local/bin/python3 -u /mnt/maintenance/maintenance_check.py
+        echo "$(date) - Run Maintenance check ... done"
         sleep ${SLEEP}
     done
 
