@@ -7,8 +7,7 @@ helm:
       - name: userhomes
         mountPath: /mnt/userhomes
     image:
-      tag: "1.1.0-asi2"
-      # tag: "devel"
+      tag: "1.2.1"
     nameOverride: "drf-k8smgr"
     nodeSelector:
       worker: "true"
@@ -51,6 +50,8 @@ targetCustomizations:
         tunnel:
           host: drf-tunnel-ssh-staging.jupyterjsc.svc
         loggerName: "K8sMgrStaging"
+        labels:
+          stage: "staging"
         gunicorn:
           processes: 4
           threads: 1
@@ -90,6 +91,8 @@ targetCustomizations:
         tunnel:
           host: drf-tunnel-ssh-production.jupyterjsc.svc
         loggerName: "K8sMgrProduction"
+        labels:
+          stage: "production"
         gunicorn:
           processes: 4
           threads: 1

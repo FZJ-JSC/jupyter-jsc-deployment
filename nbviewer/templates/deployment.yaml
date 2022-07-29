@@ -37,6 +37,10 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.github.secretname }}
                   key: GITHUB_API_TOKEN
+            - name: NBVIEWER_HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['hostname']
           {{- end }}
           ports:
             - name: http

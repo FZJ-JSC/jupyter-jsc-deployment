@@ -19,6 +19,9 @@ spec:
       labels:
         app: {{ include "drf-unicoremgr.name" . }}
         {{- include "drf-unicoremgr.selectorLabels" . | nindent 8 }}
+        {{- with .Values.labels }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -94,6 +97,11 @@ spec:
               value: "{{ .Values.gunicorn.processes }}"
             - name: GUNICORN_THREADS
               value: "{{ .Values.gunicorn.threads }}"
+            - name: STAGE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.labels['stage']
             - name: SQL_USER
               valueFrom:
                 secretKeyRef:
@@ -130,6 +138,9 @@ spec:
               mountPath: /mnt/shared-data
             - name: tz-config
               mountPath: /etc/localtime
+            {{- with .Values.extraVolumeMounts }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
         - name: mount-watch
           image: alpine:3.14
           imagePullPolicy: Always
@@ -166,9 +177,6 @@ spec:
               mountPath: /mnt/shared-data
             - name: tz-config
               mountPath: /etc/localtime
-            {{- with .Values.extraVolumeMounts }}
-            {{- . | toYaml | nindent 12 }}
-            {{- end }}
       volumes:
       - name: shared-data
         emptyDir: {}

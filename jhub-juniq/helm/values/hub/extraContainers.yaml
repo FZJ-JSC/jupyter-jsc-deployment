@@ -51,8 +51,6 @@ hub:
               key: SQL_HOST
         - name: JUPYTERHUB_DATABASE_USER
           value: "jupyterhubjuniq"
-        - name: JUPYTERHUB_DATABASE_USER
-          value: "jupyterhubjuniq"
         - name: JUPYTERHUB_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -70,13 +68,13 @@ hub:
           valueFrom:
             secretKeyRef:
               name: drf-unicoremgr-passwds
-              key: JUPYTERHUB_JUNIQ_USER_PASS
+              key: JUPYTERHUBJUNIQ_USER_PASS
               optional: false
         - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:
               name: drf-k8smgr-passwds 
-              key: JUPYTERHUB_JUNIQ_USER_PASS
+              key: JUPYTERHUBJUNIQ_USER_PASS
               optional: false
       volumeMounts:
         - name: shared-data
