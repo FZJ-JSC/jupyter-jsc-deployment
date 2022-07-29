@@ -54,11 +54,6 @@ spec:
                 secretKeyRef:
                   name: "{{ .Values.gitconfig.secret }}"
                   key: PASSWORD
-            - name: STAGE
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: metadata.labels['stage']
           imagePullPolicy: Always
           command: ["/bin/sh"]
           args:
@@ -142,6 +137,11 @@ spec:
               value: "{{ .Values.deploymentNamespace }}"
             - name: LOGGER_NAME
               value: "{{ .Values.loggerName }}"
+            - name: STAGE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.labels['stage']
           ports:
             - name: https
               containerPort: 8443
