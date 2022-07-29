@@ -4,6 +4,7 @@ metadata:
   name: {{ include "nbviewer.name" . }}
   labels:
     {{- include "nbviewer.labels" . | nindent 4 }}
+    {{- include "nbviewer.selectorLabels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -44,7 +45,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
