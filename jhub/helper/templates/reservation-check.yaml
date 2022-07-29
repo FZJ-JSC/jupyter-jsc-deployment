@@ -10,7 +10,9 @@ data:
     
     while true
     do
+        echo "$(date) - Run Reservation check ..."
         /usr/local/bin/python3 -u /mnt/reservation/..data/reservation_check.py
+        echo "$(date) - Run Reservation check ... done"
         sleep ${SLEEP}
     done
 
@@ -31,6 +33,11 @@ data:
     with open(config_path, "r") as f:
       config = json.load(f)
 
+    try:
+      with open(output_path, "r") as f:
+        previous_dict = json.load(f)
+    except:
+      previous_dict = {}
     output_dict = {}
 
     for system, infos in config.get("reservation-check", {}).get("systems", {}).items():
@@ -43,14 +50,20 @@ data:
           return ""
         return value
 
-      output = check_output(li, stderr=STDOUT, timeout=reservation_timeout).decode("utf8").rstrip()
-      system_list_n = output.split("\n\n")
-      system_list = [x.replace("\n", "") for x in system_list_n]
-      for reservation_string in system_list:
-        reservation_key_values_list = re.findall(regex_pattern, reservation_string)
-        reservation_key_values_dict = { x[0]: null_to_empty(x[0], x[1], infos) for x in reservation_key_values_list }
-        if "ReservationName" in reservation_key_values_dict.keys():
-          output_dict[system].append(copy.deepcopy(reservation_key_values_dict))
+      try:
+        output = check_output(li, stderr=STDOUT, timeout=reservation_timeout).decode("utf8").rstrip()
+        system_list_n = output.split("\n\n")
+        system_list = [x.replace("\n", "") for x in system_list_n]
+      except:
+        print(f"Could not check reservation for {system}. Use previous values.")
+        if system in previous_dict.keys():
+          output_dict[system] = previous_dict[system]
+      else:
+        for reservation_string in system_list:
+          reservation_key_values_list = re.findall(regex_pattern, reservation_string)
+          reservation_key_values_dict = { x[0]: null_to_empty(x[0], x[1], infos) for x in reservation_key_values_list }
+          if "ReservationName" in reservation_key_values_dict.keys():
+            output_dict[system].append(copy.deepcopy(reservation_key_values_dict))
 
     with open(output_path, "w") as f:
       json.dump(output_dict, f, sort_keys=True, indent=2)

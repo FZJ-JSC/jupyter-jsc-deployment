@@ -150,7 +150,7 @@ spec:
           - -c
           - >-
               apk add curl &&
-              export REMOTECHECK_TOKEN=$(echo -n "remotecheck:${REMOTECHECK_USER_PASS}" | base64 -w 0) ; while true; do sleep 300; curl -s -X "GET" -H "Authorization: Basic ${REMOTECHECK_TOKEN}" -H "uuidcode: tunnel-side-remote-check-cronjob" --cacert /mnt/shared-data/certs/tunnel.crt https://${DEPLOYMENT_NAME}.${DEPLOYMENT_NAMESPACE}.svc/api/remotecheck/ ; done
+              export REMOTECHECK_TOKEN=$(echo -n "remotecheck:${REMOTECHECK_USER_PASS}" | base64 -w 0) ; while true; do sleep 300; echo "$(date) - Send request ..." ; curl -X "GET" -H "Authorization: Basic ${REMOTECHECK_TOKEN}" -H "uuidcode: tunnel-side-remote-check-cronjob" --cacert /mnt/shared-data/certs/tunnel.crt https://${DEPLOYMENT_NAME}.${DEPLOYMENT_NAMESPACE}.svc/api/remotecheck/ ; echo "$(date) - Send request ... done ( $? )" ; done
           env:
             - name: REMOTECHECK_USER_PASS
               valueFrom:
