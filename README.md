@@ -2,8 +2,8 @@
  - Rancher [Staging](https://zam10207.zam.kfa-juelich.de) & [Production](https://zam10111.zam.kfa-juelich.de)
   
 # Merge
- - [Basic-Staging to Basic-Production](https://gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/fleet-deployment/-/merge_requests/new?change_branches=true&merge_request%5Bsource_branch%5D=basics-staging&merge_request%5Bsource_project_id%5D=4685&merge_request%5Btarget_branch%5D=basics-production&merge_request%5Btarget_project_id%5D=4685)  
- - [JupyterJSC-Staging to JupyterJSC-Production](https://gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/fleet-deployment/-/merge_requests/new?change_branches=true&merge_request%5Bsource_branch%5D=jupyterjsc-staging&merge_request%5Bsource_project_id%5D=4685&merge_request%5Btarget_branch%5D=jupyterjsc-production&merge_request%5Btarget_project_id%5D=4685)  
+ - [Basic-Staging to Basic-Production](https://gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/fleet-deployment/-/merge_requests/new?merge_request%5Bsource_project_id%5D=4685&merge_request%5Bsource_branch%5D=basics-staging&merge_request%5Btarget_project_id%5D=4685&merge_request%5Btarget_branch%5D=basics-production)  
+ - [JupyterJSC-Staging to JupyterJSC-Production](https://gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/fleet-deployment/-/merge_requests/new?merge_request%5Bsource_project_id%5D=4685&merge_request%5Bsource_branch%5D=jupyterjsc-staging&merge_request%5Btarget_project_id%5D=4685&merge_request%5Btarget_branch%5D=jupyterjsc-production)  
   
   
 # [Config](https://gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/config) Merges
