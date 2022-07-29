@@ -23,6 +23,7 @@ helm.sh/chart: {{ include "nbviewer.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+hostname: {{ default "jupyterhub.local" .Values.nbviewer.hostname }}
 {{- end }}
 
 {{/*
@@ -31,7 +32,6 @@ Selector labels
 {{- define "nbviewer.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "nbviewer.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-hostname: {{ default "jupyterhub.local" .Values.nbviewer.hostname }}
 {{- end }}
 
 {{/*

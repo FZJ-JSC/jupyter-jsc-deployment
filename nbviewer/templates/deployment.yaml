@@ -4,7 +4,6 @@ metadata:
   name: {{ include "nbviewer.name" . }}
   labels:
     {{- include "nbviewer.labels" . | nindent 4 }}
-    {{- include "nbviewer.selectorLabels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
