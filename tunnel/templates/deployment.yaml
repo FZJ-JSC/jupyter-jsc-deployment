@@ -85,6 +85,8 @@ spec:
               value: "{{ .Values.gunicorn.processes }}"
             - name: GUNICORN_THREADS
               value: "{{ .Values.gunicorn.threads }}"
+            - name: GUNICORN_TIMEOUT
+              value: "{{ .Values.gunicorn.timeout }}"
             - name: SQL_USER
               valueFrom:
                 secretKeyRef:

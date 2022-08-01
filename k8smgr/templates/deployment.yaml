@@ -107,6 +107,8 @@ spec:
               value: "{{ .Values.gunicorn.processes }}"
             - name: GUNICORN_THREADS
               value: "{{ .Values.gunicorn.threads }}"
+            - name: GUNICORN_TIMEOUT
+              value: "{{ .Values.gunicorn.timeout }}"
             {{- if .Values.secrets.tunnelpasswds }}
             - name: TUNNELSVC_K8SMGR_USER_PASSWORD
               valueFrom:

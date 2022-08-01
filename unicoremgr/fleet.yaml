@@ -5,7 +5,7 @@ helm:
       - name: persistent
         mountPath: /mnt/persistent
     image:
-      tag: "1.2.4"
+      tag: "1.2.5"
     nameOverride: "drf-unicoremgr"
     nodeSelector:
       worker: "true"
@@ -43,6 +43,7 @@ targetCustomizations:
         gunicorn:
           processes: 4
           threads: 1
+          timeout: 180
   - name: production
     clusterSelector:
       matchLabels:
@@ -74,3 +75,4 @@ targetCustomizations:
         gunicorn:
           processes: 4
           threads: 1
+          timeout: 180
