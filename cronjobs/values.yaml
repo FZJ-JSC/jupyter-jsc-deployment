@@ -29,7 +29,10 @@ jobs:
         memory: 256Mi
     env:
     - name: GIT_REPO
-      value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
+      value: "gitlab.jsc.fz-juelich.de/kreuzer1/tmp.git"
+      #value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
+    - name: GIT_BRANCH
+      value: "main"
     envFrom:
     - secretRef:
       name: cronjobs
