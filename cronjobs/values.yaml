@@ -10,7 +10,8 @@ jobs:
       repository: alpine
       tag: 3.14
       imagePullPolicy: Always
-    schedule: "0 2 * * MON"
+    #schedule: "0 2 * * MON"
+    schedule: "*/5 * * * *"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 3
     concurrencyPolicy: Allow
