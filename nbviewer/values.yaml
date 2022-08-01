@@ -19,9 +19,6 @@ imagePullSecrets:
 
 nameOverride: "nbviewer"
 
-nbviewer:
-  hostname: jupyterhub-local
-
 podAnnotations: {}
 
 podSecurityContext: {}
