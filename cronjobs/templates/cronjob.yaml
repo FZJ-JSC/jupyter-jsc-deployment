@@ -15,13 +15,13 @@ spec:
   concurrencyPolicy: {{ $job.concurrencyPolicy }}
   failedJobsHistoryLimit: {{ $job.failedJobsHistoryLimit }}
   jobTemplate:
-    metadata:
-      {{- with $job.annotation }}
-      annotations:
-{{ toYaml . | indent 8 }}
-      {{- end }}
     spec:
       template:
+        metadata:
+          annotations:
+            {{- with $job.podAnnotations }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
           labels:
             app: {{ $release_name }}
             cron: {{ $job.name }}
