@@ -10,6 +10,8 @@ metadata:
 data:
   metrics7dayhifis.sh: |
     #!/bin/bash
+    git config --global user.email "cronjob@fz-juelich.de"
+    git config --global user.name "CronJob"
     git clone --single-branch --branch ${GIT_BRANCH} https://${METRICS_7DAY_HIFIS_TOKEN_NAME}:${METRICS_7DAY_HIFIS_TOKEN}@${GIT_REPO}
     cd ${GIT_SUBDIR}
 
