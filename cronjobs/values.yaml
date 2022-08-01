@@ -16,7 +16,7 @@ jobs:
     successfulJobsHistoryLimit: 3
     concurrencyPolicy: Allow
     restartPolicy: Never
-    command: ["/bin/bash"]
+    command: ["/bin/sh"]
     args:
       - -c
       - >-
