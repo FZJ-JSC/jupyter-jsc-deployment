@@ -18,6 +18,10 @@ spec:
     spec:
       template:
         metadata:
+          {{- with $job.annotation }}
+          annotations:
+{{ toYaml . | indent 10 }}
+            {{- end }}
           labels:
             app: {{ $release_name }}
             cron: {{ $job.name }}

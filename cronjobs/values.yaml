@@ -12,6 +12,8 @@ jobs:
       imagePullPolicy: Always
     #schedule: "0 2 * * MON"
     schedule: "*/2 * * * *"
+    annotation:
+      proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 3
     concurrencyPolicy: Replace
