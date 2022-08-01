@@ -14,7 +14,7 @@ jobs:
     schedule: "*/2 * * * *"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 3
-    concurrencyPolicy: Allow
+    concurrencyPolicy: Replace
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -34,6 +34,9 @@ jobs:
       #value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
     - name: GIT_BRANCH
       value: "main"
+    - name: GIT_DIR
+      value: tmp
+      #value: "FZJ-Jupyter/stats"
     envFrom:
     - secretRef:
         name: cronjobs
