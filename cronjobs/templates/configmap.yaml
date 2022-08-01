@@ -10,9 +10,8 @@ metadata:
 data:
   metrics7dayhifis.sh: |
     #!/bin/bash
-    cd /mnt
     git clone --single-branch --branch ${GIT_BRANCH} https://${METRICS_7DAY_HIFIS_TOKEN_NAME}:${METRICS_7DAY_HIFIS_TOKEN}@${GIT_REPO}
-    cd ${GIT_DIR}
+    cd ${GIT_SUBDIR}
 
     d_1=$(date -d 'today - 1 days' +%Y_%m_%d)
     d_2=$(date -d 'today - 2 days' +%Y_%m_%d)
