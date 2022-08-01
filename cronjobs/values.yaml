@@ -10,8 +10,8 @@ jobs:
       repository: alpine
       tag: 3.14
       imagePullPolicy: Always
-    #schedule: "0 2 * * MON"
-    schedule: "*/2 * * * *"
+    schedule: "0 2 * * MON"
+    #schedule: "*/2 * * * *"
     podAnnotations:
       proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
     failedJobsHistoryLimit: 1
@@ -32,13 +32,13 @@ jobs:
         memory: 256Mi
     env:
     - name: GIT_REPO
-      value: "gitlab.jsc.fz-juelich.de/kreuzer1/tmp.git"
-      #value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
+      #value: "gitlab.jsc.fz-juelich.de/kreuzer1/tmp.git"
+      value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
     - name: GIT_BRANCH
       value: "main"
     - name: GIT_SUBDIR
-      value: tmp
-      #value: "FZJ-Jupyter/stats"
+      #value: tmp
+      value: "FZJ-Jupyter/stats"
     envFrom:
     - secretRef:
         name: cronjobs

@@ -6,4 +6,4 @@ targetCustomizations:
         stage: production
     helm:
       values:
-        enabled: true
+        enabled: false
