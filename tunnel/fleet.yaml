@@ -22,7 +22,7 @@ helm:
             user: "k8smgr"
             port: 2222
             hostname: "drf-k8smgr-ssh.jupyterjsc.svc"
-          - name: "deep01"
+          - name: "deepv"
             user: "ljupyter"
             port: 22
             hostname: "deep.fz-juelich.de"
