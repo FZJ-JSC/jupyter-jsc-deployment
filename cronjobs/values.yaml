@@ -22,7 +22,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash git && /bin/bash /mnt/volumes/..data/metrics7dayhifis.sh
+          apk add bash coreutils git && /bin/bash /mnt/volumes/metrics7dayhifis.sh
     resources:
       limits:
         cpu: 50m
@@ -36,7 +36,7 @@ jobs:
       #value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
     - name: GIT_BRANCH
       value: "main"
-    - name: GIT_DIR
+    - name: GIT_SUBDIR
       value: tmp
       #value: "FZJ-Jupyter/stats"
     envFrom:
