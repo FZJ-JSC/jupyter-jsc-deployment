@@ -35,7 +35,7 @@ jobs:
       value: "main"
     envFrom:
     - secretRef:
-      name: cronjobs
+        name: cronjobs
     nodeSelector:
       worker: "true"
     volumes:
