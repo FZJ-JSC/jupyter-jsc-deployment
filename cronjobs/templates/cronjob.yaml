@@ -18,7 +18,7 @@ spec:
     metadata:
       {{- with $job.annotation }}
       annotations:
-{{ toYaml . | indent 6 }}
+{{ toYaml . | indent 8 }}
       {{- end }}
     spec:
       template:
