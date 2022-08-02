@@ -27,7 +27,7 @@ targetCustomizations:
             - secretName: jupyter-jsc-certs
               hosts:
                 - docs.jupyter-jsc-staging.fz-juelich.de
-        nbviewer:
+        labels:
           hostname: jupyter-jsc-staging.fz-juelich.de
   - name: production
     clusterSelector:
@@ -48,5 +48,5 @@ targetCustomizations:
             - secretName: jupyter-jsc-certs
               hosts:
                 - docs.jupyter-jsc.fz-juelich.de
-        nbviewer:
+        labels:
           hostname: jupyter-jsc.fz-juelich.de
