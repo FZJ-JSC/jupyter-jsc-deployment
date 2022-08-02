@@ -30,8 +30,6 @@ spec:
       - image: k8s.gcr.io/pause:3.2
         imagePullPolicy: IfNotPresent
         name: pause
-        livenessProbe:
-          enabled: false
         readinessProbe:
           enabled: false
       dnsPolicy: ClusterFirst
