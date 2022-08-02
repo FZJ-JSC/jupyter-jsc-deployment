@@ -30,7 +30,6 @@ spec:
       - image: k8s.gcr.io/pause:3.2
         imagePullPolicy: IfNotPresent
         name: pause
-        readinessProbe: {}
       dnsPolicy: ClusterFirst
       initContainers:
       {{- range $image := .Values.images }}
