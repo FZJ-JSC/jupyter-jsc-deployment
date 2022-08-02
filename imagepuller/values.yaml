@@ -6,6 +6,9 @@ enabled: false
 nodeSelector:
   usernode: "true"
 
+podAnnotations:
+  sidecar.istio.io/inject: "false"
+
 tolerations:
   - effect: NoExecute
     key: usernode
