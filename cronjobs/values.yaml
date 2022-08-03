@@ -8,6 +8,7 @@ stage: none
 jobs:
   # first cron
   - name: 7days-metric
+    enabled: false
     namespace: jupyterjsc
     stage: production
     image:
@@ -62,6 +63,7 @@ jobs:
         mountPath: /mnt/volumes
   # second cron
   - name: daily-db-backup
+    enabled: true
     namespace: database
     stage: production
     image:
@@ -109,6 +111,7 @@ jobs:
       - name: persistent
         mountPath: /mnt/persistent
   - name: daily-db-backup-staging
+    enabled: true
     namespace: database
     stage: staging
     image:
@@ -156,6 +159,7 @@ jobs:
       - name: persistent
         mountPath: /mnt/persistent
   - name: cleanup-user-jobs-staging
+    enabled: true
     namespace: jupyterjsc
     stage: staging
     image:
@@ -194,6 +198,7 @@ jobs:
       - name: persistent
         mountPath: /mnt/persistent
   - name: cleanup-user-jobs
+    enabled: true
     namespace: jupyterjsc
     stage: production
     image:

@@ -4,7 +4,8 @@
 
 {{- if .Values.enabled }}
 {{- range $job := .Values.jobs }}
-{{- if eq $job.stage $.Values.stage }}
+{{- if $job.enabled }}
+{{- if or (eq $job.stage "all") (eq $job.stage $.Values.stage) }}
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -93,6 +94,7 @@ spec:
           {{- end }}
   schedule: {{ $job.schedule | quote }}
   successfulJobsHistoryLimit: {{ $job.successfulJobsHistoryLimit }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

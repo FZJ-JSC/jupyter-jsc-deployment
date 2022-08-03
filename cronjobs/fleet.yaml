@@ -7,7 +7,7 @@ targetCustomizations:
     helm:
       values:
         stage: "staging"
-        enabled: false
+        enabled: true
   - name: production
     clusterSelector:
       matchLabels:
