@@ -27,6 +27,8 @@ proxy:
             - >-
               mkdir -p /mnt/persistent/jhub
               # while true; do sleep 30; done
+    image:
+      tag: "4.5.1"
     nodeSelector:
       worker: "true"
   https:

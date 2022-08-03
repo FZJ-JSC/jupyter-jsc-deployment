@@ -1,0 +1,22 @@
+nameOverride: ""
+fullnameOverride: ""
+
+enabled: false
+
+nodeSelector:
+  usernode: "true"
+
+podAnnotations:
+  sidecar.istio.io/inject: "false"
+
+tolerations:
+  - effect: NoExecute
+    key: usernode
+    value: "true"
+
+images:
+  # images to pull
+  - name: aiidalab-docker-stack
+    image: aiidalab/aiidalab-docker-stack:21.07.1
+  - name: user-jupyterlab
+    image: jupyterjsc/user-jupyterlab:1.0.0

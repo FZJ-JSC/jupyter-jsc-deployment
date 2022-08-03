@@ -51,6 +51,7 @@ ingress:
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/whitelist-source-range: "134.94.0.0/16"
   hosts:
     - host: drf-unicoremgr.svc
       svcName: drf-unicoremgr
