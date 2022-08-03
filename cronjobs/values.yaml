@@ -5,59 +5,58 @@ enabled: false
 
 jobs:
   # first cron
-  # - name: 7days-metric
-  #   image:
-  #     repository: alpine
-  #     tag: 3.14
-  #     imagePullPolicy: Always
-  #   schedule: "0 2 * * MON"
-  #   #schedule: "*/2 * * * *"
-  #   podAnnotations:
-  #     proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
-  #   failedJobsHistoryLimit: 1
-  #   successfulJobsHistoryLimit: 3
-  #   concurrencyPolicy: Replace
-  #   restartPolicy: Never
-  #   command: ["/bin/sh"]
-  #   args:
-  #     - -c
-  #     - >-
-  #         apk add bash coreutils git && /bin/bash /mnt/volumes/metrics7dayhifis.sh
-  #   resources:
-  #     limits:
-  #       cpu: 50m
-  #       memory: 256Mi
-  #     requests:
-  #       cpu: 50m
-  #       memory: 256Mi
-  #   env:
-  #   - name: GIT_REPO
-  #     #value: "gitlab.jsc.fz-juelich.de/kreuzer1/tmp.git"
-  #     value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
-  #   - name: GIT_BRANCH
-  #     value: "main"
-  #   - name: GIT_SUBDIR
-  #     #value: tmp
-  #     value: "FZJ-Jupyter/stats"
-  #   envFrom:
-  #   - secretRef:
-  #       name: cronjobs
-  #   nodeSelector:
-  #     worker: "true"
-  #   volumes:
-  #     - name: persistent
-  #       nfs:
-  #         path: /mnt/storage/jupyterhub
-  #         server: "10.0.20.30"
-  #     - name: cronjobs-cm
-  #       configMap:
-  #         defaultMode: 400
-  #         name: cronjobs
-  #   volumeMounts:
-  #     - name: persistent
-  #       mountPath: /mnt/persistent
-  #     - name: cronjobs-cm
-  #       mountPath: /mnt/volumes
+  - name: 7days-metric
+    namespace: jupyterjsc
+    image:
+      repository: alpine
+      tag: 3.14
+      imagePullPolicy: Always
+    schedule: "0 2 * * MON"
+    #schedule: "*/2 * * * *"
+    podAnnotations:
+      proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 3
+    concurrencyPolicy: Replace
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash coreutils git && /bin/bash /mnt/volumes/metrics7dayhifis.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: GIT_REPO
+      value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
+    - name: GIT_BRANCH
+      value: "main"
+    - name: GIT_SUBDIR
+      value: "FZJ-Jupyter/stats"
+    envFrom:
+    - secretRef:
+        name: cronjobs
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: persistent
+        nfs:
+          path: /mnt/storage/jupyterhub
+          server: "10.0.20.30"
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: persistent
+        mountPath: /mnt/persistent
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
   # second cron
   - name: daily-db-backup
     namespace: database
@@ -76,8 +75,11 @@ jobs:
     args:
       - -c
       - >-
-          apk add --update postgresql &> ;
-          pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump
+          pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
+          pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
+          pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump ;
     resources:
       limits:
         cpu: 50m
@@ -97,8 +99,8 @@ jobs:
       - name: persistent
         nfs:
           path: /mnt/storage/db-backups
-          server: 10.0.94.174
-          # server: 10.0.20.30
+          server: 10.0.20.30
+          # server: 10.0.94.174
     volumeMounts:
       - name: persistent
         mountPath: /mnt/persistent
