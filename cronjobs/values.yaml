@@ -5,13 +5,67 @@ enabled: false
 
 jobs:
   # first cron
-  - name: 7days-metric
+  # - name: 7days-metric
+  #   image:
+  #     repository: alpine
+  #     tag: 3.14
+  #     imagePullPolicy: Always
+  #   schedule: "0 2 * * MON"
+  #   #schedule: "*/2 * * * *"
+  #   podAnnotations:
+  #     proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+  #   failedJobsHistoryLimit: 1
+  #   successfulJobsHistoryLimit: 3
+  #   concurrencyPolicy: Replace
+  #   restartPolicy: Never
+  #   command: ["/bin/sh"]
+  #   args:
+  #     - -c
+  #     - >-
+  #         apk add bash coreutils git && /bin/bash /mnt/volumes/metrics7dayhifis.sh
+  #   resources:
+  #     limits:
+  #       cpu: 50m
+  #       memory: 256Mi
+  #     requests:
+  #       cpu: 50m
+  #       memory: 256Mi
+  #   env:
+  #   - name: GIT_REPO
+  #     #value: "gitlab.jsc.fz-juelich.de/kreuzer1/tmp.git"
+  #     value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
+  #   - name: GIT_BRANCH
+  #     value: "main"
+  #   - name: GIT_SUBDIR
+  #     #value: tmp
+  #     value: "FZJ-Jupyter/stats"
+  #   envFrom:
+  #   - secretRef:
+  #       name: cronjobs
+  #   nodeSelector:
+  #     worker: "true"
+  #   volumes:
+  #     - name: persistent
+  #       nfs:
+  #         path: /mnt/storage/jupyterhub
+  #         server: "10.0.20.30"
+  #     - name: cronjobs-cm
+  #       configMap:
+  #         defaultMode: 400
+  #         name: cronjobs
+  #   volumeMounts:
+  #     - name: persistent
+  #       mountPath: /mnt/persistent
+  #     - name: cronjobs-cm
+  #       mountPath: /mnt/volumes
+  # second cron
+  - name: daily-db-backup
     image:
       repository: alpine
       tag: 3.14
       imagePullPolicy: Always
-    schedule: "0 2 * * MON"
-    #schedule: "*/2 * * * *"
+    #schedule: "0 2 * * *"
+    schedule: "*/2 * * * *"
     podAnnotations:
       proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
     failedJobsHistoryLimit: 1
@@ -22,7 +76,8 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git && /bin/bash /mnt/volumes/metrics7dayhifis.sh
+          apk add --update postgresql &> /dev/null
+          pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump
     resources:
       limits:
         cpu: 50m
@@ -31,30 +86,19 @@ jobs:
         cpu: 50m
         memory: 256Mi
     env:
-    - name: GIT_REPO
-      #value: "gitlab.jsc.fz-juelich.de/kreuzer1/tmp.git"
-      value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
-    - name: GIT_BRANCH
-      value: "main"
-    - name: GIT_SUBDIR
-      #value: tmp
-      value: "FZJ-Jupyter/stats"
-    envFrom:
-    - secretRef:
-        name: cronjobs
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-auth
+          key: postgres-password
     nodeSelector:
       worker: "true"
     volumes:
       - name: persistent
         nfs:
-          path: /mnt/storage/jupyterhub
-          server: "10.0.20.30"
-      - name: cronjobs-cm
-        configMap:
-          defaultMode: 400
-          name: cronjobs
+          path: /mnt/storage/db-backups
+          server: 10.0.94.174
+          # server: 10.0.20.30
     volumeMounts:
       - name: persistent
         mountPath: /mnt/persistent
-      - name: cronjobs-cm
-        mountPath: /mnt/volumes
