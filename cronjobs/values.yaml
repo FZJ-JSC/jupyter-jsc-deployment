@@ -60,6 +60,7 @@ jobs:
   #       mountPath: /mnt/volumes
   # second cron
   - name: daily-db-backup
+    namespace: database
     image:
       repository: alpine
       tag: 3.14
