@@ -177,8 +177,8 @@ jobs:
     args:
       - -c
       - >-
-          find /mnt/persistent/k8smgr/user_jobs -mtime +30 -exec rm -f {} \;
-          find /mnt/persistent/unicoremgr/user_jobs -mtime +30 -exec rm -f {} \;
+          find /mnt/persistent/k8smgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
+          find /mnt/persistent/unicoremgr/user_jobs -mtime +30 -exec rm -rf {} \;
     resources:
       limits:
         cpu: 50m
