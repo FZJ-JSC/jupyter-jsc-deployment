@@ -6,6 +6,7 @@ targetCustomizations:
         stage: staging
     helm:
       values:
+        stage: "staging"
         enabled: false
   - name: production
     clusterSelector:
@@ -13,4 +14,5 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        stage: "production"
         enabled: false
