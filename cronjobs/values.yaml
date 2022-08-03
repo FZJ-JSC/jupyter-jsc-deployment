@@ -168,7 +168,7 @@ jobs:
       imagePullPolicy: Always
     schedule: "0 2 * * *"
     podAnnotations:
-      sidecar.istio.io/inject: false
+      sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 3
     concurrencyPolicy: Replace
@@ -207,7 +207,7 @@ jobs:
       imagePullPolicy: Always
     schedule: "0 2 * * *"
     podAnnotations:
-      sidecar.istio.io/inject: false
+      sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 3
     concurrencyPolicy: Replace
