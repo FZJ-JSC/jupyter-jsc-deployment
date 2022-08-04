@@ -10,8 +10,9 @@ targetCustomizations:
         provider.cattle.io: rke
     helm:
       values:
+        enabled: false
+        # if enabled is set to true, remember to set jhub/helper/fleet.yaml:staging.helm.values.ingress.enabled to false
         ingress:
-          enabled: true
           hosts:
             - host: jupyter-jsc-staging.fz-juelich.de
               paths:
@@ -30,8 +31,9 @@ targetCustomizations:
         provider.cattle.io: rke
     helm:
       values:
+        enabled: false
+        # if enabled is set to true, remember to set jhub/helper/fleet.yaml:production.helm.values.ingress.enabled to false
         ingress:
-          enabled: false
           hosts:
             - host: jupyter-jsc.fz-juelich.de
               paths:
