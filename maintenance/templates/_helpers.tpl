@@ -50,13 +50,3 @@ app.kubernetes.io/name: {{ include "maintenance.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "maintenance.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "maintenance.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
