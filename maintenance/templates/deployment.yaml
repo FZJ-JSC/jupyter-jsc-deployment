@@ -32,8 +32,8 @@ spec:
             - secretRef:
                 name: "jupyter-jsc-config"
           env:
-            name: BRANCH
-            value: {{ .Values.gitBranch }}
+            - name: BRANCH
+              value: {{ .Values.gitBranch }}
           command: ["/bin/sh"]
           args:
             - -c
