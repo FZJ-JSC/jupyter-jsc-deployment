@@ -18,7 +18,7 @@ jobs:
     schedule: "0 2 * * MON"
     #schedule: "*/2 * * * *"
     podAnnotations:
-      proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
     concurrencyPolicy: Replace
@@ -72,7 +72,7 @@ jobs:
       imagePullPolicy: Always
     schedule: "0 2 * * *"
     podAnnotations:
-      proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
     concurrencyPolicy: Replace
@@ -120,7 +120,7 @@ jobs:
       imagePullPolicy: Always
     schedule: "0 2 * * *"
     podAnnotations:
-      proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
     concurrencyPolicy: Replace
