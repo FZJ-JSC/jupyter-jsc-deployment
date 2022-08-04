@@ -181,7 +181,8 @@ jobs:
       - -c
       - >-
           find /mnt/persistent/k8smgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
-          find /mnt/persistent/unicoremgr/user_jobs -mtime +30 -exec rm -rf {} \;
+          find /mnt/persistent/unicoremgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
+          find /mnt/persistent/db-backups -mtime +30 -exec rm -rf {} \; ;
     
     resources:
       limits:
@@ -221,7 +222,8 @@ jobs:
       - -c
       - >-
           find /mnt/persistent/k8smgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
-          find /mnt/persistent/unicoremgr/user_jobs -mtime +30 -exec rm -rf {} \;
+          find /mnt/persistent/unicoremgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
+          find /mnt/persistent/db-backups -mtime +30 -exec rm -rf {} \; ;
     
     resources:
       limits:
