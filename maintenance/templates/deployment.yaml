@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "maintenance.fullname" . }}
+  labels:
+    {{- include "maintenance.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "maintenance.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "maintenance.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "maintenance.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: prepare-shared-data
+          image: alpine:3.14
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: "jupyter-jsc-config"
+          env:
+            name: BRANCH
+            value: {{ .Values.gitBranch }}
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - >-
+              apk add bash git ;
+              cd /mnt/shared-data ;
+              export GIT_REPO_SHORT=${REPOSITORY#"https://"} ; 
+              git clone --single-branch --branch ${BRANCH} https://${USERNAME}:${PASSWORD}@${GIT_REPO_SHORT} static-files 
+          volumeMounts:
+            - name: shared-data
+              mountPath: /mnt/shared-data
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: shared-data
+              mountPath: /mnt/shared-data
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: nginx.conf
+            - name: tz-config
+              mountPath: /etc/localtime
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: shared-data
+        emptyDir: {}
+      - name: nginx-config
+        configMap:
+          defaultMode: 400
+          name: {{ include "maintenance.fullname" . }}-nginx-config
+      - name: tz-config
+        hostPath:
+          path: /usr/share/zoneinfo/Europe/Berlin
