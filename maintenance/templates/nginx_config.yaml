@@ -11,7 +11,7 @@ data:
         access_log  /var/log/nginx/host.access.log  main;
 
         root /mnt/shared-data/static-files/maintenance;
-        index maintenance.html
+        index maintenance.html;
 
         location / {
             try_files $uri $uri/ =404;
