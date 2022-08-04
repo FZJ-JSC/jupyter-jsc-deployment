@@ -28,6 +28,7 @@ jobs:
       - -c
       - >-
           apk add bash coreutils git && /bin/bash /mnt/volumes/metrics7dayhifis.sh
+    
     resources:
       limits:
         cpu: 50m
@@ -86,6 +87,7 @@ jobs:
           pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
           pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
           pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
+    
     resources:
       limits:
         cpu: 50m
@@ -134,6 +136,7 @@ jobs:
           pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
           pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
           pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
+    
     resources:
       limits:
         cpu: 50m
@@ -179,6 +182,7 @@ jobs:
       - >-
           find /mnt/persistent/k8smgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
           find /mnt/persistent/unicoremgr/user_jobs -mtime +30 -exec rm -rf {} \;
+    
     resources:
       limits:
         cpu: 50m
@@ -218,6 +222,7 @@ jobs:
       - >-
           find /mnt/persistent/k8smgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
           find /mnt/persistent/unicoremgr/user_jobs -mtime +30 -exec rm -rf {} \;
+    
     resources:
       limits:
         cpu: 50m
