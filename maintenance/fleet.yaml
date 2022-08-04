@@ -11,6 +11,7 @@ targetCustomizations:
     helm:
       values:
         ingress:
+          enabled: true
           hosts:
             - host: jupyter-jsc-staging.fz-juelich.de
               paths:
@@ -30,6 +31,7 @@ targetCustomizations:
     helm:
       values:
         ingress:
+          enabled: false
           hosts:
             - host: jupyter-jsc.fz-juelich.de
               paths:
