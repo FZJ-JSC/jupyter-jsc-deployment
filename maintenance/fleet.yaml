@@ -1,7 +1,7 @@
 defaultNamespace: jupyterjsc
 helm:
   values:
-    nameOverride: "jhub-maintenance"
+    fullnameOverride: "jhub-maintenance"
 targetCustomizations:
   - name: staging
     clusterSelector:
