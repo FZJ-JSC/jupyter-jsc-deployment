@@ -6,13 +6,9 @@ helm:
   values:
     hub:
       livenessProbe:
-        enabled: true
-        httpGet:
-          scheme: HTTPS
+        enabled: false
       readinessProbe:
-        enabled: true
-        httpGet:
-          scheme: HTTPS
+        enabled: false
       command: ["/bin/bash"]
       args:
         - -c

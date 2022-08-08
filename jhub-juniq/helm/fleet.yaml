@@ -6,9 +6,9 @@ helm:
   values:
     hub:
       livenessProbe:
-        enabled: true
+        enabled: false
       readinessProbe:
-        enabled: true
+        enabled: false
       command: ["/bin/bash"]
       args:
         - -c
