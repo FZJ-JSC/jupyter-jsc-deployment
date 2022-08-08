@@ -8,7 +8,7 @@ stage: none
 jobs:
   # first cron
   - name: 7days-metric
-    enabled: false
+    enabled: true
     namespace: jupyterjsc
     stage: production
     image:
