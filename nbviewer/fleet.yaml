@@ -2,7 +2,7 @@ defaultNamespace: jupyterjsc
 helm:
   values:
     image:
-      tag: "devel"
+      tag: "1.1.4"
     nodeSelector:
       worker: "true"
     podAnnotations:
