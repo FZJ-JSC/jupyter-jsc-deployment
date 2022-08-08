@@ -14,3 +14,7 @@ hub:
       mountPath: /mnt/unity_certs
     - name: tz-config
       mountPath: /etc/localtime
+    - name: twofa-keypair
+      mountPath: /mnt/twofa
+    - name: twofa-remove-keypair
+      mountPath: /mnt/twofa-remove

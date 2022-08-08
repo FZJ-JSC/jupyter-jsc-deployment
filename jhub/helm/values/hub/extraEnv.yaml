@@ -26,6 +26,18 @@ hub:
       value: "true"
     - name: SEND2FA_CONFIG_PATH
       value: "/mnt/shared-data/git_config/send_mail_config.json"
+    - name: TWOFA_SSH_KEY
+      value: "/mnt/twofa/twofa"
+    - name: TWOFA_SSH_USER
+      value: "unity"
+    - name: TWOFA_SSH_HOST
+      value: "zam2041.zam.kfa-juelich.de"
+    - name: TWOFA_REMOVE_SSH_KEY
+      value: "/mnt/twofa-remove/twofa"
+    - name: TWOFA_REMOVE_SSH_USER
+      value: "unity"
+    - name: TWOFA_REMOVE_SSH_HOST
+      value: "zam2041.zam.kfa-juelich.de"
     - name: MAINTENANCE_PATH
       value: "/mnt/shared-data/maintenance-check"
     - name: MAINTENANCE_FILE
