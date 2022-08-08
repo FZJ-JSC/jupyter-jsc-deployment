@@ -63,6 +63,7 @@ targetCustomizations:
     helm:
       values:
         ingress:
+          enabled: false
           hosts:
             - host: jupyter-jsc.fz-juelich.de
               paths:
