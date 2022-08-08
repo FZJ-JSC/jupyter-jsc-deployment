@@ -13,4 +13,4 @@ targetCustomizations:
         stage: production
     helm:
       values:
-        enabled: false
+        enabled: true
