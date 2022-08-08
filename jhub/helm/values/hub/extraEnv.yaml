@@ -24,6 +24,8 @@ hub:
       value: "/mnt/persistent/metrics.log"
     - name: SHOW_DRF_LOGS
       value: "true"
+    - name: SEND2FA_CONFIG_PATH
+      value: "/mnt/shared-data/git_config/send_mail_config.json"
     - name: MAINTENANCE_PATH
       value: "/mnt/shared-data/maintenance-check"
     - name: MAINTENANCE_FILE
