@@ -11,6 +11,7 @@ targetCustomizations:
     helm:
       values:
         ingress:
+          enabled: true
           hosts:
             - host: jupyter-jsc-staging.fz-juelich.de
               paths:
@@ -40,6 +41,14 @@ targetCustomizations:
               paths:
                 - path: /hub/static
                   pathType: Prefix
+                - path: /2FA
+                  pathType: Exact
+                - path: /2fa
+                  pathType: Exact
+                - path: /2fadetails
+                  pathType: Exact
+                - path: /jusufcloud
+                  pathType: Exact
               svcName: hub-static-files
               svcPort: 8070
           tls:
@@ -83,6 +92,14 @@ targetCustomizations:
               paths:
                 - path: /hub/static
                   pathType: Prefix
+                - path: /2FA
+                  pathType: Exact
+                - path: /2fa
+                  pathType: Exact
+                - path: /2fadetails
+                  pathType: Exact
+                - path: /jusufcloud
+                  pathType: Exact
               svcName: hub-static-files
               svcPort: 8070
           tls:

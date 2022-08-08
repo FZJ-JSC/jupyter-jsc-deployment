@@ -1,0 +1,47 @@
+defaultNamespace: jupyterjsc
+helm:
+  values:
+    fullnameOverride: "jhub-maintenance"
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+        provider.cattle.io: rke
+    helm:
+      values:
+        enabled: false
+        # if enabled is set to true, remember to set jhub/helper/fleet.yaml:staging.helm.values.ingress.enabled to false
+        ingress:
+          hosts:
+            - host: jupyter-jsc-staging.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
+          tls:
+            - secretName: jupyter-jsc-certs
+              hosts:
+                - jupyter-jsc-staging.fz-juelich.de
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+        provider.cattle.io: rke
+    helm:
+      values:
+        enabled: false
+        # if enabled is set to true, remember to set jhub/helper/fleet.yaml:production.helm.values.ingress.enabled to false
+        ingress:
+          hosts:
+            - host: jupyter-jsc.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
+          tls:
+            - secretName: jupyter-jsc-certs
+              hosts:
+                - jupyter-jsc.fz-juelich.de

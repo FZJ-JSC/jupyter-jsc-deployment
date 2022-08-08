@@ -1,11 +1,16 @@
 nameOverride: ""
 fullnameOverride: ""
 
-enabled: false
+enabled: true
+
+stage: none
 
 jobs:
   # first cron
   - name: 7days-metric
+    enabled: false
+    namespace: jupyterjsc
+    stage: production
     image:
       repository: alpine
       tag: 3.14
@@ -13,9 +18,9 @@ jobs:
     schedule: "0 2 * * MON"
     #schedule: "*/2 * * * *"
     podAnnotations:
-      proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
-    successfulJobsHistoryLimit: 3
+    successfulJobsHistoryLimit: 1
     concurrencyPolicy: Replace
     restartPolicy: Never
     command: ["/bin/sh"]
@@ -23,6 +28,7 @@ jobs:
       - -c
       - >-
           apk add bash coreutils git && /bin/bash /mnt/volumes/metrics7dayhifis.sh
+    
     resources:
       limits:
         cpu: 50m
@@ -32,12 +38,10 @@ jobs:
         memory: 256Mi
     env:
     - name: GIT_REPO
-      #value: "gitlab.jsc.fz-juelich.de/kreuzer1/tmp.git"
       value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
     - name: GIT_BRANCH
       value: "main"
     - name: GIT_SUBDIR
-      #value: tmp
       value: "FZJ-Jupyter/stats"
     envFrom:
     - secretRef:
@@ -58,3 +62,184 @@ jobs:
         mountPath: /mnt/persistent
       - name: cronjobs-cm
         mountPath: /mnt/volumes
+  # second cron
+  - name: daily-db-backup
+    enabled: true
+    namespace: database
+    stage: production
+    image:
+      repository: postgres
+      tag: 14.2-alpine
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Replace
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
+          pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
+          pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: PGPASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-auth
+          key: postgres-password
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: persistent
+        nfs:
+          path: /mnt/storage/db-backups
+          server: 10.0.20.30
+          # server: 10.0.94.174
+    volumeMounts:
+      - name: persistent
+        mountPath: /mnt/persistent
+  - name: daily-db-backup-staging
+    enabled: true
+    namespace: database
+    stage: staging
+    image:
+      repository: postgres
+      tag: 14.2-alpine
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Replace
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
+          pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
+          pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: PGPASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-auth
+          key: postgres-password
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: persistent
+        nfs:
+          path: /mnt/storage/db-backups
+          # server: 10.0.20.30
+          server: 10.0.94.174
+    volumeMounts:
+      - name: persistent
+        mountPath: /mnt/persistent
+  - name: cleanup-user-jobs-staging
+    enabled: true
+    namespace: jupyterjsc
+    stage: staging
+    image:
+      repository: alpine
+      tag: 3.14
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Replace
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          find /mnt/persistent/k8smgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
+          find /mnt/persistent/unicoremgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
+          find /mnt/persistent/db-backups -mtime +30 -exec rm -rf {} \; ;
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: persistent
+        nfs:
+          path: /mnt/storage
+          # server: 10.0.20.30
+          server: 10.0.94.174
+    volumeMounts:
+      - name: persistent
+        mountPath: /mnt/persistent
+  - name: cleanup-user-jobs
+    enabled: true
+    namespace: jupyterjsc
+    stage: production
+    image:
+      repository: alpine
+      tag: 3.14
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Replace
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          find /mnt/persistent/k8smgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
+          find /mnt/persistent/unicoremgr/user_jobs -mtime +30 -exec rm -rf {} \; ;
+          find /mnt/persistent/db-backups -mtime +30 -exec rm -rf {} \; ;
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: persistent
+        nfs:
+          path: /mnt/storage
+          server: 10.0.20.30
+          # server: 10.0.94.174
+    volumeMounts:
+      - name: persistent
+        mountPath: /mnt/persistent

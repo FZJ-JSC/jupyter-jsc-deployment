@@ -84,6 +84,14 @@ targetCustomizations:
                 items:
                   - key: tls.ca
                     path: ca.pem
+            - name: twofa-keypair
+              secret:
+                defaultMode: 400
+                secretName: twofa-keypair
+            - name: twofa-remove-keypair
+              secret:
+                defaultMode: 400
+                secretName: twofa-remove-keypair
             - name: unity-jsc-certs
               secret:
                 secretName: unity-jsc-certs
@@ -154,6 +162,14 @@ targetCustomizations:
                 items:
                   - key: tls.ca
                     path: ca.pem
+            - name: twofa-keypair
+              secret:
+                defaultMode: 400
+                secretName: twofa-keypair
+            - name: twofa-remove-keypair
+              secret:
+                defaultMode: 400
+                secretName: twofa-remove-keypair
             - name: unity-jsc-certs
               secret:
                 secretName: unity-jsc-certs
