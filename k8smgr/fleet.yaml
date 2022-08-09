@@ -7,7 +7,7 @@ helm:
       - name: userhomes
         mountPath: /mnt/userhomes
     image:
-      tag: "1.2.7"
+      tag: "1.2.8"
     nameOverride: "drf-k8smgr"
     nodeSelector:
       worker: "true"
