@@ -73,6 +73,6 @@ targetCustomizations:
         labels:
           stage: "production"
         gunicorn:
-          processes: 4
+          processes: 16
           threads: 1
           timeout: 180
