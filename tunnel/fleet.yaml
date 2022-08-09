@@ -240,5 +240,5 @@ targetCustomizations:
         stage: production
         loggerName: "TunnelProduction"
         gunicorn:
-          processes: 4
+          processes: 16
           threads: 1

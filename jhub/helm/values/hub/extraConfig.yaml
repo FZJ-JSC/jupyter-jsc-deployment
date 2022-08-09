@@ -81,7 +81,7 @@ hub:
         f'https://{get_name("hub")}:{get_name_env("hub", "_SERVICE_PORT")}'
       )
       # TODO override cull service. cull --url http:// instead of https://
-      c.JupyterHub.concurrent_spawn_limit = 100
+      c.JupyterHub.concurrent_spawn_limit = 40
 
       c.JupyterHub.spawner_class = BackendSpawner
       c.BackendSpawner.http_timeout = 900
