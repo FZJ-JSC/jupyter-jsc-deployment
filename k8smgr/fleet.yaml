@@ -94,6 +94,6 @@ targetCustomizations:
         labels:
           stage: "production"
         gunicorn:
-          processes: 16
+          processes: 8
           threads: 1
 
