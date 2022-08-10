@@ -44,7 +44,7 @@ helm:
       prometheusSpec:
         resources:
           limits:
-            memory: 4500Mi
+            memory: 8500Mi
             cpu: 4000m
           requests:
             memory: 750Mi
