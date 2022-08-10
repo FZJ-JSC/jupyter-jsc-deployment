@@ -13,6 +13,7 @@ helm:
         upstream-keepalive-connections: "0"
         ssl-session-timeout: "1d"
         ssl-session-cache-size: "50m"
+        ssl-protocols: "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3"
       kind: DaemonSet
       metrics:
         enabled: true
