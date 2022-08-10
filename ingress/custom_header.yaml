@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  Strict-Transport-Security: "max-age=15768000"
+kind: ConfigMap
+metadata:
+  name: custom-headers
+  namespace: ingress-nginx

@@ -11,6 +11,8 @@ helm:
         use-forwarded-headers: "true"
         use-proxy-protocol: "true"
         upstream-keepalive-connections: "0"
+        ssl-session-timeout: "1d"
+        ssl-session-cache-size: "50m"
       kind: DaemonSet
       metrics:
         enabled: true
