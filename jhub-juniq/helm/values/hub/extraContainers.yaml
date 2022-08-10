@@ -23,11 +23,7 @@ hub:
         - name: shared-data
           mountPath: /mnt/shared-data
         - name: maintenance-check
-          mountPath: /mnt/maintenance/maintenance_check.py
-          subPath: maintenance_check.py
-        - name: maintenance-check
-          mountPath: /mnt/maintenance/run.sh
-          subPath: run.sh
+          mountPath: /mnt/maintenance
         - name: tz-config
           mountPath: /etc/localtime
     - name: cleanup-sql
