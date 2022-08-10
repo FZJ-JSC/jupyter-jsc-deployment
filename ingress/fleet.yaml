@@ -21,6 +21,10 @@ helm:
             release: prometheus-stack
           enabled: true
           namespace: cattle-monitoring-system
+          metricRelabelings:
+          - action: drop
+            regex: '(nginx_ingress_controller_request_duration_seconds_bucket|nginx_ingress_controller_response_size_bucket|nginx_ingress_controller_request_size_bucket|nginx_ingress_controller_response_duration_seconds_bucket|nginx_ingress_controller_bytes_sent_bucket|istio_tcp_connections_closed_total|istio_tcp_received_bytes_total|istio_tcp_connections_opened_total|istio_tcp_sent_bytes_total)'
+            sourceLabels: [__name__]          
       service:
         annotations:
           loadbalancer.openstack.org/keep-floatingip: true
