@@ -18,6 +18,13 @@ targetCustomizations:
         stage: staging
     helm:
       values:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 2000m
+            memory: 2048Mi
         ingress:
           hosts:
             - host: drf-unicoremgr.staging.svc
@@ -50,6 +57,13 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 2000m
+            memory: 2048Mi
         ingress:
           hosts:
             - host: drf-unicoremgr.production.svc
