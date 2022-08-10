@@ -179,9 +179,9 @@ data:
 
 
     def update_status(system, output_dir, svc, systems_status_list, static_dir):
-        # if svc["health"] != systems_status_list.get(system.upper(), None):
-        update_status_file(system, output_dir, svc["health"])
-        update_status_image(system, static_dir, svc["health"])
+        if svc["health"] != systems_status_list.get(system.upper(), None):
+            update_status_file(system, output_dir, svc["health"])
+            update_status_image(system, static_dir, svc["health"])
 
 
     def check_maintenances(config_mc, output_dir, static_dir):
