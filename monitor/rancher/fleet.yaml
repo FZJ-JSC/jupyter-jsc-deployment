@@ -32,7 +32,7 @@ helm:
           from_name: Jupyter-JSC Monitoring
           host: mail.fz-juelich.de:25
     ingressNginx:
-      enabled: true
+      enabled: false
     kube-state-metrics:
       nodeSelector:
         monitoring: "true"

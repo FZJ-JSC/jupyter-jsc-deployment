@@ -7,5 +7,7 @@ helm:
   values:
     ingressGateways:
       enabled: false
+    kiali:
+      enabled: false
 dependsOn:
   - name: basics-monitor-crd
