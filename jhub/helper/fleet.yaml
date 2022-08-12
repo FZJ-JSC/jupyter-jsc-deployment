@@ -24,6 +24,7 @@ targetCustomizations:
               hosts:
                 - jupyter-jsc-staging.fz-juelich.de
         ingressuser:
+          enabled: false
           hosts:
             - host: jupyter-jsc-staging.fz-juelich.de
               paths:
@@ -76,6 +77,7 @@ targetCustomizations:
               hosts:
                 - jupyter-jsc.fz-juelich.de
         ingressuser:
+          enabled: false
           hosts:
             - host: jupyter-jsc.fz-juelich.de
               paths:
