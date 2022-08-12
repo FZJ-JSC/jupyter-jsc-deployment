@@ -61,6 +61,11 @@ hub:
         secretKeyRef:
           name: drf-k8smgr-passwds
           key: JUPYTERHUB_USER_PASS
+    - name: K8SMGRJUSUFCLOUD_AUTHENTICATION_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: drf-k8smgr-jusufcloud-passwds
+          key: JUPYTERHUB_USER_PASS
     - name: OAUTH_CLIENT_ID
       valueFrom:
         secretKeyRef:
