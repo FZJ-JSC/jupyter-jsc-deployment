@@ -187,3 +187,10 @@ targetCustomizations:
             hostname: "jupyter-jsc.fz-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubProduction"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 2048Mi
+            limits:
+              cpu: 1000m
+              memory: 3072Mi
