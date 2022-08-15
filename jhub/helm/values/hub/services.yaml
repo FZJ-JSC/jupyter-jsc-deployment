@@ -1,0 +1,9 @@
+hub:
+  services:
+    metrics:
+      name: metrics-prometheus-monitor
+  loadRoles:
+    metrics-role:
+      description: Access to metrics information for Prometheus ServiceMonitor
+      scopes: [read:metrics]
+      services: [metrics-prometheus-monitor]

@@ -27,6 +27,7 @@ helm:
     - values/hub/image.yaml
     - values/hub/initContainers.yaml
     - values/hub/others.yaml
+    - values/hub/services.yaml
     - values/common.yaml
     - values/proxy.yaml
 targetCustomizations:

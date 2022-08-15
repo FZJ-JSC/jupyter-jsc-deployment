@@ -19,3 +19,4 @@ spec:
   endpoints:
   - path: /hub/metrics
     port: hub
+    bearerTokenSecret: hub.services.metrics-prometheus-monitor.apiToken
