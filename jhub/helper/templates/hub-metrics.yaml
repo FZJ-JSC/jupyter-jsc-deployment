@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: hub-metrics
+  namespace: jupyterjsc
+  labels:
+    app: jupyterhub
+    component: hub
+    release: jupyterhub
+spec:
+  namespaceSelector:
+    matchNames:
+    - jupyterjsc
+  selector:
+    matchLabels:
+      app: jupyterhub
+      component: hub
+      release: jupyterhub
+  endpoints:
+  - path: /hub/metrics
+    port: hub
