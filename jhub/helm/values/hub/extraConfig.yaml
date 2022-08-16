@@ -101,19 +101,17 @@ hub:
       }
 
       c.JupyterHub.services = [
-          {'name': 'reading-metrics', 'api_token': os.environ.get("METRICS_API_TOKEN")},
-          {'name': 'adding-users', 'api_token': 'super-secret-token'},
+          {'name': 'reading-metrics', 'api_token': 'super-secret-token'},
       ]
       c.JupyterHub.load_roles = [
           {
               "name": "read-metrics",
               "description": "Allows for reading metrics",
               "services": [
-                  "reading-metrics", "adding-users"
+                  "reading-metrics"
               ],
               "scopes": [
                   "read:metrics",
-                  "admin:users"
               ],
           }
       ]
