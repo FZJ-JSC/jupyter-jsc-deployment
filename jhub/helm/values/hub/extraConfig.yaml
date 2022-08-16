@@ -29,8 +29,10 @@ hub:
       from spawner import BackendSpawner
       from logs import create_extra_handlers
 
-      c.JupyterHub.log_level = 10
       custom_config_path = os.environ.get("CUSTOM_CONFIG_PATH", "/mnt/shared-data/git_config/jupyterhub_custom_config.json")
+      jhub_hostname = os.environ.get("JUPYTERHUB_HOSTNAME", "default")
+
+      c.JupyterHub.log_level = 10
       c.JupyterHub.custom_config_file = custom_config_path
       c.JupyterHub.extra_log_handlers = create_extra_handlers()
       db_host = os.environ.get("SQL_HOST")
@@ -135,8 +137,6 @@ hub:
 
       # c.CustomGenericOAuthenticator.extra_params_allowed_runtime = foo
       # http://localhost:8000/hub/oauth_login?extra_param_key1=value1
-
-      jhub_hostname = os.environ.get("JUPYTERHUB_HOSTNAME", "default")
 
       c.JupyterHub.template_paths = [f"/mnt/shared-data/jhub_files/{jupyterhub_version}/templates"]
       c.JupyterHub.template_vars = {
