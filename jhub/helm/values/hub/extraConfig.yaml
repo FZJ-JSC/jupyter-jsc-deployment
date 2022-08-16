@@ -75,8 +75,8 @@ hub:
       # }
       # c.JupyterHub.internal_certs_location = "/mnt/shared-data/tmp-internal-ssl"
 
-      c.JupyterHub.ssl_cert = "/mnt/persistent/internal-ssl/hub-internal/hub-internal.crt"
-      c.JupyterHub.ssl_key = "/mnt/persistent/internal-ssl/hub-internal/hub-internal.key"
+      # c.JupyterHub.ssl_cert = "/mnt/persistent/internal-ssl/hub-internal/hub-internal.crt"
+      # c.JupyterHub.ssl_key = "/mnt/persistent/internal-ssl/hub-internal/hub-internal.key"
       c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
       c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
       c.JupyterHub.hub_connect_url = (
