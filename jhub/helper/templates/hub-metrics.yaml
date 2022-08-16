@@ -19,6 +19,3 @@ spec:
   endpoints:
   - path: /hub/metrics
     port: hub
-    bearerTokenSecret: 
-      name: metrics
-      key: METRICS_API_TOKEN
