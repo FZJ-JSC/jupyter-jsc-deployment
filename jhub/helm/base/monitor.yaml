@@ -1,0 +1,19 @@
+{{- if .Values.hub.prometheus.monitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "jupyterhub.proxy.fullname" . }}-servicemonitor
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+spec:
+  jobLabel: {{ .Release.Name }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace | quote }}
+  selector: {}
+  endpoints:
+    - port: http # internal name of the port service exposes
+      path: /hub/metrics
+      interval: 5s
+{{- end }}

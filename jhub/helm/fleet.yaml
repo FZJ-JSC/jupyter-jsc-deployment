@@ -30,6 +30,8 @@ helm:
     - values/hub/others.yaml
     - values/common.yaml
     - values/proxy.yaml
+kustomize:
+  dir: overlays
 targetCustomizations:
   - name: staging
     clusterSelector:
