@@ -6,13 +6,17 @@ hub:
       default_url: /hub/home
       # hub_ip: 0.0.0.0
       # hub_port: 8000
+      tornado_settings:
+        slow_spawn_timeout: 0
+
       init_spawners_timeout: 0
       concurrent_spawn_limit: 40
+      last_activity_interval: 60
+      
       jinja_environment_options:
         extensions:
           - jinja2.ext.do
           - jinja2.ext.loopcontrols
-      last_activity_interval: 60
 
       internal_ssl: true
       internal_certs_location: /mnt/shared-data/tmp-internal-ssl
@@ -41,7 +45,9 @@ hub:
       ssl_key: /mnt/persistent/internal-ssl/hub-internal/hub-internal.key
 
       load_roles:
-        read-metrics:
-          description: Access to metrics information
-          scopes: [read:metrics]
-          services: [metrics-prometheus-monitor]
+        - read-metrics:
+            description: Access to metrics information
+            scopes: 
+              - read:metrics
+            services:
+              - metrics-prometheus-monitor

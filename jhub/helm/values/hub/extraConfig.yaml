@@ -83,7 +83,7 @@ hub:
         f'https://{get_name("hub")}:{get_name_env("hub", "_SERVICE_PORT")}'
       )
       # TODO override cull service. cull --url http:// instead of https://
-      c.JupyterHub.concurrent_spawn_limit = 40
+      # c.JupyterHub.concurrent_spawn_limit = 40
 
       c.JupyterHub.spawner_class = BackendSpawner
       c.BackendSpawner.http_timeout = 900
@@ -91,7 +91,7 @@ hub:
       c.BackendSpawner.poll_interval_randomizer = 20
       # c.BackendSpawner.ssl_alt_names = [f"DNS:{jupyterhub_host}"]
       # See https://github.com/jupyterhub/jupyterhub/issues/1222#issuecomment-415264385
-      c.JupyterHub.tornado_settings = {"slow_spawn_timeout": 0}
+      # c.JupyterHub.tornado_settings = {"slow_spawn_timeout": 0}
 
       c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
       # c.Authenticator.admin_users = {'a.grosch@fz-juelich.de', 't.kreuzer@fz-juelich.de'}
