@@ -107,12 +107,13 @@ hub:
       c.JupyterHub.load_roles = [
           {
               "name": "read-metrics",
+              "description": "Allows for reading metrics",
               "services": [
                   "reading-metrics", "adding-users"
               ],
               "scopes": [
                   "read:metrics",
-                  "admin"
+                  "admin:users"
               ],
           }
       ]
