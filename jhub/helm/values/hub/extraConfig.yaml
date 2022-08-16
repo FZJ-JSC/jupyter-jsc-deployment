@@ -41,8 +41,6 @@ hub:
       db_password = os.environ.get("SQL_PASSWORD")
       db_database = os.environ.get("SQL_DATABASE")
       c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
-      c.JupyterHub.pid_file = "/mnt/persistent/jupyterhub.pid"
-      c.JupyterHub.cookie_secret_file = "/mnt/persistent/jupyterhub_cookie_secret"
 
       c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
       c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
