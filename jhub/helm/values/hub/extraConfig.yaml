@@ -108,10 +108,11 @@ hub:
           {
               "name": "read-metrics",
               "services": [
-                  "metrics",
+                  "metrics",, "adding-users"
               ],
               "scopes": [
                   "read:metrics",
+                  "admin"
               ],
           }
       ]
