@@ -1,10 +1,10 @@
-# Does not work for v0.11.x, but keep around for upgrade
 hub:
   services:
     metrics:
       name: metrics-prometheus-monitor
-  loadRoles:
-    metrics-role:
-      description: Access to metrics information for Prometheus ServiceMonitor
+      apiToken: super-secret-token
+  load_roles:
+    read-metrics:
+      description: Access to metrics information
       scopes: [read:metrics]
       services: [metrics-prometheus-monitor]
