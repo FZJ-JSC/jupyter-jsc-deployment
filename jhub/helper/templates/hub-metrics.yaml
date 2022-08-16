@@ -20,5 +20,5 @@ spec:
   - path: /hub/metrics
     port: hub
     bearerTokenSecret: 
-      name: {{ include "jupyterhub.hub.fullname" . }}
-      key: hub.services.metrics-prometheus-monitor.apiToken
+      name: metrics
+      key: METRICS_API_TOKEN
