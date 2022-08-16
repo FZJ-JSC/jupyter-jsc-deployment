@@ -98,10 +98,9 @@ hub:
       c.Authenticator.admin_users = {
         'a.grosch_at_fz-juelich.de', 
         't.kreuzer_at_fz-juelich.de',
-        'metrics-service'
       }
       c.JupyterHub.api_tokens = {
-        os.environ.get("METRICS_API_TOKEN"): 'metrics-service',
+        os.environ.get("METRICS_API_TOKEN"): 'a.grosch_at_fz-juelich.de',
       }
 
       c.CustomGenericOAuthenticator.custom_config_file = custom_config_path
