@@ -20,5 +20,5 @@ spec:
   - path: /hub/metrics
     port: hub
     bearerTokenSecret: 
-      name: {{ include "jupyterhub.hub.fullname" . }}
+      name: hub
       key: hub.services.metrics.apiToken
