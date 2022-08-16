@@ -14,7 +14,6 @@ hub:
       concurrent_spawn_limit: 40
       last_activity_interval: 60
 
-      existingSecret: hub-services
       load_roles:
         - name: read-metrics
           description: Access to metrics information

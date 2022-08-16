@@ -1,5 +1,4 @@
-# hub:
-#   services:
-#     metrics:
-#       name: metrics-prometheus-monitor
-#       apiToken: super-secret-token
+hub:
+  services:
+    metrics:
+      name: metrics-prometheus-monitor
