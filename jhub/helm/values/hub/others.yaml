@@ -15,9 +15,6 @@ hub:
         - namespaceSelector:
             matchLabels:
               name: cattle-monitoring-system
-          podSelector:
-            matchLabels:
-              hub.jupyter.org/network-access-hub: "true"
   resources:
     requests:
       cpu: 100m
