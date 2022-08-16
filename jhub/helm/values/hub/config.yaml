@@ -56,7 +56,7 @@ hub:
       trusted_alt_names:
         - DNS:hub
         - DNS:proxy-public
-        - DNS:{{ include "jupyterhub.hub.fullname" . | quote }}
+        - "DNS:{{ metadata.labels['hostname'] }}"
         - DNS:drf-k8smgr-jupyterhub-forward.jupyterjsc.svc
         - DNS:drf-k8smgr-jupyterhub-forward.userlabs.svc
         - DNS:jrlogin01i
