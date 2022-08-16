@@ -3,8 +3,3 @@ hub:
     metrics:
       name: metrics-prometheus-monitor
       apiToken: super-secret-token
-  load_roles:
-    read-metrics:
-      description: Access to metrics information
-      scopes: [read:metrics]
-      services: [metrics-prometheus-monitor]

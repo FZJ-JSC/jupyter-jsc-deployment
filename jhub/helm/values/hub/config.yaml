@@ -36,3 +36,11 @@ hub:
             key: /mnt/persistent/internal-ssl/hub-ca/hub-ca.key
             cert: /mnt/persistent/internal-ssl/hub-ca/hub-ca.crt
             ca: /mnt/persistent/internal-ssl/hub-ca_trust.crt
+      ssl_cert: /mnt/persistent/internal-ssl/hub-internal/hub-internal.crt
+      ssl_key: /mnt/persistent/internal-ssl/hub-internal/hub-internal.key
+
+      load_roles:
+        read-metrics:
+          description: Access to metrics information
+          scopes: [read:metrics]
+          services: [metrics-prometheus-monitor]
