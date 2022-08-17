@@ -17,6 +17,6 @@ spec:
     - port: http # internal name of the port service exposes
       path: /hub/metrics
       interval: 5s
-      bearerToken:
+      bearerTokenSecret:
         name: hub
         key: hub.services.metrics.apiToken
