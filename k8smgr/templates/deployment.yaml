@@ -109,6 +109,10 @@ spec:
               value: "{{ .Values.gunicorn.threads }}"
             - name: GUNICORN_TIMEOUT
               value: "{{ .Values.gunicorn.timeout }}"
+            - name: GUNICORN_MAX_REQUESTS
+              value: "{{ .Values.gunicorn.maxRequests }}"
+            - name: GUNICORN_MAX_REQUESTS_JITTER
+              value: "{{ .Values.gunicorn.maxRequestsJitter }}"
             {{- if .Values.secrets.tunnelpasswds }}
             - name: TUNNELSVC_K8SMGR_USER_PASSWORD
               valueFrom:
