@@ -1,10 +1,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "jupyterhub.proxy.fullname" . }}-servicemonitor
+  name: hub-servicemonitor
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "jupyterhub.labels" . | nindent 4 }}
+    app: jupyterhub
+    release: jupyterhub
+    component: proxy
 spec:
   jobLabel: {{ .Release.Name }}
   namespaceSelector:
@@ -15,3 +17,6 @@ spec:
     - port: http # internal name of the port service exposes
       path: /hub/metrics
       interval: 5s
+      bearerToken:
+        name: hub
+        key: hub.services.metrics.apiToken
