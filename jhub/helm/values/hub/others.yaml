@@ -7,14 +7,6 @@ hub:
     type: "postgres"
   nodeSelector:
     worker: "true"
-  networkPolicy:
-    allowedIngressPorts:
-      - 8070
-    ingress:
-      - from:
-        - namespaceSelector:
-            matchLabels:
-              name: cattle-monitoring-system
   resources:
     requests:
       cpu: 100m
