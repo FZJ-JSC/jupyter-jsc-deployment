@@ -2,16 +2,16 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: hub-servicemonitor
-  namespace: {{ .Release.Namespace }}
+  namespace: jupyterjsc
   labels:
     app: jupyterhub
     release: jupyterhub
     component: proxy
 spec:
-  jobLabel: {{ .Release.Name }}
+  jobLabel: jupyterhub
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace | quote }}
+      - jupyterjsc
   selector: {}
   endpoints:
     - port: http # internal name of the port service exposes
