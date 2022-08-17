@@ -2,7 +2,7 @@ defaultNamespace: jupyterjsc
 helm:
   values:
     image:
-      tag: "1.2.3"
+      tag: "1.2.4"
     nameOverride: "drf-tunnel"
     nodeSelector:
       worker: "true"
@@ -215,8 +215,10 @@ targetCustomizations:
         stage: staging
         loggerName: "TunnelStaging"
         gunicorn:
-          processes: 4
-          threads: 1
+          processes: 2
+          threads: 8
+          maxRequests: 200
+          maxRequestsJitter: 50
   - name: production
     clusterSelector:
       matchLabels:
@@ -254,5 +256,7 @@ targetCustomizations:
         stage: production
         loggerName: "TunnelProduction"
         gunicorn:
-          processes: 16
-          threads: 1
+          processes: 4
+          threads: 8
+          maxRequests: 200
+          maxRequestsJitter: 50

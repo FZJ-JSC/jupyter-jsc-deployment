@@ -107,8 +107,10 @@ loggerName: "K8sMgr"
 
 gunicorn:
   processes: 4
-  threads: 1
+  threads: 4
   timeout: 30
+  maxRequests: 100
+  maxRequestsJitter: 50
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
