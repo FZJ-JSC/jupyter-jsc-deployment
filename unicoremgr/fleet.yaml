@@ -48,9 +48,11 @@ targetCustomizations:
         labels:
           stage: "staging"
         gunicorn:
-          processes: 4
-          threads: 1
+          processes: 2
+          threads: 8
           timeout: 180
+          maxRequests: 200
+          maxRequestsJitter: 50
   - name: production
     clusterSelector:
       matchLabels:
@@ -87,6 +89,8 @@ targetCustomizations:
         labels:
           stage: "production"
         gunicorn:
-          processes: 8
-          threads: 1
-          timeout: 180
+          processes: 4
+          threads: 25
+          timeout: 60
+          maxRequests: 200
+          maxRequestsJitter: 50
