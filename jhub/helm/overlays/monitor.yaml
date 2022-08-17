@@ -14,7 +14,7 @@ spec:
       - jupyterjsc
   selector: {}
   endpoints:
-    - port: http # internal name of the port service exposes
+    - port: https # internal name of the port service exposes
       path: /hub/metrics
       interval: 5s
       bearerTokenSecret:

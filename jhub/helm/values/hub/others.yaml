@@ -7,6 +7,9 @@ hub:
     type: "postgres"
   nodeSelector:
     worker: "true"
+  networkPolicy:
+    allowedIngressPorts:
+      - 8070
   resources:
     requests:
       cpu: 100m

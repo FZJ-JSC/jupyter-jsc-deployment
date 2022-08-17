@@ -28,8 +28,6 @@ proxy:
               mkdir -p /mnt/persistent/jhub
               # while true; do sleep 30; done
     networkPolicy:
-      allowedIngressPorts:
-        - 8070
       ingress:
         - from:
           - namespaceSelector:
