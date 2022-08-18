@@ -1,13 +1,56 @@
 hub:
   config:
     JupyterHub:
+      allow_named_servers: true
       cleanup_proxy: false
       default_url: /hub/home
       # hub_ip: 0.0.0.0
       # hub_port: 8000
+      pid_file: /mnt/persistent/jupyterhub.pid
+      cookie_secret_file: /mnt/persistent/jupyterhub_cookie_secret
+      # See https://github.com/jupyterhub/jupyterhub/issues/1222#issuecomment-415264385
+      tornado_settings:
+        slow_spawn_timeout: 0
+
       init_spawners_timeout: 0
+      concurrent_spawn_limit: 40
+      last_activity_interval: 60
+
+      load_roles:
+        - name: read-metrics
+          description: Access to metrics information
+          scopes: 
+            - read:metrics
+          services:
+            - metrics-prometheus-monitor
+      
       jinja_environment_options:
         extensions:
           - jinja2.ext.do
           - jinja2.ext.loopcontrols
-      last_activity_interval: 60
+
+      internal_ssl: true
+      internal_certs_location: /mnt/shared-data/tmp-internal-ssl
+      external_ssl_authorities:
+        services-ca:
+          key: /mnt/persistent/internal-ssl/services-ca/services-ca.key
+          cert: /mnt/persistent/internal-ssl/services-ca/services-ca.crt
+          ca: /mnt/persistent/internal-ssl/services-ca_trust.crt
+        proxy-client-ca:
+          key: /mnt/persistent/internal-ssl/proxy-client-ca/proxy-client-ca.key
+          cert: /mnt/persistent/internal-ssl/proxy-client-ca/proxy-client-ca.crt
+          ca: /mnt/persistent/internal-ssl/proxy-client-ca_trust.crt
+        proxy-api-ca:
+          key: /mnt/persistent/internal-ssl/proxy-api-ca/proxy-api-ca.key
+          cert: /mnt/persistent/internal-ssl/proxy-api-ca/proxy-api-ca.crt
+          ca: /mnt/persistent/internal-ssl/proxy-api-ca_trust.crt
+        notebooks-ca:
+          key: /mnt/persistent/internal-ssl/notebooks-ca/notebooks-ca.key
+          cert: /mnt/persistent/internal-ssl/notebooks-ca/notebooks-ca.crt
+          ca: /mnt/persistent/internal-ssl/notebooks-ca_trust.crt
+        hub-ca:
+          key: /mnt/persistent/internal-ssl/hub-ca/hub-ca.key
+          cert: /mnt/persistent/internal-ssl/hub-ca/hub-ca.crt
+          ca: /mnt/persistent/internal-ssl/hub-ca_trust.crt
+      ssl_cert: /mnt/persistent/internal-ssl/hub-internal/hub-internal.crt
+      ssl_key: /mnt/persistent/internal-ssl/hub-internal/hub-internal.key

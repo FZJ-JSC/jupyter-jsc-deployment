@@ -12,6 +12,10 @@ hub:
       valueFrom:
         fieldRef:
           fieldPath: metadata.labels['hostname']
+    - name: JUPYTERHUB_APP
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app']
     - name: LOGGER_NAME
       valueFrom:
         fieldRef:
