@@ -8,6 +8,10 @@ hub:
       valueFrom:
         fieldRef:
           fieldPath: metadata.labels['jhub_version']
+    - name: JUPYTERHUB_APP
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app']
     - name: JUPYTERHUB_HOSTNAME
       valueFrom:
         fieldRef:
