@@ -1,0 +1,4 @@
+hub:
+  services:
+    metrics:
+      name: metrics-prometheus-monitor

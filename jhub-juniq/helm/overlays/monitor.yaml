@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: juniq-servicemonitor
+  namespace: jupyterjsc
+  labels:
+    app: juniq
+    release: jupyterhub
+    component: proxy
+spec:
+  jobLabel: jupyterhub
+  namespaceSelector:
+    matchNames:
+      - jupyterjsc
+  selector:
+    matchLabels:
+      app: juniq
+  endpoints:
+    - port: https # internal name of the port service exposes
+      scheme: https
+      tlsConfig:
+        insecureSkipVerify: true
+      path: /hub/metrics
+      interval: 5s
+      bearerTokenSecret:
+        name: juniq-hub
+        key: hub.services.metrics.apiToken

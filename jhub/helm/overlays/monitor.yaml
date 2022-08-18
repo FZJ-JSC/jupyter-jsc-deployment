@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: hub-servicemonitor
+  namespace: jupyterjsc
+  labels:
+    app: jupyterhub
+    release: jupyterhub
+    component: proxy
+spec:
+  jobLabel: jupyterhub
+  namespaceSelector:
+    matchNames:
+      - jupyterjsc
+  selector:
+    matchLabels:
+      app: jupyterhub
+  endpoints:
+    - port: https # internal name of the port service exposes
+      scheme: https
+      tlsConfig:
+        insecureSkipVerify: true
+      path: /hub/metrics
+      interval: 5s
+      bearerTokenSecret:
+        name: hub
+        key: hub.services.metrics.apiToken

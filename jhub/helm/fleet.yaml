@@ -26,9 +26,12 @@ helm:
     - values/hub/extraVolumeMounts.yaml
     - values/hub/image.yaml
     - values/hub/initContainers.yaml
+    - values/hub/services.yaml
     - values/hub/others.yaml
     - values/common.yaml
     - values/proxy.yaml
+kustomize:
+  dir: overlays
 targetCustomizations:
   - name: staging
     clusterSelector:
