@@ -87,22 +87,32 @@ data:
         return ret
 
 
-    def setup_next_maintenance(system, id, all_incidents, next_maintenance, output_dir):
-        system_incidents = [
-            x for x in all_incidents if int(id) in x.get("affected_services", [])
-        ]
-        next_maintenance_incident = [
+    def setup_next_maintenance(system, id, active_system_incidents, next_maintenance, maintenance_health_threshold, output_dir):
+        active_incidents = [
             x
-            for x in system_incidents
-            if parser.parse(x["start_time"]) == parser.parse(next_maintenance)
+            for x in active_system_incidents
+            if x["incident_severity"] > maintenance_health_threshold
         ]
-        if len(next_maintenance_incident) == 0:
-            raise Exception(f"Could not find matching start time in incidents for {system}")
-        if len(next_maintenance_incident) > 1:
-            log.warning(
-                "Multiple incidents for the same datetime. Use first first one in list"
-            )
-        next_maintenance_incident = next_maintenance_incident[0]
+        if active_incidents:
+            log.info("Found active incidence over threshold")
+            if len(active_incidents) > 1:
+                log.warning(
+                    "Multiple active incidents. Use first one in list"
+                )
+            next_maintenance_incident = active_incidents[0]
+        else:
+            next_maintenance_incident = [
+                x
+                for x in active_system_incidents
+                if parser.parse(x["start_time"]) == parser.parse(next_maintenance)
+            ]
+            if len(next_maintenance_incident) == 0:
+                raise Exception(f"Could not find matching start time in incidents for {system}")
+            if len(next_maintenance_incident) > 1:
+                log.warning(
+                    "Multiple incidents for the same datetime. Use first one in list"
+                )
+            next_maintenance_incident = next_maintenance_incident[0]
         short_description = next_maintenance_incident["short_description"]
         if short_description:
             description = short_description
@@ -124,8 +134,8 @@ data:
     def update_maintenance_file(
         system, output_dir, svc, systems_maintenance_list, maintenance_health_threshold
     ):
-        # if svc["health"] > maintenance_health_threshold:
-        if svc["next_maintenance"] and svc["health"] > maintenance_health_threshold:
+        if svc["health"] > maintenance_health_threshold:
+        # if svc["next_maintenance"] and svc["health"] > maintenance_health_threshold:
             # System is in maintenance state, but not in the list
             if system.upper() not in systems_maintenance_list:
                 systems_maintenance_list_update = read_json_file(
@@ -207,9 +217,12 @@ data:
                     )
                     update_status(name, output_dir, svc, systems_status_list, static_dir)
                     next_maintenance = svc["next_maintenance"]
-                    if next_maintenance:
+                    active_system_incidents = [
+                        x for x in all_incidents if int(id) in x.get("affected_services", []) and not x.get("resolved", "")
+                    ]
+                    if next_maintenance or active_system_incidents:
                         setup_next_maintenance(
-                            name, id, all_incidents, next_maintenance, output_dir
+                            name, id, active_system_incidents, next_maintenance, maintenance_health_threshold, output_dir
                         )
                     else:
                         no_next_maintenance(name, output_dir)
