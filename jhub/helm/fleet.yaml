@@ -55,10 +55,10 @@ targetCustomizations:
               configMap:
                 defaultMode: 400
                 name: jupyterhub-cleanup-sql
-            - name: maintenance-check
+            - name: incident-check
               configMap:
                 defaultMode: 400
-                name: jupyterhub-maintenance-check
+                name: jupyterhub-incident-check
             - name: reservation-check
               configMap:
                 defaultMode: 400
@@ -133,10 +133,10 @@ targetCustomizations:
               configMap:
                 defaultMode: 400
                 name: jupyterhub-cleanup-sql
-            - name: maintenance-check
+            - name: incident-check
               configMap:
                 defaultMode: 400
-                name: jupyterhub-maintenance-check
+                name: jupyterhub-incident-check
             - name: reservation-check
               configMap:
                 defaultMode: 400
