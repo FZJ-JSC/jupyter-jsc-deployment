@@ -8,6 +8,8 @@ helm:
       worker: "true"
     podAnnotations:
       proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+    tunnelServices:
+      namespace: "tunneling"
     jupyterhubs:
       juniq:
         ssh_config_hosts:
