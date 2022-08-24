@@ -42,10 +42,10 @@ hub:
       value: "unity"
     - name: TWOFA_REMOVE_SSH_HOST
       value: "zam2041.zam.kfa-juelich.de"
-    - name: MAINTENANCE_PATH
-      value: "/mnt/shared-data/maintenance-check"
-    - name: MAINTENANCE_FILE
-      value: "/mnt/shared-data/maintenance-check/maintenance.json"
+    - name: INCIDENTS_PATH
+      value: "/mnt/shared-data/incident-check"
+    - name: INCIDENTS_FILE
+      value: "/mnt/shared-data/incident-check/active_incidents.json"
     - name: RESERVATIONS_FILE
       value: "/mnt/shared-data/reservation-check/reservation_test.json"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE

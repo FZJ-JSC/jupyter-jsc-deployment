@@ -1,6 +1,6 @@
 hub:
   extraContainers:
-    - name: maintenance-check
+    - name: incident-check
       image: python:3.9-alpine3.16
       imagePullPolicy: Always
       command: ["/bin/sh"]
@@ -9,21 +9,21 @@ hub:
         - >-
             pip install jsonformatter python-dateutil requests &&
             mkdir -p $OUTPUT_DIR &&
-            source /mnt/maintenance/run.sh
+            source /mnt/incidents/run.sh
       env:
         - name: CUSTOM_CONFIG_PATH
           value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
         - name: OUTPUT_DIR
-          value: "/mnt/shared-data/maintenance-check"
+          value: "/mnt/shared-data/incident-check"
         - name: STATIC_IMG_DIR
           value: "/mnt/shared-data/static-files/default/images/footer"
         - name: LOGGER_NAME
-          value: "MaintenanceCheck"
+          value: "IncidentCheck"
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
-        - name: maintenance-check
-          mountPath: /mnt/maintenance
+        - name: incident-check
+          mountPath: /mnt/incidents
         - name: tz-config
           mountPath: /etc/localtime
     - name: cleanup-sql
