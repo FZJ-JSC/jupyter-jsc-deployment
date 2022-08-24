@@ -77,9 +77,6 @@ service:
   # nodePort: 30000
   type: ClusterIP
 
-tunnelServices:
-  namespace: tunneling
-
 ingress:
   enabled: true
   className: "nginx"

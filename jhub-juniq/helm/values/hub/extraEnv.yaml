@@ -38,8 +38,8 @@ hub:
       value: "/mnt/shared-data/incident-check/active_incidents.json"
     - name: RESERVATIONS_FILE
       value: "/mnt/shared-data/reservation-check/reservation_test.json"
-    - name: TUNNEL_SERVICES_NAMESPACE
-      value: "tunneling"
+    - name: TUNNEL_DEPLOYMENT_NAMESPACE
+      value: "jupyterjsc"
     - name: TUNNEL_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
