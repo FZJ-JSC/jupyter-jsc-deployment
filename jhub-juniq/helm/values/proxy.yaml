@@ -15,6 +15,8 @@ proxy:
      - "--client-ssl-ca=/etc/chp/tls/proxy-client-ca_trust.crt"
      - "--client-ssl-request-cert"
      - "--client-ssl-reject-unauthorized"
+     - "--timeout=60000"
+     - "--proxy-timeout=180000"
      # - "--log-level=debug"
     extraPodSpec:
       initContainers:
