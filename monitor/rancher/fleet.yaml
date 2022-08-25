@@ -35,8 +35,9 @@ helm:
       enabled: false
     kube-state-metrics:
       metricLabelsAllowlist:
-         # to select jupyterhub/singeuser-server services and get the service metrics
-         - pods=[app,component]
+         # to select jupyterhub/singeuser-server metrics
+         - nodes=[nodepool]
+         - pods=[app,component,hub.jupyter.org/username,hub.jupyter.org/vo,hub.jupyter.org/name,hub.jupyter.org/service,hub.jupyter.org/system,hub.jupyter.org/account,hub.jupyter.org/project,hub.jupyter.org/partition,hub.jupyter.org/nodes,hub.jupyter.org/gpus,hub.jupyter.org/runtime,hub.jupyter.org/reservation]
          - services=[app,component,hub.jupyter.org/username,hub.jupyter.org/vo,hub.jupyter.org/name,hub.jupyter.org/service,hub.jupyter.org/system,hub.jupyter.org/account,hub.jupyter.org/project,hub.jupyter.org/partition,hub.jupyter.org/nodes,hub.jupyter.org/gpus,hub.jupyter.org/runtime,hub.jupyter.org/reservation]
       nodeSelector:
         monitoring: "true"
