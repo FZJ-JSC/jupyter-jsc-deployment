@@ -143,7 +143,7 @@ data:
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
               "refId": "A"
             }
           ],
@@ -206,7 +206,7 @@ data:
               "format": "time_series",
               "interval": "7d",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
               "refId": "A"
             }
           ],

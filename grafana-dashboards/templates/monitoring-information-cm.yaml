@@ -314,7 +314,7 @@ data:
               "expr": "sum(kubelet_volume_stats_available_bytes{namespace=\"cattle-monitoring-system\"}) by (persistentvolumeclaim)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{persistentvolumeclaim}}",
+              "legendFormat": "{{ "{{" }}persistentvolumeclaim}}",
               "refId": "A"
             }
           ],

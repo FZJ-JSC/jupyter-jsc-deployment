@@ -93,7 +93,7 @@ data:
               "expr": "kube_pod_labels{\n  label_app=~\"depl.+\",\n  namespace=\"userlabs\"\n}\n* on (namespace, pod) group_left()\nsum(\n  container_memory_working_set_bytes{\n    namespace=\"userlabs\",\n    container=\"main\",\n    name!=\"\",\n  }\n) by (namespace, pod)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_app}} ({{namespace}})",
+              "legendFormat": "{{ "{{" }}label_app}} ({{ "{{" }}namespace}})",
               "refId": "A"
             }
           ],
@@ -155,7 +155,7 @@ data:
               "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\ncontainer_memory_working_set_bytes{name!=\"\"}\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{ namespace=~\"userlabs\" }\n  ) by (pod, namespace)\n) by (pod)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ label_component }}",
+              "legendFormat": "{{ "{{" }} label_component }}",
               "refId": "A"
             }
           ],
@@ -255,7 +255,7 @@ data:
               "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\nirate(container_cpu_usage_seconds_total{name!=\"\"}[5m])\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{ namespace=~\"userlabs\" }\n  ) by (pod, namespace)\n) by (pod)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ label_component }}",
+              "legendFormat": "{{ "{{" }} label_component }}",
               "refId": "A"
             }
           ],
@@ -376,7 +376,7 @@ data:
               "expr": "sum(\n  # kube_pod_info.node identifies the pod node,\n  # while kube_pod_labels.node is the metrics exporter's node\n  kube_pod_info{node!=\"\"}\n  * on (namespace, pod) group_left() \n  group(\n    kube_pod_labels{ pod=~\"depl.+\", namespace=~\"userlabs\" }\n  ) by (pod, namespace)\n) by (node)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ node }}",
+              "legendFormat": "{{ "{{" }} node }}",
               "refId": "A"
             }
           ],

@@ -103,7 +103,7 @@ data:
               "expr": "sum(\n  rate(node_cpu_seconds_total{mode!=\"idle\"}[5m]) \n  * on(pod) group_left(node) kube_pod_info\n) by (node)\n/\nsum(kube_node_status_capacity{resource=\"cpu\"}) by (node)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ node }}",
+              "legendFormat": "{{ "{{" }} node }}",
               "refId": "A"
             }
           ],
@@ -203,7 +203,7 @@ data:
               "expr": "1 - (\n  sum (\n    (\n      # Memory that can be allocated to processes when they need\n      node_memory_MemFree_bytes + # Unused bytes\n      node_memory_Cached_bytes + # Shared memory + temporary disk cache\n      node_memory_Buffers_bytes # Very temporary buffer memory cache for disk i/o\n    )\n    * on(pod) group_left(node) kube_pod_info\n  ) by (node)\n  /\n  sum (\n    node_memory_MemTotal_bytes \n    * on(pod) group_left(node) kube_pod_info\n  ) by (node)\n)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{node}}",
+              "legendFormat": "{{ "{{" }}node}}",
               "refId": "A"
             }
           ],
@@ -303,7 +303,7 @@ data:
               "expr": "sum(\n  # Get individual container CPU limits\n  kube_pod_container_resource_requests{resource=\"cpu\"}\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (node)\n/\nsum(\n  # Get individual container CPU requests\n  kube_node_status_allocatable{resource=\"cpu\"}\n) by (node)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{node}}",
+              "legendFormat": "{{ "{{" }}node}}",
               "refId": "A"
             }
           ],
@@ -403,7 +403,7 @@ data:
               "expr": "sum(\n  # Get individual container memory limits\n  kube_pod_container_resource_requests{resource=\"memory\"}\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (node)\n/\nsum(\n  # Get individual container memory requests\n  kube_node_status_allocatable{resource=\"memory\"}\n) by (node)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{node}}",
+              "legendFormat": "{{ "{{" }}node}}",
               "refId": "A"
             }
           ],
@@ -523,7 +523,7 @@ data:
               "expr": "sum(\n  # Get individual container memory requests\n  kube_pod_container_resource_requests{resource=\"cpu\"}\n  # Add node pool name as label\n  * on(node) group_left(label_nodepool)\n  # group aggregator ensures that node names are unique per\n  # pool.\n  group(\n    kube_node_labels\n  ) by (node, label_nodepool)\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (label_nodepool)\n/\nsum(\n  # Total allocatable CPU on a node\n  kube_node_status_allocatable{resource=\"cpu\"}\n  # Add nodepool name as label\n  * on(node) group_left(label_nodepool)\n  # group aggregator ensures that node names are unique per\n  # pool.\n  group(\n    kube_node_labels\n  ) by (node, label_nodepool)\n) by (label_nodepool)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_nodepool}}",
+              "legendFormat": "{{ "{{" }}label_nodepool}}",
               "refId": "A"
             }
           ],
@@ -623,7 +623,7 @@ data:
               "expr": "sum(\n  # Get individual container memory requests\n  kube_pod_container_resource_requests{resource=\"memory\"}\n  # Add node pool name as label\n  * on(node) group_left(label_nodepool)\n  # group aggregator ensures that node names are unique per\n  # pool.\n  group(\n    kube_node_labels\n  ) by (node, label_nodepool)\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (label_nodepool)\n/\nsum(\n  # Total allocatable memory on a node\n  kube_node_status_allocatable{resource=\"memory\"}\n  # Add nodepool name as label\n  * on(node) group_left(label_nodepool)\n  # group aggregator ensures that node names are unique per\n  # pool.\n  group(\n    kube_node_labels\n  ) by (node, label_nodepool)\n) by (label_nodepool)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_nodepool}}",
+              "legendFormat": "{{ "{{" }}label_nodepool}}",
               "refId": "A"
             }
           ],
@@ -724,7 +724,7 @@ data:
               "expr": "sum(kube_node_labels) by (label_nodepool)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_nodepool}}",
+              "legendFormat": "{{ "{{" }}label_nodepool}}",
               "refId": "A"
             }
           ],
@@ -827,7 +827,7 @@ data:
               "expr": "sum(kube_pod_status_phase{phase!=\"Running\"}) by (phase)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{phase}}",
+              "legendFormat": "{{ "{{" }}phase}}",
               "refId": "A"
             }
           ],

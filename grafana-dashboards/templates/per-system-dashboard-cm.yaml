@@ -109,7 +109,7 @@ data:
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_hub_jupyter_org_system=~\"$system\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
               "refId": "B"
             }
           ],
@@ -215,7 +215,7 @@ data:
               "expr": "sum(\n  group(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_hub_jupyter_org_system=~\"$system\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n  ) by (label_hub_jupyter_org_username, label_hub_jupyter_org_system)\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
               "refId": "B"
             }
           ],
@@ -314,14 +314,14 @@ data:
               "expr": "sum(\n  kube_service_labels{\n      label_app=\"$hub\",\n      label_hub_jupyter_org_system=~\"$system\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_partition)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_partition}} (all Systems)",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_partition}} (all Systems)",
               "refId": "A"
             },
             {
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_hub_jupyter_org_system=~\"$system\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_partition, label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}/{{label_hub_jupyter_org_partition}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}/{{ "{{" }}label_hub_jupyter_org_partition}}",
               "refId": "B"
             }
           ],
@@ -420,14 +420,14 @@ data:
               "expr": "sum(\n  kube_service_labels{\n      label_app=\"$hub\",\n      label_hub_jupyter_org_system=~\"$system\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_project)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_project}} (all Systems)",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_project}} (all Systems)",
               "refId": "A"
             },
             {
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_hub_jupyter_org_system=~\"$system\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_project, label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}/{{label_hub_jupyter_org_project}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}/{{ "{{" }}label_hub_jupyter_org_project}}",
               "refId": "B"
             }
           ],
@@ -526,14 +526,14 @@ data:
               "expr": "sum(\n  kube_service_labels{\n      label_app=\"$hub\",\n      label_hub_jupyter_org_system=~\"$system\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_service)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_service}} (all Systems)",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_service}} (all Systems)",
               "refId": "A"
             },
             {
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_hub_jupyter_org_system=~\"$system\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_service, label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}/{{label_hub_jupyter_org_service}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}/{{ "{{" }}label_hub_jupyter_org_service}}",
               "refId": "B"
             }
           ],
@@ -632,14 +632,14 @@ data:
               "expr": "sum(\n  kube_service_labels{\n      label_app=\"$hub\",\n      label_hub_jupyter_org_system=~\"$system\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_vo)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_vo}} (all Systems)",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_vo}} (all Systems)",
               "refId": "A"
             },
             {
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_hub_jupyter_org_system=~\"$system\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_vo, label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}/{{label_hub_jupyter_org_vo}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}/{{ "{{" }}label_hub_jupyter_org_vo}}",
               "refId": "B"
             }
           ],
@@ -766,7 +766,7 @@ data:
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
               "refId": "A"
             }
           ],
@@ -836,7 +836,7 @@ data:
               "expr": "sum(\n  group(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n  ) by (label_hub_jupyter_org_username, label_hub_jupyter_org_system)\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
               "refId": "A"
             }
           ],
@@ -906,7 +906,7 @@ data:
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_partition)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_partition}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_partition}}",
               "refId": "A"
             }
           ],
@@ -976,7 +976,7 @@ data:
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_partition, label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}/{{label_hub_jupyter_org_partition}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}/{{ "{{" }}label_hub_jupyter_org_partition}}",
               "refId": "A"
             }
           ],
@@ -1046,7 +1046,7 @@ data:
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_project)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_project}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_project}}",
               "refId": "A"
             }
           ],
@@ -1116,7 +1116,7 @@ data:
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_project, label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}/{{label_hub_jupyter_org_project}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}/{{ "{{" }}label_hub_jupyter_org_project}}",
               "refId": "A"
             }
           ],
@@ -1186,7 +1186,7 @@ data:
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_service)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_service}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_service}}",
               "refId": "A"
             }
           ],
@@ -1256,7 +1256,7 @@ data:
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_service, label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}/{{label_hub_jupyter_org_service}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}/{{ "{{" }}label_hub_jupyter_org_service}}",
               "refId": "A"
             }
           ],
@@ -1326,7 +1326,7 @@ data:
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_vo)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_vo}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_vo}}",
               "refId": "A"
             }
           ],
@@ -1396,7 +1396,7 @@ data:
               "expr": "sum(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n}\n) by (label_hub_jupyter_org_vo, label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_system}}/{{label_hub_jupyter_org_vo}}",
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}/{{ "{{" }}label_hub_jupyter_org_vo}}",
               "refId": "A"
             }
           ],
