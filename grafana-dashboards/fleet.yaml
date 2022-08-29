@@ -1,0 +1,10 @@
+defaultNamespace: cattle-dashboards
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
