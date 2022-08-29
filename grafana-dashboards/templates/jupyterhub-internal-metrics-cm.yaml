@@ -24,8 +24,8 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 2861,
-      "iteration": 1661778949204,
+      "id": 84,
+      "iteration": 1661784421530,
       "links": [],
       "panels": [
         {
@@ -93,8 +93,11 @@ data:
           "pluginVersion": "7.5.11",
           "targets": [
             {
+              "exemplar": true,
               "expr": "jupyterhub_running_servers{service=\"$proxy\"}",
               "format": "time_series",
+              "instant": true,
+              "interval": "",
               "intervalFactor": 2,
               "legendFormat": "Running Servers",
               "refId": "A"
@@ -1340,5 +1343,5 @@ data:
       "timezone": "browser",
       "title": "JupyterHub Internal Metrics",
       "uid": "GyTP-sWVk",
-      "version": 2
+      "version": 1
     }
