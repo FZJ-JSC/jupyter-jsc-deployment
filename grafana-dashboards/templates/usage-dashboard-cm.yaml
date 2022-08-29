@@ -106,7 +106,7 @@ data:
           "pluginVersion": "7.5.11",
           "targets": [
             {
-              "expr": "group(\n  kube_service_labels{ \n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\" }\n) by (label_hub_jupyter_org_system)\n",
+              "expr": "sum(\n  kube_service_labels{ \n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\" }\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
