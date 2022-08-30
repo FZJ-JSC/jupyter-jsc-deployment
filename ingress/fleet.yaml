@@ -14,6 +14,8 @@ helm:
         ssl-session-timeout: "1d"
         ssl-session-cache-size: "50m"
         ssl-protocols: "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3"
+      extraArgs:
+        enable-ssl-passthrough: ""
       kind: DaemonSet
       metrics:
         enabled: true
