@@ -192,6 +192,7 @@ targetCustomizations:
             cpu: 2000m
             memory: 2048Mi
         ingress:
+          enabled: false
           hosts:
             - host: drf-tunnel.staging.svc
               paths:
