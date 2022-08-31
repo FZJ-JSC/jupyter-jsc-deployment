@@ -27,20 +27,19 @@ data:
 
     successful_total=$(grep -r -E "${d_1}|${d_2}|${d_3}|${d_4}|${d_5}|${d_6}|${d_7}" /mnt/persistent/metrics.log* | grep "action=successful" | wc -l)
     successful_systems=$(awk -v OFS=";" '{print $2,$1}' <(grep -r -E "${d_1}|${d_2}|${d_3}|${d_4}|${d_5}|${d_6}|${d_7}" /mnt/persistent/metrics.log* | grep "action=successful" | sed -e 's/.*system=\([^;]*\);.*/\1/' | sort | uniq -c))
-    echo "${d_7}-${d_1};successful_jobs;$successful_total" >> usage-stats-jupyter-jsc-weekly.txt
 
     user_total=$(grep -r -E "${d_1}|${d_2}|${d_3}|${d_4}|${d_5}|${d_6}|${d_7}" /mnt/persistent/metrics.log* | sed -e 's/.*userid=\([^;]*\);.*/\1/' | sort | uniq | wc -l)
     authenticators=$(awk -v OFS=";" '{print $2,$1}' <( grep -r -E "${d_1}|${d_2}|${d_3}|${d_4}|${d_5}|${d_6}|${d_7}" /mnt/persistent/metrics.log* | grep "action=login" | sed -e 's/.*authenticator=\([^;]*\).*/\1/' | sort | uniq -c))
-    echo "${d_7}-${d_1};unique_user;$user_total" >> usage-stats-jupyter-jsc-weekly.txt
 
-    used_nodes=$(grep -r -E "${d_1}|${d_2}|${d_3}|${d_4}|${d_5}|${d_6}|${d_7}" /mnt/persistent/metrics.log* | grep "action=successful" | grep "resource_nodes" | sed -e 's/.*resource_nodes=\([^;]*\).*/\1/' | sort | uniq -c | awk '{s+=$1*$2} END {print s}')
-    echo "${d_7}-${d_1};nodes;$used_nodes" >> usage-stats-jupyter-jsc-weekly.txt
+    used_nodes=$(grep -r -E "${d_1}|${d_2}|${d_3}|${d_4}|${d_5}|${d_6}|${d_7}" /mnt/persistent/metrics.log* | grep "action=successful" | grep "nodes=" | sed -e 's/.*nodes=\([^;]*\).*/\1/' | sort | uniq -c | awk '{s+=$1*$2} END {print s}')
 
-    used_gpus=$(grep -r -E "${d_1}|${d_2}|${d_3}|${d_4}|${d_5}|${d_6}|${d_7}" /mnt/persistent/metrics.log* | grep "action=successful" | grep "resource_gpus" | sed -e 's/.*resource_gpus=\([^;]*\).*/\1/' | sort | uniq -c | awk '{s+=$1*$2} END {print s}')
-    echo "${d_7}-${d_1};gpus;$used_gpus" >> usage-stats-jupyter-jsc-weekly.txt
+    used_gpus=$(grep -r -E "${d_1}|${d_2}|${d_3}|${d_4}|${d_5}|${d_6}|${d_7}" /mnt/persistent/metrics.log* | grep "action=successful" | grep "gpus=" | sed -e 's/.*gpus=\([^;]*\).*/\1/' | sort | uniq -c | awk '{s+=$1*$2} END {print s}')
 
-    git add usage-stats-jupyter-jsc-weekly.txt
+    datetime=`date --rfc-3339=seconds -d 'today - 7 days'`
+    echo "$datetime,$successful_total,$user_total,$used_nodes,$used_gpus" >> usage-stats-jupyter-jsc-weekly.csv
+    
+    git add usage-stats-jupyter-jsc-weekly.csv
     git commit -m "update Jupyter-JSC metrics"
     git push origin ${GIT_BRANCH}
-
+    
     find /mnt/persistent/ -type f -name "metrics.log*" -mtime +30 -delete
