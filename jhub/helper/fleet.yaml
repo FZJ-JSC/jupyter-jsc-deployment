@@ -50,6 +50,8 @@ targetCustomizations:
                   pathType: Exact
                 - path: /jusufcloud
                   pathType: Exact
+                - path: /hdfaai
+                  pathType: Exact
               svcName: hub-static-files
               svcPort: 8070
           tls:
@@ -102,6 +104,8 @@ targetCustomizations:
                 - path: /2fadetails
                   pathType: Exact
                 - path: /jusufcloud
+                  pathType: Exact
+                - path: /hdfaai
                   pathType: Exact
               svcName: hub-static-files
               svcPort: 8070

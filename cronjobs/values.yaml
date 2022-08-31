@@ -40,7 +40,7 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
     - name: GIT_BRANCH
-      value: "main"
+      value: "master"
     - name: GIT_SUBDIR
       value: "FZJ-Jupyter/stats"
     envFrom:
