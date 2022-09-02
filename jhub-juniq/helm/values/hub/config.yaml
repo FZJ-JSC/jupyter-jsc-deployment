@@ -30,7 +30,7 @@ hub:
           - jinja2.ext.loopcontrols
 
       internal_ssl: true
-      internal_certs_location: /mnt/shared-data/tmp-internal-ssl
+      internal_certs_location: /mnt/persistent/internal-ssl
       external_ssl_authorities:
         services-ca:
           key: /mnt/persistent/internal-ssl/services-ca/services-ca.key
