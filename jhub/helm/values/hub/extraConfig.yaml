@@ -129,7 +129,7 @@ hub:
               r"/api/users/([^/]+)/notifications/spawners/stop",
               SpawnStopNotificationAPIHandler,
           ),
-          (r"/api/refreshhpc/([^/]+)", refresh_hpc_accounts.HPCUpdateAPIHandler),
+          (r"/api/refreshhpc/([^/]+)", HPCUpdateAPIHandler),
           (r"/api/restarttunnel", ForwardTunnelRestartAPIHandler),
           (r"/api/2FA", twoFA.TwoFAAPIHandler),
           (r"/2FA/([^/]+)", twoFA.TwoFACodeHandler),
