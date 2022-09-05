@@ -96,6 +96,15 @@ hub:
       # c.CustomGenericOAuthenticator.extra_params_allowed_runtime = foo
       # http://localhost:8000/hub/oauth_login?extra_param_key1=value1
 
+      # Add external refresh hpc refresh-hpc-accounts service for unity
+      # Currently has to be added in extraConfig.yaml instead of services.yaml since there is no way to pass a token via a secret in services.yaml
+      c.JupyterHub.services = [
+          {
+              "name": "refresh-hpc-accounts",
+              "api_token": os.environ.get("HPC_UPDATE_API_TOKEN", "")
+          }
+      ]
+
       c.JupyterHub.template_paths = [f"/mnt/shared-data/jhub_files/{jupyterhub_version}/templates"]
       c.JupyterHub.template_vars = {
           "spawn_progress_update_url": "users/progress/update",
