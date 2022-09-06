@@ -102,6 +102,9 @@ hub:
           {
               "name": "refresh-hpc-accounts",
               "api_token": os.environ.get("HPC_UPDATE_API_TOKEN", "")
+          },
+          {
+              "name": "metrics-prometheus-monitor"
           }
       ]
 

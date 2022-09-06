@@ -1,4 +1,1 @@
-hub:
-  services:
-    metrics:
-      name: metrics-prometheus-monitor
+# Move contents here to extraConfig so that we can use secret tokens
