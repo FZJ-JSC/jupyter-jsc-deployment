@@ -111,15 +111,15 @@ hub:
       c.JupyterHub.load_roles = [
           {
               "name": "refresh-hpc",
-              "description": "Grants access to user authentication state to refresh HPC information"
+              "description": "Grants access to user authentication state to refresh HPC information",
               "scopes": [ "admin:users" ],
-              "services": [  "refresh-hpc-accounts" ]
+              "services": [  "refresh-hpc-accounts" ],
           },
           {
               "name": "read-metrics",
-              "description": "Access to metrics information"
+              "description": "Access to metrics information",
               "scopes": [ "read:metrics" ],
-              "services": [  "metrics-prometheus-monitor" ]
+              "services": [  "metrics-prometheus-monitor" ],
           },
       ]
 
