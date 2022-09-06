@@ -15,6 +15,7 @@ hub:
       from apihandler import ForwardTunnelRestartAPIHandler
       from apihandler import DRFServiceLogLevelAPIHandler
       from apihandler import JHubLogLevelAPIHandler
+      from apihandler import HPCUpdateAPIHandler
       from apihandler import SpawnNotificationAPIHandler
       from apihandler import SpawnProgressStatusAPIHandler
       from apihandler import SpawnProgressUpdateAPIHandler
@@ -128,6 +129,7 @@ hub:
               r"/api/users/([^/]+)/notifications/spawners/stop",
               SpawnStopNotificationAPIHandler,
           ),
+          (r"/api/refreshhpc/([^/]+)", HPCUpdateAPIHandler),
           (r"/api/restarttunnel", ForwardTunnelRestartAPIHandler),
           (r"/api/2FA", twoFA.TwoFAAPIHandler),
           (r"/2FA/([^/]+)", twoFA.TwoFACodeHandler),

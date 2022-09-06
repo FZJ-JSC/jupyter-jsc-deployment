@@ -48,12 +48,7 @@ hub:
           chmod 400 /mnt/shared-data/twofa/activate &&
           chmod 400 /mnt/shared-data/twofa/remove &&
           chown -R 1000:100 /mnt/shared-data && 
-          chown -R 1000:100 /mnt/persistent &&
-          rm -f /mnt/persistent/internal-ssl/overlays/*.crt &&
-          rm -f /mnt/persistent/internal-ssl/overlays/certipy.json &&
-          rm -rf /mnt/persistent/internal-ssl/overlays/hub-internal &&
-          rm -rf /mnt/persistent/internal-ssl/overlays/proxy-api &&
-          rm -rf /mnt/persistent/internal-ssl/overlays/proxy-client
+          chown -R 1000:100 /mnt/persistent
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data

@@ -23,6 +23,12 @@ hub:
             - read:metrics
           services:
             - metrics-prometheus-monitor
+        - name: refresh-hpc
+          description: Grants access to user authentication state to refresh HPC information
+          scopes:
+            - admin:users
+          services:
+            - refresh-hpc-accounts
       
       jinja_environment_options:
         extensions:
