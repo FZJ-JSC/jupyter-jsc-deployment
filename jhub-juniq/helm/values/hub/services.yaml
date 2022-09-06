@@ -1,1 +1,6 @@
-# Move contents here to extraConfig so that we can use secret tokens
+hub:
+  services:
+    metrics:
+      name: metrics-prometheus-monitor
+    refresh_hpc:
+      name: refresh-hpc-accounts
