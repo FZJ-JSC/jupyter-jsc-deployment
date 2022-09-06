@@ -80,11 +80,6 @@ hub:
         secretKeyRef:
           name: hub-custom
           key: oauth_client_secret_password
-    - name: HPC_UPDATE_API_TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: hub-custom
-          key: hpc_update_api_token
     - name: SQL_HOST
       valueFrom:
         secretKeyRef:
