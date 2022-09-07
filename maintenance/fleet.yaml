@@ -31,7 +31,7 @@ targetCustomizations:
         provider.cattle.io: rke
     helm:
       values:
-        enabled: false
+        enabled: true
         # if enabled is set to true, remember to set jhub/helper/fleet.yaml:production.helm.values.ingress.enabled to false
         ingress:
           hosts:
