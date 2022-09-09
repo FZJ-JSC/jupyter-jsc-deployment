@@ -3,6 +3,7 @@ helm:
   releaseName: ceticadminer
   repo: https://cetic.github.io/helm-charts
   chart: adminer
+  version: 0.1.7
   values:
     service:
       type: ClusterIP
