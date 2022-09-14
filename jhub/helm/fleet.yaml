@@ -45,7 +45,7 @@ targetCustomizations:
             - name: persistent
               nfs:
                 path: /mnt/storage/jupyterhub
-                server: 10.0.94.174
+                server: 10.0.94.248
             - name: shared-data
               emptyDir: {}
             - name: mount-watch

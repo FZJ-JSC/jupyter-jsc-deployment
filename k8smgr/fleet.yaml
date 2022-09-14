@@ -50,11 +50,11 @@ targetCustomizations:
           - name: persistent
             nfs:
               path: /mnt/storage/k8smgr
-              server: 10.0.94.174
+              server: 10.0.94.248
           - name: userhomes
             nfs:
               path: /mnt/userhomes
-              server: 10.0.94.174
+              server: 10.0.94.248
         tunnel:
           host: drf-tunnel-ssh-staging.jupyterjsc.svc
         loggerName: "K8sMgrStaging"

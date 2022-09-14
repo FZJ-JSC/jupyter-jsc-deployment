@@ -44,7 +44,7 @@ targetCustomizations:
           - name: persistent
             nfs:
               path: /mnt/storage/unicoremgr
-              server: 10.0.94.174
+              server: 10.0.94.248
         loggerName: "UnicoreMgrStaging"
         labels:
           stage: "staging"
