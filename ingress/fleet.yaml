@@ -32,8 +32,8 @@ helm:
         annotations:
           loadbalancer.openstack.org/keep-floatingip: true
           loadbalancer.openstack.org/proxy-protocol: "true"
-          loadbalancer.openstack.org/timeout-client-data: "600000"
-          loadbalancer.openstack.org/timeout-member-connect: "600000"
+          #loadbalancer.openstack.org/timeout-client-data: "600000"
+          #loadbalancer.openstack.org/timeout-member-connect: "600000"
           loadbalancer.openstack.org/timeout-member-data: "600000"
 targetCustomizations:
   - name: staging
