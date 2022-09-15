@@ -8,6 +8,11 @@ helm:
       worker: "true"
     podAnnotations:
       proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+    servicessh:
+      annotations:
+        loadbalancer.openstack.org/timeout-client-data: "600000"
+        loadbalancer.openstack.org/timeout-member-connect: "600000"
+        loadbalancer.openstack.org/timeout-member-data: "600000"
     jupyterhubs:
       juniq:
         ssh_config_hosts:
