@@ -16,7 +16,7 @@ ingress:
     nginx.ingress.kubernetes.io/server-snippet: |
       ssl_stapling on;
       ssl_stapling_verify on;
-    nginx.ingress.kubernetes.io/location-snippet: |
+    nginx.ingress.kubernetes.io/configuration-snippet: |
       add_header Strict-Transport-Security max-age=15768000;
   hosts:
     - host: jupyterhub.local
@@ -40,7 +40,7 @@ ingressuser:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/location-snippet: |
+    nginx.ingress.kubernetes.io/configuration-snippet: |
       expires 0;
       add_header Strict-Transport-Security max-age=15768000;
       add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate';
