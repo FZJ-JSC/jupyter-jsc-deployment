@@ -41,9 +41,10 @@ ingressuser:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/configuration-snippet: |
-      expires 0;
+      expires -1;
       add_header Strict-Transport-Security max-age=15768000;
-      add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate';
+      add_header Pragma "no-cache";
+      add_header Cache-Control "no-store, must-revalidate";
 
   hosts:
     - host: jupyterhub.local
