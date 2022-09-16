@@ -40,6 +40,8 @@ ingressuser:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/proxy-next-upstream: "error timeout http_503"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       expires -1;
       add_header Strict-Transport-Security max-age=15768000;
