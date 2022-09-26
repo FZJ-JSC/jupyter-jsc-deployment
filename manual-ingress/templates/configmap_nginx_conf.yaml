@@ -52,6 +52,7 @@ data:
 
         include /etc/nginx/conf.d/*.conf;
     }
+
   {{- if .Values.enabledServices.jhub }}
   {{- range $jhubInstance := .Values.jhubInstances }}
   {{ $jhubInstance.name }}.conf: |
@@ -250,6 +251,7 @@ data:
     }
   {{- end }}
   {{- end }}
+
   {{- if .Values.enabledServices.airflow }}
   {{- range $airflowInstance := .Values.airflowInstances }}
   {{ $airflowInstance.name }}.conf: |
@@ -326,6 +328,7 @@ data:
     }
   {{- end }}
   {{- end }}
+  
   {{- if .Values.enabledServices.nbviewer }}
   {{- range $nbviewerInstance := .Values.nbviewerInstances }}
   {{ $nbviewerInstance.name }}.conf: |
