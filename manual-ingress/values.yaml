@@ -28,12 +28,31 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+enabledServices:
+  jhubInstances: true
+  nbviewer: true
+  airflow: false
+
 jhubInstances:
   - name: "default-staging"
-    host: "proxy-public.jupyterjsc.svc"
     serverName: "jupyter-jsc-staging.fz-juelich.de"
-    scheme: "https"
     tlsSecret: "test-certs"
+    host: "proxy-public.jupyterjsc.svc"
+    scheme: "https"
+    staticFiles:
+      scheme: "http"
+      host: "hub-static-files.jupyterjsc.svc"
+      port: 8070
+
+airflowInstances:
+  - name: "airflow-staging"
+    serverName: "zam10231.zam.kfa-juelich.de"
+    tlsSecret: "airflow-web-certs"
+    allowCidr: "134.94.0.0/16"
+    host: "airflow-web.airflow.svc:8080"
+    scheme: "http"
+    minio:
+        hostMinio: "minio.airflow.svc:7000"
 
 service:
   loadBalancerIP: ""
