@@ -53,7 +53,7 @@ airflowInstances:
     tlsSecret: "airflow-web-certs"
     allowCidr: "134.94.0.0/16"
     host: "airflow-web.airflow.svc:8080"
-    scheme: "http"
+    scheme: "https"
 
 nbviewerInstances:
   - name: "nbviewer-staging"
