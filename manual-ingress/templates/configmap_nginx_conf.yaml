@@ -52,9 +52,9 @@ data:
 
         include /etc/nginx/conf.d/*.conf;
     }
-  {{- if .Values.enabledServices.jhubInstances }}
-  {{- range $jhubInstance := .Values.jhubInstances }}
-  {{ $jhubInstance.name }}.conf: |
+    {{- if .Values.enabledServices.jhubInstances }}
+    {{- range $jhubInstance := .Values.jhubInstances }}
+    {{ $jhubInstance.name }}.conf: |
     # top-level http config for websocket headers
     # If Upgrade is defined, Connection = upgrade
     # If Upgrade is empty, Connection = close
@@ -187,6 +187,60 @@ data:
                         
             proxy_redirect                          off;
         }
+        {{- range $redirect := $jhubInstance.staticFiles.redirects }}
+        location ~* "^/{{ $redirect }}" {
+            {{- if eq $jhubInstance.staticFiles.scheme "https" }}
+            proxy_pass                              https://{{ $jhubInstance.staticFiles.host }}:{{ $jhubInstance.staticFiles.port }};
+            {{- else }}
+            proxy_pass                              http://{{ $jhubInstance.staticFiles.host }}:{{ $jhubInstance.staticFiles.port }};
+            {{- end }}
+
+            {{- if $jhubInstance.allowCidr }}
+            allow                                   {{ $jhubInstance.allowCidr }};
+            deny                                    all;
+            {{- end }}
+
+            proxy_set_header X-Real-IP              $remote_addr;
+            proxy_set_header Host                   $host;
+            proxy_set_header X-Forwarded-For        $proxy_add_x_forwarded_for;
+
+            # websocket headers
+            proxy_http_version                      1.1;
+            proxy_set_header Upgrade                $http_upgrade;
+            proxy_set_header Connection             $connection_upgrade;
+            proxy_set_header X-Scheme               $scheme;
+
+            proxy_buffering                         off;
+
+            # mitigate HTTPoxy Vulnerability
+            # https://www.nginx.com/blog/mitigating-the-httpoxy-vulnerability-with-nginx/
+            proxy_set_header Proxy                  "";
+
+            # Custom headers to proxied server            
+            proxy_connect_timeout                   {{ $jhubInstance.proxyConnectTimeout | default "5s" }};
+            proxy_send_timeout                      {{ $jhubInstance.proxySendTimeout | default "60s" }};
+            proxy_read_timeout                      {{ $jhubInstance.proxyReadTimeout | default "60s" }};
+            
+            proxy_buffering                         off;
+            proxy_buffer_size                       4k;
+            proxy_buffers                           4 4k;
+            
+            proxy_max_temp_file_size                {{ $jhubInstance.proxyMaxTempFileSize | default "1024m" }};
+            
+            proxy_request_buffering                 on;
+            proxy_http_version                      1.1;
+            
+            proxy_cookie_domain                     off;
+            proxy_cookie_path                       off;
+            
+            # In case of errors try the next upstream server before returning an error
+            proxy_next_upstream                     error timeout;
+            proxy_next_upstream_timeout             0;
+            proxy_next_upstream_tries               3;
+                        
+            proxy_redirect                          off;
+        }
+        {{- end }}
         {{- end }}
 
         # Managing requests to verify letsencrypt host
@@ -194,11 +248,11 @@ data:
             allow all;
         }
     }
-  {{- end }}
-  {{- end }}
-  {{- if .Values.enabledServices.airflowInstances }}
-  {{- range $airflowInstance := .Values.airflowInstances }}
-  {{ $airflowInstance.name }}.conf: |
+    {{- end }}
+    {{- end }}
+    {{- if .Values.enabledServices.airflowInstances }}
+    {{- range $airflowInstance := .Values.airflowInstances }}
+    {{ $airflowInstance.name }}.conf: |
     # HTTPS server to handle Airflow
     server {
         server_name {{ $airflowInstance.serverName }};
@@ -212,8 +266,6 @@ data:
         ssl_prefer_server_ciphers on;
         #ssl_dhparam /etc/ssl/certs/dhparam.pem;
         ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA';
-        ssl_session_timeout 1d;
-        ssl_session_cache shared:SSL:50m;
         ssl_stapling_verify on;
 
         location ~* "^/airflow" {
@@ -271,48 +323,65 @@ data:
                         
             proxy_redirect                          off; 
         }
-        {{ if $airflowInstance.minio }}
-        location ~* "^/minio" {
-            {{- if eq $airflowInstance.minio.scheme "https" }}
-            proxy_pass https://{{ $airflowInstance.minio.host }};
+    }
+  {{- end }}
+  {{- end }}
+  
+  {{- if .Values.enabledServices.nbviewerInstances }}
+  {{- range $nbviewerInstance := .Values.nbviewerInstances }}
+  {{ $nbviewerInstance.name }}.conf: |
+    # HTTPS server to handle nbviewer
+    server {
+        server_name {{ $nbviewerInstance.serverName }};
+
+        listen 443 ssl proxy_protocol http2 ;
+
+        ssl_certificate /mnt/{{ $nbviewerInstance.name }}/tls.crt;
+        ssl_certificate_key /mnt/{{ $nbviewerInstance.name }}/tls.key;
+
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_prefer_server_ciphers on;
+        #ssl_dhparam /etc/ssl/certs/dhparam.pem;
+        ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA';
+
+        location / {
+            {{- if eq $nbviewerInstance.scheme "https" }}
+            proxy_pass                              https://{{ $nbviewerInstance.host }}:{{ $nbviewerInstance.port }};
             {{- else }}
-            proxy_pass http://{{ $airflowInstance.minio.host }};
+            proxy_pass                              http://{{ $nbviewerInstance.host }}:{{ $nbviewerInstance.port }};
             {{- end }}
 
-            {{- if $airflowInstance.allowCidr }}
-            allow {{ $airflowInstance.allowCidr }};
-            deny all;
+            {{- if $nbviewerInstance.allowCidr }}
+            allow                                   {{ $nbviewerInstance.allowCidr }};
+            deny                                    all;
             {{- end }}
-            
-            client_max_body_size                    1m;
-            proxy_set_header Host                   $host;
-            proxy_set_header                        Upgrade           $http_upgrade;
-            proxy_set_header                        Connection        $connection_upgrade;
-            proxy_set_header X-Request-ID           $req_id;
+
             proxy_set_header X-Real-IP              $remote_addr;
+            proxy_set_header Host                   $host;
             proxy_set_header X-Forwarded-For        $proxy_add_x_forwarded_for;
 
-            proxy_set_header X-Forwarded-Host       $host;
-            proxy_set_header X-Forwarded-Port       $pass_port;
-            proxy_set_header X-Forwarded-Proto      $scheme;
-            proxy_set_header X-Forwarded-Scheme     $scheme;
-            
+            # websocket headers
+            proxy_http_version                      1.1;
+            proxy_set_header Upgrade                $http_upgrade;
+            proxy_set_header Connection             $connection_upgrade;
             proxy_set_header X-Scheme               $scheme;
-                        
+
+            proxy_buffering                         off;
+
             # mitigate HTTPoxy Vulnerability
             # https://www.nginx.com/blog/mitigating-the-httpoxy-vulnerability-with-nginx/
             proxy_set_header Proxy                  "";
-            
+
             # Custom headers to proxied server            
-            proxy_connect_timeout                   {{ $airflowInstance.minio.proxyConnectTimeout | default "5s" }};
-            proxy_send_timeout                      {{ $airflowInstance.minio.proxySendTimeout | default "60s" }};
-            proxy_read_timeout                      {{ $airflowInstance.minio.proxyReadTimeout | default "60s" }};
+            proxy_connect_timeout                   {{ $nbviewerInstance.proxyConnectTimeout | default "5s" }};
+            proxy_send_timeout                      {{ $nbviewerInstance.proxySendTimeout | default "60s" }};
+            proxy_read_timeout                      {{ $nbviewerInstance.proxyReadTimeout | default "60s" }};
             
             proxy_buffering                         off;
             proxy_buffer_size                       4k;
             proxy_buffers                           4 4k;
             
-            proxy_max_temp_file_size                {{ $airflowInstance.minio.proxyMaxTempFileSize | default "1024m" }};
+            proxy_max_temp_file_size                {{ $nbviewerInstance.proxyMaxTempFileSize | default "1024m" }};
             
             proxy_request_buffering                 on;
             proxy_http_version                      1.1;
@@ -325,9 +394,9 @@ data:
             proxy_next_upstream_timeout             0;
             proxy_next_upstream_tries               3;
                         
-            proxy_redirect                          off; 
+            proxy_redirect                          off;
         }
-    }
+    }  
   {{- end }}
   {{- end }}
 {{- end }}

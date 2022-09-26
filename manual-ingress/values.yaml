@@ -36,13 +36,16 @@ enabledServices:
 jhubInstances:
   - name: "default-staging"
     serverName: "jupyter-jsc-staging.fz-juelich.de"
-    tlsSecret: "test-certs"
+    tlsSecret: "jupyter-jsc-certs"
     host: "proxy-public.jupyterjsc.svc"
     scheme: "https"
     staticFiles:
       scheme: "http"
       host: "hub-static-files.jupyterjsc.svc"
       port: 8070
+      redirects:
+        - 2fa
+        - hdfaai
 
 airflowInstances:
   - name: "airflow-staging"
@@ -51,9 +54,13 @@ airflowInstances:
     allowCidr: "134.94.0.0/16"
     host: "airflow-web.airflow.svc:8080"
     scheme: "http"
-    minio:
-        host: "minio.airflow.svc"
-        port: 7000
+
+nbviewerInstances:
+  - name: "nbviewer-staging"
+    serverName: "docs.jupyter-jsc-staging.fz-juelich.de"
+    tlsSecret: "jupyter-jsc-certs"
+    host: "nbviewer.jupyterjsc.svc"
+    port: 8080
 
 service:
   loadBalancerIP: ""
