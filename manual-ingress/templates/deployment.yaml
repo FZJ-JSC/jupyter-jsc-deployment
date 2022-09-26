@@ -50,22 +50,28 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.jhubInstances }}
           volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
             {{- range $jhubInstance := .Values.jhubInstances }}
-            - mountPath: /mnt/{{ $jhubInstance.name }}
-              name: {{ $jhubInstance.name }}
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/{{ $jhubInstance.name }}.conf
+              subPath: {{ $jhubInstance.name }}.conf
+            - name: {{ $jhubInstance.name }}-cert
+              mountPath: /mnt/{{ $jhubInstance.name }}
             {{- end }}
-          {{- end }}
-      {{- if .Values.jhubInstances }}
       volumes:
+        - name: nginx-config
+          configMap:
+            defaultMode: 420
+            name: {{ include "manualIngress.name" . }}-files
         {{- range $jhubInstance := .Values.jhubInstances }}
-        - name: {{ $jhubInstance.name }}
+        - name: {{ $jhubInstance.name }}-cert
           secret:
             defaultMode: 420
             secretName: {{ $jhubInstance.tlsSecret }}
         {{ end }}
-      {{ end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
