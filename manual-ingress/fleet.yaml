@@ -1,0 +1,17 @@
+defaultNamespace: ingress-nginx
+helm:
+  values:
+    image:
+      tag: "1.23.1"
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+        provider.cattle.io: rke
+    helm:
+      releaseName: manual-ingress-nginx-staging
+      values:
+        enabled: true
+        service:
+          loadBalancerIP: 134.94.199.203
