@@ -51,7 +51,7 @@ hub:
       # TODO override cull service. cull --url http:// instead of https://
 
       c.JupyterHub.spawner_class = BackendSpawner
-      c.BackendSpawner.http_timeout = 43200
+      c.BackendSpawner.http_timeout = 7200
       c.BackendSpawner.poll_interval = 10
       c.BackendSpawner.poll_interval_randomizer = 20
       # c.BackendSpawner.ssl_alt_names = [f"DNS:{jupyterhub_host}"]
