@@ -54,11 +54,11 @@ spec:
             - name: nginx-config
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
-            {{- if .Values.enabledServices.jhubInstances }}
+            {{- if .Values.enabledServices.jhub }}
             {{- range $jhubInstance := .Values.jhubInstances }}
             - name: nginx-config
               mountPath: /etc/nginx/conf.d/{{ $jhubInstance.name }}.conf
-              subPath: {{ $jhubInstance.name }}.conf
+              subPath: jhub-{{ $jhubInstance.name }}.conf
             - name: {{ $jhubInstance.name }}-cert
               mountPath: /mnt/{{ $jhubInstance.name }}
             {{- end }}
@@ -67,9 +67,18 @@ spec:
             {{- range $airflowInstance := .Values.airflowInstance }}
             - name: nginx-config
               mountPath: /etc/nginx/conf.d/{{ $airflowInstance.name }}.conf
-              subPath: {{ $airflowInstance.name }}.conf
+              subPath: airflow-{{ $airflowInstance.name }}.conf
             - name: {{ $airflowInstance.name }}-cert
               mountPath: /mnt/{{ $airflowInstance.name }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.enabledServices.nbviewer }}
+            {{- range $nbviewerInstance := .Values.nbviewerInstance }}
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/{{ $nbviewerInstance.name }}.conf
+              subPath: nbviewer-{{ $nbviewerInstance.name }}.conf
+            - name: {{ $nbviewerInstance.name }}-cert
+              mountPath: /mnt/{{ $nbviewerInstance.name }}
             {{- end }}
             {{- end }}
       volumes:
@@ -77,7 +86,7 @@ spec:
           configMap:
             defaultMode: 420
             name: {{ include "manualIngress.name" . }}-files
-        {{- if .Values.enabledServices.jhubInstances }}
+        {{- if .Values.enabledServices.jhub }}
         {{- range $jhubInstance := .Values.jhubInstances }}
         - name: {{ $jhubInstance.name }}-cert
           secret:
@@ -85,12 +94,20 @@ spec:
             secretName: {{ $jhubInstance.tlsSecret }}
         {{ end }}
         {{ end }}
-        {{- if .Values.enabledServices.airflowInstances }}
+        {{- if .Values.enabledServices.airflow }}
         {{- range $airflowInstance := .Values.airflowInstances }}
         - name: {{ $airflowInstance.name }}-cert
           secret:
             defaultMode: 420
             secretName: {{ $airflowInstance.tlsSecret }}
+        {{ end }}
+        {{ end }}
+        {{- if .Values.enabledServices.nbviewer }}
+        {{- range $nbviewerInstance := .Values.nbviewerInstances }}
+        - name: {{ $nbviewerInstance.name }}-cert
+          secret:
+            defaultMode: 420
+            secretName: {{ $nbviewerInstance.tlsSecret }}
         {{ end }}
         {{ end }}
       {{- with .Values.nodeSelector }}

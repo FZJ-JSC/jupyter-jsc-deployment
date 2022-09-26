@@ -55,7 +55,7 @@ data:
 
   {{- if .Values.enabledServices.jhub }}
   {{- range $jhubInstance := .Values.jhubInstances }}
-  {{ $jhubInstance.name }}.conf: |
+  jhub-{{ $jhubInstance.name }}.conf: |
     # top-level http config for websocket headers
     # If Upgrade is defined, Connection = upgrade
     # If Upgrade is empty, Connection = close
@@ -254,7 +254,7 @@ data:
 
   {{- if .Values.enabledServices.airflow }}
   {{- range $airflowInstance := .Values.airflowInstances }}
-  {{ $airflowInstance.name }}.conf: |
+  airflow-{{ $airflowInstance.name }}.conf: |
     # HTTPS server to handle Airflow
     server {
         server_name {{ $airflowInstance.serverName }};
@@ -328,10 +328,10 @@ data:
     }
   {{- end }}
   {{- end }}
-  
+
   {{- if .Values.enabledServices.nbviewer }}
   {{- range $nbviewerInstance := .Values.nbviewerInstances }}
-  {{ $nbviewerInstance.name }}.conf: |
+  nbviewer-{{ $nbviewerInstance.name }}.conf: |
     # HTTPS server to handle nbviewer
     server {
         server_name {{ $nbviewerInstance.serverName }};
