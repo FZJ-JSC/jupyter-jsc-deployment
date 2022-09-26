@@ -57,14 +57,14 @@ spec:
             {{- if .Values.enabledServices.jhub }}
             {{- range $jhubInstance := .Values.jhubInstances }}
             - name: nginx-config
-              mountPath: /etc/nginx/conf.d/{{ $jhubInstance.name }}.conf
+              mountPath: /etc/nginx/conf.d/jhub-{{ $jhubInstance.name }}.conf
               subPath: jhub-{{ $jhubInstance.name }}.conf
             - name: {{ $jhubInstance.name }}-cert
               mountPath: /mnt/{{ $jhubInstance.name }}
             {{- end }}
             {{- end }}
             {{- if .Values.enabledServices.airflow }}
-            {{- range $airflowInstance := .Values.airflowInstance }}
+            {{- range $airflowInstance := .Values.airflowInstances }}
             - name: nginx-config
               mountPath: /etc/nginx/conf.d/{{ $airflowInstance.name }}.conf
               subPath: airflow-{{ $airflowInstance.name }}.conf
@@ -73,7 +73,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.enabledServices.nbviewer }}
-            {{- range $nbviewerInstance := .Values.nbviewerInstance }}
+            {{- range $nbviewerInstance := .Values.nbviewerInstances }}
             - name: nginx-config
               mountPath: /etc/nginx/conf.d/{{ $nbviewerInstance.name }}.conf
               subPath: nbviewer-{{ $nbviewerInstance.name }}.conf
