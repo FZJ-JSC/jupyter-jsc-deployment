@@ -52,7 +52,8 @@ airflowInstances:
     host: "airflow-web.airflow.svc:8080"
     scheme: "http"
     minio:
-        hostMinio: "minio.airflow.svc:7000"
+        host: "minio.airflow.svc"
+        port: 7000
 
 service:
   loadBalancerIP: ""
