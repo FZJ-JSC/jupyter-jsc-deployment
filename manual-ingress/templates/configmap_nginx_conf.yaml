@@ -100,8 +100,6 @@ data:
             proxy_set_header Connection             $connection_upgrade;
             proxy_set_header X-Scheme               $scheme;
 
-            proxy_buffering                         off;
-
             # mitigate HTTPoxy Vulnerability
             # https://www.nginx.com/blog/mitigating-the-httpoxy-vulnerability-with-nginx/
             proxy_set_header Proxy                  "";
@@ -150,8 +148,6 @@ data:
             proxy_set_header Connection             $connection_upgrade;
             proxy_set_header X-Scheme               $scheme;
 
-            proxy_buffering                         off;
-
             # mitigate HTTPoxy Vulnerability
             # https://www.nginx.com/blog/mitigating-the-httpoxy-vulnerability-with-nginx/
             proxy_set_header Proxy                  "";
@@ -197,8 +193,6 @@ data:
             proxy_set_header Upgrade                $http_upgrade;
             proxy_set_header Connection             $connection_upgrade;
             proxy_set_header X-Scheme               $scheme;
-
-            proxy_buffering                         off;
 
             # mitigate HTTPoxy Vulnerability
             # https://www.nginx.com/blog/mitigating-the-httpoxy-vulnerability-with-nginx/
@@ -346,8 +340,6 @@ data:
             proxy_set_header Upgrade                $http_upgrade;
             proxy_set_header Connection             $connection_upgrade;
             proxy_set_header X-Scheme               $scheme;
-
-            proxy_buffering                         off;
 
             # mitigate HTTPoxy Vulnerability
             # https://www.nginx.com/blog/mitigating-the-httpoxy-vulnerability-with-nginx/
