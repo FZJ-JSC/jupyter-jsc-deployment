@@ -83,11 +83,7 @@ data:
 
         # Managing literal requests to the JupyterHub front end
         location ~* "^/" {
-            {{- if eq $jhubInstance.scheme "https" }}
-            proxy_pass                              https://{{ $jhubInstance.host }};
-            {{- else }}
-            proxy_pass                              http://{{ $jhubInstance.host }};
-            {{- end }}
+            proxy_pass                              {{ default "http" $jhubInstance.scheme }}://{{ $jhubInstance.host }};
 
             {{- if $jhubInstance.allowCidr }}
             allow                                   {{ $jhubInstance.allowCidr }};
@@ -137,12 +133,8 @@ data:
 
         {{- if $jhubInstance.staticFiles }}
         location ~* "^/hub/static" {
-            {{- if eq $jhubInstance.staticFiles.scheme "https" }}
-            proxy_pass                              https://{{ $jhubInstance.staticFiles.host }}:{{ $jhubInstance.staticFiles.port }};
-            {{- else }}
-            proxy_pass                              http://{{ $jhubInstance.staticFiles.host }}:{{ $jhubInstance.staticFiles.port }};
-            {{- end }}
-
+            proxy_pass                              {{ default "http" $jhubInstance.staticFiles.scheme }}://{{ $jhubInstance.staticFiles.host }}:{{ $jhubInstance.staticFiles.port }};
+            
             {{- if $jhubInstance.allowCidr }}
             allow                                   {{ $jhubInstance.allowCidr }};
             deny                                    all;
@@ -190,12 +182,7 @@ data:
         }
         {{- range $redirect := $jhubInstance.staticFiles.redirects }}
         location ~* "^/{{ $redirect }}" {
-            {{- if eq $jhubInstance.staticFiles.scheme "https" }}
-            proxy_pass                              https://{{ $jhubInstance.staticFiles.host }}:{{ $jhubInstance.staticFiles.port }};
-            {{- else }}
-            proxy_pass                              http://{{ $jhubInstance.staticFiles.host }}:{{ $jhubInstance.staticFiles.port }};
-            {{- end }}
-
+            proxy_pass                              {{ default "http" $jhubInstance.staticFiles.scheme }}://{{ $jhubInstance.staticFiles.host }}:{{ $jhubInstance.staticFiles.port }};
             {{- if $jhubInstance.allowCidr }}
             allow                                   {{ $jhubInstance.allowCidr }};
             deny                                    all;
@@ -271,11 +258,7 @@ data:
         ssl_stapling_verify on;
 
         location ~* "^/airflow" {
-            {{- if eq $airflowInstance.scheme "https" }}
-            proxy_pass https://{{ $airflowInstance.host }};
-            {{- else }}
-            proxy_pass http://{{ $airflowInstance.host }};
-            {{- end }}
+            proxy_pass                              {{ default "http" $airflowInstance.scheme }}://{{ $airflowInstance.host }};
 
             {{- if $airflowInstance.allowCidr }}
             allow {{ $airflowInstance.allowCidr }};
@@ -347,11 +330,7 @@ data:
         ssl_ciphers 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA';
 
         location / {
-            {{- if eq $nbviewerInstance.scheme "https" }}
-            proxy_pass                              https://{{ $nbviewerInstance.host }}:{{ $nbviewerInstance.port }};
-            {{- else }}
-            proxy_pass                              http://{{ $nbviewerInstance.host }}:{{ $nbviewerInstance.port }};
-            {{- end }}
+            proxy_pass                              {{ default "http" $nbviewerInstance.scheme }}://{{ $nbviewerInstance.host }}:{{ $nbviewerInstance.port }};
 
             {{- if $nbviewerInstance.allowCidr }}
             allow                                   {{ $nbviewerInstance.allowCidr }};
