@@ -14,7 +14,6 @@ image:
 
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: ""
 
 podAnnotations: {}
 
@@ -30,7 +29,7 @@ securityContext: {}
   # runAsUser: 1000
 
 jhubInstances:
-  - name: "defaultStaging"
+  - name: "default-staging"
     host: "proxy-public.jupyterjsc.svc"
     serverName: "jupyter-jsc-staging.fz-juelich.de"
     scheme: "https"
