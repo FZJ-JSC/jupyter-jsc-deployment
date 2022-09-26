@@ -12,7 +12,7 @@ metadata:
 spec:
   type: LoadBalancer
   {{- if .Values.service.loadBalancerIP }}
-  loadBalancerIP: {{- include "manualIngress.service.loadBalancerIP" }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
   ports:
     - port: 80
