@@ -10,8 +10,9 @@ targetCustomizations:
         stage: staging
         provider.cattle.io: rke
     helm:
-      releaseName: manual-ingress-nginx-staging
+      releaseName: "manual-ingress-nginx-staging"
       values:
         enabled: true
+        nameOverride: "manual-ingress-nginx-staging"
         service:
           loadBalancerIP: 134.94.199.203
