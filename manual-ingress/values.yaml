@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-enabled: false
+enabled: true
 
 replicaCount: 1
 
@@ -29,9 +29,9 @@ securityContext: {}
   # runAsUser: 1000
 
 enabledServices:
-  jhubInstances: true
+  jhub: true
   nbviewer: true
-  airflow: false
+  airflow: true
 
 jhubInstances:
   - name: "default-staging"
