@@ -81,6 +81,7 @@ data:
         ssl_stapling_verify on;
         add_header Strict-Transport-Security max-age=15768000;
 
+        {{- if not $jhubInstance.maintenance }}
         {{- if $jhubInstance.staticFiles }}
         location ~* "^/hub/static" {
             proxy_pass                              {{ default "http" $jhubInstance.staticFiles.scheme }}://{{ $jhubInstance.staticFiles.host }}:{{ $jhubInstance.staticFiles.port }};
@@ -175,10 +176,14 @@ data:
         }
         {{- end }}
         {{- end }}
+        {{- end }}
         # Managing literal requests to the JupyterHub front end
         location ~* "^/" {
+            {{- if $jhubInstance.maintenance }}
+            proxy_pass                              http://{{ $jhubInstance.maintenanceHost }}
+            {{- else }}
             proxy_pass                              {{ default "http" $jhubInstance.scheme }}://{{ $jhubInstance.host }};
-
+            {{- end }}
             {{- if $jhubInstance.allowCidr }}
             allow                                   {{ $jhubInstance.allowCidr }};
             deny                                    all;
