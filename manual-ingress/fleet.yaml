@@ -15,4 +15,4 @@ targetCustomizations:
         enabled: true
         nameOverride: "manual-ingress-nginx-staging"
         service:
-          loadBalancerIP: 134.94.199.231
+          loadBalancerIP: 134.94.199.199
