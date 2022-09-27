@@ -34,21 +34,43 @@ enabledServices:
   airflow: true
 
 jhubInstances:
-  - name: "default-staging"
+  - name: "jupyterjsc-staging"
     serverName: "jupyter-jsc-staging.fz-juelich.de"
     tlsSecret: "jupyter-jsc-certs"
     host: "proxy-public.jupyterjsc.svc"
     scheme: "https"
     proxyReadTimeout: 86400s
     proxyConnectTimeout: 3600s
-    proxySendTimeout: 3601s
+    proxySendTimeout: 3600s
     clientMaxBodySize: 2g
     staticFiles:
       scheme: "http"
       host: "hub-static-files.jupyterjsc.svc"
       port: 8070
       redirects:
+        - 2FA
         - 2fa
+        - 2fadetails
+        - jusufcloud
+        - hdfaai
+  - name: "juniq-staging"
+    serverName: "juniq-staging.fz-juelich.de"
+    tlsSecret: "juniq-certs"
+    host: "juniq-proxy-public.jupyterjsc.svc"
+    scheme: "https"
+    proxyReadTimeout: 86400s
+    proxyConnectTimeout: 3600s
+    proxySendTimeout: 3600s
+    clientMaxBodySize: 2g
+    staticFiles:
+      scheme: "http"
+      host: "juniq-static-files.jupyterjsc.svc"
+      port: 8070
+      redirects:
+        - 2FA
+        - 2fa
+        - 2fadetails
+        - jusufcloud
         - hdfaai
 
 airflowInstances:
