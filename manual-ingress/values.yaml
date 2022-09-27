@@ -43,6 +43,8 @@ jhubInstances:
     proxyConnectTimeout: 3600s
     proxySendTimeout: 3600s
     clientMaxBodySize: 2g
+    maintenanceHost: "jhub-maintenance"
+    maintenance: false
     staticFiles:
       scheme: "http"
       host: "hub-static-files.jupyterjsc.svc"
@@ -62,6 +64,8 @@ jhubInstances:
     proxyConnectTimeout: 3600s
     proxySendTimeout: 3600s
     clientMaxBodySize: 2g
+    maintenanceHost: "jhub-maintenance"
+    maintenance: false
     staticFiles:
       scheme: "http"
       host: "juniq-static-files.jupyterjsc.svc"
@@ -114,7 +118,8 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
-nodeSelector: {}
+nodeSelector:
+  worker: "true"
 
 tolerations: []
 

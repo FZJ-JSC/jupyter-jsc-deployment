@@ -11,7 +11,7 @@ targetCustomizations:
     helm:
       values:
         enabled: false
-        # if enabled is set to true, remember to set jhub/helper/fleet.yaml:staging.helm.values.ingress.enabled to false
+        # if enabled is set to true, remember to set manual-ingress/fleet.yaml:staging.helm.values.jhubInstances.maintenance to true
         ingress:
           hosts:
             - host: jupyter-jsc-staging.fz-juelich.de
@@ -32,7 +32,7 @@ targetCustomizations:
     helm:
       values:
         enabled: false
-        # if enabled is set to true, remember to set jhub/helper/fleet.yaml:production.helm.values.ingress.enabled to false
+        # if enabled is set to true, remember to set manual-ingress/fleet.yaml:production.helm.values.jhubInstances.maintenance to true
         ingress:
           hosts:
             - host: jupyter-jsc.fz-juelich.de
