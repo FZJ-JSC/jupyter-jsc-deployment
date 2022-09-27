@@ -39,6 +39,10 @@ jhubInstances:
     tlsSecret: "jupyter-jsc-certs"
     host: "proxy-public.jupyterjsc.svc"
     scheme: "https"
+    proxyReadTimeout: 86400s
+    proxyConnectTimeout: 3600s
+    proxySendTimeout: 3600s
+    clientMaxBodySize: 2g
     staticFiles:
       scheme: "http"
       host: "hub-static-files.jupyterjsc.svc"
