@@ -41,7 +41,7 @@ jhubInstances:
     scheme: "https"
     proxyReadTimeout: 86400s
     proxyConnectTimeout: 3600s
-    proxySendTimeout: 3600s
+    proxySendTimeout: 3601s
     clientMaxBodySize: 2g
     staticFiles:
       scheme: "http"
