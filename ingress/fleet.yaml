@@ -46,7 +46,7 @@ targetCustomizations:
       values:
         controller:
           service:
-            loadBalancerIP: 134.94.199.199
+            loadBalancerIP: 134.94.199.231
   - name: production
     clusterSelector:
       matchLabels:
