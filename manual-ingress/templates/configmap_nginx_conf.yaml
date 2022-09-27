@@ -155,7 +155,7 @@ data:
             proxy_send_timeout                      {{ $jhubInstance.proxySendTimeout | default "60s" }};
             proxy_read_timeout                      {{ $jhubInstance.proxyReadTimeout | default "60s" }};
             
-            proxy_buffering                         off;
+            proxy_buffering                         on;
             proxy_buffer_size                       4k;
             proxy_buffers                           4 4k;
             
