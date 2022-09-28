@@ -48,10 +48,10 @@ jhubInstances:
     upstream:
       enabled: false
       server:
-      - proxy-public
-      - proxy-public-1
-      - proxy-public-2
-      - proxy-public-3
+      - proxy-public.jupyterjsc.svc
+      - proxy-public-1.jupyterjsc.svc
+      - proxy-public-2.jupyterjsc.svc
+      - proxy-public-3.jupyterjsc.svc
     staticFiles:
       scheme: "http"
       host: "hub-static-files.jupyterjsc.svc"
@@ -76,10 +76,10 @@ jhubInstances:
     upstream:
       enabled: true
       server:
-      - juniq-proxy-public
-      - juniq-proxy-public-1
-      - juniq-proxy-public-2
-      - juniq-proxy-public-3
+      - juniq-proxy-public.jupyterjsc.svc
+      - juniq-proxy-public-1.jupyterjsc.svc
+      - juniq-proxy-public-2.jupyterjsc.svc
+      - juniq-proxy-public-3.jupyterjsc.svc
     staticFiles:
       scheme: "http"
       host: "juniq-static-files.jupyterjsc.svc"
