@@ -4,6 +4,10 @@
 
 nameOverride: "jhub-helper"
 
+proxyBackup:
+  release: jupyterhub
+  name: proxy-public
+
 ingress:
   enabled: true
   className: "nginx"
