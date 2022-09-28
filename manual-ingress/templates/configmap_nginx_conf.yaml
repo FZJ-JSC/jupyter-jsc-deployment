@@ -63,7 +63,7 @@ data:
         default upgrade;
         ''      close;
     }
-    {{- if (default "false" $jhubInstance.upstream.enabled) }}
+    {{- if $jhubInstance.upstream.enabled }}
     upstream backend-{{ $jhubInstance.name }} {
     {{- range $server := $jhubInstance.upstream.server }}
         server {{ $server }};
@@ -190,7 +190,7 @@ data:
             {{- if $jhubInstance.maintenance }}
             proxy_pass                              http://{{ $jhubInstance.maintenanceHost }}
             {{- else }}
-            {{- if (default "false" $jhubInstance.upstream.enabled) }}
+            {{- if $jhubInstance.upstream.enabled }}
             proxy_pass                              {{ default "http" $jhubInstance.scheme }}://backend-{{ $jhubInstance.name }};
             {{- else }}
             proxy_pass                              {{ default "http" $jhubInstance.scheme }}://{{ $jhubInstance.host }};
