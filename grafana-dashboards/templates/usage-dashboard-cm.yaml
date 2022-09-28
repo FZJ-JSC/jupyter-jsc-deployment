@@ -741,7 +741,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "count(\n  sum(\n    min_over_time(\n      kube_service_labels{ \n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\" }[1d]\n    )\n  ) by (pod)\n)\n",
+              "expr": "count(\n  sum(\n    min_over_time(\n      kube_service_labels{ \n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\" }[1d]\n    )\n  ) by (label_hub_jupyter_org_username)\n)\n",
               "format": "time_series",
               "interval": "1d",
               "intervalFactor": 2,
@@ -841,7 +841,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "count(\n  sum(\n    min_over_time(\n      kube_service_labels{ \n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\" }[30d]\n    )\n  ) by (pod)\n)\n",
+              "expr": "count(\n  sum(\n    min_over_time(\n      kube_service_labels{ \n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\" }[30d]\n    )\n  ) by (label_hub_jupyter_org_username)\n)\n",
               "format": "time_series",
               "interval": "30d",
               "intervalFactor": 2,
