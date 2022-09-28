@@ -232,7 +232,7 @@ data:
             proxy_cookie_path                       off;
             
             # In case of errors try the next upstream server before returning an error
-            proxy_next_upstream                     error timeout;
+            proxy_next_upstream                     error timeout http_503;
             proxy_next_upstream_timeout             0;
             proxy_next_upstream_tries               3;
                         

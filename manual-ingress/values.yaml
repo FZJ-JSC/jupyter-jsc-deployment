@@ -46,12 +46,12 @@ jhubInstances:
     maintenanceHost: "jhub-maintenance"
     maintenance: false
     upstream:
-      enabled: false
+      enabled: true
       server:
-      - proxy-public.jupyterjsc.svc
-      - proxy-public-1.jupyterjsc.svc
-      - proxy-public-2.jupyterjsc.svc
-      - proxy-public-3.jupyterjsc.svc
+      - proxy-public.jupyterjsc.svc:443
+      - proxy-public-1.jupyterjsc.svc:443
+      - proxy-public-2.jupyterjsc.svc:443
+      - proxy-public-3.jupyterjsc.svc:443
     staticFiles:
       scheme: "http"
       host: "hub-static-files.jupyterjsc.svc"
