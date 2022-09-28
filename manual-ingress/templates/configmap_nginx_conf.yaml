@@ -63,6 +63,13 @@ data:
         default upgrade;
         ''      close;
     }
+    {{- if (default "false" $jhubInstance.upstream.enabled) }}
+    upstream backend {
+    {{- range $server := $jhubInstance.upstream.server }}
+        server {{ default "http" $jhubInstance.scheme }}://{{ $server }};
+    {{- end }}
+    }
+    {{- end }}
     # HTTPS server to handle JupyterHub
     server {
         server_name {{ $jhubInstance.serverName }};
@@ -183,7 +190,11 @@ data:
             {{- if $jhubInstance.maintenance }}
             proxy_pass                              http://{{ $jhubInstance.maintenanceHost }}
             {{- else }}
+            {{- if (default "false" $jhubInstance.upstream.enabled) }}
+            proxy_pass                              {{ default "http" $jhubInstance.scheme }}://backend;
+            {{- else }}
             proxy_pass                              {{ default "http" $jhubInstance.scheme }}://{{ $jhubInstance.host }};
+            {{- end }}
             {{- end }}
             {{- if $jhubInstance.allowCidr }}
             allow                                   {{ $jhubInstance.allowCidr }};

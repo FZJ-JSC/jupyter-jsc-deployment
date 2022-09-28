@@ -4,6 +4,10 @@
 
 nameOverride: "hub-juniq-helper"
 
+proxyBackup:
+  name: juniq-proxy-public
+  release: jupyterhub-juniq
+
 ingress:
   enabled: true
   className: "nginx"

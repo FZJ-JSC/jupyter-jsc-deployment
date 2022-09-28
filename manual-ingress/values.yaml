@@ -45,6 +45,13 @@ jhubInstances:
     clientMaxBodySize: 2g
     maintenanceHost: "jhub-maintenance"
     maintenance: false
+    upstream:
+      enabled: false
+      server:
+      - proxy-public
+      - proxy-public-1
+      - proxy-public-2
+      - proxy-public-3
     staticFiles:
       scheme: "http"
       host: "hub-static-files.jupyterjsc.svc"
@@ -66,6 +73,13 @@ jhubInstances:
     clientMaxBodySize: 2g
     maintenanceHost: "jhub-maintenance"
     maintenance: false
+    upstream:
+      enabled: true
+      server:
+      - juniq-proxy-public
+      - juniq-proxy-public-1
+      - juniq-proxy-public-2
+      - juniq-proxy-public-3
     staticFiles:
       scheme: "http"
       host: "juniq-static-files.jupyterjsc.svc"
