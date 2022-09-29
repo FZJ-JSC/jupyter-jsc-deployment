@@ -54,3 +54,24 @@ spec:
     release: {{ .Values.proxyBackup.release }}
     component: proxy
   type: ClusterIP
+{{- range untilStep 4 5 1 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.proxyBackup.name }}-{{ . }}
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    release: {{ .Values.proxyBackup.release }}
+    component: proxy
+  type: ClusterIP
+{{- end }}
