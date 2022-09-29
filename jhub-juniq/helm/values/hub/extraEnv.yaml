@@ -37,7 +37,7 @@ hub:
     - name: INCIDENTS_FILE
       value: "/mnt/shared-data/incident-check/active_incidents.json"
     - name: RESERVATIONS_FILE
-      value: "/mnt/shared-data/reservation-check/reservation_test.json"
+      value: "/mnt/shared-data/reservation-check/reservation.json"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
       value: "jupyterjsc"
     - name: TUNNEL_JUPYTERHUB_USER_PASS
