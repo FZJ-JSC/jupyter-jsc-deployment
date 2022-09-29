@@ -189,7 +189,7 @@ data:
         # Managing literal requests to the JupyterHub front end
         location ~* "^/" {
             {{- if $jhubInstance.maintenance }}
-            proxy_pass                              http://{{ $jhubInstance.maintenanceHost }}
+            proxy_pass                              http://{{ $jhubInstance.maintenanceHost }};
             {{- else }}
             {{- if $jhubInstance.upstream.enabled }}
             proxy_pass                              {{ default "http" $jhubInstance.scheme }}://backend-{{ $jhubInstance.name }};

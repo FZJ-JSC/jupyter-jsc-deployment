@@ -74,7 +74,7 @@ jhubInstances:
     proxyConnectTimeout: 3600s
     proxySendTimeout: 3600s
     clientMaxBodySize: 2g
-    maintenanceHost: "jhub-maintenance"
+    maintenanceHost: "jhub-maintenance.jupyterjsc.svc"
     maintenance: true
     upstream:
       enabled: true
