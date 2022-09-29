@@ -88,7 +88,7 @@ data:
         ssl_certificate /mnt/{{ $jhubInstance.name }}/tls.crt;
         ssl_certificate_key /mnt/{{ $jhubInstance.name }}/tls.key;
 
-        ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
         ssl_prefer_server_ciphers on;
         #ssl_dhparam /etc/ssl/certs/dhparam.pem;
         #ssl_ciphers 'EECDH+AESGCM:EECDH+AES256';
@@ -278,7 +278,7 @@ data:
         ssl_certificate /mnt/{{ $airflowInstance.name }}/tls.crt;
         ssl_certificate_key /mnt/{{ $airflowInstance.name }}/tls.key;
 
-        ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
         ssl_prefer_server_ciphers on;
         #ssl_dhparam /etc/ssl/certs/dhparam.pem;
         #ssl_ciphers 'EECDH+AESGCM:EECDH+AES256';
@@ -359,7 +359,7 @@ data:
         ssl_certificate /mnt/{{ $nbviewerInstance.name }}/tls.crt;
         ssl_certificate_key /mnt/{{ $nbviewerInstance.name }}/tls.key;
 
-        ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
         ssl_prefer_server_ciphers on;
         #ssl_dhparam /etc/ssl/certs/dhparam.pem;
         #ssl_ciphers 'EECDH+AESGCM:EECDH+AES256';
