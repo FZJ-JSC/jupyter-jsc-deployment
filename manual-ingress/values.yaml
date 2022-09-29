@@ -75,7 +75,7 @@ jhubInstances:
     proxySendTimeout: 3600s
     clientMaxBodySize: 2g
     maintenanceHost: "jhub-maintenance"
-    maintenance: false
+    maintenance: true
     upstream:
       enabled: true
       server:
