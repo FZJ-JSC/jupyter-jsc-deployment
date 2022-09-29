@@ -83,6 +83,7 @@ data:
     server {
         server_name {{ $jhubInstance.serverName }};
 
+        listen 80 ssl proxy_protocol ;
         listen 443 ssl proxy_protocol http2 ;
 
         ssl_certificate /mnt/{{ $jhubInstance.name }}/tls.crt;
@@ -275,6 +276,7 @@ data:
     server {
         server_name {{ $airflowInstance.serverName }};
 
+        listen 80 ssl proxy_protocol ;
         listen 443 ssl proxy_protocol http2 ;
 
         ssl_certificate /mnt/{{ $airflowInstance.name }}/tls.crt;
@@ -358,6 +360,7 @@ data:
     server {
         server_name {{ $nbviewerInstance.serverName }};
 
+        listen 80 ssl proxy_protocol ;
         listen 443 ssl proxy_protocol http2 ;
 
         ssl_certificate /mnt/{{ $nbviewerInstance.name }}/tls.crt;
