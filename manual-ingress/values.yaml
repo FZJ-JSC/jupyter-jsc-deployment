@@ -80,11 +80,14 @@ jhubInstances:
     maintenance: false
     upstream:
       enabled: true
+      tries: 5
       server:
       - juniq-proxy-public.jupyterjsc.svc:443
+      - juniq-proxy-public-0.jupyterjsc.svc:443
       - juniq-proxy-public-1.jupyterjsc.svc:443
       - juniq-proxy-public-2.jupyterjsc.svc:443
       - juniq-proxy-public-3.jupyterjsc.svc:443
+      - juniq-proxy-public-4.jupyterjsc.svc:443
     staticFiles:
       scheme: "http"
       host: "juniq-static-files.jupyterjsc.svc"
