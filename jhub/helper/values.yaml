@@ -7,6 +7,7 @@ nameOverride: "jhub-helper"
 proxyBackup:
   release: jupyterhub
   name: proxy-public
+  numberOfBackups: 5
 
 ingress:
   enabled: true
