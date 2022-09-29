@@ -72,13 +72,13 @@ data:
     }
     {{- end }}
     # HTTP server to redirect all 80 traffic to SSL/HTTPS
-    server {
-        listen 80 proxy_protocol;
-        server_name {{ $jhubInstance.serverName }};
+    # server {
+    #     listen 80 proxy_protocol;
+    #     server_name {{ $jhubInstance.serverName }};
 
-        # Tell all requests to port 80 to be 302 redirected to HTTPS
-        return 302 https://$host$request_uri;
-    }
+    #     # Tell all requests to port 80 to be 302 redirected to HTTPS
+    #     return 302 https://$host$request_uri;
+    # }
     # HTTPS server to handle JupyterHub
     server {
         server_name {{ $jhubInstance.serverName }};
@@ -264,13 +264,13 @@ data:
   {{- range $airflowInstance := .Values.airflowInstances }}
   airflow-{{ $airflowInstance.name }}.conf: |
     # HTTP server to redirect all 80 traffic to SSL/HTTPS
-    server {
-        listen 80 proxy_protocol;
-        server_name {{ $airflowInstance.serverName }};
+    # server {
+    #     listen 80 proxy_protocol;
+    #     server_name {{ $airflowInstance.serverName }};
 
-        # Tell all requests to port 80 to be 302 redirected to HTTPS
-        return 302 https://$host$request_uri;
-    }
+    #     # Tell all requests to port 80 to be 302 redirected to HTTPS
+    #     return 302 https://$host$request_uri;
+    # }
     # HTTPS server to handle Airflow
     server {
         server_name {{ $airflowInstance.serverName }};
@@ -347,13 +347,13 @@ data:
   {{- range $nbviewerInstance := .Values.nbviewerInstances }}
   nbviewer-{{ $nbviewerInstance.name }}.conf: |
     # HTTP server to redirect all 80 traffic to SSL/HTTPS
-    server {
-        listen 80 proxy_protocol;
-        server_name {{ $nbviewerInstance.serverName }};
+    # server {
+    #     listen 80 proxy_protocol;
+    #     server_name {{ $nbviewerInstance.serverName }};
 
-        # Tell all requests to port 80 to be 302 redirected to HTTPS
-        return 302 https://$host$request_uri;
-    }
+    #     # Tell all requests to port 80 to be 302 redirected to HTTPS
+    #     return 302 https://$host$request_uri;
+    # }
     # HTTPS server to handle nbviewer
     server {
         server_name {{ $nbviewerInstance.serverName }};
