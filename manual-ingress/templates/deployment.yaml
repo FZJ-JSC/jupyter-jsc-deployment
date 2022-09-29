@@ -55,6 +55,8 @@ spec:
             - name: nginx-config
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
+            - name: dhparam
+              mountPath: /mnt/dhparam
             {{- if .Values.enabledServices.jhub }}
             {{- range $jhubInstance := .Values.jhubInstances }}
             - name: nginx-config
@@ -87,6 +89,10 @@ spec:
           configMap:
             defaultMode: 420
             name: {{ include "manualIngress.name" . }}-files
+        - name: dhparam
+          secret:
+            defaultMode: 420
+            secretName: manual-ingress-dhparam
         {{- if .Values.enabledServices.jhub }}
         {{- range $jhubInstance := .Values.jhubInstances }}
         - name: {{ $jhubInstance.name }}-cert
