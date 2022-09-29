@@ -113,8 +113,8 @@ data:
             # https://www.nginx.com/blog/mitigating-the-httpoxy-vulnerability-with-nginx/
             proxy_set_header Proxy                  "";
 
-            client_max_body_size                    {{ $jhubInstance.clientMaxBodySize | default "1m" }};
             # Custom headers to proxied server            
+            client_max_body_size                    {{ $jhubInstance.clientMaxBodySize | default "50m" }};
             proxy_connect_timeout                   {{ $jhubInstance.proxyConnectTimeout | default "5s" }};
             proxy_send_timeout                      {{ $jhubInstance.proxySendTimeout | default "60s" }};
             proxy_read_timeout                      {{ $jhubInstance.proxyReadTimeout | default "60s" }};
@@ -160,6 +160,7 @@ data:
             proxy_set_header Proxy                  "";
 
             # Custom headers to proxied server            
+            client_max_body_size                    {{ $jhubInstance.clientMaxBodySize | default "50m" }};
             proxy_connect_timeout                   {{ $jhubInstance.proxyConnectTimeout | default "5s" }};
             proxy_send_timeout                      {{ $jhubInstance.proxySendTimeout | default "60s" }};
             proxy_read_timeout                      {{ $jhubInstance.proxyReadTimeout | default "60s" }};
@@ -216,6 +217,7 @@ data:
             proxy_set_header Proxy                  "";
 
             # Custom headers to proxied server            
+            client_max_body_size                    {{ $jhubInstance.clientMaxBodySize | default "50m" }};
             proxy_connect_timeout                   {{ $jhubInstance.proxyConnectTimeout | default "5s" }};
             proxy_send_timeout                      {{ $jhubInstance.proxySendTimeout | default "60s" }};
             proxy_read_timeout                      {{ $jhubInstance.proxyReadTimeout | default "60s" }};
@@ -273,7 +275,6 @@ data:
             deny all;
             {{- end }}
             
-            client_max_body_size                    1m;
             proxy_set_header Host                   $host;
             proxy_set_header                        Upgrade           $http_upgrade;
             proxy_set_header                        Connection        $connection_upgrade;
@@ -292,6 +293,7 @@ data:
             proxy_set_header Proxy                  "";
             
             # Custom headers to proxied server            
+            client_max_body_size                    {{ $airflowInstance.clientMaxBodySize | default "50m" }};
             proxy_connect_timeout                   {{ $airflowInstance.proxyConnectTimeout | default "5s" }};
             proxy_send_timeout                      {{ $airflowInstance.proxySendTimeout | default "60s" }};
             proxy_read_timeout                      {{ $airflowInstance.proxyReadTimeout | default "60s" }};
@@ -357,7 +359,8 @@ data:
             # https://www.nginx.com/blog/mitigating-the-httpoxy-vulnerability-with-nginx/
             proxy_set_header Proxy                  "";
 
-            # Custom headers to proxied server            
+            # Custom headers to proxied server     
+            client_max_body_size                    {{ $nbviewerInstance.clientMaxBodySize | default "50m" }};       
             proxy_connect_timeout                   {{ $nbviewerInstance.proxyConnectTimeout | default "5s" }};
             proxy_send_timeout                      {{ $nbviewerInstance.proxySendTimeout | default "60s" }};
             proxy_read_timeout                      {{ $nbviewerInstance.proxyReadTimeout | default "60s" }};
