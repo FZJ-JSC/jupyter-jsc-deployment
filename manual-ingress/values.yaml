@@ -43,7 +43,8 @@ jhubInstances:
     proxyConnectTimeout: 3600s
     proxySendTimeout: 3600s
     clientMaxBodySize: 2g
-    maintenanceHost: "jhub-maintenance"
+    maintenanceHost: "jhub-maintenance.jupyterjsc.svc"
+    # if maintenance is set to true, remember to set maintenance/fleet.yaml:staging.helm.values.enabled to true
     maintenance: false
     upstream:
       enabled: true
@@ -75,7 +76,8 @@ jhubInstances:
     proxySendTimeout: 3600s
     clientMaxBodySize: 2g
     maintenanceHost: "jhub-maintenance.jupyterjsc.svc"
-    maintenance: true
+    # if maintenance is set to true, remember to set maintenance/fleet.yaml:staging.helm.values.enabled to true
+    maintenance: false
     upstream:
       enabled: true
       server:

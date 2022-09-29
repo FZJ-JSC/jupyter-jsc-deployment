@@ -10,7 +10,7 @@ targetCustomizations:
         provider.cattle.io: rke
     helm:
       values:
-        enabled: true
+        enabled: false
         # if enabled is set to true, remember to set manual-ingress/fleet.yaml:staging.helm.values.jhubInstances.maintenance to true
         ingress:
           hosts:
