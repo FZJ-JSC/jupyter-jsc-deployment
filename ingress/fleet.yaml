@@ -16,7 +16,7 @@ helm:
         ssl-protocols: "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3"
       extraArgs:
         enable-ssl-passthrough: ""
-      kind: Daemonset
+      kind: DaemonSet
       metrics:
         enabled: true
         serviceMonitor:
