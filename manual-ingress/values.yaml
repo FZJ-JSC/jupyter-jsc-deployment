@@ -1,0 +1,148 @@
+# Default values for manualIngress.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+enabled: false
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+enabledServices:
+  jhub: true
+  nbviewer: true
+  airflow: true
+
+jhubInstances:
+  - name: "jupyterjsc-staging"
+    serverName: "jupyter-jsc-staging.fz-juelich.de"
+    tlsSecret: "jupyter-jsc-certs"
+    host: "proxy-public.jupyterjsc.svc"
+    scheme: "https"
+    proxyReadTimeout: 86400s
+    proxyConnectTimeout: 3600s
+    proxySendTimeout: 3600s
+    clientMaxBodySize: 2g
+    maintenanceHost: "jhub-maintenance.jupyterjsc.svc"
+    # if maintenance is set to true, remember to set maintenance/fleet.yaml:staging.helm.values.enabled to true
+    maintenance: false
+    upstream:
+      enabled: true
+      tries: 5
+      server:
+      - proxy-public.jupyterjsc.svc:443
+      - proxy-public-0.jupyterjsc.svc:443
+      - proxy-public-1.jupyterjsc.svc:443
+      - proxy-public-2.jupyterjsc.svc:443
+      - proxy-public-3.jupyterjsc.svc:443
+      - proxy-public-4.jupyterjsc.svc:443
+    staticFiles:
+      scheme: "http"
+      host: "hub-static-files.jupyterjsc.svc"
+      port: 8070
+      redirects:
+        - 2FA
+        - 2fa
+        - 2fadetails
+        - jusufcloud
+        - hdfaai
+  - name: "juniq-staging"
+    serverName: "juniq-staging.fz-juelich.de"
+    tlsSecret: "juniq-certs"
+    host: "juniq-proxy-public.jupyterjsc.svc"
+    scheme: "https"
+    proxyReadTimeout: 86400s
+    proxyConnectTimeout: 3600s
+    proxySendTimeout: 3600s
+    clientMaxBodySize: 2g
+    maintenanceHost: "jhub-maintenance.jupyterjsc.svc"
+    # if maintenance is set to true, remember to set maintenance/fleet.yaml:staging.helm.values.enabled to true
+    maintenance: false
+    upstream:
+      enabled: true
+      tries: 5
+      server:
+      - juniq-proxy-public.jupyterjsc.svc:443
+      - juniq-proxy-public-0.jupyterjsc.svc:443
+      - juniq-proxy-public-1.jupyterjsc.svc:443
+      - juniq-proxy-public-2.jupyterjsc.svc:443
+      - juniq-proxy-public-3.jupyterjsc.svc:443
+      - juniq-proxy-public-4.jupyterjsc.svc:443
+    staticFiles:
+      scheme: "http"
+      host: "juniq-static-files.jupyterjsc.svc"
+      port: 8070
+      redirects:
+        - 2FA
+        - 2fa
+        - 2fadetails
+        - jusufcloud
+        - hdfaai
+
+airflowInstances:
+  - name: "airflow-staging"
+    serverName: "zam10231.zam.kfa-juelich.de"
+    tlsSecret: "airflow-web-certs"
+    allowCidr: "134.94.0.0/16"
+    host: "airflow-web.airflow.svc:8080"
+    scheme: "https"
+
+nbviewerInstances:
+  - name: "nbviewer-staging"
+    serverName: "docs.jupyter-jsc-staging.fz-juelich.de"
+    tlsSecret: "jupyter-jsc-certs"
+    host: "nbviewer.jupyterjsc.svc"
+    port: 8080
+
+service:
+  loadBalancerIP: ""
+  annotations: 
+    loadbalancer.openstack.org/keep-floatingip: "true"
+    loadbalancer.openstack.org/proxy-protocol: "true"
+    loadbalancer.openstack.org/timeout-member-data: "600000"
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector:
+  worker: "true"
+
+tolerations: []
+
+affinity: {}
