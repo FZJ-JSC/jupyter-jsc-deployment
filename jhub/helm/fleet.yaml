@@ -112,6 +112,13 @@ targetCustomizations:
             hostname: "jupyter-jsc-staging.fz-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubStaging"
+        ingress:
+          hosts:
+          - jupyter-jsc-staging.fz-juelich.de
+          tls:
+          - hosts:
+            - jupyter-jsc-staging.fz-juelich.de
+            secretName: jupyter-jsc-certs
   - name: production
     clusterSelector:
       matchLabels:
@@ -197,3 +204,10 @@ targetCustomizations:
             limits:
               cpu: 1000m
               memory: 3072Mi
+        ingress:
+          hosts:
+          - jupyter-jsc.fz-juelich.de
+          tls:
+          - hosts:
+            - jupyter-jsc.fz-juelich.de
+            secretName: jupyter-jsc-certs

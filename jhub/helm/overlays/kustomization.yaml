@@ -1,2 +1,10 @@
 resources:
   - monitor.yaml
+
+patches:
+- target:
+    kind: Ingress
+    name: hub
+    group: networking.k8s.io
+    version: v1
+  path: ingress-patch.json
