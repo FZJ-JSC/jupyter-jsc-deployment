@@ -11,6 +11,7 @@ targetCustomizations:
     helm:
       values:
         ingress:
+          enabled: false
           hosts:
             - host: juniq-staging.fz-juelich.de
               paths:
@@ -23,6 +24,7 @@ targetCustomizations:
               hosts:
                 - juniq-staging.fz-juelich.de
         ingressuser:
+          enabled: false
           hosts:
             - host: juniq-staging.fz-juelich.de
               paths:
@@ -35,6 +37,7 @@ targetCustomizations:
               hosts:
                 - juniq-staging.fz-juelich.de
         ingresshubstatic:
+          enabled: false
           hosts:
             - host: juniq-staging.fz-juelich.de
               paths:
