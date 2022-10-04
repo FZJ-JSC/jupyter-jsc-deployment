@@ -6,4 +6,6 @@ patches:
     kind: Ingress
     name: juniq
     namespace: jupyterjsc
+    group: networking.k8s.io
+    version: v1
   path: ingress-patch.json
