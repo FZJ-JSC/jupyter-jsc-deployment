@@ -109,7 +109,8 @@ ingress:
           proxy_redirect                          off;
       }
   
-  ingressClassName: "nginx"
+  # will be supported in 2.0.0 ...
+  #ingressClassName: "nginx"
   hosts:
   - juniq-staging.fz-juelich.de
   tls:
