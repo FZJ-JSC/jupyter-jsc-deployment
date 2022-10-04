@@ -11,7 +11,7 @@ ingress:
     nginx.ingress.kubernetes.io/server-snippet: |
       # Managing requests to the users JupyterLab
       location ~* "^/user/([^/]+)/([^/]+)/" {
-          proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
+          #proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
           proxy_pass                              https://juniq-retries;
           #allow                                   134.94.0.0/16;
           #deny                                    all;
