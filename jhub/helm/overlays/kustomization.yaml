@@ -4,7 +4,7 @@ resources:
 patches:
 - target:
     kind: Ingress
-    name: hub
+    name: jupyterhub
     group: networking.k8s.io
     version: v1
   path: ingress-patch.json
