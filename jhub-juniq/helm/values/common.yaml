@@ -102,7 +102,7 @@ ingress:
   
   # will be supported in 2.0.0 ...
   #ingressClassName: "nginx"
-  prePuller:
+prePuller:
   hook:
     enabled: false
   continuous:
