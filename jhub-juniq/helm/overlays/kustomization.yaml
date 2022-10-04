@@ -5,4 +5,5 @@ patches:
 - target:
     kind: Ingress
     name: juniq
+    namespace: jupyterjsc
   path: ingress-patch.json
