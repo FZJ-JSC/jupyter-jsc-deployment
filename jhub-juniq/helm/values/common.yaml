@@ -108,6 +108,7 @@ ingress:
           
           proxy_redirect                          off;
       }
+  
   ingressClassName: "nginx"
   hosts:
   - juniq-staging.fz-juelich.de
