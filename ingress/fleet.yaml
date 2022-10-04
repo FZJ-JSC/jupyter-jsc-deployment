@@ -4,6 +4,8 @@ helm:
   chart: https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.1.1/ingress-nginx-4.1.1.tgz
   values:
     controller:
+      ingressClassResource:
+        default: true
       config:
         compute-full-forwarded-for: "true"
         proxy-real-ip-cidr: 0.0.0.0/0
@@ -13,10 +15,10 @@ helm:
         upstream-keepalive-connections: "0"
         ssl-session-timeout: "1d"
         ssl-session-cache-size: "50m"
-        ssl-protocols: "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3"
+        ssl-protocols: "TLSv1.2 TLSv1.3"
       extraArgs:
         enable-ssl-passthrough: ""
-      kind: Deployment
+      kind: DaemonSet
       metrics:
         enabled: true
         serviceMonitor:
