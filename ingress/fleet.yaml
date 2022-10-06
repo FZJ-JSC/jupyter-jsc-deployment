@@ -10,6 +10,7 @@ helm:
         real-ip-header: proxy_protocol
         use-forwarded-headers: "true"
         use-proxy-protocol: "true"
+        use-http2: false
         upstream-keepalive-connections: "0"
         ssl-session-timeout: "1d"
         ssl-session-cache-size: "50m"
