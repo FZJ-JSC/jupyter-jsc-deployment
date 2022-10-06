@@ -24,7 +24,7 @@ targetCustomizations:
     helm:
       releaseName: "manual-ingress-nginx-production"
       values:
-        enabled: true
+        enabled: false
         nameOverride: "manual-ingress-nginx-production"
         replicaCount: 2
         service:
