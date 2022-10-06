@@ -28,7 +28,7 @@ targetCustomizations:
         nameOverride: "manual-ingress-nginx-production"
         replicaCount: 2
         service:
-          loadBalancerIP: 134.94.199.54
+          loadBalancerIP: 134.94.199.72
         enabledServices:
           jhub: true
           nbviewer: true
