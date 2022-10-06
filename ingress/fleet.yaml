@@ -25,6 +25,7 @@ helm:
               server proxy-public-2.jupyterjsc.svc:443;
               server proxy-public-3.jupyterjsc.svc:443;
               server proxy-public-4.jupyterjsc.svc:443;
+              keepalive 32;
           }
           upstream juniq-retries {
               server juniq-proxy-public.jupyterjsc.svc:443;
@@ -33,6 +34,7 @@ helm:
               server juniq-proxy-public-2.jupyterjsc.svc:443;
               server juniq-proxy-public-3.jupyterjsc.svc:443;
               server juniq-proxy-public-4.jupyterjsc.svc:443;
+              keepalive 32;
           }
       extraArgs:
         enable-ssl-passthrough: ""
@@ -77,6 +79,6 @@ targetCustomizations:
       values:
         controller:
           service:
-            loadBalancerIP: 134.94.199.72
+            loadBalancerIP: 134.94.199.54
 dependsOn:
   - name: basics-monitor-crd
