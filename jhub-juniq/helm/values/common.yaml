@@ -10,7 +10,7 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/server-snippet: |
       # Managing requests to the users JupyterLab
-      location ~* "^/user/([^/]+)/([^/]+)/" {
+      location ~* "^/deactivate-user/([^/]+)/([^/]+)/" {
           #proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
           proxy_pass                              https://juniq-retries;
           #allow                                   134.94.0.0/16;
