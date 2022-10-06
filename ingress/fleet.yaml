@@ -57,6 +57,6 @@ targetCustomizations:
       values:
         controller:
           service:
-            loadBalancerIP: 134.94.199.72
+            loadBalancerIP: 134.94.199.54
 dependsOn:
   - name: basics-monitor-crd
