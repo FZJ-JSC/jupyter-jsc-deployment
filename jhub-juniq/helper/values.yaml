@@ -9,73 +9,7 @@ proxyBackup:
   release: jupyterhub-juniq
   numberOfBackups: 5
 
-ingress:
-  enabled: true
-  className: "nginx"
-  annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-    nginx.ingress.kubernetes.io/proxy-body-size: "2g"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-  hosts:
-    - host: jupyterhub.local
-      svcName: juniq-proxy-public
-      svcPort: 443
-      paths:
-        - path: /
-          pathType: Prefix
-  tls: 
-    - secretName: jupyterhub-local
-      hosts:
-        - jupyterhub.local
-
-ingressuser:
-  name: juniq-proxy-public-user-websockets
-  enabled: true
-  className: "nginx"
-  annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/use-regex: "true"
-  hosts:
-    - host: jupyterhub.local
-      svcName: juniq-proxy-public
-      svcPort: 443
-      paths:
-        - path: "/user/([^/]+)/([^/]+)/"
-          pathType: Prefix
-  tls:
-    - secretName: jupyterhub-local
-      hosts:
-        - jupyterhub.local
-
-ingresshubstatic:
-  enabled: true
-  className: "nginx"
-  hosts:
-    - host: jupyterhub.local
-      svcName: juniq-static-files
-      svcPort: 8070
-      paths:
-        - path: /hub/static
-          pathType: Prefix
-  tls:
-    - secretName: jupyterhub-local
-      hosts:
-        - jupyterhub.local
-
 labels: {}
-
-podAnnotations:
-  sidecar.istio.io/inject: "false"
-
-service:
-  name: "juniq-proxy-public"
-  port: 443
 
 serviceStatic:
   name: "juniq-static-files"

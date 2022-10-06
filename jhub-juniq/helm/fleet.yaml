@@ -104,6 +104,13 @@ targetCustomizations:
             hostname: "juniq-staging.fz-juelich.de"
             drf_username: "jupyterhubjuniq"
             logger_name: "JupyterHubJUNIQStaging"
+        ingress:
+          hosts:
+          - juniq-staging.fz-juelich.de
+          tls:
+          - hosts:
+            - juniq-staging.fz-juelich.de
+            secretName: juniq-certs
   - name: production
     clusterSelector:
       matchLabels:
@@ -174,3 +181,10 @@ targetCustomizations:
             hostname: "juniq.fz-juelich.de"
             drf_username: "jupyterhubjuniq"
             logger_name: "JupyterHubJUNIQProduction"
+        ingress:
+          hosts:
+          - juniq.fz-juelich.de
+          tls:
+          - hosts:
+            - juniq.fz-juelich.de
+            secretName: juniq-certs
