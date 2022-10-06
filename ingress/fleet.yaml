@@ -14,7 +14,24 @@ helm:
         upstream-keepalive-connections: "0"
         ssl-session-timeout: "1d"
         ssl-session-cache-size: "50m"
-        ssl-protocols: "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3"
+        ssl-protocols: "TLSv1.2 TLSv1.3"
+        http-snippet: |
+          upstream default-jhub-retries {
+              server proxy-public.jupyterjsc.svc:443;
+              server proxy-public-0.jupyterjsc.svc:443;
+              server proxy-public-1.jupyterjsc.svc:443;
+              server proxy-public-2.jupyterjsc.svc:443;
+              server proxy-public-3.jupyterjsc.svc:443;
+              server proxy-public-4.jupyterjsc.svc:443;
+          }
+          upstream juniq-retries {
+              server juniq-proxy-public.jupyterjsc.svc:443;
+              server juniq-proxy-public-0.jupyterjsc.svc:443;
+              server juniq-proxy-public-1.jupyterjsc.svc:443;
+              server juniq-proxy-public-2.jupyterjsc.svc:443;
+              server juniq-proxy-public-3.jupyterjsc.svc:443;
+              server juniq-proxy-public-4.jupyterjsc.svc:443;
+          }
       extraArgs:
         enable-ssl-passthrough: ""
       kind: DaemonSet
