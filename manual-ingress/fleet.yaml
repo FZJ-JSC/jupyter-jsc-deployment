@@ -24,11 +24,11 @@ targetCustomizations:
     helm:
       releaseName: "manual-ingress-nginx-production"
       values:
-        enabled: true
+        enabled: false
         nameOverride: "manual-ingress-nginx-production"
         replicaCount: 2
         service:
-          loadBalancerIP: 134.94.199.54
+          loadBalancerIP: 134.94.199.72
         enabledServices:
           jhub: true
           nbviewer: true
