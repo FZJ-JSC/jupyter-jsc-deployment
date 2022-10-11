@@ -21,6 +21,7 @@ hub:
       from apihandler import SpawnProgressUpdateAPIHandler
       from apihandler import SpawnStopNotificationAPIHandler
       from apihandler import SpawnUpdateOptionsAPIHandler
+      from apihandler import TemplateServerAPIHandler
       from apihandler import twoFA
       from apihandler import UserRandomServerAPIHandler
       from apihandler import user_cancel_message
@@ -139,6 +140,8 @@ hub:
           (r"/api/logs/jhub/handler/([^/]+)", JHubLogLevelAPIHandler),
           (r"/api/logs/([^/]+)/handler", DRFServiceLogLevelAPIHandler),
           (r"/api/logs/([^/]+)/handler/([^/]+)", DRFServiceLogLevelAPIHandler),
+          (r"/api/templates/([^/]+)/([^/]+)", TemplateServerAPIHandler),
+          (r"/templates/t/(.+)", page_handlers.TemplateServerHandler),
       ]
 
       c.JupyterHub.trusted_alt_names = [
