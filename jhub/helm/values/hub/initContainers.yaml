@@ -42,6 +42,10 @@ hub:
             secretKeyRef:
               name: "jupyter-jsc-nts-config"
               key: PASSWORD
+        - name: NTS_GIT_BRANCH
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['NTS_GIT_BRANCH']
       command: ["/bin/sh"]
       args:
         - -c
