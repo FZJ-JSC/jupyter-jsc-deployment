@@ -17,6 +17,7 @@ hub:
       from apihandler import JHubLogLevelAPIHandler
       from apihandler import HPCUpdateAPIHandler
       from apihandler import SpawnNotificationAPIHandler
+      from apihandler import SpawnOptionsFormAPIHandler
       from apihandler import SpawnProgressStatusAPIHandler
       from apihandler import SpawnProgressUpdateAPIHandler
       from apihandler import SpawnStopNotificationAPIHandler
@@ -120,7 +121,9 @@ hub:
           # APIHandlers
           (r"/api/users/([^/]+)/random/server", UserRandomServerAPIHandler),
           (r"/api/users/([^/]+)/server/update", SpawnUpdateOptionsAPIHandler),
+          (r"/api/users/([^/]+)/server/optionsform", SpawnOptionsFormAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]*)/update", SpawnUpdateOptionsAPIHandler),
+          (r"/api/users/([^/]+)/servers/([^/]+)/optionsform", SpawnOptionsFormAPIHandler),
           (r"/api/users/progress/update/([^/]+)", SpawnProgressUpdateAPIHandler),
           (r"/api/users/progress/update/([^/]+)/([^/]+)", SpawnProgressUpdateAPIHandler),
           (r"/api/users/progress/status/([^/]+)", SpawnProgressStatusAPIHandler),
