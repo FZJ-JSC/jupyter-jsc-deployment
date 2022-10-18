@@ -47,7 +47,7 @@ hub:
     - name: INCIDENTS_FILE
       value: "/mnt/shared-data/incident-check/active_incidents.json"
     - name: RESERVATIONS_FILE
-      value: "/mnt/shared-data/reservation-check/reservation.json"
+      value: "/mnt/shared-data/reservation-check/reservations.json"
     - name: NOTEBOOK_TEMPLATES_PATH
       value: "/mnt/shared-data/notebook_template_server"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
