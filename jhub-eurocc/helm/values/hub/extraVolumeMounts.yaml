@@ -1,0 +1,16 @@
+hub:
+  extraVolumeMounts:
+    - name: shared-data
+      mountPath: /mnt/shared-data
+    - name: persistent
+      mountPath: /mnt/persistent
+    - name: drf-tunnel-certs
+      mountPath: /mnt/tunnel_certs
+    - name: drf-unicoremgr-certs
+      mountPath: /mnt/unicoremgr_certs
+    - name: drf-k8smgr-certs
+      mountPath: /mnt/k8smgr_certs
+    - name: unity-jsc-certs
+      mountPath: /mnt/unity_certs
+    - name: tz-config
+      mountPath: /etc/localtime
