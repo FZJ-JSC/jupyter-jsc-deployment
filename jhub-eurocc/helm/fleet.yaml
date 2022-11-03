@@ -106,11 +106,11 @@ targetCustomizations:
             logger_name: "JupyterHubEuroCCStaging"
         ingress:
           hosts:
-          - eurocc-staging.fz-juelich.de
+          - binder.jupyter-jsc-staging.fz-juelich.de
           tls:
           - hosts:
-            - eurocc-staging.fz-juelich.de
-            secretName: eurocc-certs
+            - binder.jupyter-jsc-staging.fz-juelich.de
+            secretName: jupyter-jsc-certs
   - name: production
     clusterSelector:
       matchLabels:
@@ -183,8 +183,8 @@ targetCustomizations:
             logger_name: "JupyterHubEuroCCProduction"
         ingress:
           hosts:
-          - eurocc.fz-juelich.de
+          - binder.jupyter-jsc.fz-juelich.de
           tls:
           - hosts:
-            - eurocc.fz-juelich.de
-            secretName: eurocc-certs
+            - binder.jupyter-jsc.fz-juelich.de
+            secretName: jupyter-jsc-certs
