@@ -2,8 +2,8 @@ proxy:
   service:
     type: ClusterIP
   chp:
-    defaultTarget: "https://hub:8081"
-    errorTarget: "https://hub:8081/hub/error"
+    defaultTarget: "https://eurocc-hub:8081"
+    errorTarget: "https://eurocc-hub:8081/hub/error"
     extraCommandLineFlags:
      - "--api-ssl-key=/etc/chp/tls/proxy-api_proxy-api.key"
      - "--api-ssl-cert=/etc/chp/tls/proxy-api_proxy-api.crt"
