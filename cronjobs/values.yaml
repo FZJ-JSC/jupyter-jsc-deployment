@@ -84,6 +84,7 @@ jobs:
       - >-
           pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
           pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
           pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
           pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
           pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
@@ -133,6 +134,7 @@ jobs:
       - >-
           pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
           pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
           pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
           pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
           pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
