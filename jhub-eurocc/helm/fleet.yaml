@@ -101,7 +101,7 @@ targetCustomizations:
           labels:
             stage: staging
             jhub_version: "2.1.1"
-            hostname: "eurocc-staging.fz-juelich.de"
+            hostname: "bunder.jupyter-jsc-staging.fz-juelich.de"
             drf_username: "jupyterhubeurocc"
             logger_name: "JupyterHubEuroCCStaging"
         ingress:
