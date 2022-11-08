@@ -82,7 +82,7 @@ hub:
           f"https://{unity_host}/jupyter-oauth2/userinfo"
       )
       c.CustomGenericOAuthenticator.username_key = "username_attr"
-      c.CustomGenericOAuthenticator.scope = "single-logout;oidc;hpc_infos;x500;authenticator;eduperson_entitlement;username;profile".split(
+      c.CustomGenericOAuthenticator.scope = "single-logout;hpc_infos;x500;authenticator;eduperson_entitlement;username;profile".split(
           ";"
       )
       c.CustomGenericOAuthenticator.tls_verify = False
