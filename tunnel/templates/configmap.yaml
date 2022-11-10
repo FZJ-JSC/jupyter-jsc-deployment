@@ -40,6 +40,7 @@ data:
         ControlPath /tmp/control_remote_{{ $host.name }}
     
     {{- range $additional_remote_host := $jupyterhub.additional_remote_hosts }}
+
     Host remote_{{ $host.name }}_{{ $additional_remote_host }}
         User {{ $host.user }}
         Port {{ default 22 $host.port }}
@@ -49,6 +50,7 @@ data:
     {{- end }}
 
     {{- range $additional_host := $jupyterhub.additional_hosts }}
+    
     Host tunnel_{{ $host.name }}_{{ $additional_host }}
         User {{ $host.user }}
         Port {{ default 22 $host.port }}
