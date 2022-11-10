@@ -25,6 +25,8 @@ ssh_config_hosts_defaults:
 
 jupyterhubs:
   default:
+    additional_hosts: []
+    additional_remote_hosts: []
     ssh_config_hosts:
     - name: "demo_site"
       user: "ljupyter"
