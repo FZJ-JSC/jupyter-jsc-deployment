@@ -100,7 +100,7 @@ targetCustomizations:
                 path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: staging
-            jhub_version: "2.1.1"
+            jhub_version: "2.3.1"
             hostname: "juniq-staging.fz-juelich.de"
             drf_username: "jupyterhubjuniq"
             logger_name: "JupyterHubJUNIQStaging"
@@ -177,7 +177,7 @@ targetCustomizations:
                 path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: production
-            jhub_version: "2.1.1"
+            jhub_version: "2.3.1"
             hostname: "juniq.fz-juelich.de"
             drf_username: "jupyterhubjuniq"
             logger_name: "JupyterHubJUNIQProduction"
