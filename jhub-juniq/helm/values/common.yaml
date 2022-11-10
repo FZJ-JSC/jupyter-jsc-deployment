@@ -56,7 +56,7 @@ ingress:
       }
       location ~* "^/((hub/static)|(2FA)|(2fa)|(2fadetails)|(jusufcloud)|(hdfaai))" {
           #proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
-          proxy_pass                              http://hub-static-files.jupyterjsc.svc:8070;
+          proxy_pass                              http://juniq-static-files.jupyterjsc.svc:8070;
           
           #allow                                   {{ $jhubInstance.allowCidr }};
           #deny                                    all;
