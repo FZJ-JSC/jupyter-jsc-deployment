@@ -112,7 +112,7 @@ targetCustomizations:
             hostname: "jupyter-jsc-staging.fz-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubStaging"
-            NTS_GIT_BRANCH: "notebook-template-server"
+            NTS_GIT_BRANCH: "main"
         ingress:
           hosts:
           - jupyter-jsc-staging.fz-juelich.de
@@ -198,7 +198,7 @@ targetCustomizations:
             hostname: "jupyter-jsc.fz-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubProduction"
-            NTS_GIT_BRANCH: "notebook-template-server"
+            NTS_GIT_BRANCH: "main"
           resources:
             requests:
               cpu: 100m
