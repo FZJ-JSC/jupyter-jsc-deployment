@@ -3,7 +3,7 @@ helm:
   releaseName: postgresql
   repo: https://charts.bitnami.com/bitnami
   chart: postgresql
-  version: 11.1.28
+  version: 11.9.13
   values:
     auth:
       existingSecret: "postgresql-auth"
