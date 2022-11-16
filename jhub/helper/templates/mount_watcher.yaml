@@ -48,4 +48,4 @@ data:
     cp -r /tmp/static-files/* /mnt/shared-data/static-files
     rm -rf /tmp/static-files
     test -d /mnt/shared-data/notebook_template_server && cd /mnt/shared-data/notebook_template_server
-    test -d /mnt/shared-data/notebook_template_server && git pull origin ${NTS_GIT_BRANCH}-${JUPYTERHUB_STAGE}
+    test -d /mnt/shared-data/notebook_template_server && git pull origin ${NTS_GIT_BRANCH}
