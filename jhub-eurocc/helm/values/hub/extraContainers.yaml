@@ -45,6 +45,8 @@ hub:
             secretKeyRef:
               name: postgresql-general
               key: SQL_HOST
+        - name: JUPYTERHUB_DATABASE
+          value: "jupyterhubeurocc"
         - name: JUPYTERHUB_DATABASE_USER
           value: "jupyterhubeurocc"
         - name: JUPYTERHUB_DATABASE_PASSWORD
