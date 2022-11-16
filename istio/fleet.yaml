@@ -3,7 +3,7 @@ helm:
   releaseName: rancher-istio
   repo: https://charts.rancher.io
   chart: rancher-istio
-  version: 100.2.0+up1.12.6
+  version: 100.4.0+up1.14.1
   values:
     ingressGateways:
       enabled: false
