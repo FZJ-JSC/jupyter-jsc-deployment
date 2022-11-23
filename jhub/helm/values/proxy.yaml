@@ -41,12 +41,8 @@ proxy:
       worker: "true"
   https:
     enabled: true
-    type: letsencrypt
-    #type: letsencrypt, manual, offload, secret
-    letsencrypt:
-      contactEmail: t.kreuzer@fz-juelich.de
-    #type: secret
-    #secret:
-    #  name: internal-ssl
-    #  key: proxy-client_proxy-client.key
-    #  crt: proxy-client_proxy-client.crt
+    type: secret
+    secret:
+      name: internal-ssl
+      key: proxy-client_proxy-client.key
+      crt: proxy-client_proxy-client.crt
