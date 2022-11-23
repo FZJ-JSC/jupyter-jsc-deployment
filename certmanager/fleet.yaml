@@ -1,0 +1,10 @@
+defaultNamespace: default
+helm:
+  releaseName: certmanager
+  repo: https://charts.jetstack.io
+  chart: cert-manager
+  version: v1.10.1
+  values:
+    prometheus:
+      enabled: false
+    installCRDs: true
