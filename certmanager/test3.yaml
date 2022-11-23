@@ -1,8 +1,0 @@
-
-apiVersion: v1
-data:
-  a: b
-kind: ConfigMap
-metadata:
-  name: test3
-  namespace: default
