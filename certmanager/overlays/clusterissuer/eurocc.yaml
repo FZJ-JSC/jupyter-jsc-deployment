@@ -5,8 +5,8 @@ metadata:
   namespace: jupyterjsc
 spec:
   acme:
-    # server: https://acme-staging-v02.api.letsencrypt.org/directory
-    server: https://acme-v02.api.letsencrypt.org/directory
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    # server: https://acme-v02.api.letsencrypt.org/directory
     email: t.kreuzer@fz-juelich.de
     privateKeySecretRef:
       name: eurocc-clusterissuer
