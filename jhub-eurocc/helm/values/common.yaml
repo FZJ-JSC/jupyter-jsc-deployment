@@ -3,8 +3,7 @@ cull:
 ingress:
   enabled: true
   annotations:
-    cert-manager.io/cluster-issuer: eurocc-clusterissuer
-    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/cluster-issuer: eurocc-gcs
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/proxy-body-size: "2g"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
