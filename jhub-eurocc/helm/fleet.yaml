@@ -110,8 +110,7 @@ targetCustomizations:
           - jupyter-staging.eurocc-gcs.de
           tls:
           - hosts:
-            - binder.jupyter-jsc-staging.fz-juelich.de
-            secretName: jupyter-jsc-certs
+            - jupyter-staging.eurocc-gcs.de
   - name: production
     clusterSelector:
       matchLabels:
