@@ -1,6 +1,6 @@
 defaultNamespace: default
 helm:
-  releaseName: certmanager
+  releaseName: cert-manager
   repo: https://charts.jetstack.io
   chart: cert-manager
   version: v1.10.1
