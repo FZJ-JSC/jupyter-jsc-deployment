@@ -111,7 +111,7 @@ targetCustomizations:
           tls:
           - hosts:
             - jupyter-staging.eurocc-gcs.de
-            secretName: eurocc-clusterissuer-staging
+            secretName: eurocc-gcs
   - name: production
     clusterSelector:
       matchLabels:
