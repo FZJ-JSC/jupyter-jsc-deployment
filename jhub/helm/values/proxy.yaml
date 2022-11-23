@@ -41,10 +41,12 @@ proxy:
       worker: "true"
   https:
     enabled: true
-    type: secret
-    secret:
-      name: internal-ssl
-      key: proxy-client_proxy-client.key
-      crt: proxy-client_proxy-client.crt
-      #key: hub-internal_hub-internal.key
-      #crt: hub-internal_hub-internal.crt
+    type: letsencrypt
+    #type: letsencrypt, manual, offload, secret
+    letsencrypt:
+      contactEmail: t.kreuzer@fz-juelich.de
+    #type: secret
+    #secret:
+    #  name: internal-ssl
+    #  key: proxy-client_proxy-client.key
+    #  crt: proxy-client_proxy-client.crt

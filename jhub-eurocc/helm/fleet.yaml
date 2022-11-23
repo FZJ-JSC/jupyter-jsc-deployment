@@ -101,13 +101,13 @@ targetCustomizations:
           labels:
             stage: staging
             jhub_version: "2.3.1"
-            hostname: "binder.jupyter-jsc-staging.fz-juelich.de"
+            hostname: "jupyter-staging.eurocc-gcs.de"
             drf_username: "jupyterhubeurocc"
             logger_name: "JupyterHubEuroCCStaging"
             NTS_GIT_BRANCH: "main"
         ingress:
           hosts:
-          - binder.jupyter-jsc-staging.fz-juelich.de
+          - jupyter-staging.eurocc-gcs.de
           tls:
           - hosts:
             - binder.jupyter-jsc-staging.fz-juelich.de
