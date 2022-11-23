@@ -104,7 +104,6 @@ ingress:
       # Managing requests to verify letsencrypt host
       location ~ /.well-known {
           allow all;
-          proxy_pass                              https://eurocc-retries;
       }
 
   # will be supported in 2.0.0 ...
