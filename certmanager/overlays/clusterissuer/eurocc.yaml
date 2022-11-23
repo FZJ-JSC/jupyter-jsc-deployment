@@ -9,7 +9,7 @@ spec:
     # server: https://acme-v02.api.letsencrypt.org/directory
     email: t.kreuzer@fz-juelich.de
     privateKeySecretRef:
-      name: eurocc-clusterissuer
+      name: eurocc-clusterissuer-staging
     solvers:
       - http01:
           ingress:
