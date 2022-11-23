@@ -100,7 +100,10 @@ ingress:
           
           proxy_redirect                          off;
       }
-  
+      # Managing requests to verify letsencrypt host
+      location ~ /.well-known {
+          allow all;
+      }
   # will be supported in 2.0.0 ...
   #ingressClassName: "nginx"
 prePuller:
