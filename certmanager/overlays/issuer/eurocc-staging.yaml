@@ -11,5 +11,4 @@ spec:
       name: eurocc-issuer-staging
     solvers:
       - http01:
-          ingress:
-            class: "nginx"
+          ingress: {}
