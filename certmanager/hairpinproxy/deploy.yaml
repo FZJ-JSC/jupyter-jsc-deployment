@@ -1,12 +1,5 @@
 # https://github.com/compumike/hairpin-proxy
 
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: hairpin-proxy
-
----
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
