@@ -1,15 +1,14 @@
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Issuer
 metadata:
-  name: eurocc-clusterissuer-staging
+  name: eurocc-issuer-staging
   namespace: jupyterjsc
 spec:
   acme:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    # server: https://acme-v02.api.letsencrypt.org/directory
     email: t.kreuzer@fz-juelich.de
     privateKeySecretRef:
-      name: eurocc-clusterissuer-staging
+      name: eurocc-issuer-staging
     solvers:
       - http01:
           ingress:
