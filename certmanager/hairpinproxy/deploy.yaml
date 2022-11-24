@@ -1,5 +1,14 @@
 # https://github.com/compumike/hairpin-proxy
 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hairpin-proxy-haproxy-cm
+  data:
+    TARGET_SERVER: 'ingress-nginx-staging-controller.ingress-nginx.svc.cluster.local'
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,9 +29,9 @@ spec:
       containers:
         - image: compumike/hairpin-proxy-haproxy:0.2.1
           name: main
-          env:
-          - name: TARGET_SERVER
-            value: ingress-nginx-staging-controller.ingress-nginx.svc.cluster.local
+          envFrom:
+            - configMapRef:
+                name: hairpin-proxy-haproxy-cm
           resources:
             requests:
               memory: "100Mi"
