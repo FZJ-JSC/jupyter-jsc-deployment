@@ -3,6 +3,8 @@ cull:
 ingress:
   enabled: true
   annotations:
+    acme.cert-manager.io/http01-edit-in-place: "false"
+    cert-manager.io/issuer: letsencrypt-issuer-staging
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/proxy-body-size: "2g"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
