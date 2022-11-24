@@ -110,7 +110,7 @@ targetCustomizations:
           tls:
           - hosts:
             - juniq-staging.fz-juelich.de
-            secretName: letsencrypt-issuer-staging
+            secretName: test-secret
   - name: production
     clusterSelector:
       matchLabels:
