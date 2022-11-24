@@ -1,0 +1,4 @@
+defaultNamespace: default
+
+#dependsOn:
+#    https://github.com/syseleven/designate-certmanager-webhook/archive/refs/tags/helm-0.5.0.tar.gz
