@@ -110,7 +110,7 @@ targetCustomizations:
           tls:
           - hosts:
             - juniq-staging.fz-juelich.de
-            secretName: test-secret
+            secretName: juniq-tls
   - name: production
     clusterSelector:
       matchLabels:
