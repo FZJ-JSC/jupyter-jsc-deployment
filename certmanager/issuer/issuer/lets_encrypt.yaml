@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: eurocc-issuer
+  name: letsencrypt-issuer
   namespace: jupyterjsc
 spec:
   acme:
@@ -9,7 +9,7 @@ spec:
     server: https://acme-v02.api.letsencrypt.org/directory
     email: vsgc-adm@fz-juelich.de
     privateKeySecretRef:
-      name: eurocc-issuer-private-key
+      name: letsencrypt-issuer-private-key
     solvers:
       - http01:
           ingress: {}
