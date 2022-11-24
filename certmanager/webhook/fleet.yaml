@@ -1,7 +1,6 @@
 defaultNamespace: default
 helm:
-    chart: https://github.com/syseleven/designate-certmanager-webhook/archive/refs/tags/helm-0.5.0.tar.gz
-    values:
-        credentialsSecret: openstack-app-credential
+  values:
+    credentialsSecret: openstack-app-credential
 dependsOn:
   - name: jupyterjsc-certmanager
