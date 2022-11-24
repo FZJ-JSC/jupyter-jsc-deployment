@@ -8,7 +8,7 @@ spec:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     email: t.kreuzer@fz-juelich.de
     privateKeySecretRef:
-      name: eurocc-issuer-staging
+      name: eurocc-issuer-staging-private-key
     solvers:
       - http01:
           ingress: {}
