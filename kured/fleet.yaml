@@ -6,14 +6,15 @@ helm:
   version: 4.0.4
   values:
     configuration:
-      rebootDays: ["sat", "sun", "tue"]
-      startTime: "3am"
-      endTime: "6am"
-      timeZone: Europe/Berlin
       drainGracePeriod: "120"
       drainTimeout: "300s"
+      endTime: "6am"
       forceReboot: true
       lockReleaseDelay: "300s"
+      period: "15m"
+      rebootDays: ["sat", "sun", "tue"]
+      startTime: "3am"
+      timeZone: Europe/Berlin
     tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
