@@ -13,6 +13,7 @@ helm:
       drainGracePeriod: "120"
       drainTimeout: "300s"
       forceReboot: true
+      lockReleaseDelay: "300s"
     tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
