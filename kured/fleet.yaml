@@ -12,8 +12,8 @@ helm:
       startTime: "3am"
       endTime: "6am"
       timeZone: Europe/Berlin
-      drainGracePeriod: "120"
-      drainTimeout: "300"
+      drainGracePeriod: "120s"
+      drainTimeout: "300s"
       forceReboot: true
     tolerations:
       - key: node-role.kubernetes.io/master
