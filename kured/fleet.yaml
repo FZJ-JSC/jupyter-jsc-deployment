@@ -12,7 +12,7 @@ helm:
       forceReboot: true
       lockReleaseDelay: "300s"
       period: "15m"
-      rebootDays: ["sat", "sun", "tue"]
+      rebootDays: ["sat", "sun", "mon"]
       startTime: "3am"
       timeZone: Europe/Berlin
     tolerations:
