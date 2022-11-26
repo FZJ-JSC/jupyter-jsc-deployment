@@ -63,9 +63,7 @@ helm:
         annotations:
           loadbalancer.openstack.org/keep-floatingip: true
           loadbalancer.openstack.org/proxy-protocol: "true"
-          # slow starting kernels, like SlurmWrapper, use Post Request
-          # taking a long time. timeout-client-data may prevent them
-          # loadbalancer.openstack.org/timeout-client-data: "43200000"
+          #loadbalancer.openstack.org/timeout-client-data: "600000"
           #loadbalancer.openstack.org/timeout-member-connect: "600000"
           loadbalancer.openstack.org/timeout-member-data: "600000"
 targetCustomizations:
