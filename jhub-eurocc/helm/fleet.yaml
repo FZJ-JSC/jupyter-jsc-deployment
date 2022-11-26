@@ -179,14 +179,14 @@ targetCustomizations:
           labels:
             stage: production
             jhub_version: "2.3.1"
-            hostname: "eurocc.fz-juelich.de"
+            hostname: "jupyter.eurocc-gcs.de"
             drf_username: "jupyterhubeurocc"
             logger_name: "JupyterHubEuroCCProduction"
             NTS_GIT_BRANCH: "main"
         ingress:
           hosts:
-          - binder.jupyter-jsc.fz-juelich.de
+          - jupyter.eurocc-gcs.de
           tls:
           - hosts:
-            - binder.jupyter-jsc.fz-juelich.de
-            secretName: jupyter-jsc-certs
+            - jupyter.eurocc-gcs.de
+            secretName: eurocc-tls
