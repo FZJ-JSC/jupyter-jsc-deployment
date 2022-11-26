@@ -33,7 +33,7 @@ ingress:
           # Custom headers to proxied server
           client_max_body_size                    "2g";
           proxy_connect_timeout                   "3600s";
-          proxy_send_timeout                      "43200s";
+          proxy_send_timeout                      "3600s";
           proxy_read_timeout                      "86400s";
           
           proxy_buffering                         off;
