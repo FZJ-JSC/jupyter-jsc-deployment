@@ -107,7 +107,7 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: false
+          enabled: true
           hosts:
           - juniq-staging.fz-juelich.de
           tls:
