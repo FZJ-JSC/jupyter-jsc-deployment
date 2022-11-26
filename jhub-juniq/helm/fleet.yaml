@@ -105,6 +105,7 @@ targetCustomizations:
             drf_username: "jupyterhubjuniq"
             logger_name: "JupyterHubJUNIQStaging"
         ingress:
+          enabled: false
           hosts:
           - juniq-staging.fz-juelich.de
           tls:

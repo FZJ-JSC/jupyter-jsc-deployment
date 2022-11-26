@@ -10,9 +10,12 @@ targetCustomizations:
         provider.cattle.io: rke
     helm:
       values:
-        enabled: false
+        enabled: true
         # if enabled is set to true, remember to set manual-ingress/fleet.yaml:staging.helm.values.jhubInstances.maintenance to true
         ingress:
+          annotations:
+            acme.cert-manager.io/http01-edit-in-place: "false"
+            cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
           hosts:
             - host: jupyter-jsc-staging.fz-juelich.de
               paths:
@@ -20,10 +23,28 @@ targetCustomizations:
                   pathType: Prefix
               svcName: jhub-maintenance
               svcPort: 80
+            - host: jupyter-staging.eurocc-gcs.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
+            - host: juniq-staging.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
           tls:
-            - secretName: jupyter-jsc-certs
-              hosts:
+            - hosts:
                 - jupyter-jsc-staging.fz-juelich.de
+              secretName: jupyter-jsc-certs
+            - hosts:
+                - jupyter-staging.eurocc-gcs.de
+              secretName: eurocc-tls
+            - hosts:
+                - juniq-staging.fz-juelich.de
+              secretName: juniq-tls
   - name: production
     clusterSelector:
       matchLabels:
@@ -45,3 +66,35 @@ targetCustomizations:
             - secretName: jupyter-jsc-certs
               hosts:
                 - jupyter-jsc.fz-juelich.de
+          annotations:
+            acme.cert-manager.io/http01-edit-in-place: "false"
+            cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
+          hosts:
+            - host: jupyter-jsc.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
+            - host: jupyter.eurocc-gcs.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
+            - host: juniq.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
+          tls:
+            - hosts:
+                - jupyter-jsc.fz-juelich.de
+              secretName: jupyter-jsc-certs
+            - hosts:
+                - jupyter.eurocc-gcs.de
+              secretName: eurocc-tls
+            - hosts:
+                - juniq.fz-juelich.de
+              secretName: juniq-certs

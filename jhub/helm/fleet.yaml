@@ -207,6 +207,7 @@ targetCustomizations:
               cpu: 1000m
               memory: 3072Mi
         ingress:
+          enabled: false
           hosts:
           - jupyter-jsc.fz-juelich.de
           tls:
