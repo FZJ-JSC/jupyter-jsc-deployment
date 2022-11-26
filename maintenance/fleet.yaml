@@ -10,8 +10,10 @@ targetCustomizations:
         provider.cattle.io: rke
     helm:
       values:
+        # Set JupyterHub in maintenance:
+          #   Set enabled here to true, update ingress in jhub[-juniq|-eurocc]/helm/fleet.yaml
+          #   Update ingress.hosts and ingress.tls in this file, if only specific hubs should go in maintenance
         enabled: true
-        # if enabled is set to true, remember to set manual-ingress/fleet.yaml:staging.helm.values.jhubInstances.maintenance to true
         ingress:
           annotations:
             acme.cert-manager.io/http01-edit-in-place: "false"
@@ -52,20 +54,11 @@ targetCustomizations:
         provider.cattle.io: rke
     helm:
       values:
-        enabled: false
-        # if enabled is set to true, remember to set manual-ingress/fleet.yaml:production.helm.values.jhubInstances.maintenance to true
+        # Set JupyterHub in maintenance:
+          #   Set enabled here to true, update ingress in jhub[-juniq|-eurocc]/helm/fleet.yaml
+          #   Update ingress.hosts and ingress.tls in this file, if only specific hubs should go in maintenance
+        enabled: true
         ingress:
-          hosts:
-            - host: jupyter-jsc.fz-juelich.de
-              paths:
-                - path: /
-                  pathType: Prefix
-              svcName: jhub-maintenance
-              svcPort: 80
-          tls:
-            - secretName: jupyter-jsc-certs
-              hosts:
-                - jupyter-jsc.fz-juelich.de
           annotations:
             acme.cert-manager.io/http01-edit-in-place: "false"
             cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer

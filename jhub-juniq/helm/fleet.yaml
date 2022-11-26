@@ -105,6 +105,8 @@ targetCustomizations:
             drf_username: "jupyterhubjuniq"
             logger_name: "JupyterHubJUNIQStaging"
         ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
           enabled: false
           hosts:
           - juniq-staging.fz-juelich.de
@@ -183,6 +185,9 @@ targetCustomizations:
             drf_username: "jupyterhubjuniq"
             logger_name: "JupyterHubJUNIQProduction"
         ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+          enabled: false
           hosts:
           - juniq.fz-juelich.de
           tls:

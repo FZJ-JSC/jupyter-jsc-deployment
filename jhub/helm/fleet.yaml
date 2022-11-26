@@ -114,6 +114,8 @@ targetCustomizations:
             logger_name: "JupyterHubStaging"
             NTS_GIT_BRANCH: "main"
         ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
           enabled: false
           hosts:
           - jupyter-jsc-staging.fz-juelich.de
@@ -208,6 +210,9 @@ targetCustomizations:
               cpu: 1000m
               memory: 3072Mi
         ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+          enabled: false
           hosts:
           - jupyter-jsc.fz-juelich.de
           tls:
