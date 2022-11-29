@@ -42,7 +42,7 @@ targetCustomizations:
           tls:
             - hosts:
                 - jupyter-jsc-staging.fz-juelich.de
-              secretName: jupyter-jsc-certs
+              secretName: jupyter-jsc-tls
             - hosts:
                 - jupyter-staging.eurocc-gcs.de
               secretName: eurocc-tls
@@ -86,7 +86,7 @@ targetCustomizations:
           tls:
             - hosts:
                 - jupyter-jsc.fz-juelich.de
-              secretName: jupyter-jsc-certs
+              secretName: jupyter-jsc-tls
             - hosts:
                 - jupyter.eurocc-gcs.de
               secretName: eurocc-tls
