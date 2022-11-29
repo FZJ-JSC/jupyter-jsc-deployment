@@ -3,7 +3,7 @@ helm:
   releaseName: postgresql
   repo: https://charts.bitnami.com/bitnami
   chart: postgresql
-  version: 11.1.28
+  version: 11.9.13
   values:
     auth:
       existingSecret: "postgresql-auth"
@@ -27,6 +27,13 @@ helm:
               psql -U postgres -c "CREATE DATABASE ${JUPYTERHUB_JUNIQ_DATABASE};"
               psql -U postgres -c "CREATE USER ${JUPYTERHUB_JUNIQ_USER} WITH ENCRYPTED PASSWORD '${JUPYTERHUB_JUNIQ_PASSWORD}';"
               psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${JUPYTERHUB_JUNIQ_DATABASE} TO ${JUPYTERHUB_JUNIQ_USER};"
+            fi
+
+            export JUPYTERHUB_EUROCC_SETUP=${JUPYTERHUB_EUROCC_SETUP:-"false"}
+            if [[ ${JUPYTERHUB_EUROCC_SETUP} == "true" ]]; then
+              psql -U postgres -c "CREATE DATABASE ${JUPYTERHUB_EUROCC_DATABASE};"
+              psql -U postgres -c "CREATE USER ${JUPYTERHUB_EUROCC_USER} WITH ENCRYPTED PASSWORD '${JUPYTERHUB_EUROCC_PASSWORD}';"
+              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${JUPYTERHUB_EUROCC_DATABASE} TO ${JUPYTERHUB_EUROCC_USER};"
             fi
 
             export UNICOREMGR_SETUP=${UNICOREMGR_SETUP:-"false"}
