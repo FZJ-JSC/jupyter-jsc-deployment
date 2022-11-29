@@ -21,6 +21,13 @@ helm:
             port: 2222
             hostname: "drf-k8smgr-ssh.jupyterjsc.svc"
             remoteKeySuffix: "_juniq"
+      eurocc:
+        ssh_config_hosts:
+          - name: "k8smgr_hdfcloud_eurocc"
+            user: "k8smgr"
+            port: 2222
+            hostname: "drf-k8smgr-ssh.jupyterjsc.svc"
+            remoteKeySuffix: "_eurocc"
       default:
         additional_remote_hosts:
           - eurocc
