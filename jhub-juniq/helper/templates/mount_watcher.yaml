@@ -42,6 +42,8 @@ data:
     cd /mnt/shared-data/jhub_files
     git pull origin {{ .Values.jhubfiles.branch }}-${JUPYTERHUB_STAGE}
     cp -r /mnt/shared-data/jhub_files/${JUPYTERHUB_VERSION}/static /tmp/static-files
+    rm -r /tmp/static-files/default/images/footer/systems
+    rm -r /tmp/static-files/juniq.fz-juelich.de/images/footer/systems
     chown -R 1000:1000 /tmp/static-files
     cp -r /tmp/static-files/* /mnt/shared-data/static-files
     rm -rf /tmp/static-files
