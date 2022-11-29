@@ -59,7 +59,7 @@ targetCustomizations:
         # Set JupyterHub in maintenance:
           #   Set enabled here to true, update ingress in jhub[-juniq|-eurocc]/helm/fleet.yaml
           #   Update ingress.hosts and ingress.tls in this file, if only specific hubs should go in maintenance
-        enabled: true
+        enabled: false
         ingress:
           annotations:
             acme.cert-manager.io/http01-edit-in-place: "false"
