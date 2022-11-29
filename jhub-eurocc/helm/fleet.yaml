@@ -1,4 +1,6 @@
 defaultNamespace: jupyterjsc
+dependsOn:
+  - name: jupyterjsc-certmanager
 helm:
   releaseName: jupyterhub-eurocc
   repo: https://jupyterhub.github.io/helm-chart/
