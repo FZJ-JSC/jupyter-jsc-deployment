@@ -39,6 +39,7 @@ spec:
       ports:
         - port: 56789
         - port: 56788
+        - port: 56787
         - port: 443
     - to:
         - ipBlock:
