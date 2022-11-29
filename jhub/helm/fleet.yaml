@@ -108,11 +108,15 @@ targetCustomizations:
                 path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: staging
-            jhub_version: "2.1.1"
+            jhub_version: "2.3.1"
             hostname: "jupyter-jsc-staging.fz-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubStaging"
+            NTS_GIT_BRANCH: "main"
         ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+          enabled: true
           hosts:
           - jupyter-jsc-staging.fz-juelich.de
           tls:
@@ -193,10 +197,11 @@ targetCustomizations:
                 path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: production
-            jhub_version: "2.1.1"
+            jhub_version: "2.3.1"
             hostname: "jupyter-jsc.fz-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubProduction"
+            NTS_GIT_BRANCH: "main"
           resources:
             requests:
               cpu: 100m
@@ -205,6 +210,9 @@ targetCustomizations:
               cpu: 1000m
               memory: 3072Mi
         ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+          enabled: false
           hosts:
           - jupyter-jsc.fz-juelich.de
           tls:

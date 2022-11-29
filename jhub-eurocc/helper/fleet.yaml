@@ -1,0 +1,4 @@
+defaultNamespace: jupyterjsc
+helm:
+  values:
+    nameOverride: "eurocc-jhub-helper"

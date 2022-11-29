@@ -1,0 +1,12 @@
+resources:
+- monitor.yaml
+
+# https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/1.2.0/jupyterhub/templates/ingress.yaml#L28
+# No support for JupyterHub with ssl :(
+patches:
+- target:
+    kind: Ingress
+    name: eurocc
+    group: networking.k8s.io
+    version: v1
+  path: ingress-patch.json

@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-issuer-staging
+  namespace: jupyterjsc
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: vsgc-adm@fz-juelich.de
+    privateKeySecretRef:
+      name: letsencrypt-issuer-staging-private-key
+    solvers:
+      - http01:
+          ingress: {}

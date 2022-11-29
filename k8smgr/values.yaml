@@ -40,6 +40,15 @@ jupyterhubs:
       port: 56788
     remote:
       scriptName: manage_tunnel_juniq.sh
+  eurocc:
+    host: eurocc-proxy-public
+    port: 443
+    forwardService:
+      name: drf-k8smgr-jhub-eurocc-forward
+      type: ClusterIP
+      port: 56787
+    remote:
+      scriptName: manage_tunnel_eurocc.sh
 
 gitconfig:
   branch: "k8smgr-dev"

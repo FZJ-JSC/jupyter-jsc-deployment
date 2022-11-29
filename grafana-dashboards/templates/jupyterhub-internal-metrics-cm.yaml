@@ -1290,12 +1290,16 @@ data:
             "name": "proxy",
             "options": [
               {
+                "text": "proxy-public",
+                "value": "proxy-public"
+              },
+              {
                 "text": "juniq-proxy-public",
                 "value": "juniq-proxy-public"
               },
               {
-                "text": "proxy-public",
-                "value": "proxy-public"
+                "text": "eurocc-proxy-public",
+                "value": "eurocc-proxy-public"
               }
             ],
             "query": "label_values(kube_service_labels{label_component=\"proxy-public\"}, service)",

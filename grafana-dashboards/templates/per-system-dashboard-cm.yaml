@@ -1450,12 +1450,16 @@ data:
             "name": "hub",
             "options": [
               {
+                "text": "jupyterhub",
+                "value": "jupyterhub"
+              },
+              {
                 "text": "juniq",
                 "value": "juniq"
               },
               {
-                "text": "jupyterhub",
-                "value": "jupyterhub"
+                "text": "eurocc",
+                "value": "eurocc"
               }
             ],
             "query": "label_values(kube_service_labels{label_component=\"hub\"}, label_app)",

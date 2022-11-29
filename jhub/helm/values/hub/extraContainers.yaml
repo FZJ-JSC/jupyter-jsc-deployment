@@ -105,6 +105,10 @@ hub:
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['jhub_version']
+        - name: NTS_GIT_BRANCH
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['NTS_GIT_BRANCH']
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data

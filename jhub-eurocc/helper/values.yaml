@@ -1,0 +1,22 @@
+# Default values for helper.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: "hub-eurocc-helper"
+
+proxyBackup:
+  name: eurocc-proxy-public
+  release: jupyterhub-eurocc
+  numberOfBackups: 5
+
+labels: {}
+
+serviceStatic:
+  name: "eurocc-static-files"
+  port: 8070
+
+gitconfig:
+  branch: "jupyterhub-eurocc"
+
+jhubfiles:
+  branch: "jupyterhub-files"

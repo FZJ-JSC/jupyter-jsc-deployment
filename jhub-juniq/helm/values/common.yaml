@@ -3,6 +3,8 @@ cull:
 ingress:
   enabled: true
   annotations:
+    acme.cert-manager.io/http01-edit-in-place: "false"
+    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/proxy-body-size: "2g"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
@@ -56,7 +58,7 @@ ingress:
       }
       location ~* "^/((hub/static)|(2FA)|(2fa)|(2fadetails)|(jusufcloud)|(hdfaai))" {
           #proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
-          proxy_pass                              http://hub-static-files.jupyterjsc.svc:8070;
+          proxy_pass                              http://juniq-static-files.jupyterjsc.svc:8070;
           
           #allow                                   {{ $jhubInstance.allowCidr }};
           #deny                                    all;

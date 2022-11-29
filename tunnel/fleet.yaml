@@ -2,7 +2,7 @@ defaultNamespace: jupyterjsc
 helm:
   values:
     image:
-      tag: "1.2.5.1"
+      tag: "1.3.0"
     nameOverride: "drf-tunnel"
     nodeSelector:
       worker: "true"
@@ -22,6 +22,8 @@ helm:
             hostname: "drf-k8smgr-ssh.jupyterjsc.svc"
             remoteKeySuffix: "_juniq"
       default:
+        additional_remote_hosts:
+          - eurocc
         ssh_config_hosts: 
           - name: "k8smgr_hdfcloud"
             user: "k8smgr"

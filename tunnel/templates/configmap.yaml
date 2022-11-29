@@ -38,6 +38,27 @@ data:
         HostName {{ $host.hostname }}
         IdentityFile /mnt/shared-data/keypairs/remote{{ $host.remoteKeySuffix | default "" }}
         ControlPath /tmp/control_remote_{{ $host.name }}
+    
+    {{- range $additional_remote_host := $jupyterhub.additional_remote_hosts }}
+
+    Host remote_{{ $host.name }}_{{ $additional_remote_host }}
+        User {{ $host.user }}
+        Port {{ default 22 $host.port }}
+        HostName {{ $host.hostname }}
+        IdentityFile /mnt/shared-data/keypairs/remote_{{ $additional_remote_host }}
+        ControlPath /tmp/control_remote_{{ $host.name }}_{{ $additional_remote_host }}
+    {{- end }}
+
+    {{- range $additional_host := $jupyterhub.additional_hosts }}
+    
+    Host tunnel_{{ $host.name }}_{{ $additional_host }}
+        User {{ $host.user }}
+        Port {{ default 22 $host.port }}
+        HostName {{ $host.hostname }}
+        IdentityFile /mnt/shared-data/keypairs/tunnel_{{ $additional_host }}
+        ControlPath /tmp/control_tunnel_{{ $host.name }}_{{ $additional_host }}
+    {{- end }}
+
     {{- end }}
     {{- end }}
     {{- end }}
