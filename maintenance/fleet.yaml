@@ -71,12 +71,12 @@ targetCustomizations:
                   pathType: Prefix
               svcName: jhub-maintenance
               svcPort: 80
-            - host: jupyter.eurocc-gcs.de
-              paths:
-                - path: /
-                  pathType: Prefix
-              svcName: jhub-maintenance
-              svcPort: 80
+            #- host: jupyter.eurocc-gcs.de
+            #  paths:
+            #    - path: /
+            #      pathType: Prefix
+            #  svcName: jhub-maintenance
+            #  svcPort: 80
             - host: juniq.fz-juelich.de
               paths:
                 - path: /
@@ -87,9 +87,9 @@ targetCustomizations:
             - hosts:
                 - jupyter-jsc.fz-juelich.de
               secretName: jupyter-jsc-tls
-            - hosts:
-                - jupyter.eurocc-gcs.de
-              secretName: eurocc-tls
+            #- hosts:
+            #    - jupyter.eurocc-gcs.de
+            #  secretName: eurocc-tls
             - hosts:
                 - juniq.fz-juelich.de
               secretName: juniq-certs

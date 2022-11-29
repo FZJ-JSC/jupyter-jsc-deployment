@@ -186,8 +186,8 @@ targetCustomizations:
             logger_name: "JupyterHubJUNIQProduction"
         ingress:
           # Set JupyterHub in maintenance:
-          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: false
+          #   Set enabled: false, update ingress in maintenance/fleet.yaml
+          enabled: true
           hosts:
           - juniq.fz-juelich.de
           tls:
