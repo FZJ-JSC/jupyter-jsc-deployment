@@ -51,9 +51,15 @@ hub:
             fieldRef:
               fieldPath: metadata.labels['NTS_GIT_BRANCH']
         - name: TEMPLATE_GIT_REPO
+          value: "https://github.com/kochhlrs/jupyter_gcs_eurocc.git"
+        - name: TEMPLATE_GIT_BRANCH
           valueFrom:
             fieldRef:
-              fieldPath: metadata.labels['TEMPLATE_GIT_REPO']
+              fieldPath: metadata.labels['TEMPLATE_GIT_BRANCH']
+        - name: STATIC_GIT_BRANCH
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['STATIC_GIT_BRANCH']
       command: ["/bin/sh"]
       args:
         - -c
@@ -69,8 +75,8 @@ hub:
           git clone --single-branch --branch jupyterhub-eurocc-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config &&
           git clone --single-branch --branch jupyterhub-files-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} jhub_files &&
           cd /mnt/shared-data/jhub_files/ &&
-          git submodule add -b templates ${TEMPLATE_GIT_REPO} ${JUPYTERHUB_VERSION}/templates/${JUPYTERHUB_URL} &&
-          git submodule add -b static ${TEMPLATE_GIT_REPO} ${JUPYTERHUB_VERSION}/static/${JUPYTERHUB_URL} &&
+          git submodule add -b ${TEMPLATE_GIT_BRANCH} ${TEMPLATE_GIT_REPO} ${JUPYTERHUB_VERSION}/templates/${JUPYTERHUB_URL} &&
+          git submodule add -b ${STATIC_GIT_BRANCH} ${TEMPLATE_GIT_REPO} ${JUPYTERHUB_VERSION}/static/${JUPYTERHUB_URL} &&
           cd /mnt/shared-data &&
           export NTS_GIT_REPO_SHORT=${NTS_GIT_REPO#"https://"} && 
           git clone --single-branch --branch ${NTS_GIT_BRANCH} https://${NTS_GIT_USERNAME}:${NTS_GIT_PASSWORD}@${NTS_GIT_REPO_SHORT} notebook_template_server && 
