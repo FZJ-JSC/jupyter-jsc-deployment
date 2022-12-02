@@ -107,6 +107,7 @@ targetCustomizations:
             drf_username: "jupyterhubeurocc"
             logger_name: "JupyterHubEuroCCStaging"
             NTS_GIT_BRANCH: "main"
+            TEMPLATE_GIT_REPO: "https://github.com/kochhlrs/jupyter_gcs_eurocc.git"
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
