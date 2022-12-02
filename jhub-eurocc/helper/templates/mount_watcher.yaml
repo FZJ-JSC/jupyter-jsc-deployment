@@ -7,8 +7,9 @@ data:
     #!/bin/bash
     git config --global --add safe.directory /mnt/shared-data/git_config
     git config --global --add safe.directory /mnt/shared-data/jhub_files
-    git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/templates/jupyter-staging.eurocc-gcs.de
-    git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/static/jupyter-staging.eurocc-gcs.de
+    test -d /mnt/shared-data/notebook_template_server && git config --global --add safe.directory /mnt/shared-data/notebook_template_server
+    test -d /mnt/shared-data/jhub_files/2.3.1/templates/jupyter-staging.eurocc-gcs.de && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/templates/jupyter-staging.eurocc-gcs.de
+    test -d /mnt/shared-data/jhub_files/2.3.1/static/jupyter-staging.eurocc-gcs.de && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/static/jupyter-staging.eurocc-gcs.de
     git config --global pull.ff only
     while true;
     do
