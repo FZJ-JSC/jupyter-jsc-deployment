@@ -1,0 +1,22 @@
+# Default values for helper.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: "hub-coeraise-helper"
+
+proxyBackup:
+  name: coeraise-proxy-public
+  release: jupyterhub-coeraise
+  numberOfBackups: 5
+
+labels: {}
+
+serviceStatic:
+  name: "coeraise-static-files"
+  port: 8070
+
+gitconfig:
+  branch: "jupyterhub-coeraise"
+
+jhubfiles:
+  branch: "jupyterhub-files"

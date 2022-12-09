@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coeraise-jupyterhub-mw
+data:
+  run.sh: |
+    #!/bin/bash
+    git config --global --add safe.directory /mnt/shared-data/git_config
+    git config --global --add safe.directory /mnt/shared-data/jhub_files
+    test -d /mnt/shared-data/notebook_template_server && git config --global --add safe.directory /mnt/shared-data/notebook_template_server
+    test -d /mnt/shared-data/jhub_files/2.3.1/templates/jupyter-staging.coe-raise.eu && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/templates/jupyter-staging.coe-raise.eu
+    test -d /mnt/shared-data/jhub_files/2.3.1/static/jupyter-staging.coe-raise.eu && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/static/jupyter-staging.coe-raise.eu
+    git config --global pull.ff only
+    while true;
+    do
+      sleep 60
+      /bin/bash /mnt/volumes_mw/mount_watch/..data/compare.sh
+    done
+  compare.sh: |
+    #!/bin/bash
+    compare () {
+      if [[ ! -f $1 ]]; then
+        echo "$(date) $1 does not exist. Exit 1"
+        exit 1
+      fi
+      if [[ ! -f $2 ]]; then
+        echo "$(date) $2 does not exist. Create it."
+        cp -rp $1 $2
+      fi
+      cmp -s $1 $2
+      EC=$?
+      if [[ ! $EC -eq 0 ]]; then
+        # File has changed. It's important, that the files have the correct ownership 
+        echo "$(date) $1 changed"
+        filename=$(basename $1)
+        cp $1 /tmp/$filename
+        chown 1000:100 /tmp/$filename
+        chmod 400 /tmp/$filename
+        cp -rp /tmp/$filename $2 && rm /tmp/$filename
+      fi
+    }
+    cd /mnt/shared-data/git_config
+    echo "$(date) Compare configmaps with current files"
+    git pull origin {{ .Values.gitconfig.branch }}-${JUPYTERHUB_STAGE}
+    cd /mnt/shared-data/jhub_files
+    git pull origin {{ .Values.jhubfiles.branch }}-${JUPYTERHUB_STAGE}
+    git submodule update --remote
+    cp -r /mnt/shared-data/jhub_files/${JUPYTERHUB_VERSION}/static /tmp/static-files
+    rm -r /tmp/static-files/default/images/footer/systems
+    chown -R 1000:1000 /tmp/static-files
+    cp -r /tmp/static-files/* /mnt/shared-data/static-files
+    rm -rf /tmp/static-files
+    test -d /mnt/shared-data/notebook_template_server && cd /mnt/shared-data/notebook_template_server
+    test -d /mnt/shared-data/notebook_template_server && git pull origin ${NTS_GIT_BRANCH}
