@@ -103,7 +103,7 @@ targetCustomizations:
           labels:
             stage: staging
             jhub_version: "2.3.1"
-            hostname: "jupyter-staging.coe-raise.eu"
+            hostname: "zam10199.zam.kfa-juelich.de"
             drf_username: "jupyterhubcoeraise"
             logger_name: "JupyterHubCoERaiseStaging"
             NTS_GIT_BRANCH: "main"
@@ -114,10 +114,10 @@ targetCustomizations:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
           enabled: true
           hosts:
-          - jupyter-staging.coe-raise.eu
+          - zam10199.zam.kfa-juelich.de
           tls:
           - hosts:
-            - jupyter-staging.coe-raise.eu
+            - zam10199.zam.kfa-juelich.de
             secretName: coeraise-tls
   - name: production
     clusterSelector:
