@@ -9,6 +9,8 @@ helm:
       enabled: false
     kiali:
       enabled: false
+    global:
+      rbac: false
 targetCustomizations:
   - name: staging
     clusterSelector:
