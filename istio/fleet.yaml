@@ -3,15 +3,12 @@ helm:
   releaseName: rancher-istio
   repo: https://charts.rancher.io
   chart: rancher-istio
-  version: 101.0.0+up1.14.3
+  version: 100.4.0+up1.14.1
   values:
     ingressGateways:
       enabled: false
     kiali:
       enabled: false
-    global:
-      rbac: 
-        pspEnabled: false
 targetCustomizations:
   - name: staging
     clusterSelector:
