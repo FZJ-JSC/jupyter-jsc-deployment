@@ -10,7 +10,8 @@ helm:
     kiali:
       enabled: false
     global:
-      rbac: false
+      rbac: 
+        pspEnabled: false
 targetCustomizations:
   - name: staging
     clusterSelector:
