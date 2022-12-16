@@ -14,7 +14,7 @@ ingress:
       # Managing requests to the users JupyterLab
       location ~* "^/user/([^/]+)/([^/]+)/" {
           #proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
-          proxy_pass                              https://coeraise-retries;
+          #proxy_pass                              https://coeraise-retries;
           #allow                                   134.94.0.0/16;
           #deny                                    all;
           
