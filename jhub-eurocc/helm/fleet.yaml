@@ -112,7 +112,7 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: true
+          enabled: false
           hosts:
           - jupyter-staging.eurocc-gcs.de
           tls:
@@ -193,7 +193,7 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: true
+          enabled: false
           hosts:
           - jupyter.eurocc-gcs.de
           tls:

@@ -112,7 +112,7 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: true
+          enabled: false
           hosts:
           - zam10199.zam.kfa-juelich.de
           tls:
@@ -186,14 +186,15 @@ targetCustomizations:
           labels:
             stage: production
             jhub_version: "2.3.1"
-            hostname: "jupyter.coe-raise.eu"
+            # hostname: "jupyter.coe-raise.eu"
+            hostname: "zam10054.zam.kfa-juelich.de"
             drf_username: "jupyterhubcoeraise"
             logger_name: "JupyterHubCoERaiseProduction"
             NTS_GIT_BRANCH: "main"
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: true
+          enabled: false
           hosts:
           - jupyter.coe-raise.eu
           tls:
