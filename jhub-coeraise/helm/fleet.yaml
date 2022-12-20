@@ -107,8 +107,8 @@ targetCustomizations:
             drf_username: "jupyterhubcoeraise"
             logger_name: "JupyterHubCoERaiseStaging"
             NTS_GIT_BRANCH: "main"
-            TEMPLATE_GIT_BRANCH: templates
-            STATIC_GIT_BRANCH: static
+            TEMPLATE_GIT_BRANCH: templates-staging
+            STATIC_GIT_BRANCH: static-staging
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
@@ -191,8 +191,8 @@ targetCustomizations:
             drf_username: "jupyterhubcoeraise"
             logger_name: "JupyterHubCoERaiseProduction"
             NTS_GIT_BRANCH: "main"
-            TEMPLATE_GIT_BRANCH: templates
-            STATIC_GIT_BRANCH: static
+            TEMPLATE_GIT_BRANCH: templates-production
+            STATIC_GIT_BRANCH: static-production
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
