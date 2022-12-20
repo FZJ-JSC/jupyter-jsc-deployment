@@ -28,7 +28,7 @@ targetCustomizations:
             cpu: 2000m
             memory: 2048Mi
         ingress:
-          enabled: false
+          enabled: true
           hosts:
             - host: drf-k8smgr.staging.svc
               paths:
@@ -45,6 +45,7 @@ targetCustomizations:
           - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHakYLgiGwEPU7iyxo3anl+IwS1JvVhkhK61jTkQaQPi'
           - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_juniq.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8g9Bp0LCnkGIdNosPzYVYIngMdkwKCLpqzlyovGunW'
           - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_eurocc.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBmfQCEj+LrU9P7NL1QGpGNAZCd1AYC/UdrRSOuhJHwR'
+          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_coeraise.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFYWZysgX5rdf8pGKrHx7MXbL/ei8LhkCMVTD/7j+8sE'
         gitconfig:
           branch: "k8smgr-staging"
         extraVolumes:
@@ -96,6 +97,7 @@ targetCustomizations:
           - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG1F5LkftRlmRoE/IDiAOWRSL6KDpnRD73sGvgMbrjsf'
           - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_juniq.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPYkfio1ASJsxXWfHfZ63jj1fSEVaU5PHKDYI/oUlgzJ'
           - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_eurocc.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIANDr/6CzEkWJF1mY/qQTgNpAEd8hl+FMBlP8C9Lh83w'
+          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_coeraise.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMEfsEK48+G4hCEntDXCuJ1iGB+eUOWZv23DvYnwe1bf'
         gitconfig:
           branch: "k8smgr-production"
         extraVolumes:

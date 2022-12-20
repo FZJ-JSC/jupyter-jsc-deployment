@@ -1,0 +1,4 @@
+defaultNamespace: jupyterjsc
+helm:
+  values:
+    nameOverride: "coeraise-jhub-helper"

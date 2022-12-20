@@ -15,7 +15,7 @@ targetCustomizations:
         # Set JupyterHub in maintenance:
           #   Set enabled here to true, update ingress in jhub[-juniq|-eurocc]/helm/fleet.yaml
           #   Update ingress.hosts and ingress.tls in this file, if only specific hubs should go in maintenance
-        enabled: false
+        enabled: true
         ingress:
           annotations:
             acme.cert-manager.io/http01-edit-in-place: "false"
@@ -39,6 +39,13 @@ targetCustomizations:
                   pathType: Prefix
               svcName: jhub-maintenance
               svcPort: 80
+            - host: zam10199.zam.kfa-juelich.de
+              #host: coeraise
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
           tls:
             - hosts:
                 - jupyter-jsc-staging.fz-juelich.de
@@ -49,6 +56,9 @@ targetCustomizations:
             - hosts:
                 - juniq-staging.fz-juelich.de
               secretName: juniq-tls
+            - hosts:
+                - zam10199.zam.kfa-juelich.de
+              secretName: coeraise-tls
   - name: production
     clusterSelector:
       matchLabels:
@@ -59,7 +69,7 @@ targetCustomizations:
         # Set JupyterHub in maintenance:
           #   Set enabled here to true, update ingress in jhub[-juniq|-eurocc]/helm/fleet.yaml
           #   Update ingress.hosts and ingress.tls in this file, if only specific hubs should go in maintenance
-        enabled: false
+        enabled: true
         ingress:
           annotations:
             acme.cert-manager.io/http01-edit-in-place: "false"
@@ -71,12 +81,12 @@ targetCustomizations:
                   pathType: Prefix
               svcName: jhub-maintenance
               svcPort: 80
-            #- host: jupyter.eurocc-gcs.de
-            #  paths:
-            #    - path: /
-            #      pathType: Prefix
-            #  svcName: jhub-maintenance
-            #  svcPort: 80
+            - host: jupyter.eurocc-gcs.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
             - host: juniq.fz-juelich.de
               paths:
                 - path: /
@@ -87,9 +97,9 @@ targetCustomizations:
             - hosts:
                 - jupyter-jsc.fz-juelich.de
               secretName: jupyter-jsc-tls
-            #- hosts:
-            #    - jupyter.eurocc-gcs.de
-            #  secretName: eurocc-tls
+            - hosts:
+                - jupyter.eurocc-gcs.de
+              secretName: eurocc-tls
             - hosts:
                 - juniq.fz-juelich.de
               secretName: juniq-certs

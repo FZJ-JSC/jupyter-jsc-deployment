@@ -49,6 +49,15 @@ jupyterhubs:
       port: 56787
     remote:
       scriptName: manage_tunnel_eurocc.sh
+  coeraise:
+    host: coeraise-proxy-public
+    port: 443
+    forwardService:
+      name: drf-k8smgr-jhub-coeraise-forward
+      type: ClusterIP
+      port: 56786
+    remote:
+      scriptName: manage_tunnel_coeraise.sh
 
 gitconfig:
   branch: "k8smgr-dev"

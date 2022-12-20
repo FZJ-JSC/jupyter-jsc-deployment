@@ -1,0 +1,96 @@
+hub:
+  extraEnv:
+    - name: JUPYTERHUB_STAGE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['stage']
+    - name: JUPYTERHUB_VERSION
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['jhub_version']
+    - name: JUPYTERHUB_HOSTNAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['hostname']
+    - name: JUPYTERHUB_APP
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['app']
+    - name: LOGGER_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['logger_name']
+    - name: K8SMGRHDFCLOUD_JUPYTERHUB_USERNAME
+      value: "jupyterhubcoeraise"
+    - name: UNICOREMGR_JUPYTERHUB_USERNAME
+      value: "jupyterhubcoeraise"
+    - name: TUNNEL_JUPYTERHUB_USERNAME
+      value: "jupyterhubcoeraise"
+    - name: LOGGING_CONFIG_FILE
+      value: "/mnt/shared-data/git_config/logging.json"
+    - name: LOGGING_METRICS_LOGFILE
+      value: "/mnt/persistent/metrics.log"
+    - name: SHOW_DRF_LOGS
+      value: "false"
+    - name: INCIDENTS_PATH
+      value: "/mnt/shared-data/incident-check"
+    - name: INCIDENTS_FILE
+      value: "/mnt/shared-data/incident-check/active_incidents.json"
+    - name: RESERVATIONS_FILE
+      value: "/mnt/shared-data/reservation-check/reservation.json"
+    - name: TUNNEL_DEPLOYMENT_NAMESPACE
+      value: "jupyterjsc"
+    - name: TUNNEL_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: drf-tunnel-passwds
+          key: JUPYTERHUBCOERAISE_USER_PASS
+    - name: UNICOREMGR_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: drf-unicoremgr-passwds
+          key: JUPYTERHUBCOERAISE_USER_PASS
+    - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: drf-k8smgr-passwds
+          key: JUPYTERHUBCOERAISE_USER_PASS
+    - name: OAUTH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: hub-custom
+          key: oauth_client_id_password
+    - name: OAUTH_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: hub-custom
+          key: oauth_client_secret_password
+    - name: SQL_HOST
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-general
+          key: SQL_HOST
+    - name: SQL_PORT
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-general
+          key: SQL_PORT
+    - name: SQL_DATABASE
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-users-jupyterjsc
+          key: JUPYTERHUB_COERAISE_DATABASE
+    - name: SQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-users-jupyterjsc
+          key: JUPYTERHUB_COERAISE_PASSWORD
+    - name: SQL_USER
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-users-jupyterjsc
+          key: JUPYTERHUB_COERAISE_USER
+    - name: DEPLOYMENT_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace

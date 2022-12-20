@@ -51,7 +51,7 @@ hub:
             fieldRef:
               fieldPath: metadata.labels['NTS_GIT_BRANCH']
         - name: TEMPLATE_GIT_REPO
-          value: "https://github.com/kochhlrs/jupyter_gcs_eurocc.git"
+          value: "https://github.com/FZJ-JSC/jupyter-jsc-custom-share-template.git"
         - name: TEMPLATE_GIT_BRANCH
           valueFrom:
             fieldRef:
@@ -72,7 +72,7 @@ hub:
           cd /mnt/shared-data &&
           rm -rf /mnt/shared-data/git_config &&
           rm -rf /mnt/shared-data/jhub_files &&
-          git clone --single-branch --branch jupyterhub-eurocc-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config &&
+          git clone --single-branch --branch jupyterhub-coeraise-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config &&
           git clone --single-branch --branch jupyterhub-files-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} jhub_files &&
           cd /mnt/shared-data/jhub_files/ &&
           git submodule add -b ${TEMPLATE_GIT_BRANCH} ${TEMPLATE_GIT_REPO} ${JUPYTERHUB_VERSION}/templates/${JUPYTERHUB_URL} &&
