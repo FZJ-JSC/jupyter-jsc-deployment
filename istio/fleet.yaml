@@ -9,5 +9,14 @@ helm:
       enabled: false
     kiali:
       enabled: false
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        kiali:
+          enabled: false
 dependsOn:
   - name: basics-monitor-crd
