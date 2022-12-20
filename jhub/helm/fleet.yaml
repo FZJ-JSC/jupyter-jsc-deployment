@@ -116,7 +116,7 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: false
+          enabled: true
           hosts:
           - jupyter-jsc-staging.fz-juelich.de
           tls:
@@ -212,7 +212,7 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: false
+          enabled: true
           hosts:
           - jupyter-jsc.fz-juelich.de
           tls:
