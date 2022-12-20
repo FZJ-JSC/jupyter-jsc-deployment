@@ -112,7 +112,7 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: false
+          enabled: true
           hosts:
           - zam10199.zam.kfa-juelich.de
           tls:
@@ -196,7 +196,7 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: false
+          enabled: true
           hosts:
           - jupyter.coe-raise.eu
           tls:
