@@ -123,7 +123,6 @@ hub:
           (r"/api/users/([^/]+)/random/server", UserRandomServerAPIHandler),
           (r"/api/users/([^/]+)/server/update", SpawnUpdateOptionsAPIHandler),
           (r"/api/users/([^/]+)/server/optionsform", SpawnOptionsFormAPIHandler),
-          (r"/api/users/([^/]+)/servers/([^/]*)/userjobsforward", UserJobsForwardAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]*)/update", SpawnUpdateOptionsAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]+)/userjobsforward", UserJobsForwardAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]+)/userjobsforward/([^/]+)", UserJobsForwardAPIHandler),
