@@ -99,3 +99,22 @@ data:
     exit $?
 {{- end }}
 {{- end }}
+
+  config: |
+    Host *
+        ServerAliveInterval {{ default 60 .Values.ssh_config_hosts_defaults.serverAliveInterval }}
+        ServerAliveCountMax {{ default 5 .Values.ssh_config_hosts_defaults.serverAliveCountMax }}
+        StrictHostKeyChecking {{ default "no" .Values.ssh_config_hosts_defaults.strictHostKeyChecking }}
+        UserKnownHostsFile {{ default "/dev/null" .Values.ssh_config_hosts_defaults.usersKnownHostsFile }}
+        ControlMaster {{ default "auto" .Values.ssh_config_hosts_defaults.controlMaster }}
+        ControlPersist {{ default 0 .Values.ssh_config_hosts_defaults.controlPersist }}
+    {{- range $host := .Values.ssh_config_hosts }}
+    {{- if not $host.disabled }}
+    Host tunnel_{{ $host.name }}
+        User {{ $host.user }}
+        Port {{ default 22 $host.port }}
+        HostName {{ $host.hostname }}
+        IdentityFile /mnt/shared-data/keypairs/tunnel{{ $host.tunnelKeySuffix | default "" }}
+        ControlPath /tmp/control_tunnel_{{ $host.name }}
+    {{- end }}
+    {{- end }}

@@ -54,6 +54,8 @@ spec:
                 secretKeyRef:
                   name: "{{ .Values.gitconfig.secret }}"
                   key: PASSWORD
+            - name: SSHCONFIGFILE
+              value: "/mnt/shared-data/files/config"
           imagePullPolicy: Always
           command: ["/bin/sh"]
           args:
