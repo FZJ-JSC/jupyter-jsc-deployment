@@ -1,4 +1,4 @@
-defaultNamespace: jupyterjsc
+defaultNamespace: userlabs
 helm:
   values:
     extraVolumeMounts:
