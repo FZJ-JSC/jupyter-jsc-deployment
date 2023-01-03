@@ -32,15 +32,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "drf-unicoremgr.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{/*
-Generate certificates for drf unicoremgr service
-*/}}
-{{- define "drf-unicoremgr.gen-certs" -}}
-{{- $altNames := list ( printf "drf-unicoremgr.svc" ) ( printf "drf-unicoremgr.production.svc" ) ( printf "%s" (include "drf-unicoremgr.name" .) ) ( printf "%s.%s" (include "drf-unicoremgr.name" .) .Release.Namespace ) ( printf "%s.%s.svc" (include "drf-unicoremgr.name" .) .Release.Namespace ) -}}
-{{- $ca := genCA "drf-unicoremgr-ca" 1825 -}}
-{{- $cert := genSignedCert ( include "drf-unicoremgr.name" . ) nil $altNames 1825 $ca -}}
-tls.crt: {{ $cert.Cert | b64enc }}
-tls.key: {{ $cert.Key | b64enc }}
-tls.ca: {{ $ca.Cert | b64enc }}
-{{- end -}}
