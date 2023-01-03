@@ -19,7 +19,7 @@
                 "GUNICORN_START": "true",
                 "KUBERNETES_SERVICE_HOST": "<KUBERNETES_SERVICE_HOST>",
                 "KUBERNETES_SERVICE_PORT": "<KUBERNETES_SERVICE_PORT>",
-                "DEPLOYMENT_NAMESPACE": "jupyterjsc",
+                "DEPLOYMENT_NAMESPACE": "userlabs",
                 "DEPLOYMENT_NAME": "k8smgr",
                 "SQL_PASSWORD": "<SQL_PASSWORD>",
                 "SQL_DATABASE": "<SQL_DATABASE>",
@@ -28,7 +28,8 @@
                 "SQL_USER": "<SQL_USER>",
                 "SQL_ENGINE": "<SQL_ENGINE>",
                 "SUPERUSER_PASS": "<SUPERUSER_PASS>",
-                "JUPYTERHUB_USER_PASS": "<JUPYTERHUB_USER_PASS>"
+                "JUPYTERHUB_USER_PASS": "<JUPYTERHUB_USER_PASS>",
+                "SSHCONFIGFILE": "/mnt/shared-data/files/config"
             }
         }
     ]

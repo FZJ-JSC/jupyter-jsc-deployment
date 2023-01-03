@@ -54,8 +54,6 @@ spec:
                 secretKeyRef:
                   name: "{{ .Values.gitconfig.secret }}"
                   key: PASSWORD
-            - name: SSHCONFIGFILE
-              value: "/mnt/shared-data/files/config"
           imagePullPolicy: Always
           command: ["/bin/sh"]
           args:
@@ -141,6 +139,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['app']
+            - name: SSHCONFIGFILE
+              value: "/mnt/shared-data/files/config"
             - name: DEPLOYMENT_NAMESPACE
               value: "{{ .Values.deploymentNamespace }}"
             - name: LOGGER_NAME
