@@ -125,7 +125,6 @@ hub:
           (r"/api/users/([^/]+)/server/optionsform", SpawnOptionsFormAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]*)/update", SpawnUpdateOptionsAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]+)/userjobsforward", UserJobsForwardAPIHandler),
-          (r"/api/users/([^/]+)/servers/([^/]+)/userjobsforward/([^/]+)", UserJobsForwardAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]+)/optionsform", SpawnOptionsFormAPIHandler),
           (r"/api/users/progress/update/([^/]+)", SpawnProgressUpdateAPIHandler),
           (r"/api/users/progress/update/([^/]+)/([^/]+)", SpawnProgressUpdateAPIHandler),
