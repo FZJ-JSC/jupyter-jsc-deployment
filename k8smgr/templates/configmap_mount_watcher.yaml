@@ -47,7 +47,7 @@ data:
     compare "/mnt/volumes_certs/certs/..data/tls.crt" "/mnt/shared-data/certs/k8smgr.crt"
     compare "/mnt/volumes_certs/certs/..data/tls.key" "/mnt/shared-data/certs/k8smgr.key"
     compare "/mnt/volumes_files/files/..data/manage_tunnel.sh" "/mnt/shared-data/files/manage_tunnel.sh"
-    compare "/mnt/volumes_files/files/..data/manage_tunnel_juniq.sh" "/mnt/shared-data/files/manage_tunnel_juniq.sh.sh"
+    compare "/mnt/volumes_files/files/..data/manage_tunnel_juniq.sh" "/mnt/shared-data/files/manage_tunnel_juniq.sh"
     compare "/mnt/volumes_files/files/..data/manage_tunnel_eurocc.sh" "/mnt/shared-data/files/manage_tunnel_eurocc.sh"
     compare "/mnt/volumes_files/files/..data/manage_tunnel_coeraise.sh" "/mnt/shared-data/files/manage_tunnel_coeraise.sh"
     compare "/mnt/volumes_keypairs/keypairs/..data/ssh-privatekey" "/mnt/shared-data/keypairs/ssh-privatekey"
