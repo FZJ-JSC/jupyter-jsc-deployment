@@ -70,11 +70,6 @@ hub:
         secretKeyRef:
           name: hub-juniq-generics
           key: SQL_USER
-    - name: SQL_ENGINE
-      valueFrom:
-        secretKeyRef:
-          name: hub-juniq-generics
-          key: SQL_ENGINE
     - name: SQL_HOST
       valueFrom:
         secretKeyRef:
