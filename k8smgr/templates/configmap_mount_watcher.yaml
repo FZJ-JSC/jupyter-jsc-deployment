@@ -52,5 +52,7 @@ data:
     compare "/mnt/volumes_files/files/..data/manage_tunnel_coeraise.sh" "/mnt/shared-data/files/manage_tunnel_coeraise.sh"
     compare "/mnt/volumes_keypairs/keypairs/..data/ssh-privatekey" "/mnt/shared-data/keypairs/ssh-privatekey"
     compare "/mnt/volumes_keypairs/keypairs/..data/ssh-publickey" "/mnt/shared-data/keypairs/ssh-publickey"
+    compare "/mnt/volumes_keypairs/keypairs/..data/tunnel" "/mnt/shared-data/keypairs/tunnel"
+    compare "/mnt/volumes_keypairs/keypairs/..data/tunnel.pub" "/mnt/shared-data/keypairs/tunnel.pub"
     compare "/mnt/volumes_files/files/..data/authorized_keys" "/mnt/shared-data/files/authorized_keys"
     git pull origin {{ .Values.gitconfig.branch }}
