@@ -67,7 +67,7 @@ spec:
             - secretRef:
                 name: "{{ .Values.secrets.passwds }}"
             - secretRef:
-                name: "{{ .Values.secrets.databaseGeneral }}"
+                name: "{{ .Values.secrets.generics }}"
           env:
             {{- if .Values.debug }}
             - name: DEBUG
@@ -91,21 +91,6 @@ spec:
               value: "{{ .Values.gunicorn.maxRequests }}"
             - name: GUNICORN_MAX_REQUESTS_JITTER
               value: "{{ .Values.gunicorn.maxRequestsJitter }}"
-            - name: SQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.secrets.databaseUsers }}"
-                  key: TUNNEL_USER
-            - name: SQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.secrets.databaseUsers }}"
-                  key: TUNNEL_PASSWORD
-            - name: SQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.secrets.databaseUsers }}"
-                  key: TUNNEL_DATABASE
             - name: DEPLOYMENT_NAME
               valueFrom:
                 fieldRef:

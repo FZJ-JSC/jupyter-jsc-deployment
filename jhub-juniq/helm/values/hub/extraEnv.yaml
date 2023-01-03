@@ -43,18 +43,48 @@ hub:
     - name: TUNNEL_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
-          name: drf-tunnel-passwds
-          key: JUPYTERHUBJUNIQ_USER_PASS
+          name: hub-juniq-generics
+          key: TUNNEL_JUPYTERHUB_USER_PASS
     - name: UNICOREMGR_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
-          name: drf-unicoremgr-passwds
-          key: JUPYTERHUBJUNIQ_USER_PASS
+          name: hub-juniq-generics
+          key: UNICOREMGR_JUPYTERHUB_USER_PASS
     - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
-          name: drf-k8smgr-passwds
-          key: JUPYTERHUBJUNIQ_USER_PASS
+          name: hub-juniq-generics
+          key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+    - name: SQL_DATABASE
+      valueFrom:
+        secretKeyRef:
+          name: hub-juniq-generics
+          key: SQL_DATABASE
+    - name: SQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: hub-juniq-generics
+          key: SQL_PASSWORD
+    - name: SQL_USER
+      valueFrom:
+        secretKeyRef:
+          name: hub-juniq-generics
+          key: SQL_USER
+    - name: SQL_ENGINE
+      valueFrom:
+        secretKeyRef:
+          name: hub-juniq-generics
+          key: SQL_ENGINE
+    - name: SQL_HOST
+      valueFrom:
+        secretKeyRef:
+          name: hub-juniq-generics
+          key: SQL_HOST
+    - name: SQL_PORT
+      valueFrom:
+        secretKeyRef:
+          name: hub-juniq-generics
+          key: SQL_PORT
     - name: OAUTH_CLIENT_ID
       valueFrom:
         secretKeyRef:
@@ -65,31 +95,6 @@ hub:
         secretKeyRef:
           name: hub-custom
           key: oauth_client_secret_password
-    - name: SQL_HOST
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-general
-          key: SQL_HOST
-    - name: SQL_PORT
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-general
-          key: SQL_PORT
-    - name: SQL_DATABASE
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-users-jupyterjsc
-          key: JUPYTERHUB_JUNIQ_DATABASE
-    - name: SQL_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-users-jupyterjsc
-          key: JUPYTERHUB_JUNIQ_PASSWORD
-    - name: SQL_USER
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-users-jupyterjsc
-          key: JUPYTERHUB_JUNIQ_USER
     - name: DEPLOYMENT_NAMESPACE
       valueFrom:
         fieldRef:

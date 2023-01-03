@@ -89,7 +89,7 @@ spec:
             - secretRef:
                 name: "{{ .Values.secrets.passwds }}"
             - secretRef:
-                name: "{{ .Values.secrets.databaseGeneral }}"
+                name: "{{ .Values.secrets.generics }}"
           env:
             {{- if .Values.debug }}
             - name: DEBUG
@@ -113,28 +113,6 @@ spec:
               value: "{{ .Values.gunicorn.maxRequests }}"
             - name: GUNICORN_MAX_REQUESTS_JITTER
               value: "{{ .Values.gunicorn.maxRequestsJitter }}"
-            {{- if .Values.secrets.tunnelpasswds }}
-            - name: TUNNELSVC_K8SMGR_USER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.secrets.tunnelpasswds }}"
-                  key: K8SMGR_USER_PASS
-            {{- end }}
-            - name: SQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.secrets.databaseUsers }}"
-                  key: K8SMGR_USER
-            - name: SQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.secrets.databaseUsers }}"
-                  key: K8SMGR_PASSWORD
-            - name: SQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.secrets.databaseUsers }}"
-                  key: K8SMGR_DATABASE
             - name: DEPLOYMENT_NAME
               valueFrom:
                 fieldRef:

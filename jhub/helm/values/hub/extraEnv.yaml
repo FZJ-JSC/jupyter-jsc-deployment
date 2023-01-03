@@ -52,26 +52,6 @@ hub:
       value: "/mnt/shared-data/notebook_template_server"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
       value: "jupyterjsc"
-    - name: TUNNEL_JUPYTERHUB_USER_PASS
-      valueFrom:
-        secretKeyRef:
-          name: drf-tunnel-passwds
-          key: JUPYTERHUB_USER_PASS
-    - name: UNICOREMGR_JUPYTERHUB_USER_PASS
-      valueFrom:
-        secretKeyRef:
-          name: drf-unicoremgr-passwds
-          key: JUPYTERHUB_USER_PASS
-    - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
-      valueFrom:
-        secretKeyRef:
-          name: drf-k8smgr-passwds
-          key: JUPYTERHUB_USER_PASS
-    - name: K8SMGRJUSUFCLOUD_AUTHENTICATION_TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: drf-k8smgr-jusufcloud-passwds
-          key: JUPYTERHUB_USER_PASS
     - name: OAUTH_CLIENT_ID
       valueFrom:
         secretKeyRef:
@@ -82,32 +62,52 @@ hub:
         secretKeyRef:
           name: hub-custom
           key: oauth_client_secret_password
-    - name: SQL_HOST
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-general
-          key: SQL_HOST
-    - name: SQL_PORT
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-general
-          key: SQL_PORT
-    - name: SQL_DATABASE
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-users-jupyterjsc
-          key: JUPYTERHUB_DATABASE
-    - name: SQL_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-users-jupyterjsc
-          key: JUPYTERHUB_PASSWORD
-    - name: SQL_USER
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-users-jupyterjsc
-          key: JUPYTERHUB_USER
     - name: DEPLOYMENT_NAMESPACE
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
+    - name: TUNNEL_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: TUNNEL_JUPYTERHUB_USER_PASS
+    - name: UNICOREMGR_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: UNICOREMGR_JUPYTERHUB_USER_PASS
+    - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+    - name: K8SMGRJUSUFCLOUD_AUTHENTICATION_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: K8SMGRJUSUFCLOUD_AUTHENTICATION_TOKEN
+    - name: SQL_DATABASE
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_DATABASE
+    - name: SQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_PASSWORD
+    - name: SQL_USER
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_USER
+    - name: SQL_HOST
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_HOST
+    - name: SQL_PORT
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_PORT

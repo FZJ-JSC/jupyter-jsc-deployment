@@ -15,8 +15,7 @@ labels: {}
 
 secrets:
   passwds: "drf-unicoremgr-passwds"
-  databaseGeneral: "postgresql-general"
-  databaseUsers: "postgresql-users-jupyterjsc"
+  generics: "drf-unicoremgr-generics"
 
 gitconfig:
   branch: "unicoremgr-dev"

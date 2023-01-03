@@ -65,10 +65,8 @@ gitconfig:
 
 secrets:
   keypairs: "drf-k8smgr-keypairs"
+  generics: "drf-k8smgr-generics"
   passwds: "drf-k8smgr-passwds"
-  databaseGeneral: "postgresql-general"
-  databaseUsers: "postgresql-users-jupyterjsc"
-  tunnelpasswds: "drf-tunnel-passwds"
 
 extraVolumes: []
 extraVolumeMounts: []
