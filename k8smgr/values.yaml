@@ -61,7 +61,7 @@ jupyterhubs:
 
 gitconfig:
   branch: "k8smgr-dev"
-  secret: "jupyter-jsc-config"
+  secret: "jupyter-jsc-git-config-userlabs"
 
 secrets:
   keypairs: "drf-k8smgr-keypairs"
