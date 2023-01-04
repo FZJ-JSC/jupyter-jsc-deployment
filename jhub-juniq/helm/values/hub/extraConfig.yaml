@@ -144,6 +144,7 @@ hub:
       c.JupyterHub.trusted_alt_names = [
         "DNS:juniq-hub",
         "DNS:juniq-proxy-public",
+        f"DNS:juniq-proxy-public.{namespace}.svc",
         f"DNS:{jhub_hostname}",
         "DNS:drf-k8smgr-jhub-juniq-forward.jupyterjsc.svc",
         "DNS:drf-k8smgr-jhub-juniq-forward.userlabs.svc",

@@ -150,6 +150,7 @@ hub:
       c.JupyterHub.trusted_alt_names = [
           "DNS:coeraise-hub",
           "DNS:coeraise-proxy-public",
+          f"DNS:coeraise-proxy-public.{namespace}.svc",
           f"DNS:{jhub_hostname}",
           "DNS:drf-k8smgr-jhub-coeraise-forward.jupyterjsc.svc",
           "DNS:drf-k8smgr-jhub-coeraise-forward.userlabs.svc",
