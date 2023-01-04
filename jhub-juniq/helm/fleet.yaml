@@ -74,19 +74,19 @@ targetCustomizations:
               secret:
                 secretName: drf-tunnel-certs-public
                 items:
-                  - key: tls.crt
+                  - key: tls.ca
                     path: ca.pem
             - name: drf-unicoremgr-certs-public
               secret:
                 secretName: drf-unicoremgr-certs-public
                 items:
-                  - key: tls.crt
+                  - key: tls.ca
                     path: ca.pem
             - name: drf-k8smgr-certs-public
               secret:
                 secretName: drf-k8smgr-certs-public
                 items:
-                  - key: tls.crt
+                  - key: tls.ca
                     path: ca.pem
             - name: unity-jsc-certs
               secret:
@@ -154,19 +154,19 @@ targetCustomizations:
               secret:
                 secretName: drf-tunnel-certs-public
                 items:
-                  - key: tls.crt
+                  - key: tls.ca
                     path: ca.pem
             - name: drf-unicoremgr-certs-public
               secret:
                 secretName: drf-unicoremgr-certs-public
                 items:
-                  - key: tls.crt
+                  - key: tls.ca
                     path: ca.pem
             - name: drf-k8smgr-certs-public
               secret:
                 secretName: drf-k8smgr-certs-public
                 items:
-                  - key: tls.crt
+                  - key: tls.ca
                     path: ca.pem
             - name: unity-jsc-certs
               secret:
