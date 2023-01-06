@@ -16,6 +16,7 @@ hub:
       from apihandler import DRFServiceLogLevelAPIHandler
       from apihandler import JHubLogLevelAPIHandler
       from apihandler import HPCUpdateAPIHandler
+      from apihandler import UserJobsAPIHandler
       from apihandler import UserJobsForwardAPIHandler
       from apihandler import SpawnNotificationAPIHandler
       from apihandler import SpawnOptionsFormAPIHandler
@@ -124,8 +125,10 @@ hub:
           (r"/api/users/([^/]+)/server/update", SpawnUpdateOptionsAPIHandler),
           (r"/api/users/([^/]+)/server/optionsform", SpawnOptionsFormAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]*)/update", SpawnUpdateOptionsAPIHandler),
-          (r"/api/users/([^/]+)/servers/([^/]+)/userjobsforward", UserJobsForwardAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]+)/optionsform", SpawnOptionsFormAPIHandler),
+          (r"/api/users/userjobs/([^/]+)/([^/]+)", UserJobsAPIHandler),
+          (r"/api/users/userjobs/([^/]+)/([^/]+)/([^/]+)", UserJobsAPIHandler),          
+          (r"/api/users/userjobsforward/([^/]+)/([^/]+)", UserJobsForwardAPIHandler),
           (r"/api/users/progress/update/([^/]+)", SpawnProgressUpdateAPIHandler),
           (r"/api/users/progress/update/([^/]+)/([^/]+)", SpawnProgressUpdateAPIHandler),
           (r"/api/users/progress/status/([^/]+)", SpawnProgressStatusAPIHandler),
