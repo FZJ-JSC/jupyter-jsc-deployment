@@ -54,7 +54,7 @@ hub:
 
       c.JupyterHub.spawner_class = BackendSpawner
       c.BackendSpawner.http_timeout = 7200
-      c.BackendSpawner.poll_interval = 10
+      c.BackendSpawner.poll_interval = 120
       c.BackendSpawner.poll_interval_randomizer = 20
       # c.BackendSpawner.ssl_alt_names = [f"DNS:{jupyterhub_host}"]
 
