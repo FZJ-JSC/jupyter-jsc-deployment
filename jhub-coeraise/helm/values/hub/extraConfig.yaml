@@ -130,7 +130,7 @@ hub:
           (r"/api/userjobs", UserJobsAPIHandler),
           (r"/api/userjobs/([^/]+)", UserJobsAPIHandler),
           (r"/api/userjobsforward", UserJobsForwardAPIHandler),
-          (r"/api/userjobsforward/([^/]+)", UserJobsForwardAPIHandler)
+          (r"/api/userjobsforward/([^/]+)", UserJobsForwardAPIHandler),
           (r"/api/users/progress/update/([^/]+)", SpawnProgressUpdateAPIHandler),
           (r"/api/users/progress/update/([^/]+)/([^/]+)", SpawnProgressUpdateAPIHandler),
           (r"/api/users/progress/updateunicore/([^/]+)", SpawnProgressUNICOREUpdateAPIHandler),
