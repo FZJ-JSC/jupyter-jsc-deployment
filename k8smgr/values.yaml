@@ -61,14 +61,12 @@ jupyterhubs:
 
 gitconfig:
   branch: "k8smgr-dev"
-  secret: "jupyter-jsc-config"
+  secret: "jupyter-jsc-git-config-userlabs"
 
 secrets:
   keypairs: "drf-k8smgr-keypairs"
+  generics: "drf-k8smgr-generics"
   passwds: "drf-k8smgr-passwds"
-  databaseGeneral: "postgresql-general"
-  databaseUsers: "postgresql-users-jupyterjsc"
-  tunnelpasswds: "drf-tunnel-passwds"
 
 extraVolumes: []
 extraVolumeMounts: []
@@ -129,6 +127,172 @@ gunicorn:
   timeout: 30
   maxRequests: 100
   maxRequestsJitter: 50
+
+ssh_config_hosts_defaults:
+  serverAliveInterval: 60
+  serverAliveCountMax: 5
+  strictHostKeyChecking: "no"
+  usersKnownHostsFile: "/dev/null"
+  controlMaster: "auto"
+  controlPersist: 0
+
+ssh_config_hosts:
+  - name: "deepv"
+    user: "ljupyter"
+    port: 22
+    hostname: "deep.fz-juelich.de"
+  - name: "jwlogin01i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels01.fz-juelich.de"
+  - name: "jwlogin02i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels02.fz-juelich.de"
+  - name: "jwlogin03i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels03.fz-juelich.de"
+  - name: "jwlogin04i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels04.fz-juelich.de"
+  - name: "jwlogin05i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels05.fz-juelich.de"
+  - name: "jwlogin06i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels06.fz-juelich.de"
+  - name: "jwlogin07i"
+    disabled: True
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels07.fz-juelich.de"
+  - name: "jwlogin08i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels08.fz-juelich.de"
+  - name: "jwlogin09i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels09.fz-juelich.de"
+  - name: "jwlogin10i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels10.fz-juelich.de"
+  - name: "jwlogin11i"
+    disabled: True
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels11.fz-juelich.de"
+  - name: "jwlogin21i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels21.fz-juelich.de"
+  - name: "jwlogin22i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels22.fz-juelich.de"
+  - name: "jwlogin23i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels23.fz-juelich.de"
+  - name: "jwlogin24i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwels24.fz-juelich.de"
+  - name: "jwvis00i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwelsvis00.fz-juelich.de"
+  - name: "jwvis01i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwelsvis01.fz-juelich.de"
+  - name: "jwvis02i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwelsvis02.fz-juelich.de"
+  - name: "jwvis03i"
+    user: "ljupyter"
+    port: 22
+    hostname: "juwelsvis03.fz-juelich.de"
+  - name: "jrlogin01i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca01.fz-juelich.de"
+  - name: "jrlogin02i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca02.fz-juelich.de"
+  - name: "jrlogin03i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca03.fz-juelich.de"
+  - name: "jrlogin04i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca04.fz-juelich.de"
+  - name: "jrlogin05i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca05.fz-juelich.de"
+  - name: "jrlogin06i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca06.fz-juelich.de"
+  - name: "jrlogin07i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca07.fz-juelich.de"
+  - name: "jrlogin08i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca08.fz-juelich.de"
+  - name: "jrlogin09i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca09.fz-juelich.de"
+  - name: "jrlogin10i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca10.fz-juelich.de"
+  - name: "jrlogin11i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca11.fz-juelich.de"
+  - name: "jrlogin12i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jureca12.fz-juelich.de"
+  - name: "hdfmll01i"
+    user: "ljupyter"
+    port: 22
+    hostname: "hdfmll01.fz-juelich.de"
+  - name: "hdfmll02i"
+    user: "ljupyter"
+    port: 22
+    hostname: "hdfmll02.fz-juelich.de"
+  - name: "jsfl01i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jusuf1.fz-juelich.de"
+  - name: "jsfl02i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jusuf2.fz-juelich.de"
+  - name: "jsfl03i"
+    user: "ljupyter"
+    port: 22
+    hostname: "jusuf3.fz-juelich.de"
+  - name: "jsfl04i"
+    disabled: True
+    user: "ljupyter"
+    port: 22
+    hostname: "jusuf4.fz-juelich.de"
+  
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

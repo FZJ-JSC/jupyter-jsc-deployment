@@ -70,21 +70,21 @@ targetCustomizations:
             - name: reservation-keypair
               secret:
                 secretName: reservation-keypair
-            - name: drf-tunnel-certs
+            - name: drf-tunnel-certs-public
               secret:
-                secretName: drf-tunnel-certs
+                secretName: drf-tunnel-certs-public
                 items:
                   - key: tls.ca
                     path: ca.pem
-            - name: drf-unicoremgr-certs
+            - name: drf-unicoremgr-certs-public
               secret:
-                secretName: drf-unicoremgr-certs
+                secretName: drf-unicoremgr-certs-public
                 items:
                   - key: tls.ca
                     path: ca.pem
-            - name: drf-k8smgr-certs
+            - name: drf-k8smgr-certs-public
               secret:
-                secretName: drf-k8smgr-certs
+                secretName: drf-k8smgr-certs-public
                 items:
                   - key: tls.ca
                     path: ca.pem
@@ -150,21 +150,21 @@ targetCustomizations:
             - name: reservation-keypair
               secret:
                 secretName: reservation-keypair
-            - name: drf-tunnel-certs
+            - name: drf-tunnel-certs-public
               secret:
-                secretName: drf-tunnel-certs
+                secretName: drf-tunnel-certs-public
                 items:
                   - key: tls.ca
                     path: ca.pem
-            - name: drf-unicoremgr-certs
+            - name: drf-unicoremgr-certs-public
               secret:
-                secretName: drf-unicoremgr-certs
+                secretName: drf-unicoremgr-certs-public
                 items:
                   - key: tls.ca
                     path: ca.pem
-            - name: drf-k8smgr-certs
+            - name: drf-k8smgr-certs-public
               secret:
-                secretName: drf-k8smgr-certs
+                secretName: drf-k8smgr-certs-public
                 items:
                   - key: tls.ca
                     path: ca.pem

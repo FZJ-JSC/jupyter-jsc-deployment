@@ -40,21 +40,6 @@ hub:
       value: "/mnt/shared-data/reservation-check/reservation.json"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
       value: "jupyterjsc"
-    - name: TUNNEL_JUPYTERHUB_USER_PASS
-      valueFrom:
-        secretKeyRef:
-          name: drf-tunnel-passwds
-          key: JUPYTERHUBCOERAISE_USER_PASS
-    - name: UNICOREMGR_JUPYTERHUB_USER_PASS
-      valueFrom:
-        secretKeyRef:
-          name: drf-unicoremgr-passwds
-          key: JUPYTERHUBCOERAISE_USER_PASS
-    - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
-      valueFrom:
-        secretKeyRef:
-          name: drf-k8smgr-passwds
-          key: JUPYTERHUBCOERAISE_USER_PASS
     - name: OAUTH_CLIENT_ID
       valueFrom:
         secretKeyRef:
@@ -65,32 +50,47 @@ hub:
         secretKeyRef:
           name: hub-custom
           key: oauth_client_secret_password
-    - name: SQL_HOST
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-general
-          key: SQL_HOST
-    - name: SQL_PORT
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-general
-          key: SQL_PORT
-    - name: SQL_DATABASE
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-users-jupyterjsc
-          key: JUPYTERHUB_COERAISE_DATABASE
-    - name: SQL_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-users-jupyterjsc
-          key: JUPYTERHUB_COERAISE_PASSWORD
-    - name: SQL_USER
-      valueFrom:
-        secretKeyRef:
-          name: postgresql-users-jupyterjsc
-          key: JUPYTERHUB_COERAISE_USER
     - name: DEPLOYMENT_NAMESPACE
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
+    - name: TUNNEL_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: hub-coeraise-generics
+          key: TUNNEL_JUPYTERHUB_USER_PASS
+    - name: UNICOREMGR_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: hub-coeraise-generics
+          key: UNICOREMGR_JUPYTERHUB_USER_PASS
+    - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+      valueFrom:
+        secretKeyRef:
+          name: hub-coeraise-generics
+          key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+    - name: SQL_DATABASE
+      valueFrom:
+        secretKeyRef:
+          name: hub-coeraise-generics
+          key: SQL_DATABASE
+    - name: SQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: hub-coeraise-generics
+          key: SQL_PASSWORD
+    - name: SQL_USER
+      valueFrom:
+        secretKeyRef:
+          name: hub-coeraise-generics
+          key: SQL_USER
+    - name: SQL_HOST
+      valueFrom:
+        secretKeyRef:
+          name: hub-coeraise-generics
+          key: SQL_HOST
+    - name: SQL_PORT
+      valueFrom:
+        secretKeyRef:
+          name: hub-coeraise-generics
+          key: SQL_PORT

@@ -46,8 +46,7 @@ image:
 secrets:
   keypairs: "drf-tunnel-keypairs"
   passwds: "drf-tunnel-passwds"
-  databaseGeneral: "postgresql-general"
-  databaseUsers: "postgresql-users-jupyterjsc"
+  generics: "drf-tunnel-generics"
 
 imagePullSecrets: 
   - name: "gitlab-registry"

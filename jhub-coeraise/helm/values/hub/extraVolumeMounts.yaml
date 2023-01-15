@@ -4,11 +4,11 @@ hub:
       mountPath: /mnt/shared-data
     - name: persistent
       mountPath: /mnt/persistent
-    - name: drf-tunnel-certs
+    - name: drf-tunnel-certs-public
       mountPath: /mnt/tunnel_certs
-    - name: drf-unicoremgr-certs
+    - name: drf-unicoremgr-certs-public
       mountPath: /mnt/unicoremgr_certs
-    - name: drf-k8smgr-certs
+    - name: drf-k8smgr-certs-public
       mountPath: /mnt/k8smgr_certs
     - name: unity-jsc-certs
       mountPath: /mnt/unity_certs

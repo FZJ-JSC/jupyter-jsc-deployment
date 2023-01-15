@@ -86,9 +86,9 @@ hub:
         - name: internal-ssl
           mountPath: /mnt/certs/hub-ca_hub-ca.crt
           subPath: hub-ca_hub-ca.crt
-        - name: drf-unicoremgr-certs
+        - name: drf-unicoremgr-certs-public
           mountPath: /mnt/unicoremgr_certs
-        - name: drf-k8smgr-certs
+        - name: drf-k8smgr-certs-public
           mountPath: /mnt/k8smgr_certs
         - name: tz-config
           mountPath: /etc/localtime

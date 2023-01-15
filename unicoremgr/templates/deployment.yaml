@@ -81,7 +81,7 @@ spec:
             - secretRef:
                 name: "{{ .Values.secrets.passwds }}"
             - secretRef:
-                name: "{{ .Values.secrets.databaseGeneral }}"
+                name: "{{ .Values.secrets.generics }}"
           env:
             {{- if .Values.debug }}
             - name: DEBUG
@@ -108,21 +108,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.labels['stage']
-            - name: SQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.secrets.databaseUsers }}"
-                  key: UNICOREMGR_USER
-            - name: SQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.secrets.databaseUsers }}"
-                  key: UNICOREMGR_PASSWORD
-            - name: SQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.secrets.databaseUsers }}"
-                  key: UNICOREMGR_DATABASE
             - name: LOGGER_NAME
               value: "{{ .Values.loggerName }}"
           ports:

@@ -16,10 +16,13 @@ hub:
       from apihandler import DRFServiceLogLevelAPIHandler
       from apihandler import JHubLogLevelAPIHandler
       from apihandler import HPCUpdateAPIHandler
+      from apihandler import UserJobsAPIHandler
+      from apihandler import UserJobsForwardAPIHandler
       from apihandler import SpawnNotificationAPIHandler
       from apihandler import SpawnOptionsFormAPIHandler
       from apihandler import SpawnProgressStatusAPIHandler
       from apihandler import SpawnProgressUpdateAPIHandler
+      from apihandler import SpawnProgressUNICOREUpdateAPIHandler
       from apihandler import SpawnStopNotificationAPIHandler
       from apihandler import SpawnUpdateOptionsAPIHandler
       from apihandler import TemplateServerAPIHandler
@@ -124,8 +127,14 @@ hub:
           (r"/api/users/([^/]+)/server/optionsform", SpawnOptionsFormAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]*)/update", SpawnUpdateOptionsAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]+)/optionsform", SpawnOptionsFormAPIHandler),
+          (r"/api/userjobs", UserJobsAPIHandler),
+          (r"/api/userjobs/([^/]+)", UserJobsAPIHandler),
+          (r"/api/userjobsforward", UserJobsForwardAPIHandler),
+          (r"/api/userjobsforward/([^/]+)", UserJobsForwardAPIHandler)
           (r"/api/users/progress/update/([^/]+)", SpawnProgressUpdateAPIHandler),
           (r"/api/users/progress/update/([^/]+)/([^/]+)", SpawnProgressUpdateAPIHandler),
+          (r"/api/users/progress/updateunicore/([^/]+)", SpawnProgressUNICOREUpdateAPIHandler),
+          (r"/api/users/progress/updateunicore/([^/]+)/([^/]+)", SpawnProgressUNICOREUpdateAPIHandler),
           (r"/api/users/progress/status/([^/]+)", SpawnProgressStatusAPIHandler),
           (r"/api/users/progress/status/([^/]+)/([^/]+)", SpawnProgressStatusAPIHandler),
           (r"/api/users/([^/]+)/notifications/spawners/spawn", SpawnNotificationAPIHandler),
@@ -150,6 +159,7 @@ hub:
       c.JupyterHub.trusted_alt_names = [
           "DNS:coeraise-hub",
           "DNS:coeraise-proxy-public",
+          f"DNS:coeraise-proxy-public.{namespace}.svc",
           f"DNS:{jhub_hostname}",
           "DNS:drf-k8smgr-jhub-coeraise-forward.jupyterjsc.svc",
           "DNS:drf-k8smgr-jhub-coeraise-forward.userlabs.svc",

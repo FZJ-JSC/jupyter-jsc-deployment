@@ -19,21 +19,21 @@ helm:
           - name: "k8smgr_hdfcloud_juniq"
             user: "k8smgr"
             port: 2222
-            hostname: "drf-k8smgr-ssh.jupyterjsc.svc"
+            hostname: "drf-k8smgr-ssh.userlabs.svc"
             remoteKeySuffix: "_juniq"
       eurocc:
         ssh_config_hosts:
           - name: "k8smgr_hdfcloud_eurocc"
             user: "k8smgr"
             port: 2222
-            hostname: "drf-k8smgr-ssh.jupyterjsc.svc"
+            hostname: "drf-k8smgr-ssh.userlabs.svc"
             remoteKeySuffix: "_eurocc"
       coeraise:
         ssh_config_hosts:
           - name: "k8smgr_hdfcloud_coeraise"
             user: "k8smgr"
             port: 2222
-            hostname: "drf-k8smgr-ssh.jupyterjsc.svc"
+            hostname: "drf-k8smgr-ssh.userlabs.svc"
             remoteKeySuffix: "_coeraise"
       default:
         additional_remote_hosts:
@@ -43,7 +43,7 @@ helm:
           - name: "k8smgr_hdfcloud"
             user: "k8smgr"
             port: 2222
-            hostname: "drf-k8smgr-ssh.jupyterjsc.svc"
+            hostname: "drf-k8smgr-ssh.userlabs.svc"
           - name: "deepv"
             user: "ljupyter"
             port: 22
