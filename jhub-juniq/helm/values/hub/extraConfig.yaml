@@ -16,9 +16,12 @@ hub:
       from apihandler import DRFServiceLogLevelAPIHandler
       from apihandler import JHubLogLevelAPIHandler
       from apihandler import HPCUpdateAPIHandler
+      from apihandler import UserJobsAPIHandler
+      from apihandler import UserJobsForwardAPIHandler
       from apihandler import SpawnNotificationAPIHandler
       from apihandler import SpawnProgressStatusAPIHandler
       from apihandler import SpawnProgressUpdateAPIHandler
+      from apihandler import SpawnProgressUNICOREUpdateAPIHandler
       from apihandler import SpawnStopNotificationAPIHandler
       from apihandler import SpawnUpdateOptionsAPIHandler
       from apihandler import twoFA
@@ -120,8 +123,14 @@ hub:
           (r"/api/users/([^/]+)/random/server", UserRandomServerAPIHandler),
           (r"/api/users/([^/]+)/server/update", SpawnUpdateOptionsAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]*)/update", SpawnUpdateOptionsAPIHandler),
+          (r"/api/userjobs", UserJobsAPIHandler),
+          (r"/api/userjobs/([^/]+)", UserJobsAPIHandler),
+          (r"/api/userjobsforward", UserJobsForwardAPIHandler),
+          (r"/api/userjobsforward/([^/]+)", UserJobsForwardAPIHandler),
           (r"/api/users/progress/update/([^/]+)", SpawnProgressUpdateAPIHandler),
           (r"/api/users/progress/update/([^/]+)/([^/]+)", SpawnProgressUpdateAPIHandler),
+          (r"/api/users/progress/updateunicore/([^/]+)", SpawnProgressUNICOREUpdateAPIHandler),
+          (r"/api/users/progress/updateunicore/([^/]+)/([^/]+)", SpawnProgressUNICOREUpdateAPIHandler)
           (r"/api/users/progress/status/([^/]+)", SpawnProgressStatusAPIHandler),
           (r"/api/users/progress/status/([^/]+)/([^/]+)", SpawnProgressStatusAPIHandler),
           (r"/api/users/([^/]+)/notifications/spawners/spawn", SpawnNotificationAPIHandler),
