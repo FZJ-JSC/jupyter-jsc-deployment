@@ -17,6 +17,6 @@ targetCustomizations:
     helm:
       values:
         kiali:
-          enabled: false
+          enabled: true
 dependsOn:
   - name: basics-monitor-crd
