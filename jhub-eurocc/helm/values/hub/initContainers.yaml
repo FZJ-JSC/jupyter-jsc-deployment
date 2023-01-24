@@ -76,6 +76,7 @@ hub:
           cd /mnt/shared-data &&
           rm -rf /mnt/shared-data/git_config &&
           rm -rf /mnt/shared-data/jhub_files &&
+          rm -rf /mnt/shared-data/notebook_template_server &&
           git clone --single-branch --branch jupyterhub-eurocc-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config &&
           git clone --single-branch --branch jupyterhub-files-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} jhub_files &&
           cd /mnt/shared-data &&
