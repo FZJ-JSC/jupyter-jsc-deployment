@@ -1,0 +1,204 @@
+defaultNamespace: jupyterjsc
+dependsOn:
+  - name: jupyterjsc-certmanager
+helm:
+  releaseName: jupyterhub-portalgauss
+  repo: https://jupyterhub.github.io/helm-chart/
+  chart: jupyterhub
+  version: 1.2.0
+  values:
+    hub:
+      livenessProbe:
+        enabled: false
+      readinessProbe:
+        enabled: false
+      command: ["/bin/bash"]
+      args:
+        - -c
+        - >-
+          /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+      containerSecurityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        allowPrivilegeEscalation: true
+  valuesFiles:
+    - values/hub/config.yaml
+    - values/hub/extraConfig.yaml
+    - values/hub/extraContainers.yaml
+    - values/hub/extraEnv.yaml
+    - values/hub/extraVolumeMounts.yaml
+    - values/hub/image.yaml
+    - values/hub/initContainers.yaml
+    - values/hub/services.yaml
+    - values/hub/others.yaml
+    - values/common.yaml
+    - values/proxy.yaml
+kustomize:
+  dir: overlays
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        hub:
+          extraVolumes:
+            - name: persistent
+              nfs:
+                path: /mnt/storage/jupyterhub_portalgauss
+                server: 10.0.94.248
+            - name: shared-data
+              emptyDir: {}
+            - name: mount-watch
+              configMap:
+                defaultMode: 400
+                name: portalgauss-jupyterhub-mw
+            - name: cleanup-sql
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-cleanup-sql
+            - name: incident-check
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-incident-check
+            - name: reservation-check
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-reservation-check
+            - name: internal-ssl
+              secret:
+                secretName: internal-ssl-portalgauss
+            - name: reservation-keypair
+              secret:
+                secretName: reservation-keypair
+            - name: drf-tunnel-certs-public
+              secret:
+                secretName: drf-tunnel-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: drf-unicoremgr-certs-public
+              secret:
+                secretName: drf-unicoremgr-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: drf-k8smgr-certs-public
+              secret:
+                secretName: drf-k8smgr-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: unity-jsc-certs
+              secret:
+                secretName: unity-jsc-certs
+            - name: hub-nginx-config
+              configMap:
+                defaultMode: 400
+                name: hub-nginx-config
+            - name: tz-config
+              hostPath:
+                path: /usr/share/zoneinfo/Europe/Berlin
+          labels:
+            stage: staging
+            jhub_version: "2.3.1"
+            hostname: "portal-staging.gauss-centre.eu"
+            drf_username: "jupyterhubportalgauss"
+            logger_name: "JupyterHubPortalGaussStaging"
+            NTS_GIT_BRANCH: "main"
+            TEMPLATE_GIT_BRANCH: templates
+            STATIC_GIT_BRANCH: static
+        ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+          enabled: true
+          hosts:
+          - portal-staging.gauss-centre.eu
+          tls:
+          - hosts:
+            - portal-staging.gauss-centre.eu
+            secretName: portalgauss-tls
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      values:
+        hub:
+          extraVolumes:
+            - name: persistent
+              nfs:
+                path: /mnt/storage/jupyterhub_portalgauss
+                server: 10.0.20.30
+            - name: shared-data
+              emptyDir: {}
+            - name: mount-watch
+              configMap:
+                defaultMode: 400
+                name: portalgauss-jupyterhub-mw
+            - name: cleanup-sql
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-cleanup-sql
+            - name: incident-check
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-incident-check
+            - name: reservation-check
+              configMap:
+                defaultMode: 400
+                name: jupyterhub-reservation-check
+            - name: internal-ssl
+              secret:
+                secretName: internal-ssl-portalgauss
+            - name: reservation-keypair
+              secret:
+                secretName: reservation-keypair
+            - name: drf-tunnel-certs-public
+              secret:
+                secretName: drf-tunnel-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: drf-unicoremgr-certs-public
+              secret:
+                secretName: drf-unicoremgr-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: drf-k8smgr-certs-public
+              secret:
+                secretName: drf-k8smgr-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: unity-jsc-certs
+              secret:
+                secretName: unity-jsc-certs
+            - name: hub-nginx-config
+              configMap:
+                defaultMode: 400
+                name: hub-nginx-config
+            - name: tz-config
+              hostPath:
+                path: /usr/share/zoneinfo/Europe/Berlin
+          labels:
+            stage: production
+            jhub_version: "2.3.1"
+            hostname: "portal.gauss-centre.eu"
+            drf_username: "jupyterhubportalgauss"
+            logger_name: "JupyterHubPortalGaussProduction"
+            NTS_GIT_BRANCH: "main"
+            TEMPLATE_GIT_BRANCH: templates
+            STATIC_GIT_BRANCH: static
+        ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+          enabled: true
+          hosts:
+          - portal.gauss-centre.eu
+          tls:
+          - hosts:
+            - portal.gauss-centre.eu
+            secretName: portalgauss-tls

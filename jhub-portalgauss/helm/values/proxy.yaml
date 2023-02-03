@@ -1,0 +1,42 @@
+proxy:
+  service:
+    type: ClusterIP
+  chp:
+    defaultTarget: "https://portalgauss-hub:8081"
+    errorTarget: "https://portalgauss-hub:8081/hub/error"
+    extraCommandLineFlags:
+     - "--api-ssl-key=/etc/chp/tls/proxy-api_proxy-api.key"
+     - "--api-ssl-cert=/etc/chp/tls/proxy-api_proxy-api.crt"
+     - "--api-ssl-ca=/etc/chp/tls/proxy-api-ca_trust.crt"
+     - "--api-ssl-request-cert"
+     - "--api-ssl-reject-unauthorized"
+     - "--client-ssl-key=/etc/chp/tls/proxy-client_proxy-client.key"
+     - "--client-ssl-cert=/etc/chp/tls/proxy-client_proxy-client.crt"
+     - "--client-ssl-ca=/etc/chp/tls/proxy-client-ca_trust.crt"
+     - "--client-ssl-request-cert"
+     - "--client-ssl-reject-unauthorized"
+     - "--timeout=60000"
+     - "--proxy-timeout=180000"
+     # - "--log-level=debug"
+    extraPodSpec:
+      initContainers:
+        - name: test
+          image: alpine:3.14
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - >-
+              mkdir -p /mnt/persistent/jhub
+              # while true; do sleep 30; done
+    image:
+      tag: "4.5.1"
+    nodeSelector:
+      worker: "true"
+  https:
+    enabled: true
+    type: secret
+    secret:
+      name: internal-ssl-portalgauss
+      key: proxy-client_proxy-client.key
+      crt: proxy-client_proxy-client.crt
