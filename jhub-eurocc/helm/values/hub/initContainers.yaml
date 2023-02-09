@@ -62,6 +62,7 @@ hub:
               fieldPath: metadata.labels['STATIC_GIT_BRANCH']
       command: ["/bin/sh"]
       args:
+        - -c
         - >-
           apk add bash git &&
           mkdir -p /mnt/shared-data/tmp-internal-ssl &&
