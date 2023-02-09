@@ -34,17 +34,17 @@ hub:
         - name: TEMPLATE_GIT_REPO
           valueFrom:
             secretKeyRef:
-              name: "juniq-share"
+              name: "juniq-share-config"
               key: REPOSITORY
         - name: TEMPLATE_GIT_USERNAME
           valueFrom:
             secretKeyRef:
-              name: "juniq-share"
+              name: "juniq-share-config"
               key: USERNAME
         - name: TEMPLATE_GIT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: "juniq-share"
+              name: "juniq-share-config"
               key: PASSWORD
         - name: TEMPLATE_GIT_BRANCH
           valueFrom:
