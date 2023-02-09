@@ -104,6 +104,8 @@ targetCustomizations:
             hostname: "juniq-staging.fz-juelich.de"
             drf_username: "jupyterhubjuniq"
             logger_name: "JupyterHubJUNIQStaging"
+            TEMPLATE_GIT_BRANCH: templates
+            STATIC_GIT_BRANCH: static
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
@@ -184,6 +186,8 @@ targetCustomizations:
             hostname: "juniq.fz-juelich.de"
             drf_username: "jupyterhubjuniq"
             logger_name: "JupyterHubJUNIQProduction"
+            TEMPLATE_GIT_BRANCH: templates
+            STATIC_GIT_BRANCH: static
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled: false, update ingress in maintenance/fleet.yaml

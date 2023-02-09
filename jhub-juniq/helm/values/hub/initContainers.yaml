@@ -12,6 +12,10 @@ hub:
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['stage']
+        - name: JUPYTERHUB_URL
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['hostname']
         - name: GIT_REPO
           valueFrom:
             secretKeyRef:
@@ -27,6 +31,16 @@ hub:
             secretKeyRef:
               name: "jupyter-jsc-config"
               key: PASSWORD
+        - name: TEMPLATE_GIT_REPO
+          value: "https://jugit.fz-juelich.de/qip/juniq-platform/juniq-landing-page.git"
+        - name: TEMPLATE_GIT_BRANCH
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['TEMPLATE_GIT_BRANCH']
+        - name: STATIC_GIT_BRANCH
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['STATIC_GIT_BRANCH']
       command: ["/bin/sh"]
       args:
         - -c
@@ -41,6 +55,9 @@ hub:
           rm -rf /mnt/shared-data/jhub_files &&
           git clone --single-branch --branch jupyterhub-juniq-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config &&
           git clone --single-branch --branch jupyterhub-files-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} jhub_files &&
+          cd /mnt/shared-data/jhub_files/ &&
+          git submodule add -b ${TEMPLATE_GIT_BRANCH} ${TEMPLATE_GIT_REPO} ${JUPYTERHUB_VERSION}/templates/${JUPYTERHUB_URL} &&
+          git submodule add -b ${STATIC_GIT_BRANCH} ${TEMPLATE_GIT_REPO} ${JUPYTERHUB_VERSION}/static/${JUPYTERHUB_URL} &&
           cp -r /mnt/shared-data/jhub_files/${JUPYTERHUB_VERSION}/static /mnt/shared-data/static-files &&
           chown -R 1000:100 /mnt/shared-data &&
           chown -R 1000:100 /mnt/persistent
