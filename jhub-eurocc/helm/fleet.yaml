@@ -107,8 +107,8 @@ targetCustomizations:
             drf_username: "jupyterhubeurocc"
             logger_name: "JupyterHubEuroCCStaging"
             NTS_GIT_BRANCH: "main"
-            TEMPLATE_GIT_BRANCH: templates
-            STATIC_GIT_BRANCH: static
+            TEMPLATE_GIT_BRANCH: templates-staging
+            STATIC_GIT_BRANCH: static-staging
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
@@ -190,8 +190,8 @@ targetCustomizations:
             drf_username: "jupyterhubeurocc"
             logger_name: "JupyterHubEuroCCProduction"
             NTS_GIT_BRANCH: "main"
-            TEMPLATE_GIT_BRANCH: templates
-            STATIC_GIT_BRANCH: static
+            TEMPLATE_GIT_BRANCH: templates-production
+            STATIC_GIT_BRANCH: static-production
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
