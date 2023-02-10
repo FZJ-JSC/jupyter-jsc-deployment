@@ -10,6 +10,7 @@ spec:
     matchLabels:
       app: {{ include "drf-tunnel.name" . }}
       {{- include "drf-tunnel.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "drf-tunnel.name" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
