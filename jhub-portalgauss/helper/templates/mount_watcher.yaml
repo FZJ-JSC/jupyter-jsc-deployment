@@ -10,6 +10,8 @@ data:
     test -d /mnt/shared-data/notebook_template_server && git config --global --add safe.directory /mnt/shared-data/notebook_template_server
     test -d /mnt/shared-data/jhub_files/2.3.1/templates/portal-staging.gauss-centre.eu && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/templates/portal-staging.gauss-centre.eu
     test -d /mnt/shared-data/jhub_files/2.3.1/static/portal-staging.gauss-centre.eu && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/static/portal-staging.gauss-centre.eu
+    test -d /mnt/shared-data/jhub_files/2.3.1/templates/jupyter.eurocc-gcs.de && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/templates/jupyter.eurocc-gcs.de
+    test -d /mnt/shared-data/jhub_files/2.3.1/static/jupyter.eurocc-gcs.de && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/static/jupyter.eurocc-gcs.de
     git config --global pull.ff only
     while true;
     do
