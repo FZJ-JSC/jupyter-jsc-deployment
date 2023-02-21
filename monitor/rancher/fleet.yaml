@@ -34,6 +34,11 @@ helm:
     ingressNginx:
       enabled: false
     kube-state-metrics:
+      prometheus:
+        monitor:
+          enabled: true
+          additionalLabels:
+            release: "rancher-monitoring"
       metricLabelsAllowlist:
          # to select jupyterhub/singeuser-server metrics
          - nodes=[nodepool]
