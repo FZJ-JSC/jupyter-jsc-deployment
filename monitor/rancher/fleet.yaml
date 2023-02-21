@@ -38,7 +38,7 @@ helm:
         monitor:
           enabled: true
           additionalLabels:
-            release: "rancher-monitoring"
+            release: "kube-prometheus-stack"
       metricLabelsAllowlist:
          # to select jupyterhub/singeuser-server metrics
          - nodes=[nodepool]
