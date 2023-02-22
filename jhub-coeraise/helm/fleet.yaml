@@ -118,7 +118,7 @@ targetCustomizations:
           tls:
           - hosts:
             - jupyter-staging.coe-raise.eu
-            secretName: coeraise-tls-v1
+            secretName: coeraise-tls
   - name: production
     clusterSelector:
       matchLabels:
