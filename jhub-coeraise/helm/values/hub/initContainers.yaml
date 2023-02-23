@@ -51,7 +51,20 @@ hub:
             fieldRef:
               fieldPath: metadata.labels['NTS_GIT_BRANCH']
         - name: TEMPLATE_GIT_REPO
-          value: "https://github.com/FZJ-JSC/jupyter-jsc-custom-share-template.git"
+          valueFrom:
+            secretKeyRef:
+              name: "coeraise-share-config"
+              key: REPOSITORY
+        - name: TEMPLATE_GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: "coeraise-share-config"
+              key: USERNAME
+        - name: TEMPLATE_GIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "coeraise-share-config"
+              key: PASSWORD
         - name: TEMPLATE_GIT_BRANCH
           valueFrom:
             fieldRef:
