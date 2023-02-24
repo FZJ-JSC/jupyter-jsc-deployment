@@ -106,7 +106,6 @@ targetCustomizations:
             hostname: "jupyter-staging.eurocc-gcs.de"
             drf_username: "jupyterhubeurocc"
             logger_name: "JupyterHubEuroCCStaging"
-            NTS_GIT_BRANCH: "main"
             TEMPLATE_GIT_BRANCH: templates-staging
             STATIC_GIT_BRANCH: static-staging
         ingress:
@@ -189,9 +188,15 @@ targetCustomizations:
             hostname: "jupyter.eurocc-gcs.de"
             drf_username: "jupyterhubeurocc"
             logger_name: "JupyterHubEuroCCProduction"
-            NTS_GIT_BRANCH: "main"
             TEMPLATE_GIT_BRANCH: templates-production
             STATIC_GIT_BRANCH: static-production
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 2048Mi
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml

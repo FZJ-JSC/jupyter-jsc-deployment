@@ -7,7 +7,6 @@ data:
     #!/bin/bash
     git config --global --add safe.directory /mnt/shared-data/git_config
     git config --global --add safe.directory /mnt/shared-data/jhub_files
-    test -d /mnt/shared-data/notebook_template_server && git config --global --add safe.directory /mnt/shared-data/notebook_template_server
     test -d /mnt/shared-data/jhub_files/2.3.1/templates/jupyter-staging.eurocc-gcs.de && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/templates/jupyter-staging.eurocc-gcs.de
     test -d /mnt/shared-data/jhub_files/2.3.1/static/jupyter-staging.eurocc-gcs.de && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/static/jupyter-staging.eurocc-gcs.de
     test -d /mnt/shared-data/jhub_files/2.3.1/templates/jupyter.eurocc-gcs.de && git config --global --add safe.directory /mnt/shared-data/jhub_files/2.3.1/templates/jupyter.eurocc-gcs.de
@@ -52,5 +51,3 @@ data:
     chown -R 1000:1000 /tmp/static-files
     cp -r /tmp/static-files/* /mnt/shared-data/static-files
     rm -rf /tmp/static-files
-    test -d /mnt/shared-data/notebook_template_server && cd /mnt/shared-data/notebook_template_server
-    test -d /mnt/shared-data/notebook_template_server && git pull origin ${NTS_GIT_BRANCH}

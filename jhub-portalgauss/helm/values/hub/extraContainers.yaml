@@ -65,7 +65,7 @@ hub:
         - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:
-              name: hub-portalgauss-generics 
+              name: hub-portalgauss-generics
               key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
               optional: false
       volumeMounts:

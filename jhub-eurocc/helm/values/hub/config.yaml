@@ -13,7 +13,7 @@ hub:
         slow_spawn_timeout: 0
 
       init_spawners_timeout: 0
-      concurrent_spawn_limit: 7
+      concurrent_spawn_limit: 40
       last_activity_interval: 60
 
       load_roles:

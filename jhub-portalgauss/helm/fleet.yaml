@@ -106,7 +106,6 @@ targetCustomizations:
             hostname: "portal-staging.gauss-centre.eu"
             drf_username: "jupyterhubportalgauss"
             logger_name: "JupyterHubPortalGaussStaging"
-            NTS_GIT_BRANCH: "main"
             TEMPLATE_GIT_BRANCH: templates-staging
             STATIC_GIT_BRANCH: static-staging
         ingress:
@@ -189,7 +188,6 @@ targetCustomizations:
             hostname: "portal.gauss-centre.eu"
             drf_username: "jupyterhubportalgauss"
             logger_name: "JupyterHubPortalGaussProduction"
-            NTS_GIT_BRANCH: "main"
             TEMPLATE_GIT_BRANCH: templates-production
             STATIC_GIT_BRANCH: static-production
         ingress:

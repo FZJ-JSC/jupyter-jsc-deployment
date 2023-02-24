@@ -8,14 +8,14 @@ hub:
       valueFrom:
         fieldRef:
           fieldPath: metadata.labels['jhub_version']
-    - name: JUPYTERHUB_HOSTNAME
-      valueFrom:
-        fieldRef:
-          fieldPath: metadata.labels['hostname']
     - name: JUPYTERHUB_APP
       valueFrom:
         fieldRef:
           fieldPath: metadata.labels['app']
+    - name: JUPYTERHUB_HOSTNAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.labels['hostname']
     - name: LOGGER_NAME
       valueFrom:
         fieldRef:
@@ -28,6 +28,8 @@ hub:
       value: "jupyterhubjuniq"
     - name: LOGGING_CONFIG_FILE
       value: "/mnt/shared-data/git_config/logging.json"
+    - name: LOGGING_METRICS_ENABLED
+      value: "true"
     - name: LOGGING_METRICS_LOGFILE
       value: "/mnt/persistent/metrics.log"
     - name: SHOW_DRF_LOGS
@@ -40,6 +42,20 @@ hub:
       value: "/mnt/shared-data/reservation-check/reservation.json"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
       value: "jupyterjsc"
+    - name: OAUTH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: hub-custom
+          key: oauth_client_id_password
+    - name: OAUTH_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: hub-custom
+          key: oauth_client_secret_password
+    - name: DEPLOYMENT_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
     - name: TUNNEL_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
@@ -80,17 +96,3 @@ hub:
         secretKeyRef:
           name: hub-juniq-generics
           key: SQL_PORT
-    - name: OAUTH_CLIENT_ID
-      valueFrom:
-        secretKeyRef:
-          name: hub-custom
-          key: oauth_client_id_password
-    - name: OAUTH_CLIENT_SECRET
-      valueFrom:
-        secretKeyRef:
-          name: hub-custom
-          key: oauth_client_secret_password
-    - name: DEPLOYMENT_NAMESPACE
-      valueFrom:
-        fieldRef:
-          fieldPath: metadata.namespace

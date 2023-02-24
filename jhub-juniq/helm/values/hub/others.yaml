@@ -13,6 +13,7 @@ hub:
       /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
   command:
     - /bin/bash
+  consecutiveFailureLimit: 0
   db:
     type: "postgres"
   nodeSelector:

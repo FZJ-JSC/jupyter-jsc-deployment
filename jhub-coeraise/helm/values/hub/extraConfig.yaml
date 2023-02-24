@@ -18,6 +18,7 @@ hub:
       from apihandler import HPCUpdateAPIHandler
       from apihandler import UserJobsAPIHandler
       from apihandler import UserJobsForwardAPIHandler
+      from apihandler import SlurmWrapperAPIHandler
       from apihandler import SpawnNotificationAPIHandler
       from apihandler import SpawnOptionsFormAPIHandler
       from apihandler import SpawnProgressStatusAPIHandler
@@ -57,7 +58,7 @@ hub:
 
       c.JupyterHub.spawner_class = BackendSpawner
       c.BackendSpawner.http_timeout = 7200
-      c.BackendSpawner.poll_interval = 10
+      c.BackendSpawner.poll_interval = 120
       c.BackendSpawner.poll_interval_randomizer = 20
       # c.BackendSpawner.ssl_alt_names = [f"DNS:{jupyterhub_host}"]
 
@@ -129,6 +130,7 @@ hub:
           (r"/api/users/([^/]+)/servers/([^/]+)/optionsform", SpawnOptionsFormAPIHandler),
           (r"/api/userjobs", UserJobsAPIHandler),
           (r"/api/userjobs/([^/]+)", UserJobsAPIHandler),
+          (r"/api/slurmwrapper/([^/]+)/([^/]+)", SlurmWrapperAPIHandler),
           (r"/api/userjobsforward", UserJobsForwardAPIHandler),
           (r"/api/userjobsforward/([^/]+)", UserJobsForwardAPIHandler),
           (r"/api/users/progress/update/([^/]+)", SpawnProgressUpdateAPIHandler),

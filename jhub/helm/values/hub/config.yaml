@@ -29,7 +29,7 @@ hub:
             - admin:users
           services:
             - refresh-hpc-accounts
-      
+
       jinja_environment_options:
         extensions:
           - jinja2.ext.do
