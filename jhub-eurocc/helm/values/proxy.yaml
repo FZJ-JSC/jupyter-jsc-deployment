@@ -36,7 +36,7 @@ proxy:
               matchLabels:
                 name: cattle-monitoring-system
     image:
-      tag: "4.5.1"
+      tag: "4.5.4"
     nodeSelector:
       worker: "true"
   https:
