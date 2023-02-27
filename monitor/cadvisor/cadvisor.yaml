@@ -109,6 +109,23 @@ spec:
       - key: node-role.kubernetes.io/etcd
         value: "true"
         effect: NoExecute
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      - key: airflow
+        value: "true"
+        effect: NoExecute
+      - key: airflow
+        value: "true"
+        effect: NoSchedule
+      - key: loki
+        value: "true"
+        effect: NoSchedule
+      - key: usernode
+        value: "true"
+        effect: NoExecute
+      - key: monitoring
+        value: "true"
+        effect: NoExecute
       volumes:
       - hostPath:
           path: /
