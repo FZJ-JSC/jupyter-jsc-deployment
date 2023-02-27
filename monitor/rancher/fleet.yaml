@@ -33,6 +33,10 @@ helm:
           host: mail.fz-juelich.de:25
     ingressNginx:
       enabled: false
+    # workaround for broken grafana dashboards. Deploy manual cAdvisor ( https://github.com/rancher/rancher/issues/38934#issuecomment-1294585708 )
+    kubelet:
+      serviceMonitor:
+        cAdvisor: false
     kube-state-metrics:
       #prometheus:
       #  monitor:
@@ -143,6 +147,7 @@ helm:
             effect: "NoExecute"
 dependsOn:
   - name: basics-ingress
+  - name: basics-monitor-cadvisor
   - name: basics-monitor-crd
   - name: basics-monitor-storage
 diff:
