@@ -16,8 +16,6 @@ helm:
             value: "true"
             effect: "NoExecute"
     grafana:
-      plugins:
-        - "8003"
       nodeSelector:
         monitoring: "true"
       tolerations:
