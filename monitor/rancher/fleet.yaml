@@ -17,7 +17,7 @@ helm:
             effect: "NoExecute"
     grafana:
       plugins:
-        - kubernetes
+        - "8003"
       nodeSelector:
         monitoring: "true"
       tolerations:
