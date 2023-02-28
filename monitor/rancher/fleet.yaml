@@ -145,6 +145,63 @@ helm:
           - key: "monitoring"
             value: "true"
             effect: "NoExecute"
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        alertmanager:
+          alertmanagerSpec:
+            resources:
+              requests:
+                cpu: 10m
+                memory: 50Mi
+              limits:
+                cpu: 50m
+                memory: 250Mi
+        grafana:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 150Mi
+            limits:
+              cpu: 100m
+              memory: 250Mi
+        kube-state-metrics:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 50Mi
+            limits:
+              cpu: 50m
+              memory: 200Mi
+        prometheus:
+          prometheusSpec:
+            resources:
+              requests:
+                memory: 2000Mi
+                cpu: 300m
+              limits:
+                memory: 4000Mi
+                cpu: 1000m
+        prometheus-node-exporter:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 20Mi
+            limits:
+              cpu: 50m
+              memory: 50Mi
+        prometheusOperator:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 150Mi
+            limits:
+              cpu: 50m
+              memory: 500Mi
 dependsOn:
   - name: basics-ingress
   - name: basics-monitor-cadvisor
