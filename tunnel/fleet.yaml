@@ -208,10 +208,10 @@ targetCustomizations:
       values:
         resources:
           requests:
-            cpu: 100m
-            memory: 512Mi
+            cpu: 20m
+            memory: 600Mi
           limits:
-            cpu: 2000m
+            cpu: 200m
             memory: 2048Mi
         ingress:
           enabled: false

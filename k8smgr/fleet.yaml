@@ -22,11 +22,11 @@ targetCustomizations:
       values:
         resources:
           requests:
-            cpu: 100m
-            memory: 512Mi
+            cpu: 10m
+            memory: 256Mi
           limits:
-            cpu: 2000m
-            memory: 2048Mi
+            cpu: 100m
+            memory: 1024Mi
         ingress:
           enabled: true
           hosts:

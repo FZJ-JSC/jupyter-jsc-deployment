@@ -113,6 +113,22 @@ targetCustomizations:
             drf_username: "jupyterhub"
             logger_name: "JupyterHubStaging"
             NTS_GIT_BRANCH: "main"
+          resources:
+            requests:
+              cpu: 20m
+              memory: 256Mi 
+            limits:
+              cpu: 200m
+              memory: 1024Mi
+        proxy:
+          chp:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
@@ -209,6 +225,15 @@ targetCustomizations:
             limits:
               cpu: 1000m
               memory: 3072Mi
+        proxy:
+          chp:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
