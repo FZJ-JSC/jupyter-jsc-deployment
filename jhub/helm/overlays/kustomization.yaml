@@ -1,5 +1,5 @@
 resources:
-  - monitor.yaml
+- monitor.yaml
 
 patches:
 - target:

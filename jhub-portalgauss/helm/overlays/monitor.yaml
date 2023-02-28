@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: portalgauss-servicemonitor
+  namespace: jupyterjsc
+  labels:
+    app: portalgauss
+    release: jupyterhub
+    component: proxy
+spec:
+  jobLabel: jupyterhub
+  namespaceSelector:
+    matchNames:
+      - jupyterjsc
+  selector:
+    matchLabels:
+      app: portalgauss
+  endpoints:
+    - port: https # internal name of the port service exposes
+      scheme: https
+      tlsConfig:
+        insecureSkipVerify: true
+      path: /hub/metrics
+      interval: 5s
+      bearerTokenSecret:
+        name: portalgauss-hub
+        key: hub.services.metrics.apiToken

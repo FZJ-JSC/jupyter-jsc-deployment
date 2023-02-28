@@ -38,7 +38,7 @@ jobs:
         memory: 256Mi
     env:
     - name: GIT_REPO
-      value: "gitlab.hzdr.de/hifis/overall/kpi/FZJ-Jupyter.git"
+      value: "codebase.helmholtz.cloud/hifis/overall/kpi/FZJ-Jupyter.git"
     - name: GIT_BRANCH
       value: "master"
     - name: GIT_SUBDIR

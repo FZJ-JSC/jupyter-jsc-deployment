@@ -43,7 +43,7 @@ hub:
         - name: SQL_HOST
           valueFrom:
             secretKeyRef:
-              name: postgresql-general
+              name: hub-eurocc-generics
               key: SQL_HOST
         - name: JUPYTERHUB_DATABASE
           value: "jupyterhubeurocc"
@@ -52,8 +52,8 @@ hub:
         - name: JUPYTERHUB_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgresql-users-jupyterjsc
-              key: JUPYTERHUB_EUROCC_PASSWORD
+              name: hub-eurocc-generics
+              key: SQL_PASSWORD
         - name: UNICOREMGR_JUPYTERHUB_USERNAME
           valueFrom:
             fieldRef:
@@ -65,14 +65,14 @@ hub:
         - name: UNICOREMGR_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:
-              name: drf-unicoremgr-passwds
-              key: JUPYTERHUBEUROCC_USER_PASS
+              name: hub-eurocc-generics
+              key: UNICOREMGR_JUPYTERHUB_USER_PASS
               optional: false
         - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:
-              name: drf-k8smgr-passwds 
-              key: JUPYTERHUBEUROCC_USER_PASS
+              name: hub-eurocc-generics
+              key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
               optional: false
       volumeMounts:
         - name: shared-data

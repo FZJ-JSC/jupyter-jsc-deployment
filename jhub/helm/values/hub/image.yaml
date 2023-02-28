@@ -4,4 +4,4 @@ hub:
     pullSecrets:
       - "gitlab-registry"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
-    tag: "2.3.1.3"
+    tag: "2.3.1.4"

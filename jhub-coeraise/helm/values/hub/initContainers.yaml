@@ -31,27 +31,21 @@ hub:
             secretKeyRef:
               name: "jupyter-jsc-config"
               key: PASSWORD
-        - name: NTS_GIT_REPO
-          valueFrom:
-            secretKeyRef:
-              name: "jupyter-jsc-nts-config"
-              key: REPOSITORY
-        - name: NTS_GIT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: "jupyter-jsc-nts-config"
-              key: USERNAME
-        - name: NTS_GIT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: "jupyter-jsc-nts-config"
-              key: PASSWORD
-        - name: NTS_GIT_BRANCH
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.labels['NTS_GIT_BRANCH']
         - name: TEMPLATE_GIT_REPO
-          value: "https://github.com/FZJ-JSC/jupyter-jsc-custom-share-template.git"
+          valueFrom:
+            secretKeyRef:
+              name: "coeraise-share-config"
+              key: REPOSITORY
+        - name: TEMPLATE_GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: "coeraise-share-config"
+              key: USERNAME
+        - name: TEMPLATE_GIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "coeraise-share-config"
+              key: PASSWORD
         - name: TEMPLATE_GIT_BRANCH
           valueFrom:
             fieldRef:
@@ -73,15 +67,16 @@ hub:
           echo -n "IyEvYmluL2Jhc2gKClNSQz0iL21udC9pbnRlcm5hbF9zc2wvKiIKREVTVD0iL21udC9wZXJzaXN0ZW50L2ludGVybmFsLXNzbCIKCm1rZGlyIC1wICRERVNUCgpmb3IgZiBpbiAkU1JDCmRvCiAgZmlsZW5hbWU9JChiYXNlbmFtZSAkZikKICBpZiBbWyAke2ZpbGVuYW1lfSA9IGNlcnRpcHkuanNvbiBdXTsgdGhlbgogICAgY3AgJGYgJHtERVNUfS8ke2ZpbGVuYW1lfQogIGVsaWYgW1sgISAke2ZpbGVuYW1lfSA9ICpfdHJ1c3QuY3J0IF1dOyB0aGVuCiAgICBkaXJuYW1lPSR7ZmlsZW5hbWUlJV8qfQogICAgbWtkaXIgLXAgJHtERVNUfS8ke2Rpcm5hbWV9CiAgICBmaWxlbmFtZT0ke2ZpbGVuYW1lIyMqX30KICAgIGNwICRmICR7REVTVH0vJHtkaXJuYW1lfS8ke2ZpbGVuYW1lfQogIGVsc2UKICAgIGNwICRmICR7REVTVH0vJHtmaWxlbmFtZX0KICBmaQpkb25lCg==" | base64 -d > /tmp/secret_to_internal-ssl.sh &&
           bash /tmp/secret_to_internal-ssl.sh &&
           export GIT_REPO_SHORT=${GIT_REPO#"https://"} &&
+          export TEMPLATE_GIT_REPO_SHORT=${TEMPLATE_GIT_REPO#"https://"} &&
           cd /mnt/shared-data &&
           rm -rf /mnt/shared-data/git_config &&
           rm -rf /mnt/shared-data/jhub_files &&
-          rm -rf /mnt/shared-data/notebook_template_server &&
           git clone --single-branch --branch jupyterhub-coeraise-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config &&
           git clone --single-branch --branch jupyterhub-files-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} jhub_files &&
+          cd /mnt/shared-data/jhub_files/ &&
+          git submodule add -b ${TEMPLATE_GIT_BRANCH} https://${TEMPLATE_GIT_USERNAME}:${TEMPLATE_GIT_PASSWORD}@${TEMPLATE_GIT_REPO_SHORT} ${JUPYTERHUB_VERSION}/templates/${JUPYTERHUB_URL} &&
+          git submodule add -b ${STATIC_GIT_BRANCH} https://${TEMPLATE_GIT_USERNAME}:${TEMPLATE_GIT_PASSWORD}@${TEMPLATE_GIT_REPO_SHORT} ${JUPYTERHUB_VERSION}/static/${JUPYTERHUB_URL} &&
           cd /mnt/shared-data &&
-          export NTS_GIT_REPO_SHORT=${NTS_GIT_REPO#"https://"} && 
-          git clone --single-branch --branch ${NTS_GIT_BRANCH} https://${NTS_GIT_USERNAME}:${NTS_GIT_PASSWORD}@${NTS_GIT_REPO_SHORT} notebook_template_server && 
           cp -r /mnt/shared-data/jhub_files/${JUPYTERHUB_VERSION}/static /mnt/shared-data/static-files &&
           chown -R 1000:100 /mnt/shared-data &&
           chown -R 1000:100 /mnt/persistent

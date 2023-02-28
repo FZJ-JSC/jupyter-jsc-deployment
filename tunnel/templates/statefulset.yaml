@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "drf-tunnel.name" . }}
   labels:
@@ -10,8 +10,7 @@ spec:
     matchLabels:
       app: {{ include "drf-tunnel.name" . }}
       {{- include "drf-tunnel.selectorLabels" . | nindent 6 }}
-  strategy:
-    type: Recreate
+  serviceName: {{ include "drf-tunnel.name" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}

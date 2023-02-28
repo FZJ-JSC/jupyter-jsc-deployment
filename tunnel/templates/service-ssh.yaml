@@ -39,4 +39,4 @@ spec:
     {{- end }}
   selector:
     {{- include "drf-tunnel.selectorLabels" . | nindent 4 }}
-
+    statefulset.kubernetes.io/pod-name: {{ include "drf-tunnel.name" . }}-0

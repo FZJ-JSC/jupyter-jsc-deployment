@@ -18,6 +18,7 @@ hub:
       from apihandler import HPCUpdateAPIHandler
       from apihandler import UserJobsAPIHandler
       from apihandler import UserJobsForwardAPIHandler
+      from apihandler import SlurmWrapperAPIHandler
       from apihandler import SpawnNotificationAPIHandler
       from apihandler import SpawnOptionsFormAPIHandler
       from apihandler import SpawnProgressStatusAPIHandler
@@ -128,7 +129,8 @@ hub:
           (r"/api/users/([^/]+)/servers/([^/]*)/update", SpawnUpdateOptionsAPIHandler),
           (r"/api/users/([^/]+)/servers/([^/]+)/optionsform", SpawnOptionsFormAPIHandler),
           (r"/api/userjobs", UserJobsAPIHandler),
-          (r"/api/userjobs/([^/]+)", UserJobsAPIHandler),          
+          (r"/api/userjobs/([^/]+)", UserJobsAPIHandler),
+          (r"/api/slurmwrapper/([^/]+)/([^/]+)", SlurmWrapperAPIHandler),
           (r"/api/userjobsforward", UserJobsForwardAPIHandler),
           (r"/api/userjobsforward/([^/]+)", UserJobsForwardAPIHandler),
           (r"/api/users/progress/update/([^/]+)", SpawnProgressUpdateAPIHandler),

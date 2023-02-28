@@ -60,7 +60,7 @@ ingress:
           #proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
           proxy_pass                              http://juniq-static-files.jupyterjsc.svc:8070;
           
-          #allow                                   {{ $jhubInstance.allowCidr }};
+          #allow                                   134.94.0.0/16;
           #deny                                    all;
           
           proxy_set_header X-Real-IP              $remote_addr;
@@ -101,7 +101,6 @@ ingress:
           
           proxy_redirect                          off;
       }
-  
   # will be supported in 2.0.0 ...
   #ingressClassName: "nginx"
 prePuller:

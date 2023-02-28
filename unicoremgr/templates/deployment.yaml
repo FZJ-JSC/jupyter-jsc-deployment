@@ -56,7 +56,7 @@ spec:
           args:
           - -c
           - >-
-            apk add git && mkdir -p /mnt/shared-data/certs && cp -rp /mnt/volumes_certs/certs/..data/tls.key /mnt/shared-data/certs/unicoremgr.key && cp -rp /mnt/volumes_certs/certs/..data/tls.crt /mnt/shared-data/certs/unicoremgr.crt && chmod 400 /mnt/shared-data/certs/* && chown -R 1000:100 /mnt/shared-data/certs && export GIT_REPO_SHORT=${GIT_REPO#"https://"} && cd /mnt/shared-data && git clone --single-branch --branch ${GIT_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config && chown -R 1000:100 /mnt/shared-data
+            apk add git && mkdir -p /mnt/shared-data/certs && cp -rp /mnt/volumes_certs/certs/..data/tls.key /mnt/shared-data/certs/unicoremgr.key && cp -rp /mnt/volumes_certs/certs/..data/tls.crt /mnt/shared-data/certs/unicoremgr.crt && chmod 400 /mnt/shared-data/certs/* && chown -R 1000:100 /mnt/shared-data/certs && export GIT_REPO_SHORT=${GIT_REPO#"https://"} && cd /mnt/shared-data && rm -rf /mnt/shared-data/git_config && git clone --single-branch --branch ${GIT_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config && chown -R 1000:100 /mnt/shared-data
           volumeMounts:
             - name: certs
               mountPath: /mnt/volumes_certs/certs
