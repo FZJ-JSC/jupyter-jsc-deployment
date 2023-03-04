@@ -58,6 +58,10 @@ hub:
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['drf_username']
+        - name: TUNNEL_JUPYTERHUB_USERNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['drf_username']
         - name: UNICOREMGR_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:
@@ -69,6 +73,12 @@ hub:
             secretKeyRef:
               name: hub-generics
               key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+              optional: false
+        - name: TUNNEL_JUPYTERHUB_USER_PASS
+          valueFrom:
+            secretKeyRef:
+              name: hub-generics
+              key: TUNNEL_JUPYTERHUB_USER_PASS
               optional: false
       volumeMounts:
         - name: shared-data
@@ -86,6 +96,8 @@ hub:
           mountPath: /mnt/unicoremgr_certs
         - name: drf-k8smgr-certs-public
           mountPath: /mnt/k8smgr_certs
+        - name: drf-tunnel-certs-public
+          mountPath: /mnt/tunnel_certs
         - name: tz-config
           mountPath: /etc/localtime
     - name: mount-watch
