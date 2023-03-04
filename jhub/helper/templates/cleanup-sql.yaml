@@ -14,6 +14,10 @@ data:
         export UNICOREMGR_AUTHENTICATION_TOKEN=${UNICOREMGR_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${UNICOREMGR_JUPYTERHUB_USERNAME:-jupyterhub}:${UNICOREMGR_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
     fi
 
+    if [[ -n ${TUNNEL_JUPYTERHUB_USER_PASS} ]]; then
+        export TUNNEL_AUTHENTICATION_TOKEN=${TUNNEL_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${TUNNEL_JUPYTERHUB_USERNAME:-jupyterhub}:${TUNNEL_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
+    fi
+
     while true
     do
         /usr/local/bin/python3 -u /mnt/sql/cleanup_sql.py
@@ -161,6 +165,64 @@ data:
                     f"{now()} {uuidcode} - Delete to {service_url} ... done ({r.status_code})"
                 )
 
+    def cleanup_drf_tunnel(jhub_server_names, custom_conf, grace_period):
+        drf_services = [
+            k
+            for k, v in custom_conf.get("drf-services", {}).items()
+            if "tunnel" in v.get("urls", {}).keys()
+        ]
+        for drf_name in drf_services:
+            drf_env = f"{drf_name.upper()}_AUTHENTICATION_TOKEN"
+            authentication_token = os.environ.get(drf_env, None)
+            if not authentication_token:
+                print(f"{now()} {uuidcode} - {drf_env} not defined. Skip {drf_name}")
+                continue
+            services_url = (
+                custom_conf.get("drf-services", {})
+                .get(drf_name, {})
+                .get("urls", {})
+                .get("tunnel", "")
+            )
+            drf_headers["Authorization"] = authentication_token
+            verify = (
+                custom_conf.get("drf-services", {})
+                .get(drf_name, {})
+                .get("certificate_path", False)
+            )
+            request_timeout = (
+                custom_conf.get("drf-services", {})
+                .get(drf_name, {})
+                .get("request_timeout", 20)
+            )
+            try:
+                r = requests.get(
+                    services_url,
+                    headers=drf_headers,
+                    verify=verify,
+                    timeout=request_timeout,
+                )
+                r.raise_for_status()
+            except:
+                print(f"{now()} {uuidcode} - Could not reach {services_url}. Continue")
+                continue
+            services_to_delete = [
+                x["servername"]
+                for x in r.json()
+                if started_n_minutes_ago(grace_period, x["start_date"])
+                and x["servername"] not in jhub_server_names
+            ]
+            if not services_to_delete:
+                print(f"{now()} {uuidcode} - Nothing to cleanup for {drf_name}")
+                continue
+            for service in services_to_delete:
+                service_url = f"{services_url}{service}/"
+                print(f"{now()} {uuidcode} - Delete to {service_url} ... ")
+                r = requests.delete(
+                    service_url, headers=drf_headers, verify=verify, timeout=request_timeout
+                )
+                print(
+                    f"{now()} {uuidcode} - Delete to {service_url} ... done ({r.status_code})"
+                )
 
     if __name__ == "__main__":
         grace_period = int(os.environ.get("START_DATE_GRACE_PERIOD_IN_MIN", 5))
@@ -171,6 +233,7 @@ data:
         jhub_server_names = [x[1] for x in jhub_server]
         jhub_tokens = get_jhub_server_tokens()
         cleanup_drf_services(jhub_server_names, custom_conf, grace_period)
+        cleanup_drf_tunnel(jhub_server_names, custom_conf, grace_period)
         print(f"{now()} {uuidcode} - Cleanup falsely running services ... done")
         print(f"{now()} {uuidcode} - Delete unused tokens ...")
         delete_unused_tokens(jhub_server, jhub_tokens)
