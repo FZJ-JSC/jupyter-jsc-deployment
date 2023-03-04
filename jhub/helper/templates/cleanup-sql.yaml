@@ -30,6 +30,7 @@ data:
     import os
     import re
     import time
+    import traceback
 
     import psycopg2
     import requests
@@ -145,6 +146,7 @@ data:
                 r.raise_for_status()
             except:
                 print(f"{now()} {uuidcode} - Could not reach {services_url}. Continue")
+                print(traceback.format_exc())
                 continue
             services_to_delete = [
                 x["servername"]
@@ -204,12 +206,12 @@ data:
                 r.raise_for_status()
             except:
                 print(f"{now()} {uuidcode} - Could not reach {services_url}. Continue")
+                print(traceback.format_exc())
                 continue
             services_to_delete = [
                 x["servername"]
                 for x in r.json()
-                if started_n_minutes_ago(grace_period, x["start_date"])
-                and x["servername"] not in jhub_server_names
+                if x["servername"] not in jhub_server_names
             ]
             if not services_to_delete:
                 print(f"{now()} {uuidcode} - Nothing to cleanup for {drf_name}")
