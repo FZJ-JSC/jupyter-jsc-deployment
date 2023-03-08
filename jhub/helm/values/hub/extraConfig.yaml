@@ -3,6 +3,7 @@ hub:
     customConfig: |-
       import os
       import sys
+      from datetime import datetime
 
       custom_path = "/src/jupyterhub-custom"
       sys.path.insert(1, custom_path)
@@ -56,10 +57,21 @@ hub:
       )
       # TODO override cull service. cull --url http:// instead of https://
 
+      def custom_post_stop_hook(spawner):
+          event = spawner.stop_event
+          # Update event html message to show current time
+          now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
+          try:
+              event["html_message"] = event["html_message"].format(now=now)
+              spawner.latest_events.append(event)
+          except KeyError:
+              pass
+  
       c.JupyterHub.spawner_class = BackendSpawner
       c.BackendSpawner.http_timeout = 7200
       c.BackendSpawner.poll_interval = 120
       c.BackendSpawner.poll_interval_randomizer = 20
+      c.BackEndSpawner.post_stop_hook = custom_post_stop_hook
       # c.BackendSpawner.ssl_alt_names = [f"DNS:{jupyterhub_host}"]
 
       c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
