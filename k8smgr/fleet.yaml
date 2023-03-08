@@ -42,10 +42,6 @@ targetCustomizations:
                 - drf-k8smgr.staging.svc
         authorized_keys:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFEXIKTu6X7EjP7tq07wNb9S1P7Qwm2+E0I9kEtIgQyw'
-          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHakYLgiGwEPU7iyxo3anl+IwS1JvVhkhK61jTkQaQPi'
-          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_juniq.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA8g9Bp0LCnkGIdNosPzYVYIngMdkwKCLpqzlyovGunW'
-          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_eurocc.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBmfQCEj+LrU9P7NL1QGpGNAZCd1AYC/UdrRSOuhJHwR'
-          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_coeraise.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFYWZysgX5rdf8pGKrHx7MXbL/ei8LhkCMVTD/7j+8sE'
         gitconfig:
           branch: "k8smgr-staging"
         extraVolumes:
@@ -57,8 +53,6 @@ targetCustomizations:
             nfs:
               path: /mnt/userhomes
               server: 10.0.94.248
-        tunnel:
-          host: drf-tunnel-ssh-staging.jupyterjsc.svc
         loggerName: "K8sMgrStaging"
         labels:
           stage: "staging"
@@ -94,10 +88,6 @@ targetCustomizations:
                 - drf-k8smgr.production.svc
         authorized_keys:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHnLGTKAdycdT/1zlvGGjvr4dvSIqeFW3Eehgldl8Bh0'
-          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG1F5LkftRlmRoE/IDiAOWRSL6KDpnRD73sGvgMbrjsf'
-          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_juniq.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPYkfio1ASJsxXWfHfZ63jj1fSEVaU5PHKDYI/oUlgzJ'
-          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_eurocc.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIANDr/6CzEkWJF1mY/qQTgNpAEd8hl+FMBlP8C9Lh83w'
-          - 'restrict,command="/bin/bash /mnt/shared-data/files/manage_tunnel_coeraise.sh -a $(/bin/echo $SSH_ORIGINAL_COMMAND | sha512sum | cut -d \" \" -f 1) < /dev/null > /dev/null 2>&1" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMEfsEK48+G4hCEntDXCuJ1iGB+eUOWZv23DvYnwe1bf'
         gitconfig:
           branch: "k8smgr-production"
         extraVolumes:
@@ -109,8 +99,6 @@ targetCustomizations:
             nfs:
               path: /mnt/userhomes
               server: 10.0.20.30
-        tunnel:
-          host: drf-tunnel-ssh-production.jupyterjsc.svc
         loggerName: "K8sMgrProduction"
         labels:
           stage: "production"

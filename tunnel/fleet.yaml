@@ -14,27 +14,6 @@ helm:
         #loadbalancer.openstack.org/timeout-member-connect: "600000"
         loadbalancer.openstack.org/timeout-member-data: "600000"
     jupyterhubs:
-      juniq:
-        ssh_config_hosts:
-          - name: "k8smgr_hdfcloud_juniq"
-            user: "k8smgr"
-            port: 2222
-            hostname: "drf-k8smgr-ssh.userlabs.svc"
-            remoteKeySuffix: "_juniq"
-      eurocc:
-        ssh_config_hosts:
-          - name: "k8smgr_hdfcloud_eurocc"
-            user: "k8smgr"
-            port: 2222
-            hostname: "drf-k8smgr-ssh.userlabs.svc"
-            remoteKeySuffix: "_eurocc"
-      coeraise:
-        ssh_config_hosts:
-          - name: "k8smgr_hdfcloud_coeraise"
-            user: "k8smgr"
-            port: 2222
-            hostname: "drf-k8smgr-ssh.userlabs.svc"
-            remoteKeySuffix: "_coeraise"
       default:
         additional_remote_hosts:
           - eurocc
@@ -227,7 +206,6 @@ targetCustomizations:
               hosts:
                 - drf-tunnel.staging.svc
         authorized_keys:
-          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID3hZ8/shyAE5BB38dha7eBAXovOMtCNUqm9ChJeMtxZ hdfcloud'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgksSrTiiruGg1m7EzwMiTM9AFhUNBgeMBcCxfgfH7i deep'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH52ebnIybYxQllwfUnOhVfVuDNs6EdaVo7x6MYo3lUE juwels'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLrGzMMx/vAHIdhCotONtPKlIKMiMkdrMSFRCt1gt/e jureca'
@@ -268,7 +246,6 @@ targetCustomizations:
               hosts:
                 - drf-tunnel.production.svc
         authorized_keys:
-          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFLlGjineHob3jdZlB0AkP+p874m/npsT7HQfaxYFFil hdfcloud'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGDyzOleZ0JhOw/99dHGc4yU+g9uH3E1drJEI1L/ngjM deep'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOOjwe0VXwUfPXeDq35rwjGP/kYTD8hODuBV0BiQpB+v juwels'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM785RolstrLM01U7ui1Ce7geTu4q4T9Ored7MJl3GnD jureca'
