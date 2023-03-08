@@ -16,49 +16,6 @@ labels: {}
 
 deploymentNamespace: "userlabs"
 
-tunnel:
-  port: 7002
-  user: tunnel
-  host: drf-tunnel-ssh.jupyterjsc.svc
-
-jupyterhubs:
-  default:
-    host: proxy-public
-    port: 443
-    forwardService:
-      name: drf-k8smgr-jupyterhub-forward
-      type: ClusterIP
-      port: 56789
-    remote:
-      scriptName: manage_tunnel.sh
-  juniq:
-    host: juniq-proxy-public
-    port: 443
-    forwardService:
-      name: drf-k8smgr-jhub-juniq-forward
-      type: ClusterIP
-      port: 56788
-    remote:
-      scriptName: manage_tunnel_juniq.sh
-  eurocc:
-    host: eurocc-proxy-public
-    port: 443
-    forwardService:
-      name: drf-k8smgr-jhub-eurocc-forward
-      type: ClusterIP
-      port: 56787
-    remote:
-      scriptName: manage_tunnel_eurocc.sh
-  coeraise:
-    host: coeraise-proxy-public
-    port: 443
-    forwardService:
-      name: drf-k8smgr-jhub-coeraise-forward
-      type: ClusterIP
-      port: 56786
-    remote:
-      scriptName: manage_tunnel_coeraise.sh
-
 gitconfig:
   branch: "k8smgr-dev"
   secret: "jupyter-jsc-git-config-userlabs"
