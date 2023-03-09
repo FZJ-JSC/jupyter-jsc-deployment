@@ -106,6 +106,22 @@ targetCustomizations:
             logger_name: "JupyterHubJUNIQStaging"
             TEMPLATE_GIT_BRANCH: templates-staging
             STATIC_GIT_BRANCH: static-staging
+          resources:
+            requests:
+              cpu: 20m
+              memory: 256Mi
+            limits:
+              cpu: 200m
+              memory: 1024Mi
+        proxy:
+          chp:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
@@ -188,6 +204,22 @@ targetCustomizations:
             logger_name: "JupyterHubJUNIQProduction"
             TEMPLATE_GIT_BRANCH: templates-production
             STATIC_GIT_BRANCH: static-production
+          resources:
+            requests:
+              cpu: 20m
+              memory: 256Mi
+            limits:
+              cpu: 200m
+              memory: 1024Mi
+        proxy:
+          chp:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled: false, update ingress in maintenance/fleet.yaml
