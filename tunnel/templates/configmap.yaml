@@ -55,7 +55,7 @@ data:
         User {{ $host.user }}
         Port {{ default 22 $host.port }}
         HostName {{ $host.hostname }}
-        IdentityFile /mnt/shared-data/keypairs/tunnel_{{ $additional_host }}
+        IdentityFile /mnt/shared-data/keypairs/tunnel
         ControlPath /tmp/control_tunnel_{{ $host.name }}_{{ $additional_host }}
     {{- end }}
 
