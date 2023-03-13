@@ -3,6 +3,7 @@ hub:
     customConfig: |-
       import os
       import sys
+      from string import Template
 
       custom_path = "/src/jupyterhub-custom"
       sys.path.insert(1, custom_path)
@@ -61,7 +62,7 @@ hub:
           # Update event html message to show current time
           now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
           try:
-              event["html_message"] = event["html_message"].format(now=now)
+              event["html_message"] = Template(event_string).substitute(now=now)
               spawner.latest_events.append(event)
           except KeyError:
               pass
