@@ -36,6 +36,9 @@ helm:
             remoteKeySuffix: "_coeraise"
     jupyterhubs:
       default:
+        additional_remote_hosts:
+          - eurocc
+          - coeraise
         ssh_config_hosts: 
           - name: "k8smgr_hdfcloud"
             user: "k8smgr"
