@@ -3,6 +3,7 @@ hub:
     customConfig: |-
       import os
       import sys
+      from string import Template
 
       custom_path = "/src/jupyterhub-custom"
       sys.path.insert(1, custom_path)
