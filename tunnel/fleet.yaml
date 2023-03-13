@@ -13,6 +13,7 @@ helm:
         #loadbalancer.openstack.org/timeout-client-data: "600000"
         #loadbalancer.openstack.org/timeout-member-connect: "600000"
         loadbalancer.openstack.org/timeout-member-data: "600000"
+    jupyterhubs:
       juniq:
         ssh_config_hosts:
           - name: "k8smgr_hdfcloud_juniq"
@@ -34,7 +35,6 @@ helm:
             port: 2222
             hostname: "drf-k8smgr-ssh.userlabs.svc"
             remoteKeySuffix: "_coeraise"
-    jupyterhubs:
       default:
         additional_remote_hosts:
           - eurocc
