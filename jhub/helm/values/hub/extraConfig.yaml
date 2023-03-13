@@ -4,6 +4,7 @@ hub:
       import os
       import sys
       from datetime import datetime
+      from string import Template
 
       custom_path = "/src/jupyterhub-custom"
       sys.path.insert(1, custom_path)
@@ -56,7 +57,7 @@ hub:
         f'https://{get_name("hub")}:{get_name_env("hub", "_SERVICE_PORT")}'
       )
       # TODO override cull service. cull --url http:// instead of https://
-  
+
       c.JupyterHub.spawner_class = BackendSpawner
       c.BackendSpawner.http_timeout = 7200
       c.BackendSpawner.poll_interval = 120
