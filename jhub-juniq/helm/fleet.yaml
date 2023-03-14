@@ -20,12 +20,12 @@ helm:
         runAsGroup: 0
         allowPrivilegeEscalation: true
   valuesFiles:
-    - ../../jhub/helm/values/hub/config.yaml
+    - values/hub/config.yaml
     - values/hub/extraConfig.yaml
     - values/hub/extraContainers.yaml
     - values/hub/extraEnv.yaml
     - values/hub/extraVolumeMounts.yaml
-    - values/hub/image.yaml
+    - ../../jhub/helm/values/hub/image.yaml
     - values/hub/initContainers.yaml
     - values/hub/services.yaml
     - values/hub/others.yaml
