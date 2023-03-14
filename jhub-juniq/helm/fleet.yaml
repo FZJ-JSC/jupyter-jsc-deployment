@@ -22,7 +22,7 @@ helm:
   valuesFiles:
     - ../../jhub/helm/values/hub/config.yaml
     - values/hub/extraConfig.yaml
-    - values/hub/extraContainers.yaml
+    - ../../jhub/helm/values/hub/extraContainers.yaml
     - values/hub/extraEnv.yaml
     - ../../jhub/helm/values/hub/extraVolumeMounts.yaml
     - ../../jhub/helm/values/hub/image.yaml
