@@ -25,7 +25,7 @@
   },
   { 
     "op": "replace", 
-    "path": "/spec/template/spec/containers/5/env/25/valueFrom/secretKeyRef",
+    "path": "/spec/template/spec/containers/5/env/24/valueFrom/secretKeyRef",
     "value": { 
       "name": "hub-juniq-generics",
       "key": "SQL_DATABASE"
@@ -33,7 +33,7 @@
   },
   { 
     "op": "replace", 
-    "path": "/spec/template/spec/containers/5/env/26/valueFrom/secretKeyRef",
+    "path": "/spec/template/spec/containers/5/env/25/valueFrom/secretKeyRef",
     "value": { 
       "name": "hub-juniq-generics",
       "key": "SQL_PASSWORD"
@@ -41,7 +41,7 @@
   },
   { 
     "op": "replace", 
-    "path": "/spec/template/spec/containers/5/env/27/valueFrom/secretKeyRef",
+    "path": "/spec/template/spec/containers/5/env/26/valueFrom/secretKeyRef",
     "value": { 
       "name": "hub-juniq-generics",
       "key": "SQL_USER"
@@ -49,7 +49,7 @@
   },
   { 
     "op": "replace", 
-    "path": "/spec/template/spec/containers/5/env/28/valueFrom/secretKeyRef",
+    "path": "/spec/template/spec/containers/5/env/27/valueFrom/secretKeyRef",
     "value": { 
       "name": "hub-juniq-generics",
       "key": "SQL_HOST"
@@ -57,7 +57,7 @@
   },
   { 
     "op": "replace", 
-    "path": "/spec/template/spec/containers/5/env/29/valueFrom/secretKeyRef",
+    "path": "/spec/template/spec/containers/5/env/28/valueFrom/secretKeyRef",
     "value": { 
       "name": "hub-juniq-generics",
       "key": "SQL_PORT"
