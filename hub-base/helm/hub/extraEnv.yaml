@@ -1,5 +1,7 @@
 hub:
   extraEnv:
+    # 4 envs alreays defined, index for patch starts at 4
+    # patch index 4:
     - name: JUPYTERHUB_STAGE
       valueFrom:
         fieldRef:
@@ -20,14 +22,9 @@ hub:
       valueFrom:
         fieldRef:
           fieldPath: metadata.labels['logger_name']
-    - name: K8SMGRHDFCLOUD_JUPYTERHUB_USERNAME
-      value: "jupyterhubjuniq"
-    - name: UNICOREMGR_JUPYTERHUB_USERNAME
-      value: "jupyterhubjuniq"
-    - name: TUNNEL_JUPYTERHUB_USERNAME
-      value: "jupyterhubjuniq"
     - name: LOGGING_CONFIG_FILE
       value: "/mnt/shared-data/git_config/logging.json"
+    # patch index 10:
     - name: LOGGING_METRICS_ENABLED
       value: "true"
     - name: LOGGING_METRICS_LOGFILE
@@ -40,6 +37,8 @@ hub:
       value: "/mnt/shared-data/incident-check/active_incidents.json"
     - name: RESERVATIONS_FILE
       value: "/mnt/shared-data/reservation-check/reservation.json"
+    - name: NOTEBOOK_TEMPLATES_PATH
+      value: "/mnt/shared-data/notebook_template_server"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
       value: "jupyterjsc"
     - name: OAUTH_CLIENT_ID
@@ -52,6 +51,7 @@ hub:
         secretKeyRef:
           name: hub-custom
           key: oauth_client_secret_password
+    # patch index 20:
     - name: DEPLOYMENT_NAMESPACE
       valueFrom:
         fieldRef:
@@ -59,40 +59,45 @@ hub:
     - name: TUNNEL_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
-          name: hub-juniq-generics
+          name: hub-generics
           key: TUNNEL_JUPYTERHUB_USER_PASS
     - name: UNICOREMGR_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
-          name: hub-juniq-generics
+          name: hub-generics
           key: UNICOREMGR_JUPYTERHUB_USER_PASS
     - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
-          name: hub-juniq-generics
+          name: hub-generics
           key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+    - name: K8SMGRJUSUFCLOUD_AUTHENTICATION_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: K8SMGRJUSUFCLOUD_AUTHENTICATION_TOKEN
     - name: SQL_DATABASE
       valueFrom:
         secretKeyRef:
-          name: hub-juniq-generics
+          name: hub-generics
           key: SQL_DATABASE
     - name: SQL_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: hub-juniq-generics
+          name: hub-generics
           key: SQL_PASSWORD
     - name: SQL_USER
       valueFrom:
         secretKeyRef:
-          name: hub-juniq-generics
+          name: hub-generics
           key: SQL_USER
     - name: SQL_HOST
       valueFrom:
         secretKeyRef:
-          name: hub-juniq-generics
+          name: hub-generics
           key: SQL_HOST
     - name: SQL_PORT
       valueFrom:
         secretKeyRef:
-          name: hub-juniq-generics
+          name: hub-generics
           key: SQL_PORT

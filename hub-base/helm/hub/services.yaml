@@ -1,0 +1,6 @@
+hub:
+  services:
+    metrics:
+      name: metrics-prometheus-monitor
+    refresh_hpc:
+      name: refresh-hpc-accounts

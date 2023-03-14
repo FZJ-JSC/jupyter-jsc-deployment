@@ -16,6 +16,10 @@ hub:
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['hostname']
+        - name: HUB_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['app']
         - name: GIT_REPO
           valueFrom:
             secretKeyRef:
@@ -31,29 +35,6 @@ hub:
             secretKeyRef:
               name: "jupyter-jsc-config"
               key: PASSWORD
-        - name: TEMPLATE_GIT_REPO
-          valueFrom:
-            secretKeyRef:
-              name: "juniq-share-config"
-              key: REPOSITORY
-        - name: TEMPLATE_GIT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: "juniq-share-config"
-              key: USERNAME
-        - name: TEMPLATE_GIT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: "juniq-share-config"
-              key: PASSWORD
-        - name: TEMPLATE_GIT_BRANCH
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.labels['TEMPLATE_GIT_BRANCH']
-        - name: STATIC_GIT_BRANCH
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.labels['STATIC_GIT_BRANCH']
       command: ["/bin/sh"]
       args:
         - -c
@@ -67,7 +48,7 @@ hub:
           cd /mnt/shared-data &&
           rm -rf /mnt/shared-data/git_config &&
           rm -rf /mnt/shared-data/jhub_files &&
-          git clone --single-branch --branch jupyterhub-juniq-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config &&
+          git clone --single-branch --branch jupyterhub-${HUB_NAME}-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} git_config &&
           git clone --single-branch --branch jupyterhub-files-${JUPYTERHUB_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO_SHORT} jhub_files &&
           cd /mnt/shared-data/jhub_files/ &&
           git submodule add -b ${TEMPLATE_GIT_BRANCH} https://${TEMPLATE_GIT_USERNAME}:${TEMPLATE_GIT_PASSWORD}@${TEMPLATE_GIT_REPO_SHORT} ${JUPYTERHUB_VERSION}/templates/${JUPYTERHUB_URL} &&
