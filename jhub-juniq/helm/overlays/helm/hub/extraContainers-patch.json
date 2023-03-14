@@ -1,57 +1,45 @@
 [
   { 
     "op": "replace", 
-    "path": "/spec/template/spec/containers/1/env/0",
+    "path": "/spec/template/spec/containers/1/env/0/valueFrom/secretKeyRef",
     "value": { 
-      "valueFrom": {
-        "secretKeyRef": {
-          "name": "hub-juniq-generics"
-        }
-      } 
+      "name": "hub-juniq-generics",
+      "key": "SQL_HOST"
     }
   },
   {
     "op": "replace", 
     "path": "/spec/template/spec/containers/1/env/1",
     "value": { 
-      "valueFrom": {
-        "secretKeyRef": {
-          "name": "hub-juniq-generics"
-        }
-      } 
+      "name": "hub-juniq-generics",
+      "key": "SQL_PASSWORD"
     }
   },
   {
     "op": "replace", 
     "path": "/spec/template/spec/containers/1/env/2",
     "value": { 
-      "valueFrom": {
-        "secretKeyRef": {
-          "name": "hub-juniq-generics"
-        }
-      } 
+      "name": "hub-juniq-generics",
+      "key": "UNICOREMGR_JUPYTERHUB_USER_PASS",
+      "optional": false
     }
   },
   {
     "op": "replace", 
     "path": "/spec/template/spec/containers/1/env/3",
     "value": { 
-      "valueFrom": {
-        "secretKeyRef": {
-          "name": "hub-juniq-generics"
-        }
-      } 
+      "name": "hub-juniq-generics",
+      "key": "K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS",
+      "optional": false
     }
   },
   {
     "op": "replace", 
     "path": "/spec/template/spec/containers/1/env/4",
     "value": { 
-      "valueFrom": {
-        "secretKeyRef": {
-          "name": "hub-juniq-generics"
-        }
-      } 
+      "name": "hub-juniq-generics",
+      "key": "TUNNEL_JUPYTERHUB_USER_PASS",
+      "optional": false
     }
   }
 ]
