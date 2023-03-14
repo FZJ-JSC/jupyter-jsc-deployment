@@ -1,7 +1,7 @@
 [
   {
     "op": "add",
-    "path": "/spec/template/spec/initContainers/0/env",
+    "path": "/spec/template/spec/initContainers/0/env/-",
     "value": { 
       "name": "TEMPLATE_GIT_REPO",
       "valueFrom": {
@@ -14,7 +14,7 @@
   },
   {
     "op": "add",
-    "path": "/spec/template/spec/initContainers/0/env",
+    "path": "/spec/template/spec/initContainers/0/env/-",
     "value": { 
       "name": "TEMPLATE_GIT_USERNAME",
       "valueFrom": {
@@ -27,7 +27,7 @@
   },
   {
     "op": "add",
-    "path": "/spec/template/spec/initContainers/0/env",
+    "path": "/spec/template/spec/initContainers/0/env/-",
     "value": { 
       "name": "TEMPLATE_GIT_PASSWORD",
       "valueFrom": {
