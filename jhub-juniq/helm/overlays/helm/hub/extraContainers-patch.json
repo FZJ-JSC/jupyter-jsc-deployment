@@ -1,0 +1,57 @@
+[
+  { 
+    "op": "replace", 
+    "path": "/spec/template/spec/containers/1/env/0",
+    "value": { 
+      "valueFrom": {
+        "secretKeyRef": {
+          "name": "hub-juniq-generics"
+        }
+      } 
+    }
+  },
+  {
+    "op": "replace", 
+    "path": "/spec/template/spec/containers/1/env/1",
+    "value": { 
+      "valueFrom": {
+        "secretKeyRef": {
+          "name": "hub-juniq-generics"
+        }
+      } 
+    }
+  },
+  {
+    "op": "replace", 
+    "path": "/spec/template/spec/containers/1/env/2",
+    "value": { 
+      "valueFrom": {
+        "secretKeyRef": {
+          "name": "hub-juniq-generics"
+        }
+      } 
+    }
+  },
+  {
+    "op": "replace", 
+    "path": "/spec/template/spec/containers/1/env/3",
+    "value": { 
+      "valueFrom": {
+        "secretKeyRef": {
+          "name": "hub-juniq-generics"
+        }
+      } 
+    }
+  },
+  {
+    "op": "replace", 
+    "path": "/spec/template/spec/containers/1/env/4",
+    "value": { 
+      "valueFrom": {
+        "secretKeyRef": {
+          "name": "hub-juniq-generics"
+        }
+      } 
+    }
+  }
+]

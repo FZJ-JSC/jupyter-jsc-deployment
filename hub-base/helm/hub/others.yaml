@@ -1,0 +1,30 @@
+hub:
+  annotations:
+    proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+    kubectl.kubernetes.io/default-container: "hub"
+  args:
+    - -c
+    - >-
+      rm -f /mnt/persistent/internal-ssl/overlays/*.crt &&
+      rm -f /mnt/persistent/internal-ssl/overlays/certipy.json &&
+      rm -rf /mnt/persistent/internal-ssl/overlays/hub-internal &&
+      rm -rf /mnt/persistent/internal-ssl/overlays/proxy-api &&
+      rm -rf /mnt/persistent/internal-ssl/overlays/proxy-client &&
+      /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+  command:
+    - /bin/bash
+  consecutiveFailureLimit: 0
+  db:
+    type: "postgres"
+  nodeSelector:
+    worker: "true"
+  networkPolicy:
+    allowedIngressPorts:
+      - 8070
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 1024Mi

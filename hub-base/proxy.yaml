@@ -43,8 +43,6 @@ proxy:
     enabled: true
     type: secret
     secret:
-      name: internal-ssl-juniq
+      name: internal-ssl
       key: proxy-client_proxy-client.key
       crt: proxy-client_proxy-client.crt
-      #key: hub-internal_hub-internal.key
-      #crt: hub-internal_hub-internal.crt

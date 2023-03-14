@@ -36,24 +36,34 @@ hub:
             pip install requests psycopg2-binary &&
             source /mnt/sql/run.sh
       env:
-        - name: CUSTOM_CONFIG_PATH
-          value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
-        - name: SLEEP
-          value: "1800"
         - name: SQL_HOST
           valueFrom:
             secretKeyRef:
-              name: hub-juniq-generics
+              name: hub-generics
               key: SQL_HOST
-        - name: JUPYTERHUB_DATABASE
-          value: "jupyterhubjuniq"
-        - name: JUPYTERHUB_DATABASE_USER
-          value: "jupyterhubjuniq"
         - name: JUPYTERHUB_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: hub-juniq-generics
+              name: hub-generics
               key: SQL_PASSWORD
+        - name: UNICOREMGR_JUPYTERHUB_USER_PASS
+          valueFrom:
+            secretKeyRef:
+              name: hub-generics
+              key: UNICOREMGR_JUPYTERHUB_USER_PASS
+              optional: false
+        - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+          valueFrom:
+            secretKeyRef:
+              name: hub-generics
+              key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+              optional: false
+        - name: TUNNEL_JUPYTERHUB_USER_PASS
+          valueFrom:
+            secretKeyRef:
+              name: hub-generics
+              key: TUNNEL_JUPYTERHUB_USER_PASS
+              optional: false
         - name: UNICOREMGR_JUPYTERHUB_USERNAME
           valueFrom:
             fieldRef:
@@ -66,24 +76,10 @@ hub:
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['drf_username']
-        - name: UNICOREMGR_JUPYTERHUB_USER_PASS
-          valueFrom:
-            secretKeyRef:
-              name: hub-juniq-generics
-              key: UNICOREMGR_JUPYTERHUB_USER_PASS
-              optional: false
-        - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
-          valueFrom:
-            secretKeyRef:
-              name: hub-juniq-generics
-              key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
-              optional: false
-        - name: TUNNEL_JUPYTERHUB_USER_PASS
-          valueFrom:
-            secretKeyRef:
-              name: hub-juniq-generics
-              key: TUNNEL_JUPYTERHUB_USER_PASS
-              optional: false
+        - name: CUSTOM_CONFIG_PATH
+          value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
+        - name: SLEEP
+          value: "1800"
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
@@ -121,6 +117,10 @@ hub:
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['jhub_version']
+        # - name: NTS_GIT_BRANCH
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: metadata.labels['NTS_GIT_BRANCH']
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data

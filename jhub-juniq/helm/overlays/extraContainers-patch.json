@@ -1,7 +1,0 @@
-[
-  { 
-      "op": "replace", 
-      "path": "/spec/template/spec/containers/1/env/3",
-      "value": { "value": "jupyterhubjuniq" }
-  }
-]
