@@ -23,7 +23,7 @@ helm:
     - ../../hub-base/helm/hub/config.yaml
     - values/hub/extraConfig.yaml
     - ../../hub-base/helm/hub/extraContainers.yaml
-    - ../../hub-base/helm/extraEnv.yaml
+    - ../../hub-base/helm/hub/extraEnv.yaml
     - ../../hub-base/helm/hub/extraVolumeMounts.yaml
     - ../../hub-base/helm/hub/image.yaml
     - ../../hub-base/helm/initContainers.yaml
