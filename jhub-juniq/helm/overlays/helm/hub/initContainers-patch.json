@@ -1,0 +1,41 @@
+[
+  {
+    "op": "add",
+    "path": "/spec/template/spec/initContainers/0/env",
+    "value": { 
+      "name": "TEMPLATE_GIT_REPO",
+      "valueFrom": {
+        "secretKeyRef": {
+          "name": "juniq-share-config",
+          "key": "REPOSITORY"
+        }
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/initContainers/0/env",
+    "value": { 
+      "name": "TEMPLATE_GIT_USERNAME",
+      "valueFrom": {
+        "secretKeyRef": {
+          "name": "juniq-share-config",
+          "key": "USERNAME"
+        }
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/initContainers/0/env",
+    "value": { 
+      "name": "TEMPLATE_GIT_PASSWORD",
+      "valueFrom": {
+        "secretKeyRef": {
+          "name": "juniq-share-config",
+          "key": "PASSWORD"
+        }
+      }
+    }
+  }
+]

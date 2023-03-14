@@ -35,6 +35,14 @@ hub:
             secretKeyRef:
               name: "jupyter-jsc-config"
               key: PASSWORD
+        - name: TEMPLATE_GIT_BRANCH
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['TEMPLATE_GIT_BRANCH']
+        - name: STATIC_GIT_BRANCH
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['STATIC_GIT_BRANCH']
       command: ["/bin/sh"]
       args:
         - -c
