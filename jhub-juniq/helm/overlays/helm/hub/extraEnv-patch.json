@@ -25,14 +25,6 @@
   },
   { 
     "op": "replace", 
-    "path": "/spec/template/spec/containers/5/env/24/valueFrom/secretKeyRef",
-    "value": { 
-      "name": "hub-juniq-generics",
-      "key": "K8SMGRJUSUFCLOUD_AUTHENTICATION_TOKEN"
-    }
-  },
-  { 
-    "op": "replace", 
     "path": "/spec/template/spec/containers/5/env/25/valueFrom/secretKeyRef",
     "value": { 
       "name": "hub-juniq-generics",

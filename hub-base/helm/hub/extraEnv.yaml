@@ -71,11 +71,6 @@ hub:
         secretKeyRef:
           name: hub-generics
           key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
-    - name: K8SMGRJUSUFCLOUD_AUTHENTICATION_TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: hub-generics
-          key: K8SMGRJUSUFCLOUD_AUTHENTICATION_TOKEN
     - name: SQL_DATABASE
       valueFrom:
         secretKeyRef:
