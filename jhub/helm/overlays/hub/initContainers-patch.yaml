@@ -25,7 +25,7 @@
 - op: add
   path: "/spec/template/spec/initContainers/0/env/-"
   value:
-    name: NTS_GIT_PASSWORD
+    name: NTS_GIT_BRANCH
     valueFrom:
       fieldRef:
         fieldPath: metadata.labels['NTS_GIT_BRANCH']
