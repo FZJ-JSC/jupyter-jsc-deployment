@@ -9,4 +9,16 @@ patches:
     name: portalgauss
     group: networking.k8s.io
     version: v1
-  path: ingress-patch.json
+  path: ingress-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=portalgauss,component=hub
+  path: hub/extraContainers-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=portalgauss,component=hub
+  path: hub/extraEnv-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=portalgauss,component=hub
+  path: hub/initContainers-patch.yaml
