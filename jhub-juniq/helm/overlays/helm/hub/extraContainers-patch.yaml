@@ -21,7 +21,7 @@
       key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
       optional: false
 - op: replace
-  path: "/spec/template/spec/containers/1/env/0=4/valueFrom/secretKeyRef"
+  path: "/spec/template/spec/containers/1/env/4/valueFrom/secretKeyRef"
   value:
     - name: hub-juniq-generics
       key: TUNNEL_JUPYTERHUB_USER_PASS
