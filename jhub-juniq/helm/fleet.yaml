@@ -30,6 +30,7 @@ helm:
     - ../../hub-base/helm/hub/services.yaml
     - ../../hub-base/helm/hub/others.yaml
     - values/common.yaml
+    - values/proxy.yaml
     - ../../hub-base/helm/proxy.yaml
 kustomize:
   dir: overlays
