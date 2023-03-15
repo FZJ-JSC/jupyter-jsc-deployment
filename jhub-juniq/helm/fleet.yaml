@@ -29,9 +29,10 @@ helm:
     - ../../hub-base/helm/hub/initContainers.yaml
     - ../../hub-base/helm/hub/services.yaml
     - ../../hub-base/helm/hub/others.yaml
+    - ../../hub-base/helm/common.yaml
     - values/common.yaml
-    - values/proxy.yaml
     - ../../hub-base/helm/proxy.yaml
+    - values/proxy.yaml
 kustomize:
   dir: overlays
 targetCustomizations:

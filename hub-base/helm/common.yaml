@@ -1,8 +1,13 @@
-nameOverride: "juniq"
-fullnameOverride: "juniq"
-
+cull:
+  enabled: false
 ingress:
+  enabled: true
   annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/proxy-body-size: "2g"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/server-snippet: |
       # Managing requests to the users JupyterLab
       location ~* "^/user/([^/]+)/([^/]+)/" {
@@ -94,3 +99,13 @@ ingress:
           
           proxy_redirect                          off;
       }
+  # will be supported in 2.0.0 ...
+  #ingressClassName: "nginx"
+prePuller:
+  hook:
+    enabled: false
+  continuous:
+    enabled: false
+scheduling:
+  userScheduler:
+    enabled: false
