@@ -1,0 +1,28 @@
+- op: replace
+  path: "/spec/template/spec/containers/1/env/0/valueFrom/secretKeyRef"
+  value:
+    - name: hub-juniq-generics
+      key: SQL_HOST
+- op: replace
+  path: "/spec/template/spec/containers/1/env/1/valueFrom/secretKeyRef"
+  value:
+    - name: hub-juniq-generics
+      key: SQL_PASSWORD
+- op: replace
+  path: "/spec/template/spec/containers/1/env/2/valueFrom/secretKeyRef"
+  value:
+    - name: hub-juniq-generics
+      key: UNICOREMGR_JUPYTERHUB_USER_PASS
+      optional: false
+- op: replace
+  path: "/spec/template/spec/containers/1/env/3/valueFrom/secretKeyRef"
+  value:
+    - name: hub-juniq-generics
+      key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
+      optional: false
+- op: replace
+  path: "/spec/template/spec/containers/1/env/0=4/valueFrom/secretKeyRef"
+  value:
+    - name: hub-juniq-generics
+      key: TUNNEL_JUPYTERHUB_USER_PASS
+      optional: false

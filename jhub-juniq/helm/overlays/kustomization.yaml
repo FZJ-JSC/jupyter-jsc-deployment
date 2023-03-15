@@ -9,20 +9,20 @@ patches:
     name: juniq
     group: networking.k8s.io
     version: v1
-  path: ingress-patch.json
+  path: ingress-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=juniq,component=hub
-  path: helm/hub/extraContainers-patch.json
+  path: helm/hub/extraContainers-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=juniq,component=hub
-  path: helm/hub/extraEnv-patch.json
+  path: helm/hub/extraEnv-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=juniq,component=hub
-  path: helm/hub/initContainers-patch.json
+  path: helm/hub/initContainers-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=juniq,component=proxy
-  path: helm/proxy-patch.json
+  path: helm/proxy-patch.yaml
