@@ -7,7 +7,7 @@ ingress:
       # Managing requests to the users JupyterLab
       location ~* "^/user/([^/]+)/([^/]+)/" {
           #proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
-          proxy_pass                              https://default-jhub-retries;
+          proxy_pass                              https://juniq-retries;
           #allow                                   134.94.0.0/16;
           #deny                                    all;
           
@@ -51,7 +51,7 @@ ingress:
       }
       location ~* "^/((hub/static)|(2FA)|(2fa)|(2fadetails)|(jusufcloud)|(hdfaai))" {
           #proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
-          proxy_pass                              http://hub-static-files.jupyterjsc.svc:8070;
+          proxy_pass                              http://juniq-static-files.jupyterjsc.svc:8070;
           
           #allow                                   134.94.0.0/16;
           #deny                                    all;
