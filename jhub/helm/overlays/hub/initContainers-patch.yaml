@@ -29,6 +29,16 @@
     valueFrom:
       fieldRef:
         fieldPath: metadata.labels['NTS_GIT_BRANCH']
+- op: add
+  path: "/spec/template/spec/initContainers/0/volumeMounts/-"
+  value:
+    name: twofa-keypair
+    mountPath: "/mnt/twofa"
+- op: add
+  path: "/spec/template/spec/initContainers/0/volumeMounts/-"
+  value:
+    name: twofa-remove-keypair
+    mountPath: "/mnt/twofa-remove"
 - op: replace
   path: "/spec/template/spec/initContainers/0/args"
   value:
