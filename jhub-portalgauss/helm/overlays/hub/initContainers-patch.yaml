@@ -2,14 +2,14 @@
   path: "/spec/template/spec/initContainers/0/env/-"
   value:
     name: TEMPLATE_GIT_REPO
-    value: "https://github.com/kochhlrs/jupyter_gcs_eurocc.git"
+    value: "https://github.com/FZJ-JSC/jupyter-portal-gauss.git"
 # - op: add
 #   path: "/spec/template/spec/initContainers/0/env/-"
 #   value:
 #     name: TEMPLATE_GIT_USERNAME
 #     valueFrom:
 #       secretKeyRef:
-#         name: eurocc-share-config
+#         name: portalgauss-share-config
 #         key: USERNAME
 # - op: add
 #   path: "/spec/template/spec/initContainers/0/env/-"
@@ -17,7 +17,7 @@
 #     name: TEMPLATE_GIT_PASSWORD
 #     valueFrom:
 #       secretKeyRef:
-#         name: eurocc-share-config
+#         name: portalgauss-share-config
 #         key: PASSWORD
 - op: replace
   path: "/spec/template/spec/initContainers/0/args"
