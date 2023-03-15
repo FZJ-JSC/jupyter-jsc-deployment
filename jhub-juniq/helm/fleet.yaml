@@ -20,21 +20,18 @@ helm:
         runAsGroup: 0
         allowPrivilegeEscalation: true
   valuesFiles:
-    # We overwrite some values in hub specific files,
-    # so the import order needs to be hub-base,
-    # then the hub specific config 
     - ../../hub-base/helm/hub/config.yaml
     - values/hub/extraConfig.yaml
     - ../../hub-base/helm/hub/extraContainers.yaml
-    - values/hub/extraContainers.yaml
     - ../../hub-base/helm/hub/extraEnv.yaml
-    - values/hub/extraEnv.yaml
     - ../../hub-base/helm/hub/extraVolumeMounts.yaml
     - ../../hub-base/helm/hub/image.yaml
     - ../../hub-base/helm/hub/initContainers.yaml
-    - values/hub/initContainers.yaml
     - ../../hub-base/helm/hub/services.yaml
     - ../../hub-base/helm/hub/others.yaml
+    # We overwrite some values in hub specific files,
+    # so the import order needs to be hub-base,
+    # then the hub specific config 
     - ../../hub-base/helm/common.yaml
     - values/common.yaml
     - ../../hub-base/helm/proxy.yaml
