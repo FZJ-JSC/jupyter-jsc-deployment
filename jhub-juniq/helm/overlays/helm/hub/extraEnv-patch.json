@@ -17,7 +17,7 @@
   },
   { 
     "op": "replace", 
-    "path": "/spec/template/spec/containers/5/env/23=6/valueFrom/secretKeyRef",
+    "path": "/spec/template/spec/containers/5/env/26/valueFrom/secretKeyRef",
     "value": { 
       "name": "hub-juniq-generics",
       "key": "K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS"
