@@ -1,6 +1,6 @@
 hub:
   extraEnv:
-    # 4 envs alreays defined, index for patch starts at 4
+    # 4 envs already defined, index for patch starts at 4
     # patch index 4:
     - name: JUPYTERHUB_STAGE
       valueFrom:
@@ -37,8 +37,8 @@ hub:
       value: "/mnt/shared-data/incident-check/active_incidents.json"
     - name: RESERVATIONS_FILE
       value: "/mnt/shared-data/reservation-check/reservation.json"
-    - name: NOTEBOOK_TEMPLATES_PATH
-      value: "/mnt/shared-data/notebook_template_server"
+    # - name: NOTEBOOK_TEMPLATES_PATH
+    #   value: "/mnt/shared-data/notebook_template_server"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
       value: "jupyterjsc"
     - name: OAUTH_CLIENT_ID
