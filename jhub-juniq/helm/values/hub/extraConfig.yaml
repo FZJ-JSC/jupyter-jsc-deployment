@@ -3,6 +3,7 @@ hub:
     customConfig: |-
       import os
       import sys
+      from datatime import datetime
       from string import Template
 
       custom_path = "/src/jupyterhub-custom"
