@@ -1,10 +1,21 @@
-resources:
-- monitor.yaml
-
+# https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/1.2.0/jupyterhub/templates/ingress.yaml#L28
+# No support for JupyterHub with ssl :(
 patches:
 - target:
     kind: Ingress
     name: jupyterhub
     group: networking.k8s.io
     version: v1
-  path: ingress-patch.json
+  path: ingress-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=jupyterhub,component=hub
+  path: hub/extraContainers-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=jupyterhub,component=hub
+  path: hub/extraEnv-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=jupyterhub,component=hub
+  path: hub/initContainers-patch.yaml
