@@ -1,3 +1,4 @@
+{{- if Values.reservationCheck.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -67,3 +68,4 @@ data:
 
     with open(output_path, "w") as f:
       json.dump(output_dict, f, sort_keys=True, indent=2)
+{{- end }}
