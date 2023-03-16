@@ -22,7 +22,3 @@ helm:
       service:
         selector:
           app: jupyterhub
-    proxyBackup:
-      release: jupyterhub
-      name: proxy-public
-      numberOfBackups: 5
