@@ -1,7 +1,6 @@
 defaultNamespace: jupyterjsc
 helm:
-  repo: https://gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/fleet-deployment/
-  chart: tree/jupyterjsc-staging/hub-base/helper
+  chart: https://gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/fleet-deployment/tree/jupyterjsc-staging/jhub/helper-0.1.0.tgz
   releaseName: jupyterjsc-jhub-helper 
   values:
     nameOverride: "jhub-helper"
