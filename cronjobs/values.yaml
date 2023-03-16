@@ -254,7 +254,7 @@ jobs:
   - name: hpc-account-update-check
     enabled: true
     namespace: jupyterjsc
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16

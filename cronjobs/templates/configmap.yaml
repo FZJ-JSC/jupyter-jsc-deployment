@@ -55,7 +55,7 @@ data:
 
     sql_host = os.environ.get("SQL_HOST")
     sql_db = os.environ.get("SQL_DATABASE")
-    sql_user = os.environ.get("SQL_USERNAME")
+    sql_user = os.environ.get("SQL_USER")
     sql_password = os.environ.get("SQL_PASSWORD")
     sql_port = int(os.environ.get("SQL_PORT", "5432"))
 
