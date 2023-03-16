@@ -21,7 +21,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -76,7 +77,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -127,7 +129,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -177,7 +180,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -218,7 +222,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -259,7 +264,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
