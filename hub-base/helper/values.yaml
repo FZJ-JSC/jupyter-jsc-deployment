@@ -1,0 +1,38 @@
+# Default values for helper.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+proxyBackup:
+  release: jupyterhub
+  name: proxy-public
+  numberOfBackups: 5
+
+labels: {}
+
+serviceStatic:
+  name: "hub-static-files"
+  port: 8070
+
+gitconfig:
+  branch: "jupyterhub"
+
+jhubfiles:
+  branch: "jupyterhub-files"
+
+mountWatch:
+  safeDirectories: []
+  extraCommands: ""
+
+cleanupSQL:
+  enabled: false
+
+maintenanceCheck:
+  enabled: false
+
+reservationCheck:
+  enabled: false
+
+nginx:
+  config: false
+  service:
+    selector:
+      app: jupyterhub

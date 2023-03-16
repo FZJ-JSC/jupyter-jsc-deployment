@@ -1,3 +1,4 @@
+{{- if Values.maintenanceCheck.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -298,3 +299,4 @@ data:
         # while True:
         check_incidents(config["incident-check"], output_dir, static_dir)
         # time.sleep(config["incident-check"].get("interval", 60))
+{{- end }}

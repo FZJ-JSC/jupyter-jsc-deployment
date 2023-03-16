@@ -1,3 +1,4 @@
+{{- if Values.nginx.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -86,4 +87,4 @@ data:
         #    deny  all;
         #}
     }
-
+{{- end }}
