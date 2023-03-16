@@ -43,3 +43,58 @@ data:
     git push origin ${GIT_BRANCH}
     
     find /mnt/persistent/ -type f -name "metrics.log*" -mtime +30 -delete
+  hpcupdatecheck.py: |
+    import psycopg2
+    import os
+    import sys
+    import smtplib
+    
+    from email.mime.text import MIMEText    
+    from email.mime.multipart import MIMEMultipart
+    from datetime import datetime, timedelta
+
+    sql_host = os.environ.get("SQL_HOST")
+    sql_db = os.environ.get("SQL_DATABASE")
+    sql_user = os.environ.get("SQL_USERNAME")
+    sql_password = os.environ.get("SQL_PASSWORD")
+    sql_port = int(os.environ.get("SQL_PORT", "5432"))
+
+    def send_mail(hours):
+      to = ["t.kreuzer@fz-juelich.de", "a.grosch@fz-juelich.de"]
+      from_ = "jupyter-jsc-admin@fz-juelich.de"
+      msg = MIMEMultipart()
+
+      msg['Subject'] = 'Update HPC account cronjob may have crashed'
+      msg['From'] = from_
+      msg['To'] = ', '.join(to)
+      body = MIMEText(f"No update for at least {hours} hours. Please check the cronjob at zam2135:/home/unicore/update_unity")
+      msg.attach(body)
+
+      # Send the email via our own SMTP server.
+      s = smtplib.SMTP()
+      s.connect('mail.fz-juelich.de')
+      s.sendmail(from_, to, msg.as_string())
+      s.quit()
+
+    try:
+      con = psycopg2.connect(user=sql_user, password=sql_password, host=sql_host, port=sql_port, database=sql_db)
+      cursor = con.cursor()
+      cursor.execute("SELECT last_update FROM hpc_account_updates")
+      last_update = cursor.fetchone()
+      cursor.close()
+      con.close()
+      if last_update:
+        last_update = last_update[0]
+      else:
+        sys.exit(0)
+      days = (datetime.now() - last_update).days 
+      if days > 3:
+        send_mail(72)
+      elif days > 0 and last_update.weekday not in [0, 6]:
+        # we're more friendly on monday + sunday, because it's 
+        # usual that nothing has happened in the past 24 hours
+        send_mail(24)
+    except:
+      import traceback
+      print(traceback.format_exc())
+      sys.exit(1)

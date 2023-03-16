@@ -246,3 +246,64 @@ jobs:
     volumeMounts:
       - name: persistent
         mountPath: /mnt/persistent
+  - name: hpc-account-update-check
+    enabled: true
+    namespace: jupyterjsc
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 */2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Replace
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          pip install psycopg2-binary && python3 /mnt/volumes/hpcupdatecheck.py
+    
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: SQL_HOST
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_HOST
+    - name: SQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_PASSWORD
+    - name: SQL_DATABASE
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_DATABASE
+    - name: SQL_PORT
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_PORT
+    - name: SQL_USER
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_USER
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
