@@ -1,4 +1,21 @@
 defaultNamespace: jupyterjsc
 helm:
+  chart: /workspace/source/hub-base/helper
+  releaseName: jupyterjsc-jhub-eurocc-helper 
   values:
-    nameOverride: "eurocc-jhub-helper"
+    nameOverride: jhub-eurocc-helper
+    appName: eurocc
+    gitconfig:
+      branch: jupyterhub-eurocc
+    mountWatch:
+      safeDirectories:
+        - "/mnt/shared-data/jhub_files/2.3.1/templates/jupyter-staging.eurocc-gcs.de"
+        - "/mnt/shared-data/jhub_files/2.3.1/static/jupyter-staging.eurocc-gcs.eu"
+        - "/mnt/shared-data/jhub_files/2.3.1/templates/jupyter.eurocc-gcs.eu"
+        - "/mnt/shared-data/jhub_files/2.3.1/static/jupyter.eurocc-gcs.eu"
+    proxyBackup:
+      name: eurocc-proxy-public
+      release: jupyterhub-eurocc
+      numberOfBackups: 5
+    serviceStatic:
+      name: eurocc-static-files
