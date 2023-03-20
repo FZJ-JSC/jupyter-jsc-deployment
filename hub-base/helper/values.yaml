@@ -8,8 +8,9 @@ proxyBackup:
 
 labels: {}
 
+appName: jupyterhub
+
 serviceStatic:
-  name: "hub-static-files"
   port: 8070
 
 gitconfig:
@@ -19,6 +20,7 @@ jhubfiles:
   branch: "jupyterhub-files"
 
 mountWatch:
+  app: ""
   safeDirectories: []
   extraCommands: ""
 
@@ -33,6 +35,3 @@ reservationCheck:
 
 nginx:
   config: false
-  service:
-    selector:
-      app: jupyterhub
