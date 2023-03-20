@@ -1,6 +1,6 @@
 defaultNamespace: jupyterjsc
 helm:
-  chart: ../../hub-base/helper
+  chart: ../hub-base/helper
   releaseName: jupyterjsc-jhub-helper 
   values:
     nameOverride: "jhub-helper"
