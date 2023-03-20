@@ -1,7 +1,7 @@
 defaultNamespace: ingress-nginx
 helm:
   releaseName: ingress-nginx
-  chart: https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.4.0/ingress-nginx-4.4.0.tgz
+  chart: https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.5.2/ingress-nginx-4.5.2.tgz
   values:
     controller:
       ingressClassResource:
