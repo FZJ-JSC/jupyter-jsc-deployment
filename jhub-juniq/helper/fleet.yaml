@@ -3,7 +3,8 @@ helm:
   chart: /workspace/source/hub-base/helper
   releaseName: jupyterjsc-jhub-juniq-helper 
   values:
-    nameOverride: "jhub-juniq-helper"
+    nameOverride: jhub-juniq-helper
+    appName: juniq
     gitconfig:
       branch: jupyterhub-juniq
     mountWatch:
