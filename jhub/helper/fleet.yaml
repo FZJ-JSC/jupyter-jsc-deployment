@@ -19,6 +19,3 @@ helm:
       enabled: true
     nginx:
       config: true
-      service:
-        selector:
-          app: jupyterhub
