@@ -51,7 +51,7 @@ hub:
             secretKeyRef:
               name: hub-generics
               key: UNICOREMGR_JUPYTERHUB_USER_PASS
-              optional: false
+              # optional: false
         - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:
