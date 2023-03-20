@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  {{- if ne .Values.appName "jupyterhub"}}
+  {{ if ne .Values.appName "jupyterhub"}}
   name: {{ . }}-jupyterhub-mw
-  {{- else }}
+  {{ else }}
   name: jupyterhub-mw
-  {{- end }} 
+  {{ end }} 
 data:
   run.sh: |
     #!/bin/bash
