@@ -18,4 +18,4 @@ helm:
       release: jupyterhub-coeraise
       numberOfBackups: 5
     serviceStatic:
-      name: juniq-static-files
+      name: coeraise-static-files
