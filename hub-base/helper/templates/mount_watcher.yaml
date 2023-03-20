@@ -49,4 +49,4 @@ data:
     chown -R 1000:1000 /tmp/static-files
     cp -r /tmp/static-files/* /mnt/shared-data/static-files
     rm -rf /tmp/static-files
-    {{ .Values.mountWatch.extraCommands }}
+    {{ .Values.mountWatch.extraCommands | toYaml }}
