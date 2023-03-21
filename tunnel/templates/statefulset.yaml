@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "drf-tunnel.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: {{ include "drf-tunnel.name" . }}
