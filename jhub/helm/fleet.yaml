@@ -237,4 +237,4 @@ targetCustomizations:
           tls:
           - hosts:
             - jupyter-jsc.fz-juelich.de
-            secretName: jupyter-jsc-certs
+            secretName: jupyter-jsc-certs-le
