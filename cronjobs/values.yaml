@@ -42,7 +42,7 @@ jobs:
     - name: GIT_BRANCH
       value: "main"
     - name: GIT_SUBDIR
-      value: "Jupyter-JSC"
+      value: "metrics/Jupyter-JSC"
     envFrom:
     - secretRef:
         name: cronjob-metrics
