@@ -7,6 +7,57 @@ stage: none
 
 jobs:
   # first cron
+  - name: dayli-user-metric
+    enabled: true
+    namespace: jupyterjsc
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "30 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dayliusermetric.sh
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: GIT_REPO
+      value: "https://gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
+    - name: GIT_BRANCH
+      value: "main"
+    - name: GIT_SUBDIR
+      value: "Jupyter-JSC"
+    envFrom:
+    - secretRef:
+        name: cronjob-metrics
+    - secretRef:
+        name: hub-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
   - name: 7days-metric
     enabled: true
     namespace: jupyterjsc

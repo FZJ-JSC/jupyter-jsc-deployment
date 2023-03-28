@@ -8,6 +8,24 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 data:
+  dailyusermetric.sh: |
+    #!/bin/bash
+    git config --global user.email "cronjob@fz-juelich.de"
+    git config --global user.name "CronJob"
+    git clone --single-branch --branch ${GIT_BRANCH} https://${METRICS_TOKEN_NAME}:${METRICS_TOKEN}@${GIT_REPO}
+    if [[ -d ${GIT_SUBDIR} ]]; then
+      mkdir ${GIT_SUBDIR}
+      git add ${GIT_SUBIDR}
+    fi
+    cd ${GIT_SUBDIR}
+    YESTERDAY=$(date -d "24 hours ago" +'%Y-%m-%d')
+    TODAY=$(date +'%Y-%m-%d')
+    ACTIVE_USER=$(psql -t --csv --command "SELECT COUNT(id) FROM users WHERE last_activity >= '${YESTERDAY} 00:00:00.000000' AND last_activity < '${TODAY} 00:00:00.000000';"  postgresql://${SQL_USER}:${SQL_PASSWORD}@${SQL_HOST}:${SQL_PORT}/${SQL_DATABASE})
+    echo "${YESTERDAY};${ACTIVE_USER}" >> daily_active_user.csv
+    git add daily_active_user.csv
+    git commit -m "update daily metrics"
+    git push origin ${GIT_BRANCH}
+
   metrics7dayhifis.sh: |
     #!/bin/bash
     git config --global user.email "cronjob@fz-juelich.de"
