@@ -7,7 +7,7 @@ stage: none
 
 jobs:
   # first cron
-  - name: dayli-user-metric
+  - name: daily-user-metric
     enabled: true
     namespace: jupyterjsc
     stage: staging
@@ -27,7 +27,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dayliusermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
     
     resources:
       limits:
