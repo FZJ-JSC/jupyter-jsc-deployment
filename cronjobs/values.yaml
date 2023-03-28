@@ -42,7 +42,7 @@ jobs:
     - name: GIT_BRANCH
       value: "main"
     - name: GIT_SUBDIR
-      value: "metrics/Jupyter-JSC"
+      value: "metrics/jupyter-jsc.fz-juelich.de"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -93,7 +93,7 @@ jobs:
     - name: GIT_BRANCH
       value: "main"
     - name: GIT_SUBDIR
-      value: "metrics/JUNIQ"
+      value: "metrics/juniq.fz-juelich.de"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -144,7 +144,7 @@ jobs:
     - name: GIT_BRANCH
       value: "main"
     - name: GIT_SUBDIR
-      value: "metrics/coe-raise"
+      value: "metrics/jupyter.coe-raise.eu"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -195,7 +195,7 @@ jobs:
     - name: GIT_BRANCH
       value: "main"
     - name: GIT_SUBDIR
-      value: "metrics/eurocc-gcs"
+      value: "metrics/jupyter.eurocc-gcs.de"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -246,7 +246,7 @@ jobs:
     - name: GIT_BRANCH
       value: "main"
     - name: GIT_SUBDIR
-      value: "metrics/portal-gauss-centre"
+      value: "metrics/portal.gauss-centre.eu"
     envFrom:
     - secretRef:
         name: cronjob-metrics
