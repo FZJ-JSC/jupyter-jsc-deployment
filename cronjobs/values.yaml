@@ -7,6 +7,261 @@ stage: none
 
 jobs:
   # first cron
+  - name: daily-user-metric
+    enabled: true
+    namespace: jupyterjsc
+    stage: production
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 0 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: GIT_REPO
+      value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
+    - name: GIT_BRANCH
+      value: "main"
+    - name: GIT_SUBDIR
+      value: "metrics/Jupyter-JSC"
+    envFrom:
+    - secretRef:
+        name: cronjob-metrics
+    - secretRef:
+        name: hub-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: daily-user-metric-juniq
+    enabled: true
+    namespace: jupyterjsc
+    stage: production
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 0 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: GIT_REPO
+      value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
+    - name: GIT_BRANCH
+      value: "main"
+    - name: GIT_SUBDIR
+      value: "metrics/JUNIQ"
+    envFrom:
+    - secretRef:
+        name: cronjob-metrics
+    - secretRef:
+        name: hub-juniq-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: daily-user-metric-coe-raise
+    enabled: true
+    namespace: jupyterjsc
+    stage: production
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 0 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: GIT_REPO
+      value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
+    - name: GIT_BRANCH
+      value: "main"
+    - name: GIT_SUBDIR
+      value: "metrics/coe-raise"
+    envFrom:
+    - secretRef:
+        name: cronjob-metrics
+    - secretRef:
+        name: hub-coeraise-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: daily-user-metric-eurocc-gcs
+    enabled: true
+    namespace: jupyterjsc
+    stage: production
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 0 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: GIT_REPO
+      value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
+    - name: GIT_BRANCH
+      value: "main"
+    - name: GIT_SUBDIR
+      value: "metrics/eurocc-gcs"
+    envFrom:
+    - secretRef:
+        name: cronjob-metrics
+    - secretRef:
+        name: hub-eurocc-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: daily-user-metric-portal-gauss-centre
+    enabled: true
+    namespace: jupyterjsc
+    stage: production
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 0 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: GIT_REPO
+      value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
+    - name: GIT_BRANCH
+      value: "main"
+    - name: GIT_SUBDIR
+      value: "metrics/portal-gauss-centre"
+    envFrom:
+    - secretRef:
+        name: cronjob-metrics
+    - secretRef:
+        name: hub-portalgauss-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
   - name: 7days-metric
     enabled: true
     namespace: jupyterjsc
@@ -21,7 +276,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -76,7 +332,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -127,7 +384,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -177,7 +435,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -218,7 +477,8 @@ jobs:
       sidecar.istio.io/inject: "false"
     failedJobsHistoryLimit: 1
     successfulJobsHistoryLimit: 1
-    concurrencyPolicy: Replace
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
     restartPolicy: Never
     command: ["/bin/sh"]
     args:
@@ -246,3 +506,65 @@ jobs:
     volumeMounts:
       - name: persistent
         mountPath: /mnt/persistent
+  - name: hpc-account-update-check
+    enabled: true
+    namespace: jupyterjsc
+    stage: production
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 */2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          pip install psycopg2-binary && python3 /mnt/volumes/hpcupdatecheck.py
+    
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: SQL_HOST
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_HOST
+    - name: SQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_PASSWORD
+    - name: SQL_DATABASE
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_DATABASE
+    - name: SQL_PORT
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_PORT
+    - name: SQL_USER
+      valueFrom:
+        secretKeyRef:
+          name: hub-generics
+          key: SQL_USER
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
