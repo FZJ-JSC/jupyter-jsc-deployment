@@ -18,9 +18,8 @@ data:
     fi
     cd ${GIT_SUBDIR}
     git add .
-    YESTERDAY=$(date -d "24 hours ago" +'%Y-%m-%d')
-    TODAY=$(date +'%Y-%m-%d')
-    ACTIVE_USER=$(psql -t --csv --command "SELECT COUNT(id) FROM users WHERE last_activity >= '${YESTERDAY} 00:00:00.000000' AND last_activity < '${TODAY} 00:00:00.000000';"  postgresql://${SQL_USER}:${SQL_PASSWORD}@${SQL_HOST}:${SQL_PORT}/${SQL_DATABASE})
+    YESTERDAY=$(date -d "yesterday" +'%Y-%m-%d')
+    ACTIVE_USER=$(psql -t --csv --command "SELECT COUNT(id) FROM users WHERE last_activity >= '${YESTERDAY} 00:00:00.000000';"  postgresql://${SQL_USER}:${SQL_PASSWORD}@${SQL_HOST}:${SQL_PORT}/${SQL_DATABASE})
     echo "${YESTERDAY};${ACTIVE_USER}" >> daily_active_user.csv
     git add daily_active_user.csv
     git commit -m "update daily metrics"
