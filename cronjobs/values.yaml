@@ -38,7 +38,7 @@ jobs:
         memory: 256Mi
     env:
     - name: GIT_REPO
-      value: "https://gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
+      value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
       value: "main"
     - name: GIT_SUBDIR
