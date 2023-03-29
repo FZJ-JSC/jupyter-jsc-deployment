@@ -135,7 +135,7 @@ targetCustomizations:
           tls:
           - hosts:
             - jupyter-jsc-staging.fz-juelich.de
-            secretName: jupyter-jsc-certs
+            secretName: jupyter-jsc-certs-le
   - name: production
     clusterSelector:
       matchLabels:
