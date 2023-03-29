@@ -65,8 +65,8 @@ data:
     import os
     import sys
     import smtplib
-    
-    from email.mime.text import MIMEText    
+
+    from email.mime.text import MIMEText
     from email.mime.multipart import MIMEMultipart
     from datetime import datetime, timedelta
 
@@ -104,11 +104,11 @@ data:
         last_update = last_update[0]
       else:
         sys.exit(0)
-      days = (datetime.now() - last_update).days 
+      days = (datetime.now() - last_update).days
       if days > 3:
         send_mail(72)
       elif days > 0 and last_update.weekday not in [0, 6]:
-        # we're more friendly on monday + sunday, because it's 
+        # we're more friendly on monday + sunday, because it's
         # usual that nothing has happened in the past 24 hours
         send_mail(24)
     except:

@@ -17,6 +17,7 @@ hub:
       from apihandler import DRFServiceLogLevelAPIHandler
       from apihandler import JHubLogLevelAPIHandler
       from apihandler import HPCUpdateAPIHandler
+      from apihandler import UserCountAPIHandler
       from apihandler import UserJobsAPIHandler
       from apihandler import UserJobsForwardAPIHandler
       from apihandler import SlurmWrapperAPIHandler
@@ -49,6 +50,29 @@ hub:
       db_password = os.environ.get("SQL_PASSWORD")
       db_database = os.environ.get("SQL_DATABASE")
       c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
+
+      import logging
+      class AppLogLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if record.msg.startswith("Authenticated with token"):
+                  return False
+              if record.filename in ["scopes.py"]:
+                  return False
+              return True
+
+      class AccessLogLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if record.funcName in ["log_request"]:
+                  return False
+              return True
+
+      # available logger keys:
+      # "jupyterhub", "tornado", "oauthlib", "app_log", "access_log", "gen_log"
+      logging_filter_classes = {
+          "app_log": AppLogLoggingFilter,
+          "access_log": AccessLogLoggingFilter
+      }
+      c.JupyterHub.logging_filter_classes=logging_filter_classes
 
       c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
       c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
@@ -157,6 +181,7 @@ hub:
           (r"/api/logs/([^/]+)/handler/([^/]+)", DRFServiceLogLevelAPIHandler),
           (r"/api/templates/([^/]+)/([^/]+)", TemplateServerAPIHandler),
           (r"/templates/t/(.+)", page_handlers.TemplateServerHandler),
+          (r"/api/usercount", UserCountAPIHandler),
       ]
 
       c.JupyterHub.trusted_alt_names = [
