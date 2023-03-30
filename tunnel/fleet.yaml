@@ -206,6 +206,9 @@ targetCustomizations:
         stage: staging
     helm:
       values:
+        replicas: 2
+        image:
+          tag: "dev"
         resources:
           requests:
             cpu: 20m

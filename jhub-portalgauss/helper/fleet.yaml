@@ -1,4 +1,21 @@
 defaultNamespace: jupyterjsc
 helm:
+  chart: /workspace/source/hub-base/helper
+  releaseName: jupyterjsc-jhub-portalgauss-helper 
   values:
-    nameOverride: "portalgauss-jhub-helper"
+    nameOverride: jhub-portalgauss-helper
+    appName: portalgauss
+    gitconfig:
+      branch: jupyterhub-portalgauss
+    mountWatch:
+      safeDirectories:
+        - "/mnt/shared-data/jhub_files/2.3.1/templates/portal-staging.gauss-centre.eu"
+        - "/mnt/shared-data/jhub_files/2.3.1/static/portal-staging.gauss-centre.eu"
+        - "/mnt/shared-data/jhub_files/2.3.1/templates/portal.gauss-centre.eu"
+        - "/mnt/shared-data/jhub_files/2.3.1/static/portal.gauss-centre.eu"
+    proxyBackup:
+      name: portalgauss-proxy-public
+      release: jupyterhub-portalgauss
+      numberOfBackups: 5
+    serviceStatic:
+      name: portalgauss-static-files

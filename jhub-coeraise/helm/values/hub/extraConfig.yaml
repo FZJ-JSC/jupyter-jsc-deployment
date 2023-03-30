@@ -3,6 +3,8 @@ hub:
     customConfig: |-
       import os
       import sys
+      from datetime import datetime
+      from string import Template
 
       custom_path = "/src/jupyterhub-custom"
       sys.path.insert(1, custom_path)
@@ -16,6 +18,7 @@ hub:
       from apihandler import DRFServiceLogLevelAPIHandler
       from apihandler import JHubLogLevelAPIHandler
       from apihandler import HPCUpdateAPIHandler
+      from apihandler import UserCountAPIHandler
       from apihandler import UserJobsAPIHandler
       from apihandler import UserJobsForwardAPIHandler
       from apihandler import SlurmWrapperAPIHandler
@@ -49,6 +52,30 @@ hub:
       db_database = os.environ.get("SQL_DATABASE")
       c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
 
+
+      import logging
+      class AppLogLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if record.msg.startswith("Authenticated with token"):
+                  return False
+              if record.filename in ["scopes.py"]:
+                  return False
+              return True
+
+      class AccessLogLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if record.funcName in ["log_request"]:
+                  return False
+              return True
+
+      # available logger keys:
+      # "jupyterhub", "tornado", "oauthlib", "app_log", "access_log", "gen_log"
+      logging_filter_classes = {
+          "app_log": AppLogLoggingFilter,
+          "access_log": AccessLogLoggingFilter
+      }
+      c.JupyterHub.logging_filter_classes=logging_filter_classes
+
       c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
       c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
       c.JupyterHub.hub_connect_url = (
@@ -56,10 +83,22 @@ hub:
       )
       # TODO override cull service. cull --url http:// instead of https://
 
+      def custom_post_stop_hook(spawner):
+          event = spawner.stop_event
+          # Update event html message to show current time
+          now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
+          try:
+              event_string = event["html_message"]
+              event["html_message"] = Template(event_string).substitute(now=now)
+              spawner.latest_events.append(event)
+          except KeyError:
+              pass
+
       c.JupyterHub.spawner_class = BackendSpawner
       c.BackendSpawner.http_timeout = 7200
       c.BackendSpawner.poll_interval = 120
       c.BackendSpawner.poll_interval_randomizer = 20
+      c.BackendSpawner.post_stop_hook = custom_post_stop_hook
       # c.BackendSpawner.ssl_alt_names = [f"DNS:{jupyterhub_host}"]
 
       c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
@@ -156,6 +195,7 @@ hub:
           (r"/api/logs/([^/]+)/handler/([^/]+)", DRFServiceLogLevelAPIHandler),
           (r"/api/templates/([^/]+)/([^/]+)", TemplateServerAPIHandler),
           (r"/templates/t/(.+)", page_handlers.TemplateServerHandler),
+          (r"/api/usercount", UserCountAPIHandler),
       ]
 
       c.JupyterHub.trusted_alt_names = [
