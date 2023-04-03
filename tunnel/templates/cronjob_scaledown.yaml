@@ -21,7 +21,7 @@ spec:
           labels:
             app: {{ template "drf-tunnel.name" . }}
             cron: scale-down
-        specs:
+        spec:
           serviceAccountName: {{ include "drf-tunnel.name" . }}-cluster-role
           containers:
           - name: scale-down
