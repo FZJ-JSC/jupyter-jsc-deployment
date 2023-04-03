@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ include "drf-tunnel.name" . }}-scale-down
   labels:
-    app: {{ template "drf-tunnel.name" . }}
+    app: {{ template ".Chart.Name" . }}
     chart: {{ template "drf-tunnel.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
