@@ -25,6 +25,20 @@ spec:
             sidecar.istio.io/inject: "false"
         spec:
           serviceAccountName: {{ include "drf-tunnel.name" . }}-svc-acc
+          initContainers:
+          - name: prepare-shared-data
+            image: alpine:3.14
+            imagePullPolicy: Always
+            command: ["/bin/sh"]
+            args:
+            - -c
+            - >-
+                mkdir -p /mnt/shared-data/certs && cp -rp /mnt/volumes_certs/certs/..data/tls.ca /mnt/shared-data/certs/ca.pem && chmod 400 /mnt/shared-data/certs/* && chown -R 1000:100 /mnt/shared-data && chmod 755 /mnt/shared-data
+            volumeMounts:
+              - name: shared-data
+                mountPath: /mnt/shared-data
+              - name: certs
+                mountPath: /mnt/volumes_certs/certs
           containers:
           - name: scale-down
             image: "python:3.9-alpine3.16"
@@ -57,6 +71,8 @@ spec:
             volumeMounts:
               - name: scaledown-cm
                 mountPath: /mnt/volumes
+              - name: shared-data
+                mountPath: /mnt/shared-data
           nodeSelector:
             worker: "true"
           restartPolicy: Never
@@ -65,3 +81,9 @@ spec:
               configMap:
                 defaultMode: 400
                 name: {{ include "drf-tunnel.name" . }}-scale-down
+            - name: shared-data
+              emptyDir: {}
+            - name: certs
+              secret:
+                defaultMode: 400
+                secretName: {{ include "drf-tunnel.name" . }}-certs
