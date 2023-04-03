@@ -12,7 +12,7 @@ spec:
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
   successfulJobsHistoryLimit: 1
-  schedule: 0 0 1 * *
+  schedule: "0 0 1 * *"
   jobTemplate:
     spec:
       backoffLimit: 0
@@ -25,7 +25,7 @@ spec:
           serviceAccountName: {{ include "drf-tunnel.name" . }}-cluster-role
           containers:
           - name: scale-down
-            image: python:3.9-alpine3.16
+            image: "python:3.9-alpine3.16"
             imagePullPolicy: IfNotPresent
             env:
               - name: DEPLOYMENT_NAME
