@@ -31,7 +31,7 @@ spec:
             imagePullPolicy: IfNotPresent
             env:
               - name: DEPLOYMENT_NAME
-                value: {{ .Release.Name }}
+                value: {{ include "drf-tunnel.name" . }}
               - name: DEPLOYMENT_NAMESPACE
                 value: {{ .Release.Namespace }}
               - name: TUNNEL_USER_PASS
