@@ -1,0 +1,68 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "drf-tunnel.name" . }}-scale-down
+  labels:
+    app: {{ template "drf-tunnel.name" . }}
+    chart: {{ template "drf-tunnel.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  suspend: true
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: {{ default 0 .Values.scaledown.backoffLimit }}
+      template:
+        metadata:
+          labels:
+            app: {{ template "drf-tunnel.name" . }}
+            cron: scale-down
+        spec:
+          serviceAccountName: {{ include "drf-tunnel.name" . }}-cluster-role
+          containers:
+          - image: python:3.9-alpine3.16
+            imagePullPolicy: IfNotPresent
+            env:
+              - name: DEPLOYMENT_NAME
+                value: {{ .Release.Name }}
+              - name: DEPLOYMENT_NAMESPACE
+                value: {{ .Release.Namespace }}
+              - name: DESIRED_REPLICAS
+                valueFrom: 
+                  configMapKeyRef:
+                    name: {{ include "drf-tunnel.name" . }}-scale-down
+                    key: desired_replicas
+              - name: TUNNEL_USER_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: drf-tunnel-passwds 
+                    key: TUNNEL_JUPYTERHUB_USER_PASS
+                    optional: false
+            command: ["/bin/sh"]
+            args:
+              - -c
+              # - >-
+              #   pip install kubernetes tornado && python3 /mnt/volumes/run.sh
+              - >-
+                pip install kubernetes tornado && while true; do sleep 60; done
+            resources:
+              limits:
+                cpu: 50m
+                memory: 256Mi
+              requests:
+                cpu: 50m
+                memory: 256Mi
+            volumeMounts:
+              - name: scaledown-cm
+                mountPath: /mnt/volumes
+          nodeSelector:
+            worker: "true"
+          restartPolicy: Never
+          volumes:
+            - name: scaledown-cm
+              configMap:
+                defaultMode: 400
+                name: {{ include "drf-tunnel.name" . }}-scale-down
