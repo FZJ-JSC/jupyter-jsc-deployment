@@ -41,7 +41,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: drf-tunnel-passwds 
-                    key: TUNNEL_JUPYTERHUB_USER_PASS
+                    key: TUNNEL_USER_PASS
                     optional: false
             command: ["/bin/sh"]
             args:
