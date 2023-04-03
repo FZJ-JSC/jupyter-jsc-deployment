@@ -22,7 +22,7 @@ spec:
             app: {{ template "drf-tunnel.name" . }}
             cron: scale-down
         spec:
-          serviceAccountName: {{ include "drf-tunnel.name" . }}-cluster-role
+          serviceAccountName: {{ include "drf-tunnel.name" . }}-svc-acc
           containers:
           - name: scale-down
             image: "python:3.9-alpine3.16"
