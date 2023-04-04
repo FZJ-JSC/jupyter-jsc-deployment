@@ -61,10 +61,8 @@ spec:
             command: ["/bin/sh"]
             args:
               - -c
-              # - >-
-              #   pip install kubernetes tornado && python3 /mnt/volumes/run.sh
               - >-
-                pip install kubernetes tornado && while true; do sleep 60; done
+                pip install kubernetes tornado && python3 /mnt/volumes/run.sh
             resources:
               limits:
                 cpu: 50m

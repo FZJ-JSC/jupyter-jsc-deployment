@@ -13,10 +13,11 @@ data:
     #!/bin/bash
 
     if [[ -n ${TUNNEL_USER_PASS} ]]; then
-        export TUNNEL_AUTHENTICATION_TOKEN=${TUNNEL_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${TUNNEL_USERNAME:-jupyterhub}:${TUNNEL_USER_PASS}" | base64 -w 0)"}
+        export TUNNEL_AUTHENTICATION_TOKEN=${TUNNEL_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${TUNNEL_USERNAME:-tunnel}:${TUNNEL_USER_PASS}" | base64 -w 0)"}
     fi
 
     pip install kubernetes tornado
-    python3 /mnt/volumes/scale_down.py
+    while true; do sleep 60; done
+    # python3 /mnt/volumes/scale_down.py
   scale_down.py: |
     print("Hello world")
