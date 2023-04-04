@@ -19,4 +19,124 @@ data:
     while true; do sleep 60; done
     # python3 /mnt/volumes/scale_down.py
   scale_down.py: |
-    print("Hello world")
+    import logging
+    import os
+    import re
+    import sys
+
+    from itertools import cycle
+    from kubernetes import client, config
+    from tornado import escape, httpclient
+
+
+    http_client = httpclient.HTTPClient()
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+    log = logging.getLogger(__name__)
+
+
+    def _get_api_instance():
+        configuration = config.load_incluster_config()
+        with client.ApiClient(configuration) as api_client:               
+            api_instance = client.AppsV1Api(api_client)
+        return api_instance
+
+
+    def _get_tunnel_sts():
+        api_instance = _get_api_instance()               
+        sts_name = os.environ.get('DEPLOYMENT_NAME', 'drf-tunnel')
+        namespace = os.environ.get("DEPLOYMENT_NAMESPACE", "jupyterjsc")  
+        label = f"app.kubernetes.io/name={sts_name}"
+        tunnel_sts = api_instance.list_namespaced_stateful_set(namespace, label_selector=label)
+        if len(tunnel_sts.items) > 1:
+            log.critical(f"Got more than one stateful set for {os.environ.get('DEPLOYMENT_NAME', 'drf-tunnel')}. Stateful Set: {tunnel_sts}")
+            raise Exception(f"Got more than one stateful set.")
+        return tunnel_sts.items[0]
+
+
+    def get_current_number_of_replicas():
+        tunnel_sts = _get_tunnel_sts()
+        number_of_replicas = tunnel_sts.status.replicas
+        return number_of_replicas
+
+
+    def get_desired_number_of_replicas():
+        with open("/mnt/volumes/desired_replicas") as f:
+            desired_number_of_replicas = f.read()
+        return int(desired_number_of_replicas)
+
+
+    def _create_tunnel_request(suffix="", method="GET", **kwargs):
+        url = os.environ.get("TUNNEL_URL", "https://drf-tunnel.jupyterjsc.svc/api/tunnel/")
+        if suffix:
+            url += suffix if suffix.endswith("/") else suffix + "/"
+        service_name = os.environ.get("TUNNEL_USERNAME", "tunnel")
+        authentication_token = os.environ.get(
+            f"{service_name.upper()}_AUTHENTICATION_TOKEN", None
+        )
+        if not authentication_token:
+            log.critical(
+                f"{service_name.upper()}_AUTHENTICATION_TOKEN env variable not defined. Cannot communicate with {service_name}."
+            )
+        headers = {"Authorization": authentication_token}
+        ca = os.environ.get("CERTIFICATE_PATH", "/mnt/shared-data/certs/ca.pem")
+
+        request = httpclient.HTTPRequest(
+            url,
+            method=method,
+            headers=headers,
+            ca_certs=ca,
+            **kwargs
+        )
+        return request
+
+    def get_tunnels_exceeding_replicas(desired_replicas):
+        request = _create_tunnel_request()
+        r = http_client.fetch(request)
+
+        tunnels = escape.json_decode(r.body)
+        replace_tunnels = []
+        for tunnel in tunnels:
+            tunnel_number = re.search(r"[0-9]+$", tunnel["tunnel_pod"]).group()
+            if int(tunnel_number) >= desired_replicas:
+                replace_tunnels.append(tunnel)
+        return replace_tunnels
+
+
+    def patch_tunnel(tunnel, new_pod):
+        body = {
+            "current_pod": tunnel["tunnel_pod"],
+            "new_pod": new_pod
+        }
+        request = _create_tunnel_request(
+            suffix=tunnel["servername"], 
+            method="PATCH", 
+            body=escape.json_encode(body))
+        r = http_client.fetch(request)
+        return r
+
+
+    def scale_sts(desired_number_of_replicas):
+        api_instance = _get_api_instance()
+        tunnel_sts = _get_tunnel_sts()
+        name = tunnel_sts.metadata.name
+        namespace = os.environ.get("DEPLOYMENT_NAMESPACE", "jupyterjsc")  
+        # api_instance.patch_namespaced_stateful_set_scale(
+        #     name, namespace,
+        #     body={'spec': {'replicas': desired_number_of_replicas}}
+        # )
+
+
+    if __name__ == "__main__":
+        number_of_replicas = get_current_number_of_replicas()
+        desired_number_of_replicas = get_desired_number_of_replicas()
+
+        if number_of_replicas > desired_number_of_replicas:
+            # Get tunnels with pod number > desired number of pods
+            replace_tunnels = get_tunnels_exceeding_replicas(desired_number_of_replicas)
+            # Update services to switch selectors
+            pod_number_iterator = cycle(range(0, desired_number_of_replicas))
+            new_pod = f"drf-tunnel-{next(pod_number_iterator)}"
+            for tunnel in replace_tunnels:
+                patch_tunnel(tunnel, new_pod)
+            # Scale down
+            scale_sts(desired_number_of_replicas)
