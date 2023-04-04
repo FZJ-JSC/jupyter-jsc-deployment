@@ -48,6 +48,10 @@ spec:
                 value: {{ include "drf-tunnel.name" . }}
               - name: DEPLOYMENT_NAMESPACE
                 value: {{ .Release.Namespace }}
+              - name: CERTIFICATE_PATH
+                value: "/mnt/shared-data/certs/ca.pem"
+              - name: TUNNEL_URL
+                value: "https://drf-tunnel.jupyterjsc.svc/api/tunnel/"
               - name: TUNNEL_USER_PASS
                 valueFrom:
                   secretKeyRef:

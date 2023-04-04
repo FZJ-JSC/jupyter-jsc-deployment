@@ -13,7 +13,7 @@ data:
     #!/bin/bash
 
     if [[ -n ${TUNNEL_USER_PASS} ]]; then
-        export TUNNEL_AUTHENTICATION_TOKEN=${TUNNEL_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${TUNNEL_JUPYTERHUB_USERNAME:-jupyterhub}:${TUNNEL_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
+        export TUNNEL_AUTHENTICATION_TOKEN=${TUNNEL_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${TUNNEL_USERNAME:-jupyterhub}:${TUNNEL_USER_PASS}" | base64 -w 0)"}
     fi
 
     pip install kubernetes tornado
