@@ -62,7 +62,7 @@ spec:
             args:
               - -c
               - >-
-                pip install kubernetes tornado && python3 /mnt/volumes/run.sh
+                pip install kubernetes tornado && source /mnt/volumes/run.sh
             resources:
               limits:
                 cpu: 50m

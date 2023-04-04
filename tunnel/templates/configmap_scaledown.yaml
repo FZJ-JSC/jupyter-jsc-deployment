@@ -16,7 +16,6 @@ data:
         export TUNNEL_AUTHENTICATION_TOKEN=${TUNNEL_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${TUNNEL_USERNAME:-tunnel}:${TUNNEL_USER_PASS}" | base64 -w 0)"}
     fi
 
-    pip install kubernetes tornado
     while true; do sleep 60; done
     # python3 /mnt/volumes/scale_down.py
   scale_down.py: |
