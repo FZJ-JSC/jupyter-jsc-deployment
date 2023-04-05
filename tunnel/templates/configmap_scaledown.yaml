@@ -16,8 +16,8 @@ data:
         export TUNNEL_AUTHENTICATION_TOKEN=${TUNNEL_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${TUNNEL_USERNAME:-tunnel}:${TUNNEL_USER_PASS}" | base64 -w 0)"}
     fi
 
-    while true; do sleep 60; done
-    # python3 /mnt/volumes/scale_down.py
+    # while true; do sleep 60; done
+    python3 /mnt/volumes/scale_down.py
   scale_down.py: |
     import logging
     import os
@@ -103,15 +103,16 @@ data:
 
 
     def patch_tunnel(tunnel, new_pod):
-        body = {
-            "current_pod": tunnel["tunnel_pod"],
-            "new_pod": new_pod
-        }
+        servername = tunnel["servername"]
+        body = {"new_pod": new_pod}
+        log.info(f"Replacing tunnel {servername} on pod {tunnel['tunnel_pod']} with tunnel on pod {new_pod}.")
         request = _create_tunnel_request(
-            suffix=tunnel["servername"], 
-            method="PATCH", 
+            suffix=servername, 
+            method="PUT", 
             body=escape.json_encode(body))
+        request.headers.update({'Content-Type': 'application/json; charset=UTF-8'})
         r = http_client.fetch(request)
+        log.info("Successfully replaced tunnel.")
         return r
 
 
@@ -119,20 +120,25 @@ data:
         api_instance = _get_api_instance()
         tunnel_sts = _get_tunnel_sts()
         name = tunnel_sts.metadata.name
-        namespace = os.environ.get("DEPLOYMENT_NAMESPACE", "jupyterjsc")  
-        # api_instance.patch_namespaced_stateful_set_scale(
-        #     name, namespace,
-        #     body={'spec': {'replicas': desired_number_of_replicas}}
-        # )
+        namespace = os.environ.get("DEPLOYMENT_NAMESPACE", "jupyterjsc")
+        log.info(f"Scaling number of tunnel replicas to {desired_number_of_replicas}.")
+        api_instance.patch_namespaced_stateful_set(
+            name, namespace,
+            body={'spec': {'replicas': desired_number_of_replicas}}
+        )
 
 
     if __name__ == "__main__":
         number_of_replicas = get_current_number_of_replicas()
         desired_number_of_replicas = get_desired_number_of_replicas()
+        log.info(f"Current number of replicas: {number_of_replicas}.")
+        log.info(f"Desired number of replicas: {desired_number_of_replicas}")
 
         if number_of_replicas > desired_number_of_replicas:
             # Get tunnels with pod number > desired number of pods
             replace_tunnels = get_tunnels_exceeding_replicas(desired_number_of_replicas)
+            log.info(f"Replacing tunnels: {replace_tunnels}")
+
             # Update services to switch selectors
             pod_number_iterator = cycle(range(0, desired_number_of_replicas))
             new_pod = f"drf-tunnel-{next(pod_number_iterator)}"
