@@ -111,7 +111,12 @@ data:
             method="PUT", 
             body=escape.json_encode(body))
         request.headers.update({'Content-Type': 'application/json; charset=UTF-8'})
-        r = http_client.fetch(request)
+        try:
+            r = http_client.fetch(request)
+        except httpclient.HTTPError as e:
+            log.error(e)
+        except Exception as e:
+            log.error(e)
         log.info("Successfully replaced tunnel.")
         return r
 
