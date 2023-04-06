@@ -8,7 +8,7 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 data:
-  desired_replicas: "1"
+  desired_replicas: "all"
   run.sh: |
     #!/bin/bash
 

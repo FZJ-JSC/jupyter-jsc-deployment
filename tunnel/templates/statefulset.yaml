@@ -102,11 +102,8 @@ spec:
                   fieldPath: metadata.namespace
             - name: LOGGER_NAME
               value: "{{ .Values.loggerName }}"
-            - name: ACTIVE_PODS
-              valueFrom:
-                configMapKeyRef:
-                 name: drf-tunnel-scale-down
-                 key: desired_replicas 
+            - name: ACTIVE_REPLICAS_PATH
+              value: "/mnt/volumes/desired_replicas"
           ports:
             - name: https
               containerPort: 8443
@@ -139,6 +136,9 @@ spec:
               mountPath: /mnt/shared-data
             - name: tz-config
               mountPath: /etc/localtime
+            - name: replicas
+              mountPath: /mnt/volumes
+              subPath: desired_replicas
         - name: remote-check
           image: alpine:3.14
           imagePullPolicy: Always
@@ -203,6 +203,10 @@ spec:
       volumes:
       - name: shared-data
         emptyDir: {}
+      - name: replicas
+        configMap:
+          defaultMode: 400
+          name: {{ include "drf-tunnel.name" . }}-scale-down
       - name: mount-watch
         configMap:
           defaultMode: 400
