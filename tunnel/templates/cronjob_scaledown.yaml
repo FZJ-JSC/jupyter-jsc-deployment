@@ -62,7 +62,7 @@ spec:
             args:
               - -c
               - >-
-                pip install kubernetes tornado && source /mnt/volumes/run.sh
+                pip install kubernetes tornado && source /mnt/scaledown/run.sh
             resources:
               limits:
                 cpu: 50m
@@ -72,9 +72,9 @@ spec:
                 memory: 256Mi
             volumeMounts:
               - name: scaledown-cm
-                mountPath: /mnt/volumes
+                mountPath: /mnt/scaledown
               - name: replicas
-                mountPath: /mnt/volumes
+                mountPath: /mnt/replicas
               - name: shared-data
                 mountPath: /mnt/shared-data
           nodeSelector:
