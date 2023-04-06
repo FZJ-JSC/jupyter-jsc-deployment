@@ -73,6 +73,8 @@ spec:
             volumeMounts:
               - name: scaledown-cm
                 mountPath: /mnt/volumes
+              - name: replicas
+                mountPath: /mnt/volumes
               - name: shared-data
                 mountPath: /mnt/shared-data
           nodeSelector:
@@ -83,6 +85,10 @@ spec:
               configMap:
                 defaultMode: 400
                 name: {{ include "drf-tunnel.name" . }}-scale-down
+            - name: replicas
+              configMap:
+                defaultMode: 400
+                name: {{ include "drf-tunnel.name" . }}-desired-replicas
             - name: shared-data
               emptyDir: {}
             - name: certs

@@ -1,6 +1,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: {{ include "drf-tunnel.name" . }}-desired-replicas
+  labels:
+    app: {{ template "drf-tunnel.name" . }}
+    chart: {{ template "drf-tunnel.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+    desired_replicas: all
+
+---
+    
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: {{ include "drf-tunnel.name" . }}-scale-down
   labels:
     app: {{ template "drf-tunnel.name" . }}
@@ -8,7 +22,6 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 data:
-  desired_replicas: "all"
   run.sh: |
     #!/bin/bash
 

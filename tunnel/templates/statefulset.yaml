@@ -138,7 +138,6 @@ spec:
               mountPath: /etc/localtime
             - name: replicas
               mountPath: /mnt/active_replicas
-              subPath: desired_replicas
         - name: remote-check
           image: alpine:3.14
           imagePullPolicy: Always
@@ -206,7 +205,7 @@ spec:
       - name: replicas
         configMap:
           defaultMode: 400
-          name: {{ include "drf-tunnel.name" . }}-scale-down
+          name: {{ include "drf-tunnel.name" . }}-desired-replicas
       - name: mount-watch
         configMap:
           defaultMode: 400
