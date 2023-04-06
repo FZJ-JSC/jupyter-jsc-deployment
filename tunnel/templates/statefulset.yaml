@@ -102,6 +102,11 @@ spec:
                   fieldPath: metadata.namespace
             - name: LOGGER_NAME
               value: "{{ .Values.loggerName }}"
+            - name: ACTIVE_PODS
+              valueFrom:
+                configMapKeyRef:
+                 name: drf-tunnel-scale-down
+                 key: desired_replicas 
           ports:
             - name: https
               containerPort: 8443
