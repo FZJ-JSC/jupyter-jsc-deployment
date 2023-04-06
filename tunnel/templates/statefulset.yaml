@@ -103,7 +103,7 @@ spec:
             - name: LOGGER_NAME
               value: "{{ .Values.loggerName }}"
             - name: ACTIVE_REPLICAS_PATH
-              value: "/mnt/volumes/desired_replicas"
+              value: "/mnt/active_replicas"
           ports:
             - name: https
               containerPort: 8443
@@ -137,7 +137,7 @@ spec:
             - name: tz-config
               mountPath: /etc/localtime
             - name: replicas
-              mountPath: /mnt/volumes
+              mountPath: /mnt/active_replicas
               subPath: desired_replicas
         - name: remote-check
           image: alpine:3.14
