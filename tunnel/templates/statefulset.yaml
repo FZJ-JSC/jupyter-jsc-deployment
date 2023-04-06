@@ -204,7 +204,7 @@ spec:
         emptyDir: {}
       - name: replicas
         configMap:
-          defaultMode: 400
+          defaultMode: 0777
           name: {{ include "drf-tunnel.name" . }}-desired-replicas
       - name: mount-watch
         configMap:
