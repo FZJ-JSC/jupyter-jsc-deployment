@@ -114,7 +114,7 @@ data:
         try:
             r = http_client.fetch(request)
         except httpclient.HTTPError as e:
-            log.error(e)
+            log.error(e.response)
         except Exception as e:
             log.error(e)
         log.info("Successfully replaced tunnel.")

@@ -51,7 +51,7 @@ spec:
               - name: CERTIFICATE_PATH
                 value: "/mnt/shared-data/certs/ca.pem"
               - name: TUNNEL_URL
-                value: "https://drf-tunnel.jupyterjsc.svc/api/tunnel/"
+                value: "https://drf-tunnel.jupyterjsc.svc/api/forwarder/tunnel/"
               - name: TUNNEL_USER_PASS
                 valueFrom:
                   secretKeyRef:
