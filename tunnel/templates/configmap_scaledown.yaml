@@ -39,6 +39,7 @@ data:
 
     from itertools import cycle
     from kubernetes import client, config
+    from time import sleep
     from tornado import escape, httpclient
 
 
@@ -153,6 +154,9 @@ data:
             name, namespace,
             body={'spec': {'replicas': desired_number_of_replicas}}
         )
+        while tunnel_sts.status.availableReplicas != desired_number_of_replicas:
+            sleep(30)
+            tunnel_sts = _get_tunnel_sts()
         log.info(f"Setting number of desired replicas to 'all'.")
         app = tunnel_sts.metadata.labels["app.kubernetes.io/name"]
         v1.patch_namespaced_config_map(
