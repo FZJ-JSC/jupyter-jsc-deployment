@@ -154,7 +154,7 @@ data:
             name, namespace,
             body={'spec': {'replicas': desired_number_of_replicas}}
         )
-        while tunnel_sts.status.ready_replicas != desired_number_of_replicas:
+        while tunnel_sts.status.current_replicas != desired_number_of_replicas:
             sleep(30)
             tunnel_sts = _get_tunnel_sts()
         log.info(f"Setting number of desired replicas to 'all'.")
