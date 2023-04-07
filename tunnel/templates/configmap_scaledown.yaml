@@ -176,8 +176,8 @@ data:
 
             # Update services to switch selectors
             pod_number_iterator = cycle(range(0, desired_number_of_replicas))
-            new_pod = f"drf-tunnel-{next(pod_number_iterator)}"
             for tunnel in replace_tunnels:
+                new_pod = f"drf-tunnel-{next(pod_number_iterator)}"
                 patch_tunnel(tunnel, new_pod)
             # Scale down
             scale_sts(desired_number_of_replicas)
