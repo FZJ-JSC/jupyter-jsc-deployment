@@ -155,8 +155,10 @@ data:
             body={'spec': {'replicas': desired_number_of_replicas}}
         )
         while tunnel_sts.status.current_replicas != desired_number_of_replicas:
+            log.info(f"Waiting for pods to terminate. Current replicas: {tunnel_sts.status.current_replicas}")
             sleep(30)
             tunnel_sts = _get_tunnel_sts()
+
         log.info(f"Setting number of desired replicas to 'all'.")
         app = tunnel_sts.metadata.labels["app.kubernetes.io/name"]
         v1.patch_namespaced_config_map(
