@@ -55,5 +55,5 @@ data:
     cp -r /tmp/static-files/* /mnt/shared-data/static-files
     rm -rf /tmp/static-files
     {{- if .Values.mountWatch.extraCommands }}
-    {{ .Values.mountWatch.extraCommands | toYaml | indent 4 }}
+    {{ .Values.mountWatch.extraCommands}}
     {{- end }}
