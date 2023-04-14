@@ -33,7 +33,7 @@ hub:
       args:
         - -c
         - >-
-            pip install requests psycopg2-binary &&
+            pip install requests psycopg2-binary tornado &&
             source /mnt/sql/run.sh
       env:
         - name: SQL_HOST

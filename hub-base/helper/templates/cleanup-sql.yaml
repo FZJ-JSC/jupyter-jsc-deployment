@@ -19,7 +19,6 @@ data:
         export TUNNEL_AUTHENTICATION_TOKEN=${TUNNEL_AUTHENTICATION_TOKEN:-"Basic $(echo -n "${TUNNEL_JUPYTERHUB_USERNAME:-jupyterhub}:${TUNNEL_JUPYTERHUB_USER_PASS}" | base64 -w 0)"}
     fi
 
-    /usr/local/bin/pip3 install tornado
     while true
     do
         /usr/local/bin/python3 -u /mnt/sql/cleanup_sql.py
