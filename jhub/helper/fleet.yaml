@@ -8,9 +8,7 @@ helm:
       safeDirectories:
         - "/mnt/shared-data/notebook_template_server"
       extraCommands: |
-        test -d /mnt/shared-data/notebook_template_server && 
-        cd /mnt/shared-data/notebook_template_server &&
-        git pull origin ${NTS_GIT_BRANCH}
+        test -d /mnt/shared-data/notebook_template_server && cd /mnt/shared-data/notebook_template_server && git pull origin ${NTS_GIT_BRANCH}
     cleanupSQL: 
       enabled: true
     maintenanceCheck:
