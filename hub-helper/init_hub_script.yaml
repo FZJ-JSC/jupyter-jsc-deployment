@@ -46,7 +46,7 @@ data:
     }
 
     git_config() {
-        if [[ "${HUB_NAME}" == "jupyterhub" ]]; then
+        if [[ "${HUB_NAME}" == "default" ]]; then
             CONFIG_BRANCH=jupyterhub-${JUPYTERHUB_STAGE}
         else
             CONFIG_BRANCH=jupyterhub-${HUB_NAME}-${JUPYTERHUB_STAGE}
