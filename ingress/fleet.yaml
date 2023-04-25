@@ -27,6 +27,24 @@ helm:
               server default-proxy-public-4.jupyterjsc.svc:443 max_fails=0;
               keepalive 32;
           }
+          upstream dev1-retries {
+              server dev1-proxy-public.jupyterjscdev.svc:443 max_fails=0;
+              server dev1-proxy-public-0.jupyterjscdev.svc:443 max_fails=0;
+              server dev1-proxy-public-1.jupyterjscdev.svc:443 max_fails=0;
+              server dev1-proxy-public-2.jupyterjscdev.svc:443 max_fails=0;
+              server dev1-proxy-public-3.jupyterjscdev.svc:443 max_fails=0;
+              server dev1-proxy-public-4.jupyterjscdev.svc:443 max_fails=0;
+              keepalive 32;
+          }
+          upstream dev2-retries {
+              server dev2-proxy-public.jupyterjscdev.svc:443 max_fails=0;
+              server dev2-proxy-public-0.jupyterjscdev.svc:443 max_fails=0;
+              server dev2-proxy-public-1.jupyterjscdev.svc:443 max_fails=0;
+              server dev2-proxy-public-2.jupyterjscdev.svc:443 max_fails=0;
+              server dev2-proxy-public-3.jupyterjscdev.svc:443 max_fails=0;
+              server dev2-proxy-public-4.jupyterjscdev.svc:443 max_fails=0;
+              keepalive 32;
+          }
       extraArgs:
         enable-ssl-passthrough: ""
       kind: DaemonSet
