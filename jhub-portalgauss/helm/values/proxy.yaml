@@ -1,7 +1,0 @@
-proxy:
-  chp:
-    defaultTarget: "https://portalgauss-hub:8081"
-    errorTarget: "https://portalgauss-hub:8081/hub/error"
-  https:
-    secret:
-      name: internal-ssl-portalgauss

@@ -1,8 +1,0 @@
-proxy:
-  chp:
-    defaultTarget: "https://juniq-hub:8081"
-    errorTarget: "https://juniq-hub:8081/hub/error"
-
-  https:
-    secret:
-      name: internal-ssl-juniq

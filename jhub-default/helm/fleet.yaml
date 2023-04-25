@@ -1,4 +1,6 @@
 defaultNamespace: jupyterjsc
+dependsOn:
+  - name: jupyterjsc-hub-helper
 helm:
   releaseName: jupyterhub-default
   repo: https://jupyterhub.github.io/helm-chart/
