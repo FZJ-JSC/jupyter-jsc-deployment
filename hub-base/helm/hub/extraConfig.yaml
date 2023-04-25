@@ -47,11 +47,18 @@ hub:
                   return False
               return True
 
+      class JupyterHubLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if record.msg.startswith("Refreshing auth for"):            
+                  return False
+              return True
+
       # available usual logger keys:
       # "JupyterHub", "tornado", "tornado.application", "tornado.access", "tornado.general", "oauthlib"
       logging_filter_classes = {
           "tornado.application": AppLogLoggingFilter,
-          "tornado.access": AccessLogLoggingFilter
+          "tornado.access": AccessLogLoggingFilter,
+          "JupyterHub": JupyterHubLoggingFilter
       }
       all_loggers = {name: logging.getLogger(name) for name in logging.root.manager.loggerDict if name in logging_filter_classes.keys()}
       all_loggers_true = {name: logging.getLogger(name) for name in logging.root.manager.loggerDict}
