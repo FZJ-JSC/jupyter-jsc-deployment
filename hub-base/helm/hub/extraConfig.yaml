@@ -140,11 +140,15 @@ hub:
       import time
       async def post_stop_hook(spawner):
           # Wait up to 5 times yield_wait_seconds, before sending stop event to frontend
+          spawner.log.info(spawner.latest_events)
           stopwait = time.monotonic() + 5*spawner.yield_wait_seconds
           while time.monotonic() < stopwait:
               if spawner._cancel_event_yielded:
+                  spawner.log.info("yielded")
                   break
+              spawner.log.info("not yielded")
               await asyncio.sleep(2*spawner.yield_wait_seconds)
+          spawner.log.info(spawner.latest_events)
           spawner_events = get_spawner_events(spawner.user.id)
           spawner_events["stop"].set()
 
