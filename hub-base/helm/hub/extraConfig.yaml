@@ -202,9 +202,9 @@ hub:
           from datetime import datetime
           now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
           return {
-              "failed": False,
+              "failed": True,
               "ready": False,
-              "progress": 99,
+              "progress": 100,
               "message": "",
               "html_message": f"<details><summary>{now}: {user_cancel_message}",
           }
