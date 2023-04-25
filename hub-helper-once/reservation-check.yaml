@@ -1,8 +1,7 @@
-{{- if .Values.reservationCheck.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: jupyterhub-reservation-check
+  name: hub-all-reservation-check
 data:
   run.sh: |
     #!/bin/sh
@@ -68,4 +67,3 @@ data:
 
     with open(output_path, "w") as f:
       json.dump(output_dict, f, sort_keys=True, indent=2)
-{{- end }}

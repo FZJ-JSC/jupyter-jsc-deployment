@@ -1,8 +1,7 @@
-{{- if .Values.cleanupSQL.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: jupyterhub-cleanup-sql
+  name: hub-all-cleanup-sql
 data:
   run.sh: |
     #!/bin/sh
@@ -34,8 +33,7 @@ data:
     import traceback
 
     import psycopg2
-    from tornado import httpclient
-    from tornado.escape import json_decode
+    import requests
 
     custom_conf_file = os.environ.get(
         "CUSTOM_CONFIG_PATH", "/home/jupyterhub/jupyterhub_custom_config.json"
@@ -48,8 +46,6 @@ data:
         "Accept": "application/json",
         "uuidcode": uuidcode,
     }
-
-    http_client = httpclient.HTTPClient()
 
 
     def now():
@@ -130,34 +126,31 @@ data:
                 .get("services", "")
             )
             drf_headers["Authorization"] = authentication_token
-            certificate_path = (
+            verify = (
                 custom_conf.get("drf-services", {})
                 .get(drf_name, {})
                 .get("certificate_path", False)
             )
-            validate_cert = True if certificate_path else False
             request_timeout = (
                 custom_conf.get("drf-services", {})
                 .get(drf_name, {})
                 .get("request_timeout", 20)
             )
             try:
-                request = httpclient.HTTPRequest(
-                    services_url, 
-                    method="GET", 
+                r = requests.get(
+                    services_url,
                     headers=drf_headers,
-                    request_timeout=request_timeout,
-                    validate_cert=validate_cert,
-                    ca_certs=certificate_path
+                    verify=verify,
+                    timeout=request_timeout,
                 )
-                r = http_client.fetch(request)
+                r.raise_for_status()
             except:
                 print(f"{now()} {uuidcode} - Could not reach {services_url}. Continue")
                 print(traceback.format_exc())
                 continue
             services_to_delete = [
                 x["servername"]
-                for x in json_decode(r.body)
+                for x in r.json()
                 if started_n_minutes_ago(grace_period, x["start_date"])
                 and x["servername"] not in jhub_server_names
             ]
@@ -167,17 +160,11 @@ data:
             for service in services_to_delete:
                 service_url = f"{services_url}{service}/"
                 print(f"{now()} {uuidcode} - Delete to {service_url} ... ")
-                request = httpclient.HTTPRequest(
-                    service_url, 
-                    method="DELETE", 
-                    headers=drf_headers,
-                    request_timeout=request_timeout,
-                    validate_cert=validate_cert,
-                    ca_certs=certificate_path
+                r = requests.delete(
+                    service_url, headers=drf_headers, verify=verify, timeout=request_timeout
                 )
-                r = http_client.fetch(request)
                 print(
-                    f"{now()} {uuidcode} - Delete to {service_url} ... done ({r.code})"
+                    f"{now()} {uuidcode} - Delete to {service_url} ... done ({r.status_code})"
                 )
 
     def cleanup_drf_tunnel(jhub_server_names, custom_conf, grace_period):
@@ -199,34 +186,31 @@ data:
                 .get("tunnel", "")
             )
             drf_headers["Authorization"] = authentication_token
-            certificate_path = (
+            verify = (
                 custom_conf.get("drf-services", {})
                 .get(drf_name, {})
                 .get("certificate_path", False)
             )
-            validate_cert = True if certificate_path else False
             request_timeout = (
                 custom_conf.get("drf-services", {})
                 .get(drf_name, {})
                 .get("request_timeout", 20)
             )
             try:
-                request = httpclient.HTTPRequest(
-                    services_url, 
-                    method="GET", 
+                r = requests.get(
+                    services_url,
                     headers=drf_headers,
-                    request_timeout=request_timeout,
-                    validate_cert=validate_cert,
-                    ca_certs=certificate_path
+                    verify=verify,
+                    timeout=request_timeout,
                 )
-                r = http_client.fetch(request)
+                r.raise_for_status()
             except:
                 print(f"{now()} {uuidcode} - Could not reach {services_url}. Continue")
                 print(traceback.format_exc())
                 continue
             services_to_delete = [
                 x["servername"]
-                for x in json_decode(r.body)
+                for x in r.json()
                 if x["servername"] not in jhub_server_names
             ]
             if not services_to_delete:
@@ -235,17 +219,11 @@ data:
             for service in services_to_delete:
                 service_url = f"{services_url}{service}/"
                 print(f"{now()} {uuidcode} - Delete to {service_url} ... ")
-                request = httpclient.HTTPRequest(
-                    service_url, 
-                    method="DELETE", 
-                    headers=drf_headers,
-                    request_timeout=request_timeout,
-                    validate_cert=validate_cert,
-                    ca_certs=certificate_path
+                r = requests.delete(
+                    service_url, headers=drf_headers, verify=verify, timeout=request_timeout
                 )
-                r = http_client.fetch(request)
                 print(
-                    f"{now()} {uuidcode} - Delete to {service_url} ... done ({r.code})"
+                    f"{now()} {uuidcode} - Delete to {service_url} ... done ({r.status_code})"
                 )
 
     if __name__ == "__main__":
@@ -262,4 +240,3 @@ data:
         print(f"{now()} {uuidcode} - Delete unused tokens ...")
         delete_unused_tokens(jhub_server, jhub_tokens)
         print(f"{now()} {uuidcode} - Delete unused tokens ... done")
-{{- end }}

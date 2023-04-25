@@ -41,16 +41,6 @@ hub:
             secretKeyRef:
               name: hub-generics
               key: SQL_HOST
-        - name: JUPYTERHUB_DATABASE
-          valueFrom:
-            secretKeyRef:
-              name: hub-generics
-              key: SQL_DATABASE
-        - name: JUPYTERHUB_DATABASE_USER
-          valueFrom:
-            secretKeyRef:
-              name: hub-generics
-              key: SQL_USER
         - name: JUPYTERHUB_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -117,7 +107,7 @@ hub:
       args:
         - -c
         - >-
-            apk add bash git && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
+            apk add bash git && /bin/bash /mnt/mount_watch/mount_watch/..data/run.sh
       env:
         - name: JUPYTERHUB_STAGE
           valueFrom:
@@ -127,11 +117,30 @@ hub:
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['jhub_version']
+        - name: GIT_REPO
+          valueFrom:
+            secretKeyRef:
+              name: "jupyter-jsc-config"
+              key: REPOSITORY
+        - name: GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: "jupyter-jsc-config"
+              key: USERNAME
+        - name: GIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "jupyter-jsc-config"
+              key: PASSWORD
+        - name: HUB_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['app']
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
         - name:  mount-watch
-          mountPath: /mnt/volumes_mw/mount_watch
+          mountPath: /mnt/mount_watch/mount_watch
         - name: tz-config
           mountPath: /etc/localtime
     - name: static-files
@@ -143,10 +152,10 @@ hub:
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
-        - name: hub-nginx-config
+        - name: nginx-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
-        - name: hub-nginx-config
+        - name: nginx-config
           mountPath: /etc/nginx/conf.d/jupyter.conf
           subPath: jupyter.conf
         - name: tz-config

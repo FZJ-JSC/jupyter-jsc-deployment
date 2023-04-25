@@ -1,8 +1,7 @@
-{{- if .Values.nginx.config }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: hub-nginx-config
+  name: hub-all-static-files-nginx-config
 data:
   nginx.conf: |
     user  nginx;
@@ -44,13 +43,13 @@ data:
         access_log  /var/log/nginx/host.access.log  main;
 
         location ^~ /hub/static {
-            alias  /mnt/shared-data/static-files/;
+            alias  /mnt/shared-data/share/jupyterhub/static/;
             # root   /usr/share/nginx/html;
             # index  index.html index.htm;
         }
 
         location / {
-            alias  /mnt/shared-data/static-files/redirects/;
+            alias  /mnt/shared-data/share/jupyterhub/static/redirects/;
             # root   /usr/share/nginx/html;
             # index  index.html index.htm;
         }
@@ -87,4 +86,3 @@ data:
         #    deny  all;
         #}
     }
-{{- end }}

@@ -1,10 +1,12 @@
 defaultNamespace: jupyterjsc
 helm:
-  releaseName: jupyterhub
+  releaseName: jupyterhub-default
   repo: https://jupyterhub.github.io/helm-chart/
   chart: jupyterhub
-  version: 1.2.0
+  version: 2.0.0
   values:
+    nameOverride: "default"
+    fullnameOverride: "default"
     hub:
       livenessProbe:
         enabled: false
@@ -21,16 +23,22 @@ helm:
         allowPrivilegeEscalation: true
   valuesFiles:
     - ../../hub-base/helm/hub/config.yaml
-    - ../../hub-base/helm/hub/extraConfig.yaml
     - ../../hub-base/helm/hub/extraContainers.yaml
+    # - ../../hub-base/helm/hub/extraConfig.yaml
+    - values/extraConfig.yaml
     - ../../hub-base/helm/hub/extraEnv.yaml
     - ../../hub-base/helm/hub/extraVolumeMounts.yaml
     - ../../hub-base/helm/hub/image.yaml
     - ../../hub-base/helm/hub/initContainers.yaml
     - ../../hub-base/helm/hub/services.yaml
     - ../../hub-base/helm/hub/others.yaml
+    # We overwrite some values in hub specific files,
+    # so the import order needs to be hub-base,
+    # then the hub specific config 
     - ../../hub-base/helm/common.yaml
+    - values/common.yaml
     - ../../hub-base/helm/proxy.yaml
+    - values/proxy.yaml
 kustomize:
   dir: overlays
 targetCustomizations:
@@ -41,6 +49,8 @@ targetCustomizations:
     helm:
       values:
         hub:
+          image:
+            tag: "dev620cc716"
           extraVolumes:
             - name: persistent
               nfs:
@@ -48,28 +58,39 @@ targetCustomizations:
                 server: 10.0.94.248
             - name: shared-data
               emptyDir: {}
+            - name: init-script
+              configMap:
+                defaultMode: 400
+                name: hub-all-init-script
             - name: mount-watch
               configMap:
                 defaultMode: 400
-                name: jupyterhub-mw
+                name: hub-all-mountwatch
             - name: cleanup-sql
               configMap:
                 defaultMode: 400
-                name: jupyterhub-cleanup-sql
+                name: hub-all-cleanup-sql
             - name: incident-check
               configMap:
                 defaultMode: 400
-                name: jupyterhub-incident-check
+                name: hub-all-incident-check
             - name: reservation-check
               configMap:
                 defaultMode: 400
-                name: jupyterhub-reservation-check
+                name: hub-all-reservation-check
+            - name: nginx-config
+              configMap:
+                defaultMode: 400
+                name: hub-all-static-files-nginx-config
             - name: internal-ssl
               secret:
-                secretName: internal-ssl
+                secretName: internal-ssl-default
             - name: reservation-keypair
               secret:
                 secretName: reservation-keypair
+            - name: unity-jsc-certs
+              secret:
+                secretName: unity-jsc-certs
             - name: drf-tunnel-certs-public
               secret:
                 secretName: drf-tunnel-certs-public
@@ -88,27 +109,12 @@ targetCustomizations:
                 items:
                   - key: tls.ca
                     path: ca.pem
-            - name: twofa-keypair
-              secret:
-                defaultMode: 400
-                secretName: twofa-keypair
-            - name: twofa-remove-keypair
-              secret:
-                defaultMode: 400
-                secretName: twofa-remove-keypair
-            - name: unity-jsc-certs
-              secret:
-                secretName: unity-jsc-certs
-            - name: hub-nginx-config
-              configMap:
-                defaultMode: 400
-                name: hub-nginx-config
             - name: tz-config
               hostPath:
                 path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: staging
-            jhub_version: "2.3.1"
+            jhub_version: "3.1.1"
             hostname: "jupyter-jsc-staging.fz-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubStaging"
@@ -116,10 +122,7 @@ targetCustomizations:
           resources:
             requests:
               cpu: 20m
-              memory: 256Mi 
-            limits:
-              cpu: 200m
-              memory: 1024Mi
+              memory: 256Mi
         proxy:
           chp:
             resources:
@@ -135,7 +138,7 @@ targetCustomizations:
           tls:
           - hosts:
             - jupyter-jsc-staging.fz-juelich.de
-            secretName: jupyter-jsc-certs-le
+            secretName: jupyter-jsc-certs-default-le
   - name: production
     clusterSelector:
       matchLabels:
@@ -143,6 +146,8 @@ targetCustomizations:
     helm:
       values:
         hub:
+          image:
+            tag: "dev620cc716"
           extraVolumes:
             - name: persistent
               nfs:
@@ -150,28 +155,39 @@ targetCustomizations:
                 server: 10.0.20.30
             - name: shared-data
               emptyDir: {}
+            - name: init-script
+              configMap:
+                defaultMode: 400
+                name: hub-all-init-script
             - name: mount-watch
               configMap:
                 defaultMode: 400
-                name: jupyterhub-mw
+                name: hub-all-mountwatch
             - name: cleanup-sql
               configMap:
                 defaultMode: 400
-                name: jupyterhub-cleanup-sql
+                name: hub-all-cleanup-sql
             - name: incident-check
               configMap:
                 defaultMode: 400
-                name: jupyterhub-incident-check
+                name: hub-all-incident-check
             - name: reservation-check
               configMap:
                 defaultMode: 400
-                name: jupyterhub-reservation-check
+                name: hub-all-reservation-check
+            - name: nginx-config
+              configMap:
+                defaultMode: 400
+                name: hub-all-static-files-nginx-config
             - name: internal-ssl
               secret:
-                secretName: internal-ssl
+                secretName: internal-ssl-default
             - name: reservation-keypair
               secret:
                 secretName: reservation-keypair
+            - name: unity-jsc-certs
+              secret:
+                secretName: unity-jsc-certs
             - name: drf-tunnel-certs-public
               secret:
                 secretName: drf-tunnel-certs-public
@@ -190,27 +206,12 @@ targetCustomizations:
                 items:
                   - key: tls.ca
                     path: ca.pem
-            - name: twofa-keypair
-              secret:
-                defaultMode: 400
-                secretName: twofa-keypair
-            - name: twofa-remove-keypair
-              secret:
-                defaultMode: 400
-                secretName: twofa-remove-keypair
-            - name: unity-jsc-certs
-              secret:
-                secretName: unity-jsc-certs
-            - name: hub-nginx-config
-              configMap:
-                defaultMode: 400
-                name: hub-nginx-config
             - name: tz-config
               hostPath:
                 path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: production
-            jhub_version: "2.3.1"
+            jhub_version: "3.1.1"
             hostname: "jupyter-jsc.fz-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubProduction"
@@ -237,4 +238,4 @@ targetCustomizations:
           tls:
           - hosts:
             - jupyter-jsc.fz-juelich.de
-            secretName: jupyter-jsc-certs
+            secretName: jupyter-jsc-certs-default-le

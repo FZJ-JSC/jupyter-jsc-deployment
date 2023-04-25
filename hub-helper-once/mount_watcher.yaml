@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hub-all-mountwatch
+data:
+  run.sh: |
+    #!/bin/bash
+
+    # Variables used for git clone commands
+    CONFIG_DIR="/mnt/shared-data/git_config"
+    SHARE_JHUB_DIR_TMP="/tmp/share_jhub"
+    SHARE_SPECIFIC_TEMPLATE_DIR_TMP="/tmp/share_specific_template"
+    SHARE_SPECIFIC_STATIC_DIR_TMP="/tmp/share_specific_static"
+
+    
+    # create temporary folders
+    mkdir -p ${SHARE_JHUB_DIR_TMP}
+
+    # mark this directory as safe (or git will complain later)
+    git config --global --add safe.directory ${CONFIG_DIR}
+
+    SHARE_BRANCH=jupyterhub-files-${JUPYTERHUB_STAGE}
+    git clone --single-branch --branch ${SHARE_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"} ${SHARE_JHUB_DIR_TMP}
+
+    if [[ -n ${TEMPLATE_GIT_REPO} ]]; then
+      git clone --single-branch --branch ${TEMPLATE_GIT_BRANCH} https://${TEMPLATE_GIT_USERNAME}:${TEMPLATE_GIT_PASSWORD}@${TEMPLATE_GIT_REPO#"https://"} ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
+      git clone --single-branch --branch ${STATIC_GIT_BRANCH} https://${STATIC_GIT_USERNAME}:${STATIC_GIT_PASSWORD}@${STATIC_GIT_REPO#"https://"} ${SHARE_SPECIFIC_STATIC_DIR_TMP}
+    fi
+
+    git config --global pull.ff only
+    while true;
+    do
+      /bin/bash /mnt/mount_watch/mount_watch/..data/compare.sh
+      sleep 60
+    done
+  compare.sh: |
+    #!/bin/bash
+
+    # git_config variables
+    CONFIG_DIR="/mnt/shared-data/git_config"
+    if [[ "${HUB_NAME}" == "jupyterhub" ]]; then
+        CONFIG_BRANCH=jupyterhub-${JUPYTERHUB_STAGE}
+    else
+        CONFIG_BRANCH=jupyterhub-${HUB_NAME}-${JUPYTERHUB_STAGE}
+    fi
+
+    # git_share default variables
+    SHARE_JHUB_DIR_TMP="/tmp/share_jhub"
+    SHARE_JHUB_DIR_PREP="/tmp/share_jhub_prep"
+    SHARE_ALL_DIR_TMP="/tmp/share_all"
+    SHARE_BRANCH=jupyterhub-files-${JUPYTERHUB_STAGE}
+    SHARE_JHUB_DIR="/mnt/shared-data/share/jupyterhub"
+    
+    # git share specific variables
+    SHARE_SPECIFIC_TEMPLATE_DIR_TMP="/tmp/share_specific_template"
+    SHARE_SPECIFIC_STATIC_DIR_TMP="/tmp/share_specific_static"
+
+    # Static duplication
+    STATIC_ONLY="/mnt/shared-data/static-files"
+
+
+    echo "$(date) Compare git_config with current files"
+    # CONFIG_DIR was created by initScript
+    cd ${CONFIG_DIR}
+    git pull origin ${CONFIG_BRANCH}
+
+    # For shared files we have to pull default and specific, then overwrite the first
+    # Was created in run.sh
+    cd ${SHARE_JHUB_DIR_TMP}
+    git fetch
+    test "$(git rev-parse HEAD)" == "$(git rev-parse @{u})"
+    SHARE_JHUB_HAS_UPDATE=$?
+
+    if [[ -n ${TEMPLATE_GIT_REPO} ]]; then
+      cd ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
+      git fetch
+      test "$(git rev-parse HEAD)" == "$(git rev-parse @{u})"
+      SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE=$?
+    
+      cd ${SHARE_SPECIFIC_STATIC_DIR_TMP}
+      git fetch
+      test "$(git rev-parse HEAD)" == "$(git rev-parse @{u})"
+      SHARE_SPECIFIC_STATIC_HAS_UPDATE=$?
+    else
+      SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE=0
+      SHARE_SPECIFIC_STATIC_HAS_UPDATE=0
+    fi
+
+    if [[ ${SHARE_JHUB_HAS_UPDATE} -eq 1 || ${SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE} -eq 1 || ${SHARE_SPECIFIC_STATIC_HAS_UPDATE} -eq 1 ]]; then
+      cd ${SHARE_JHUB_DIR_TMP}
+      git pull origin ${SHARE_BRANCH}
+      cp -r ${SHARE_JHUB_DIR_TMP} ${SHARE_JHUB_DIR_PREP}
+
+      if [[ ${SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE} -eq 1 || ${SHARE_SPECIFIC_STATIC_HAS_UPDATE} -eq 1 ]]; then
+        cd ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
+        git pull origin ${TEMPLATE_GIT_BRANCH}
+        
+        cd ${SHARE_SPECIFIC_STATIC_DIR_TMP}
+        git pull origin ${STATIC_GIT_BRANCH}
+
+        cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/* ${SHARE_JHUB_DIR_PREP}/${JUPYTERHUB_VERSION}/templates/.
+        cp -r ${SHARE_SPECIFIC_STATIC_DIR_TMP}/* ${SHARE_JHUB_DIR_PREP}/${JUPYTERHUB_VERSION}/static/.
+      fi
+
+      # Let's skip footer.systems. That's managed by incident check in another script
+      rm -r ${SHARE_JHUB_DIR_PREP}/${JUPYTERHUB_VERSION}/static/images/footer/systems
+      chown -R 1000:100 ${SHARE_JHUB_DIR_PREP}
+      cp -r ${SHARE_JHUB_DIR_PREP}/${JUPYTERHUB_VERSION}/* ${SHARE_JHUB_DIR}/.
+      rm -rf ${SHARE_JHUB_DIR_PREP}
+
+    fi

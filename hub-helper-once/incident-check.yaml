@@ -1,8 +1,7 @@
-{{- if .Values.maintenanceCheck.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: jupyterhub-incident-check  
+  name: hub-all-incident-check  
 data:
   run.sh: |
     #!/bin/sh
@@ -299,4 +298,3 @@ data:
         # while True:
         check_incidents(config["incident-check"], output_dir, static_dir)
         # time.sleep(config["incident-check"].get("interval", 60))
-{{- end }}

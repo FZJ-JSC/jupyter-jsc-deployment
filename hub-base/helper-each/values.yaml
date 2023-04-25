@@ -1,0 +1,14 @@
+# Default values for helper.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+proxyBackup:
+  release: jupyterhub
+  name: proxy-public
+  numberOfBackups: 5
+
+labels: {}
+
+appName: jupyterhub
+
+serviceStatic:
+  port: 8070
