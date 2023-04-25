@@ -11,7 +11,7 @@ hub:
       sys.path.append("/mnt/customized")
 
       namespace = os.environ.get("POD_NAMESPACE", "default")
-      jupyterhub_version = os.environ.get("JUPYTERHUB_VERSION", "2.3.1")
+      jupyterhub_version = os.environ.get("JUPYTERHUB_VERSION", "3.1.1")
       jupyterhub_host = get_name("hub")
       unity_host = "unity-jsc.fz-juelich.de"
       jhub_hostname = os.environ.get("JUPYTERHUB_HOSTNAME", "default")
@@ -194,7 +194,7 @@ hub:
       c.EventBackendSpawner.request_headers_poll = request_headers
       c.EventBackendSpawner.request_url_stop = request_url_poll_stop
       c.EventBackendSpawner.request_headers_stop = request_headers
-      c.EventBackendSpawner.ssl_alt_names = ["DNS:jupyter-jsc.fz-juelich.de", "DNS:default-hub"]
+      c.EventBackendSpawner.ssl_alt_names = [f"DNS:{jhub_hostname}", "DNS:default-hub"]
       async def post_spawn_request_hook(spawner, resp_json):
           import asyncio
           await asyncio.sleep(10)

@@ -46,12 +46,7 @@ data:
     }
 
     git_config() {
-        if [[ "${HUB_NAME}" == "default" ]]; then
-            CONFIG_BRANCH=jupyterhub-${JUPYTERHUB_STAGE}
-        else
-            CONFIG_BRANCH=jupyterhub-${HUB_NAME}-${JUPYTERHUB_STAGE}
-        fi
-
+        CONFIG_BRANCH=jupyterhub-${HUB_NAME}-${JUPYTERHUB_STAGE}
         # In case of pod restarts $CONFIG_DIR is not empty and 
         # `git clone` would fail
         rm -rf ${CONFIG_DIR}
