@@ -3,54 +3,27 @@ hub:
     customConfig: |-
       import os
       import sys
-      from datetime import datetime
 
-      app_name = os.environ.get("JUPYTERHUB_APP", "jupyterhub")
-      if app_name == "jupyterhub":
-          app_name_dash = ""
-          app_name_dash_hub = "hub"
-      else:
-          app_name_dash = f"{app_name}-"
-          app_name_dash_hub = f"{app_name}-hub"
+      app_name_dash = get_name("fullname-dash")
+      app_name_dash_hub = get_name("hub")
       custom_path = "/src/jupyterhub-custom"
       sys.path.insert(1, custom_path)
+      sys.path.append("/mnt/customized")
 
       namespace = os.environ.get("POD_NAMESPACE", "default")
-      jupyterhub_version = os.environ.get("JUPYTERHUB_VERSION", "2.3.1")
+      jupyterhub_version = os.environ.get("JUPYTERHUB_VERSION", "3.1.1")
       jupyterhub_host = get_name("hub")
       unity_host = "unity-jsc.fz-juelich.de"
-
-      from apihandler import ForwardTunnelRestartAPIHandler
-      from apihandler import DRFServiceLogLevelAPIHandler
-      from apihandler import JHubLogLevelAPIHandler
-      from apihandler import HPCUpdateAPIHandler
-      from apihandler import UserCountAPIHandler
-      from apihandler import UserJobsAPIHandler
-      from apihandler import UserJobsForwardAPIHandler
-      from apihandler import SelfAPIHandlerOAuth
-      from apihandler import SlurmWrapperAPIHandler
-      from apihandler import SpawnNotificationAPIHandler
-      from apihandler import SpawnOptionsFormAPIHandler
-      from apihandler import SpawnProgressStatusAPIHandler
-      from apihandler import SpawnProgressUpdateAPIHandler
-      from apihandler import SpawnProgressUNICOREUpdateAPIHandler
-      from apihandler import SpawnStopNotificationAPIHandler
-      from apihandler import SpawnUpdateOptionsAPIHandler
-      from apihandler import TemplateServerAPIHandler
-      from apihandler import twoFA
-      from apihandler import UserRandomServerAPIHandler
-      from apihandler import user_cancel_message
-      from apihandler import vo
-      from customauthenticator import CustomGenericOAuthenticator
-      from handler import page_handlers
-      from spawner import BackendSpawner
-      from logs import create_extra_handlers
-
-      custom_config_path = os.environ.get("CUSTOM_CONFIG_PATH", "/mnt/shared-data/git_config/jupyterhub_custom_config.json")
       jhub_hostname = os.environ.get("JUPYTERHUB_HOSTNAME", "default")
 
+      import jsc_custom
+      from backendspawner import EventBackendSpawner
+      from backendspawner import user_cancel_message
+      from jsc_custom.authenticator import CustomGenericOAuthenticator
+      from jsc_custom.logs import create_extra_handlers
+      from jsc_custom.misc import get_custom_config
+
       c.JupyterHub.log_level = 10
-      c.JupyterHub.custom_config_file = custom_config_path
       c.JupyterHub.extra_log_handlers = create_extra_handlers()
       db_host = os.environ.get("SQL_HOST")
       db_port = os.environ.get("SQL_PORT")
@@ -58,7 +31,6 @@ hub:
       db_password = os.environ.get("SQL_PASSWORD")
       db_database = os.environ.get("SQL_DATABASE")
       c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
-
 
       import logging
       class AppLogLoggingFilter(logging.Filter):
@@ -75,26 +47,179 @@ hub:
                   return False
               return True
 
-      # available logger keys:
-      # "jupyterhub", "tornado", "oauthlib", "app_log", "access_log", "gen_log"
+      # available usual logger keys:
+      # "JupyterHub", "tornado", "tornado.application", "tornado.access", "tornado.general", "oauthlib"
       logging_filter_classes = {
-          "app_log": AppLogLoggingFilter,
-          "access_log": AccessLogLoggingFilter
+          "tornado.application": AppLogLoggingFilter,
+          "tornado.access": AccessLogLoggingFilter
       }
-      c.JupyterHub.logging_filter_classes=logging_filter_classes
+      all_loggers = {name: logging.getLogger(name) for name in logging.root.manager.loggerDict if name in logging_filter_classes.keys()}
+      all_loggers_true = {name: logging.getLogger(name) for name in logging.root.manager.loggerDict}
+      for key, value in logging_filter_classes.items():
+          all_loggers[key].addFilter(value())
 
+      logged_logger_name = os.environ.get("LOGGER_NAME", "JupyterHub")
+      c.JupyterHub.log_format = f"%(color)s[%(levelname)1.1s %(asctime)s.%(msecs).03d {logged_logger_name} %(module)s:%(lineno)d]%(end_color)s %(message)s"
+          
       c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
       c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
       c.JupyterHub.hub_connect_url = (
-        f'https://{get_name("hub")}:{get_name_env("hub", "_SERVICE_PORT")}'
+      f'https://{get_name("hub")}:{get_name_env("hub", "_SERVICE_PORT")}'
       )
       # TODO override cull service. cull --url http:// instead of https://
 
-      c.JupyterHub.spawner_class = BackendSpawner
-      c.BackendSpawner.http_timeout = 7200
-      c.BackendSpawner.poll_interval = 120
-      c.BackendSpawner.poll_interval_randomizer = 20
-      # c.BackendSpawner.ssl_alt_names = [f"DNS:{jupyterhub_host}"]
+      c.JupyterHub.spawner_class = EventBackendSpawner
+      c.EventBackendSpawner.http_timeout = 7200
+
+      import random
+      def poll_interval(spawner):
+          custom_config = get_custom_config()
+          system = spawner.user_options.get("system", "None")
+          drf_service = custom_config.get("systems", {}).get(system, {}).get("drf-service", "None")
+          if custom_config.get("drf-services", {}).get(drf_service, {}).get("poll", True):
+              base_poll_interval = custom_config.get("drf-services", {}).get(drf_service, {}).get("poll_interval", 30)
+              poll_interval_randomizer = custom_config.get("drf-services", {}).get(drf_service, {}).get("poll_interval_randomizer", 0)
+              poll_interval = 1e3 * base_poll_interval + random.randint(
+                  0, 1e3 * poll_interval_randomizer
+              )
+          else:
+              poll_interval = 0
+          return poll_interval
+
+      c.EventBackendSpawner.poll_interval = poll_interval
+
+      def request_kwargs(spawner):
+          custom_config = get_custom_config()
+          system = spawner.user_options.get("system", "None")
+          drf_service = custom_config.get("systems", {}).get(system, {}).get("drf-service", "None")
+          request_kwargs = custom_config.get("drf-services", {}).get(drf_service, {}).get("request_kwargs", {})
+          if "request_timeout" not in request_kwargs.keys():
+              request_kwargs["request_timeout"] = 30
+          return request_kwargs
+
+      def request_url_start(spawner):
+          custom_config = get_custom_config()
+          system = spawner.user_options.get("system", "None")
+          drf_service = custom_config.get("systems", {}).get(system, {}).get("drf-service", "None")
+          url = custom_config.get("drf-services", {}).get(drf_service, {}).get("urls", {}).get("services", "None")
+          if not url.endswith("/"):
+              url += "/"
+          return url
+
+      def request_url_poll_stop(spawner):
+          custom_config = get_custom_config()
+          system = spawner.user_options.get("system", "None")
+          drf_service = custom_config.get("systems", {}).get(system, {}).get("drf-service", "None")
+          url = custom_config.get("drf-services", {}).get(drf_service, {}).get("urls", {}).get("services", "None")
+          if not url.endswith("/"):
+              url += "/"
+          return f"{url}{spawner.name}/"
+
+      async def request_headers(spawner):
+          custom_config = get_custom_config()
+          system = spawner.user_options.get("system", "None")
+          drf_service = custom_config.get("systems", {}).get(system, {}).get("drf-service", "None")    
+          ret = {
+              "Accept": "application/json",
+              "Content-Type": "application/json",
+              "Authorization": os.environ.get(f"{drf_service.upper()}_AUTHENTICATION_TOKEN", None),
+              "uuidcode": spawner.name
+          }
+          if custom_config.get("drf-services", {}).get(drf_service, {}).get("send_access_token", False):
+              auth_state = await spawner.user.get_auth_state()
+              ret["access-token"] = auth_state.get("access_token", "None")
+          return ret
+
+
+      from jsc_custom.spawner.utils import get_spawner_events
+      async def pre_spawn_hook(spawner):
+          spawner_events = get_spawner_events(spawner.user.id)
+          spawner_events["start"].set()
+
+      import asyncio
+      import time
+      async def post_stop_hook(spawner):
+          # Wait up to 5 times yield_wait_seconds, before sending stop event to frontend
+          stopwait = time.monotonic() + 5*spawner.yield_wait_seconds
+          while time.monotonic() < stopwait:
+              if spawner._cancel_event_yielded:
+                  break
+              await asyncio.sleep(2*spawner.yield_wait_seconds)
+          spawner_events = get_spawner_events(spawner.user.id)
+          spawner_events["stop"].set()
+
+      c.EventBackendSpawner.pre_spawn_hook = pre_spawn_hook
+      c.EventBackendSpawner.post_stop_hook = post_stop_hook
+
+      async def request_body_start(spawner):
+          body = {}
+          auth_state = await spawner.user.get_auth_state()
+          env = spawner.get_env()
+          env["JUPYTERHUB_USER_ID"] = spawner.user.orm_user.id
+          env["JUPYTERHUB_STAGE"] = os.environ.get("JUPYTERHUB_STAGE", "")
+          url_parts = ["users", "setuptunnel", spawner.user.escaped_name]
+          if spawner.name:
+              url_parts.append(spawner.name)
+          env["JUPYTERHUB_SETUPTUNNEL_URL"] = url_path_join(*url_parts)
+          url_parts = ["users", "progress", "updateunicore", spawner.user.escaped_name]
+          if spawner.name:
+              url_parts.append(spawner.name)
+          env["JUPYTERHUB_STATUS_UNICORE_URL"] = f"https://{jhub_hostname}/hub/api/{url_path_join(*url_parts)}"
+          body["user_options"] = spawner.user_options
+          body["env"] = env
+          body["auth_state"] = auth_state
+          body["certs"] = {}
+          for key, path in spawner.cert_paths.items():
+            with open(path, "r") as f:
+              body["certs"][key] = f.read()
+          body["start_id"] = spawner.start_id
+          return body
+
+      async def cancel_click_event(spawner):
+          from datetime import datetime
+          now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
+          return {
+              "failed": False,
+              "ready": False,
+              "progress": 99,
+              "message": "",
+              "html_message": f"<details><summary>{now}: {user_cancel_message}",
+          }
+
+      c.EventBackendSpawner.request_url_start = request_url_start
+      c.EventBackendSpawner.request_headers_start = request_headers
+      c.EventBackendSpawner.request_body_start = request_body_start
+      c.EventBackendSpawner.request_kwargs = request_kwargs
+      c.EventBackendSpawner.request_url_poll = request_url_poll_stop
+      c.EventBackendSpawner.request_headers_poll = request_headers
+      c.EventBackendSpawner.request_url_stop = request_url_poll_stop
+      c.EventBackendSpawner.request_headers_stop = request_headers
+      c.EventBackendSpawner.ssl_alt_names = [f"DNS:{jhub_hostname}", "DNS:default-hub"]
+      async def post_spawn_request_hook(spawner, resp_json):
+          import asyncio
+          await asyncio.sleep(10)
+
+      c.EventBackendSpawner.post_spawn_request_hook = post_spawn_request_hook
+
+      def service_address(spawner):
+          namespace = os.environ.get('TUNNEL_DEPLOYMENT_NAMESPACE')
+          custom_config = get_custom_config()
+          drf_service = (
+              custom_config.get("systems", {})
+              .get(spawner.user_options["system"], {})
+              .get("drf-service", None)
+          )
+          # max length for svc names: 63 (without suffix)
+          # drf_service + "-" + self.name + "-" + self.start_id
+          #      21     +  1  +    32     +  1  + 8 = 63
+          drf_service_short = drf_service[:21]
+          svc_name = f"{drf_service_short}-{spawner.name}-{spawner.start_id}"
+          svc_full = f"{svc_name}.{namespace}.svc"
+          spawner.log.info(f"Service Address: {svc_full}")
+          return svc_full
+
+      c.EventBackendSpawner.service_address = service_address
+      c.EventBackendSpawner.port = 8080
 
       c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
       c.Authenticator.admin_users = {
@@ -102,7 +227,6 @@ hub:
           't.kreuzer_at_fz-juelich.de',
       }
 
-      c.CustomGenericOAuthenticator.custom_config_file = custom_config_path
       c.CustomGenericOAuthenticator.enable_auth_state = True
       c.CustomGenericOAuthenticator.refresh_pre_spawn = True
       c.CustomGenericOAuthenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
@@ -127,15 +251,12 @@ hub:
           ";"
       )
       c.CustomGenericOAuthenticator.tls_verify = False
+      c.CustomGenericOAuthenticator.extra_params_allowed_runtime = {
+          "uy_select_authn": ["jupyterhdfaaiAuthn.hbp", "jupyterldapAuthn.password"]
+      }
+      #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterhdfaaiAuthn.hbp
+      #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterldapAuthn.password
 
-
-      # def foo():
-      #    ret = {"key1": ["value1", "value2"]}
-      #    return ret
-
-
-      # c.CustomGenericOAuthenticator.extra_params_allowed_runtime = foo
-      # http://localhost:8000/hub/oauth_login?extra_param_key1=value1
 
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
       c.JupyterHub.template_vars = {
@@ -143,54 +264,6 @@ hub:
           "user_cancel_message": user_cancel_message
       }
       c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
-
-      c.JupyterHub.extra_handlers = [
-          # PageHandlers
-          (r"/links", page_handlers.LinksHandler),
-          (r"/2FA", page_handlers.TwoFAHandler),
-          (r"/imprint", page_handlers.ImprintHandler),
-          (r"/privacy", page_handlers.DPSHandler),
-          (r"/terms", page_handlers.ToSHandler),
-          (r"/groups", page_handlers.VOHandler),
-          (r"/logging", page_handlers.LoggingHandler),
-          (r"/logging", page_handlers.LoggingHandler),
-          # APIHandlers
-          (r"/api/user_oauth", SelfAPIHandlerOAuth),
-          (r"/api/users/([^/]+)/random/server", UserRandomServerAPIHandler),
-          (r"/api/users/([^/]+)/server/update", SpawnUpdateOptionsAPIHandler),
-          (r"/api/users/([^/]+)/server/optionsform", SpawnOptionsFormAPIHandler),
-          (r"/api/users/([^/]+)/servers/([^/]*)/update", SpawnUpdateOptionsAPIHandler),
-          (r"/api/users/([^/]+)/servers/([^/]+)/optionsform", SpawnOptionsFormAPIHandler),
-          (r"/api/userjobs", UserJobsAPIHandler),
-          (r"/api/userjobs/([^/]+)", UserJobsAPIHandler),
-          (r"/api/slurmwrapper/([^/]+)/([^/]+)", SlurmWrapperAPIHandler),
-          (r"/api/userjobsforward", UserJobsForwardAPIHandler),
-          (r"/api/userjobsforward/([^/]+)", UserJobsForwardAPIHandler),
-          (r"/api/users/progress/update/([^/]+)", SpawnProgressUpdateAPIHandler),
-          (r"/api/users/progress/update/([^/]+)/([^/]+)", SpawnProgressUpdateAPIHandler),
-          (r"/api/users/progress/updateunicore/([^/]+)", SpawnProgressUNICOREUpdateAPIHandler),
-          (r"/api/users/progress/updateunicore/([^/]+)/([^/]+)", SpawnProgressUNICOREUpdateAPIHandler),
-          (r"/api/users/progress/status/([^/]+)", SpawnProgressStatusAPIHandler),
-          (r"/api/users/progress/status/([^/]+)/([^/]+)", SpawnProgressStatusAPIHandler),
-          (r"/api/users/([^/]+)/notifications/spawners/spawn", SpawnNotificationAPIHandler),
-          (
-              r"/api/users/([^/]+)/notifications/spawners/stop",
-              SpawnStopNotificationAPIHandler,
-          ),
-          (r"/api/refreshhpc/([^/]+)", HPCUpdateAPIHandler),
-          (r"/api/restarttunnel", ForwardTunnelRestartAPIHandler),
-          (r"/api/2FA", twoFA.TwoFAAPIHandler),
-          (r"/2FA/([^/]+)", twoFA.TwoFACodeHandler),
-          (r"/api/vo/([^/]+)", vo.VOAPIHandler),
-          (r"/api/votoken/([^/]+)", vo.VOTokenAPIHandler),
-          (r"/api/logs/jhub/handler", JHubLogLevelAPIHandler),
-          (r"/api/logs/jhub/handler/([^/]+)", JHubLogLevelAPIHandler),
-          (r"/api/logs/([^/]+)/handler", DRFServiceLogLevelAPIHandler),
-          (r"/api/logs/([^/]+)/handler/([^/]+)", DRFServiceLogLevelAPIHandler),
-          (r"/api/templates/([^/]+)/([^/]+)", TemplateServerAPIHandler),
-          (r"/templates/t/(.+)", page_handlers.TemplateServerHandler),
-          (r"/api/usercount", UserCountAPIHandler),
-      ]
 
       c.JupyterHub.trusted_alt_names = [
           f"DNS:{app_name_dash_hub}",
