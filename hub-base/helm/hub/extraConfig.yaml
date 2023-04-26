@@ -154,7 +154,7 @@ hub:
               .get("drf-service", None)
           )
           if drf_service != "k8smgrhdfcloud":
-              baseurl = (
+              base_url = (
                   custom_config.get("drf-services", {})
                   .get("tunnel", {})
                   .get("urls", {})
