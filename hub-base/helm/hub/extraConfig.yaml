@@ -146,6 +146,42 @@ hub:
       import asyncio
       import time
       async def post_stop_hook(spawner):
+          # Stop ssh tunnel, if it was used
+          custom_config = get_custom_config()
+          drf_service = (
+              custom_config.get("systems", {})
+              .get(spawner.user_options["system"], {})
+              .get("drf-service", None)
+          )
+          if drf_service != "k8smgrhdfcloud":
+              baseurl = (
+                  custom_config.get("drf-services", {})
+                  .get("tunnel", {})
+                  .get("urls", {})
+                  .get("tunnel", "None")
+              )
+              request_kwargs = (
+                  custom_config.get("drf-services", {})
+                  .get("tunnel", {})
+                  .get("request_kwargs", {})
+              )
+              if "request_timeout" not in request_kwargs.keys():
+                  request_kwargs["request_timeout"] = 30
+              url = f"{base_url}{spawner.name}/"
+              headers = {
+                  "Accept": "application/json",
+                  "Content-Type": "application/json",
+                  "Authorization": os.environ.get("TUNNEL_AUTHENTICATION_TOKEN", None),
+                  "uuidcode": spawner.name
+              }
+              req = HTTPRequest(
+                  url=url,
+                  method="DELETE",
+                  headers=headers,
+                  **request_kwargs,
+              )
+              await spawner.send_request(req, action="removetunnel", raise_exception=False)
+          
           # Wait up to 5 times yield_wait_seconds, before sending stop event to frontend
           spawner.log.info(spawner.latest_events)
           stopwait = time.monotonic() + 5*spawner.yield_wait_seconds
@@ -158,6 +194,7 @@ hub:
           spawner.log.info(spawner.latest_events)
           spawner_events = get_spawner_events(spawner.user.id)
           spawner_events["stop"].set()
+
 
       c.EventBackendSpawner.pre_spawn_hook = pre_spawn_hook
       c.EventBackendSpawner.post_stop_hook = post_stop_hook
@@ -194,7 +231,7 @@ hub:
               "ready": False,
               "progress": 99,
               "message": "",
-              "html_message": f"<details><summary>{now}: Cancelling start ...</summary>You clicked the cancel button.</details>",
+              "html_message": f"<details><summary>{now}: Cancelling start ...</summary>We're stopping the start process.</details>",
           }
 
 
@@ -236,7 +273,7 @@ hub:
           )
           
           # max length for svc names: 63 (without suffix)
-          # drf_service + "-" + self.name + "-" + self.start_id
+          # drf_service + "-" + spawner.name + "-" + spawner.start_id
           #      21     +  1  +    32     +  1  + 8 = 63
           drf_service_short = drf_service[:21]
           if drf_service == "k8smgrhdfcloud":
