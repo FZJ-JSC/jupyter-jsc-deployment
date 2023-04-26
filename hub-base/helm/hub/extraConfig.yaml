@@ -145,6 +145,7 @@ hub:
 
       import asyncio
       import time
+      from tornado.httpclient import HTTPRequest
       async def post_stop_hook(spawner):
           # Stop ssh tunnel, if it was used
           custom_config = get_custom_config()
