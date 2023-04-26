@@ -1,8 +1,17 @@
 hub:
   extraConfig:
-    customConfig: |-
+    customConfig: |-   
+      import asyncio
+      import logging
       import os
+      import random
       import sys
+      import time
+
+      from backendspawner import EventBackendSpawner
+      from backendspawner import user_cancel_message
+      from datetime import datetime
+      from tornado.httpclient import HTTPRequest
 
       app_name_dash = get_name("fullname-dash")
       app_name_dash_hub = get_name("hub")
@@ -17,11 +26,10 @@ hub:
       jhub_hostname = os.environ.get("JUPYTERHUB_HOSTNAME", "default")
 
       import jsc_custom
-      from backendspawner import EventBackendSpawner
-      from backendspawner import user_cancel_message
       from jsc_custom.authenticator import CustomGenericOAuthenticator
       from jsc_custom.logs import create_extra_handlers
       from jsc_custom.misc import get_custom_config
+      from jsc_custom.spawner.utils import get_spawner_events
 
       c.JupyterHub.log_level = 10
       c.JupyterHub.extra_log_handlers = create_extra_handlers()
@@ -32,7 +40,6 @@ hub:
       db_database = os.environ.get("SQL_DATABASE")
       c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
 
-      import logging
       class AppLogLoggingFilter(logging.Filter):
           def filter(self, record):
               if str(record.msg).startswith("Authenticated with token"):
@@ -78,7 +85,6 @@ hub:
       c.JupyterHub.spawner_class = EventBackendSpawner
       c.EventBackendSpawner.http_timeout = 7200
 
-      import random
       def poll_interval(spawner):
           custom_config = get_custom_config()
           system = spawner.user_options.get("system", "None")
@@ -137,64 +143,68 @@ hub:
               ret["access-token"] = auth_state.get("access_token", "None")
           return ret
 
-
-      from jsc_custom.spawner.utils import get_spawner_events
       async def pre_spawn_hook(spawner):
           spawner_events = get_spawner_events(spawner.user.id)
           spawner_events["start"].set()
 
-      import asyncio
-      import time
-      from tornado.httpclient import HTTPRequest
       async def post_stop_hook(spawner):
-          # Stop ssh tunnel, if it was used
-          custom_config = get_custom_config()
-          drf_service = (
-              custom_config.get("systems", {})
-              .get(spawner.user_options["system"], {})
-              .get("drf-service", None)
-          )
-          if drf_service != "k8smgrhdfcloud":
-              base_url = (
-                  custom_config.get("drf-services", {})
-                  .get("tunnel", {})
-                  .get("urls", {})
-                  .get("tunnel", "None")
+          try:
+              # Stop ssh tunnel, if it was used
+              custom_config = get_custom_config()
+              drf_service = (
+                  custom_config.get("systems", {})
+                  .get(spawner.user_options["system"], {})
+                  .get("drf-service", None)
               )
-              request_kwargs = (
-                  custom_config.get("drf-services", {})
-                  .get("tunnel", {})
-                  .get("request_kwargs", {})
-              )
-              if "request_timeout" not in request_kwargs.keys():
-                  request_kwargs["request_timeout"] = 30
-              url = f"{base_url}{spawner.name}/"
-              headers = {
-                  "Accept": "application/json",
-                  "Content-Type": "application/json",
-                  "Authorization": os.environ.get("TUNNEL_AUTHENTICATION_TOKEN", None),
-                  "uuidcode": spawner.name
-              }
-              req = HTTPRequest(
-                  url=url,
-                  method="DELETE",
-                  headers=headers,
-                  **request_kwargs,
-              )
-              await spawner.send_request(req, action="removetunnel", raise_exception=False)
-          
-          # Wait up to 5 times yield_wait_seconds, before sending stop event to frontend
-          spawner.log.info(spawner.latest_events)
-          stopwait = time.monotonic() + 5*spawner.yield_wait_seconds
-          while time.monotonic() < stopwait:
-              if spawner._cancel_event_yielded:
-                  spawner.log.info("yielded")
-                  break
-              spawner.log.info("not yielded")
-              await asyncio.sleep(2*spawner.yield_wait_seconds)
-          spawner.log.info(spawner.latest_events)
-          spawner_events = get_spawner_events(spawner.user.id)
-          spawner_events["stop"].set()
+              if drf_service != "k8smgrhdfcloud":
+                  base_url = (
+                      custom_config.get("drf-services", {})
+                      .get("tunnel", {})
+                      .get("urls", {})
+                      .get("tunnel", "None")
+                  )
+                  request_kwargs = (
+                      custom_config.get("drf-services", {})
+                      .get("tunnel", {})
+                      .get("request_kwargs", {})
+                  )
+                  if "request_timeout" not in request_kwargs.keys():
+                      request_kwargs["request_timeout"] = 30
+                  url = f"{base_url}{spawner.name}/"
+                  headers = {
+                      "Accept": "application/json",
+                      "Content-Type": "application/json",
+                      "Authorization": os.environ.get("TUNNEL_AUTHENTICATION_TOKEN", None),
+                      "uuidcode": spawner.name
+                  }
+                  req = HTTPRequest(
+                      url=url,
+                      method="DELETE",
+                      headers=headers,
+                      **request_kwargs,
+                  )
+                  await spawner.send_request(req, action="removetunnel", raise_exception=False)
+              
+              # Wait up to 5 times yield_wait_seconds, before sending stop event to frontend
+              stopwait = time.monotonic() + 5*spawner.yield_wait_seconds
+              while time.monotonic() < stopwait:
+                  if spawner._cancel_event_yielded:
+                      break
+                  await asyncio.sleep(2*spawner.yield_wait_seconds)
+          finally:
+              if hasattr(spawner, "latest_events") and type(spawner.latest_events) == list:
+                  if len(spawner.latest_events) == 0 or spawner.latest_events[-1].get("progress", 0) != 100:
+                      now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
+                      default_stop_event = {
+                          "failed": True,
+                          "ready": False,
+                          "progress": 100,
+                          "message": "",
+                          "html_message": f"<details><summary>{now}: JupyterLab stopped</summary>JupyterLab was stopped for unknown reason.</details>",
+                      }
+                      spawner.latest_events.append(default_stop_event)
+              spawner_events = get_spawner_events(spawner.user.id)
+              spawner_events["stop"].set()
 
 
       c.EventBackendSpawner.pre_spawn_hook = pre_spawn_hook
@@ -225,7 +235,6 @@ hub:
           return body
 
       async def cancel_click_event(spawner):
-          from datetime import datetime
           now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
           return {
               "failed": False,
@@ -237,7 +246,6 @@ hub:
 
 
       async def stop_event(spawner):
-          from datetime import datetime
           now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
           return {
               "failed": True,
@@ -258,11 +266,10 @@ hub:
       c.EventBackendSpawner.request_url_stop = request_url_poll_stop
       c.EventBackendSpawner.request_headers_stop = request_headers
       c.EventBackendSpawner.ssl_alt_names = [f"DNS:{jhub_hostname}", "DNS:default-hub"]
-      async def post_spawn_request_hook(spawner, resp_json):
-          import asyncio
-          await asyncio.sleep(10)
 
-      c.EventBackendSpawner.post_spawn_request_hook = post_spawn_request_hook
+      # async def post_spawn_request_hook(spawner, resp_json):
+      #     await asyncio.sleep(10)
+      # c.EventBackendSpawner.post_spawn_request_hook = post_spawn_request_hook
 
       def service_address(spawner):
           namespace = os.environ.get('TUNNEL_DEPLOYMENT_NAMESPACE')
