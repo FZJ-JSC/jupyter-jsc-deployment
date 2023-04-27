@@ -1,0 +1,13 @@
+defaultNamespace: jupyterjsc
+helm:
+  chart: /workspace/source/hub-base/helper-each
+  releaseName: jupyterjsc-jhub-juniq-helper 
+  values:
+    nameOverride: jhub-juniq-helper
+    appName: juniq
+    proxyBackup:
+      name: juniq-proxy-public
+      release: jupyterhub-juniq
+      numberOfBackups: 5
+    serviceStatic:
+      name: juniq-static-files
