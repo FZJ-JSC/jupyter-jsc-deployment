@@ -1,0 +1,13 @@
+portalgaussNamespace: jupyterjsc
+helm:
+  chart: /workspace/source/hub-base/helper-each
+  releaseName: jupyterjsc-jhub-portalgauss-helper 
+  values:
+    nameOverride: jhub-portalgauss-helper
+    appName: portalgauss
+    proxyBackup:
+      name: portalgauss-proxy-public
+      release: jupyterhub-portalgauss
+      numberOfBackups: 5
+    serviceStatic:
+      name: portalgauss-static-files

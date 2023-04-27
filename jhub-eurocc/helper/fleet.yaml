@@ -1,0 +1,13 @@
+euroccNamespace: jupyterjsc
+helm:
+  chart: /workspace/source/hub-base/helper-each
+  releaseName: jupyterjsc-jhub-eurocc-helper 
+  values:
+    nameOverride: jhub-eurocc-helper
+    appName: eurocc
+    proxyBackup:
+      name: eurocc-proxy-public
+      release: jupyterhub-eurocc
+      numberOfBackups: 5
+    serviceStatic:
+      name: eurocc-static-files

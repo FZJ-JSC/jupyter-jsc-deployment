@@ -1,0 +1,7 @@
+proxy:
+  chp:
+    defaultTarget: "https://coeraise-hub:8081"
+    errorTarget: "https://coeraise-hub:8081/hub/error"
+  https:
+    secret:
+      name: internal-ssl-coeraise

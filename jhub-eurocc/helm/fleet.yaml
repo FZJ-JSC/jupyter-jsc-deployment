@@ -1,0 +1,241 @@
+defaultNamespace: jupyterjsc
+dependsOn:
+  - name: jupyterjsc-certmanager
+helm:
+  releaseName: jupyterhub-eurocc
+  repo: https://jupyterhub.github.io/helm-chart/
+  chart: jupyterhub
+  version: 2.0.0
+  values:
+    hub:
+      livenessProbe:
+        enabled: false
+      readinessProbe:
+        enabled: false
+      command: ["/bin/bash"]
+      args:
+        - -c
+        - >-
+          /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+      containerSecurityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        allowPrivilegeEscalation: true
+  valuesFiles:
+    - ../../hub-base/helm/common.yaml
+    - ../../hub-base/helm/hub/config.yaml
+    - ../../hub-base/helm/hub/extraConfig.yaml
+    - ../../hub-base/helm/hub/extraContainers.yaml
+    - ../../hub-base/helm/hub/extraEnv.yaml
+    - ../../hub-base/helm/hub/extraVolumeMounts.yaml
+    - ../../hub-base/helm/hub/image.yaml
+    - ../../hub-base/helm/hub/initContainers.yaml
+    - ../../hub-base/helm/hub/services.yaml
+    - ../../hub-base/helm/hub/others.yaml
+    - ../../hub-base/helm/proxy.yaml
+    # We overwrite some values in hub specific files,
+    # so the import order needs to be hub-base,
+    # then the hub specific config 
+    - values/common.yaml
+    - values/proxy.yaml
+kustomize:
+  dir: overlays
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        hub:
+          extraVolumes:
+            - name: persistent
+              nfs:
+                path: /mnt/storage/jupyterhub_eurocc
+                server: 10.0.94.248
+            - name: shared-data
+              emptyDir: {}
+            - name: init-script
+              configMap:
+                defaultMode: 400
+                name: hub-all-init-script
+            - name: mount-watch
+              configMap:
+                defaultMode: 400
+                name: hub-all-mountwatch
+            - name: cleanup-sql
+              configMap:
+                defaultMode: 400
+                name: hub-all-cleanup-sql
+            - name: incident-check
+              configMap:
+                defaultMode: 400
+                name: hub-all-incident-check
+            - name: reservation-check
+              configMap:
+                defaultMode: 400
+                name: hub-all-reservation-check
+            - name: nginx-config
+              configMap:
+                defaultMode: 400
+                name: hub-all-static-files-nginx-config
+            - name: internal-ssl
+              secret:
+                secretName: internal-ssl-eurocc
+            - name: reservation-keypair
+              secret:
+                secretName: reservation-keypair
+            - name: drf-tunnel-certs-public
+              secret:
+                secretName: drf-tunnel-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: drf-unicoremgr-certs-public
+              secret:
+                secretName: drf-unicoremgr-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: drf-k8smgr-certs-public
+              secret:
+                secretName: drf-k8smgr-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: unity-jsc-certs
+              secret:
+                secretName: unity-jsc-certs
+            - name: tz-config
+              hostPath:
+                path: /usr/share/zoneinfo/Europe/Berlin
+          labels:
+            stage: staging
+            jhub_version: "3.1.1"
+            hostname: "jupyter-staging.eurocc-gcs.de"
+            drf_username: "jupyterhubeurocc"
+            logger_name: "JupyterHubEuroCCStaging"
+            TEMPLATE_GIT_BRANCH: templates-staging
+            STATIC_GIT_BRANCH: static-staging
+          resources:
+            requests:
+              cpu: 20m
+              memory: 256Mi
+            limits:
+              cpu: 200m
+              memory: 1024Mi
+        proxy:
+          chp:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+        ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+          enabled: true
+          hosts:
+          - jupyter-staging.eurocc-gcs.de
+          tls:
+          - hosts:
+            - jupyter-staging.eurocc-gcs.de
+            secretName: eurocc-tls
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      values:
+        hub:
+          extraVolumes:
+            - name: persistent
+              nfs:
+                path: /mnt/storage/jupyterhub_eurocc
+                server: 10.0.20.30
+            - name: shared-data
+              emptyDir: {}
+            - name: init-script
+              configMap:
+                defaultMode: 400
+                name: hub-all-init-script
+            - name: mount-watch
+              configMap:
+                defaultMode: 400
+                name: hub-all-mountwatch
+            - name: cleanup-sql
+              configMap:
+                defaultMode: 400
+                name: hub-all-cleanup-sql
+            - name: incident-check
+              configMap:
+                defaultMode: 400
+                name: hub-all-incident-check
+            - name: reservation-check
+              configMap:
+                defaultMode: 400
+                name: hub-all-reservation-check
+            - name: nginx-config
+              configMap:
+                defaultMode: 400
+                name: hub-all-static-files-nginx-config
+            - name: internal-ssl
+              secret:
+                secretName: internal-ssl-eurocc
+            - name: reservation-keypair
+              secret:
+                secretName: reservation-keypair
+            - name: drf-tunnel-certs-public
+              secret:
+                secretName: drf-tunnel-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: drf-unicoremgr-certs-public
+              secret:
+                secretName: drf-unicoremgr-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: drf-k8smgr-certs-public
+              secret:
+                secretName: drf-k8smgr-certs-public
+                items:
+                  - key: tls.ca
+                    path: ca.pem
+            - name: unity-jsc-certs
+              secret:
+                secretName: unity-jsc-certs
+            - name: tz-config
+              hostPath:
+                path: /usr/share/zoneinfo/Europe/Berlin
+          labels:
+            stage: production
+            jhub_version: "3.1.1"
+            hostname: "jupyter.eurocc-gcs.de"
+            drf_username: "jupyterhubeurocc"
+            logger_name: "JupyterHubEuroCCProduction"
+            TEMPLATE_GIT_BRANCH: templates-production
+            STATIC_GIT_BRANCH: static-production
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 2048Mi
+        proxy:
+          chp:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+        ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+          enabled: true
+          hosts:
+          - jupyter.eurocc-gcs.de
+          tls:
+          - hosts:
+            - jupyter.eurocc-gcs.de
+            secretName: eurocc-tls

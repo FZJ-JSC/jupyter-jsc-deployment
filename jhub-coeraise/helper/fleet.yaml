@@ -1,0 +1,13 @@
+coeraiseNamespace: jupyterjsc
+helm:
+  chart: /workspace/source/hub-base/helper-each
+  releaseName: jupyterjsc-jhub-coeraise-helper 
+  values:
+    nameOverride: jhub-coeraise-helper
+    appName: coeraise
+    proxyBackup:
+      name: coeraise-proxy-public
+      release: jupyterhub-coeraise
+      numberOfBackups: 5
+    serviceStatic:
+      name: coeraise-static-files

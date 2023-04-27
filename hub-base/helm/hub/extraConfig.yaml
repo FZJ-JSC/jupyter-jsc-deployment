@@ -151,39 +151,33 @@ hub:
           try:
               # Stop ssh tunnel, if it was used
               custom_config = get_custom_config()
-              drf_service = (
-                  custom_config.get("systems", {})
-                  .get(spawner.user_options["system"], {})
-                  .get("drf-service", None)
+              base_url = (
+                  custom_config.get("drf-services", {})
+                  .get("tunnel", {})
+                  .get("urls", {})
+                  .get("tunnel", "None")
               )
-              if drf_service != "k8smgrhdfcloud":
-                  base_url = (
-                      custom_config.get("drf-services", {})
-                      .get("tunnel", {})
-                      .get("urls", {})
-                      .get("tunnel", "None")
-                  )
-                  request_kwargs = (
-                      custom_config.get("drf-services", {})
-                      .get("tunnel", {})
-                      .get("request_kwargs", {})
-                  )
-                  if "request_timeout" not in request_kwargs.keys():
-                      request_kwargs["request_timeout"] = 30
-                  url = f"{base_url}{spawner.name}/"
-                  headers = {
-                      "Accept": "application/json",
-                      "Content-Type": "application/json",
-                      "Authorization": os.environ.get("TUNNEL_AUTHENTICATION_TOKEN", None),
-                      "uuidcode": spawner.name
-                  }
-                  req = HTTPRequest(
-                      url=url,
-                      method="DELETE",
-                      headers=headers,
-                      **request_kwargs,
-                  )
-                  await spawner.send_request(req, action="removetunnel", raise_exception=False)
+              request_kwargs = (
+                  custom_config.get("drf-services", {})
+                  .get("tunnel", {})
+                  .get("request_kwargs", {})
+              )
+              if "request_timeout" not in request_kwargs.keys():
+                  request_kwargs["request_timeout"] = 30
+              url = f"{base_url}{spawner.name}/"
+              headers = {
+                  "Accept": "application/json",
+                  "Content-Type": "application/json",
+                  "Authorization": os.environ.get("TUNNEL_AUTHENTICATION_TOKEN", None),
+                  "uuidcode": spawner.name
+              }
+              req = HTTPRequest(
+                  url=url,
+                  method="DELETE",
+                  headers=headers,
+                  **request_kwargs,
+              )
+              await spawner.send_request(req, action="removetunnel", raise_exception=False)
               
               # Wait up to 5 times yield_wait_seconds, before sending stop event to frontend
               stopwait = time.monotonic() + 5*spawner.yield_wait_seconds
@@ -203,8 +197,6 @@ hub:
                           "html_message": f"<details><summary>{now}: JupyterLab stopped</summary>JupyterLab was stopped for unknown reason.</details>",
                       }
                       spawner.latest_events.append(default_stop_event)
-              spawner_events = get_spawner_events(spawner.user.id)
-              spawner_events["stop"].set()
 
 
       c.EventBackendSpawner.pre_spawn_hook = pre_spawn_hook
@@ -252,7 +244,7 @@ hub:
               "ready": False,
               "progress": 100,
               "message": "",
-              "html_message": f"<details><summary>{now}: {user_cancel_message}",
+              "html_message": f"<details><summary>{now}: JupyterLab stopped.</summary></details>",
           }
 
       c.EventBackendSpawner.cancelling_event = cancel_click_event
@@ -284,30 +276,14 @@ hub:
           # drf_service + "-" + spawner.name + "-" + spawner.start_id
           #      21     +  1  +    32     +  1  + 8 = 63
           drf_service_short = drf_service[:21]
-          if drf_service == "k8smgrhdfcloud":
-              svc_name = f"svc-{spawner.name}-{spawner.start_id}"
-              svc_full = f"{svc_name}.userlabs.svc"
-          else:
-              svc_name = f"{drf_service_short}-{spawner.name}-{spawner.start_id}"
-              svc_full = f"{svc_name}.{namespace}.svc"
+          svc_name = f"{drf_service_short}-{spawner.name}-{spawner.start_id}"
+          svc_full = f"{svc_name}.{namespace}.svc"
           spawner.log.info(f"Service Address: {svc_full}")
           return svc_full
 
       c.EventBackendSpawner.service_address = service_address
 
-      def port(spawner):
-          custom_config = get_custom_config()
-          drf_service = (
-              custom_config.get("systems", {})
-              .get(spawner.user_options["system"], {})
-              .get("drf-service", None)
-          )
-          if drf_service == "k8smgrhdfcloud":
-              return 8443
-          else:
-              return 8080
-
-      c.EventBackendSpawner.port = port
+      c.EventBackendSpawner.port = 8080
 
       c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
       c.Authenticator.admin_users = {
