@@ -1,6 +1,7 @@
 defaultNamespace: jupyterjsc
 dependsOn:
   - name: jupyterjsc-certmanager
+  - name: jupyterjsc-jhub-coeraise-helper
 helm:
   releaseName: jupyterhub-coeraise
   repo: https://jupyterhub.github.io/helm-chart/
