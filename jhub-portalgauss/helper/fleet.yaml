@@ -1,4 +1,4 @@
-portalgaussNamespace: jupyterjsc
+defaultNamespace: jupyterjsc
 helm:
   chart: /workspace/source/hub-base/helper-each
   releaseName: jupyterjsc-jhub-portalgauss-helper 
