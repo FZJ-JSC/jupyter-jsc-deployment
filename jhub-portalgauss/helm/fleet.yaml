@@ -1,6 +1,7 @@
 defaultNamespace: jupyterjsc
 dependsOn:
   - name: jupyterjsc-certmanager
+  - name: jupyterjsc-hub-helper
   - name: jupyterjsc-jhub-portalgauss-helper
 helm:
   releaseName: jupyterhub-portalgauss
