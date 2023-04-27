@@ -27,6 +27,15 @@ helm:
               server default-proxy-public-4.jupyterjsc.svc:443 max_fails=0;
               keepalive 32;
           }
+          upstream juniq-retries {
+              server juniq-proxy-public.jupyterjsc.svc:443 max_fails=0;
+              server juniq-proxy-public-0.jupyterjsc.svc:443 max_fails=0;
+              server juniq-proxy-public-1.jupyterjsc.svc:443 max_fails=0;
+              server juniq-proxy-public-2.jupyterjsc.svc:443 max_fails=0;
+              server juniq-proxy-public-3.jupyterjsc.svc:443 max_fails=0;
+              server juniq-proxy-public-4.jupyterjsc.svc:443 max_fails=0;
+              keepalive 32;
+          }
           upstream eurocc-retries {
               server eurocc-proxy-public.jupyterjsc.svc:443 max_fails=0;
               server eurocc-proxy-public-0.jupyterjsc.svc:443 max_fails=0;
