@@ -41,6 +41,16 @@ hub:
             secretKeyRef:
               name: hub-generics
               key: SQL_HOST
+        - name: JUPYTERHUB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: hub-generics
+              key: SQL_DATABASE
+        - name: JUPYTERHUB_DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: hub-generics
+              key: SQL_USER
         - name: JUPYTERHUB_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
