@@ -92,6 +92,8 @@ spec:
               value: "{{ .Values.gunicorn.maxRequests }}"
             - name: GUNICORN_MAX_REQUESTS_JITTER
               value: "{{ .Values.gunicorn.maxRequestsJitter }}"
+            - name: SSHTIMEOUT
+              value: "{{ .Values.sshtimeout }}"
             - name: DEPLOYMENT_NAME
               valueFrom:
                 fieldRef:
