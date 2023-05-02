@@ -2,8 +2,6 @@ defaultNamespace: jupyterjsc
 helm:
   values:
     fullnameOverride: "jhub-maintenance"
-dependsOn:
-  - name: jupyterjsc-cert
 targetCustomizations:
   - name: staging
     clusterSelector:
