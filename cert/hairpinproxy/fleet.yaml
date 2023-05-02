@@ -1,6 +1,4 @@
 defaultNamespace: hairpin-proxy
-dependsOn:
-  - name: jupyterjsc-cert
 
 targetCustomizations:
 - name: staging

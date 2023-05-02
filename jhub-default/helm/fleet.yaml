@@ -1,6 +1,5 @@
 defaultNamespace: jupyterjsc
 dependsOn:
-  - name: jupyterjsc-cert
   - name: jupyterjsc-hub-helper
   - name: jupyterjsc-jhub-default-helper
 helm:
