@@ -5,17 +5,15 @@ helm:
   chart: postgresql
   version: 11.9.13
   values:
-    global:
-      postgresql:
-        auth:
-          existingSecret: "postgresql-auth"
+    auth:
+      existingSecret: "postgresql-auth"
     primary:
       extraEnvVarsSecret: "postgresql-users"
       initdb:
         scripts:
           test_init_script.sh: |
             #!/bin/sh
-            export PGPASSWORD=${POSTGRES_PASSWORD}
+            export PGPASSWORD=${POSTGRESQL_PASSWORD}
 
             export JUPYTERHUB_SETUP=${JUPYTERHUB_SETUP:-"false"}
             if [[ ${JUPYTERHUB_SETUP} == "true" ]]; then
