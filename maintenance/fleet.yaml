@@ -3,7 +3,7 @@ helm:
   values:
     fullnameOverride: "jhub-maintenance"
 dependsOn:
-  - name: jupyterjsc-certmanager
+  - name: jupyterjsc-cert
 targetCustomizations:
   - name: staging
     clusterSelector:
