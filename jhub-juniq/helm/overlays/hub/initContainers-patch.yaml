@@ -22,17 +22,3 @@
       secretKeyRef:
         name: juniq-share-config
         key: PASSWORD
-- op: add
-  path: "/spec/template/spec/initContainers/0/env/-"
-  value:
-    name: TEMPLATE_GIT_BRANCH
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.labels['TEMPLATE_GIT_BRANCH']
-- op: add
-  path: "/spec/template/spec/initContainers/0/env/-"
-  value:
-    name: STATIC_GIT_BRANCH
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.labels['STATIC_GIT_BRANCH']
