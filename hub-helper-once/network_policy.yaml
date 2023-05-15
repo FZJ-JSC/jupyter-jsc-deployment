@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: userlabsdev-network-policy
+  name: userlabs-network-policy
 spec:
   podSelector:
     matchLabels:
@@ -13,7 +13,7 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              name: userlabsdev
+              name: userlabs
           podSelector:
             matchLabels:
               app: drf-k8smgr
@@ -32,7 +32,7 @@ spec:
     - to:
         - namespaceSelector:
             matchLabels:
-              name: userlabsdev
+              name: userlabs
           podSelector:
             matchLabels:
               app: drf-k8smgr
