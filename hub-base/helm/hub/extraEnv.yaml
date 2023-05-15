@@ -43,12 +43,12 @@ hub:
       valueFrom:
         secretKeyRef:
           name: hub-custom
-          key: oauth_client_id
+          key: oauth_client_id_password
     - name: OAUTH_CLIENT_SECRET
       valueFrom:
         secretKeyRef:
           name: hub-custom
-          key: oauth_client_secret
+          key: oauth_client_secret_password
     - name: DEPLOYMENT_NAMESPACE
       valueFrom:
         fieldRef:

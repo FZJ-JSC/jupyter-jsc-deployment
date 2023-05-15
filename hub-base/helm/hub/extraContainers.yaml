@@ -16,7 +16,7 @@ hub:
         - name: OUTPUT_DIR
           value: "/mnt/shared-data/incident-check"
         - name: STATIC_IMG_DIR
-          value: "/mnt/shared-data/static-files/default/images/footer"
+          value: "/mnt/shared-data/share/jupyterhub/static/images/footer"
         - name: LOGGER_NAME
           value: "IncidentCheck"
       volumeMounts:
@@ -33,7 +33,7 @@ hub:
       args:
         - -c
         - >-
-            pip install requests psycopg2-binary tornado &&
+            pip install requests psycopg2-binary &&
             source /mnt/sql/run.sh
       env:
         - name: SQL_HOST
@@ -41,16 +41,6 @@ hub:
             secretKeyRef:
               name: hub-generics
               key: SQL_HOST
-        - name: JUPYTERHUB_DATABASE
-          valueFrom:
-            secretKeyRef:
-              name: hub-generics
-              key: SQL_DATABASE
-        - name: JUPYTERHUB_DATABASE_USER
-          valueFrom:
-            secretKeyRef:
-              name: hub-generics
-              key: SQL_USER
         - name: JUPYTERHUB_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
