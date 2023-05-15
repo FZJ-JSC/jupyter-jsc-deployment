@@ -7,56 +7,22 @@
   path: "/spec/template/spec/containers/1/env/1/valueFrom/secretKeyRef"
   value:
     name: hub-juniq-generics
-    key: SQL_DATABASE
-- op: replace
-  path: "/spec/template/spec/containers/1/env/2/valueFrom/secretKeyRef"
-  value:
-    name: hub-juniq-generics
-    key: SQL_USER
-- op: replace
-  path: "/spec/template/spec/containers/1/env/3/valueFrom/secretKeyRef"
-  value:
-    name: hub-juniq-generics
     key: SQL_PASSWORD
 - op: replace
-  path: "/spec/template/spec/containers/1/env/4/valueFrom/secretKeyRef"
+  path: "/spec/template/spec/containers/1/env/2/valueFrom/secretKeyRef"
   value:
     name: hub-juniq-generics
     key: UNICOREMGR_JUPYTERHUB_USER_PASS
     optional: false
 - op: replace
-  path: "/spec/template/spec/containers/1/env/5/valueFrom/secretKeyRef"
+  path: "/spec/template/spec/containers/1/env/3/valueFrom/secretKeyRef"
   value:
     name: hub-juniq-generics
     key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
     optional: false
 - op: replace
-  path: "/spec/template/spec/containers/1/env/6/valueFrom/secretKeyRef"
+  path: "/spec/template/spec/containers/1/env/4/valueFrom/secretKeyRef"
   value:
     name: hub-juniq-generics
     key: TUNNEL_JUPYTERHUB_USER_PASS
     optional: false
-- op: add
-  path: "/spec/template/spec/containers/2/env/-"
-  value:
-    name: TEMPLATE_GIT_REPO
-    valueFrom:
-      secretKeyRef:
-        name: juniq-share-config
-        key: REPOSITORY
-- op: add
-  path: "/spec/template/spec/containers/2/env/-"
-  value:
-    name: TEMPLATE_GIT_USERNAME
-    valueFrom:
-      secretKeyRef:
-        name: juniq-share-config
-        key: USERNAME
-- op: add
-  path: "/spec/template/spec/containers/2/env/-"
-  value:
-    name: TEMPLATE_GIT_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: juniq-share-config
-        key: PASSWORD
