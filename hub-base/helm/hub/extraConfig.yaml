@@ -128,6 +128,19 @@ hub:
           system = spawner.user_options.get("system", "None")
           drf_service = custom_config.get("systems", {}).get(system, {}).get("drf-service", "None")
           url = custom_config.get("drf-services", {}).get(drf_service, {}).get("urls", {}).get("services", "None")
+          if url == "None":
+              reason = "JupyterHub configuration does not know drf-service {drf_service}, or it has no url configured"
+              now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
+              spawner.latest_events.append({
+                  "failed": True,
+                  "ready": False,
+                  "progress": 100,
+                  "message": "",
+                  "html_message": f"<details><summary>{now}: System is not configured correctly. Please contact an administrator.</summary>{reason}</details>",
+              })
+              await asyncio.sleep(2*spawner.yield_wait_seconds)
+              spawner.already_stopped = True
+              raise Exception(reason)
           if not url.endswith("/"):
               url += "/"
           return url
@@ -218,8 +231,12 @@ hub:
                       spawner.latest_events.append(default_stop_event)
 
 
+      async def failed_spawn_request_hook(exception):
+          await asyncio.sleep(2*spawner.yield_wait_seconds)
+
       c.EventBackendSpawner.pre_spawn_hook = pre_spawn_hook
       c.EventBackendSpawner.post_stop_hook = post_stop_hook
+      c.EventBackendSpawner.failed_spawn_request_hook = failed_spawn_request_hook
 
       def server_limit_exceeded(spawner, auth_state):
           custom_config = get_custom_config()
