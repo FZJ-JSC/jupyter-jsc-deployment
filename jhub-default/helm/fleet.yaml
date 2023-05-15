@@ -1,6 +1,6 @@
 defaultNamespace: jupyterjsc
 dependsOn:
-  - name: jupyterjsc-hub-helper
+  - name: jupyterjsc-hub-helper-once
   - name: jupyterjsc-jhub-default-helper
 helm:
   releaseName: jupyterhub-default
