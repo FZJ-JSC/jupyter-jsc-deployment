@@ -232,7 +232,6 @@ hub:
 
       c.EventBackendSpawner.pre_spawn_hook = pre_spawn_hook
       c.EventBackendSpawner.post_stop_hook = post_stop_hook
-      c.EventBackendSpawner.failed_spawn_request_hook = failed_spawn_request_hook
 
       def server_limit_exceeded(spawner, auth_state):
           custom_config = get_custom_config()
