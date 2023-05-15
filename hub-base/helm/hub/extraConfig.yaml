@@ -231,7 +231,7 @@ hub:
                       spawner.latest_events.append(default_stop_event)
 
 
-      async def failed_spawn_request_hook(exception):
+      async def failed_spawn_request_hook(spawner, exception):
           await asyncio.sleep(2*spawner.yield_wait_seconds)
           raise exception
 
