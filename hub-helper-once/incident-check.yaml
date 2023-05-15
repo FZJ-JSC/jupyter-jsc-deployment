@@ -32,6 +32,10 @@ data:
     from dateutil import parser
     from jsonformatter import JsonFormatter
 
+    output_dir = os.environ["OUTPUT_DIR"]
+    static_dir = os.environ["STATIC_IMG_DIR"]
+    incidents_json = f"{output_dir}/active_incidents.json"
+
     LOGGER_NAME = os.environ.get("LOGGER_NAME", "IncidentCheck")
     log = logging.getLogger(LOGGER_NAME)
     log.level = 20
@@ -134,19 +138,7 @@ data:
         return ret
 
 
-    def update_status_file(system, output_dir, health):
-        systems_status_list_update = read_json_file(
-            f"{output_dir}/status.json"
-        )
-        systems_status_list_update.update({system.upper(): health})
-        log.info(f"Write to status.json: {systems_status_list_update}")
-        write_to_file(
-            f"{output_dir}/status.json",
-            json.dumps(systems_status_list_update),
-        )
-
-
-    def update_status_image(system, static_dir, health):
+    def update_status_image(system, health):
         image_path = f"{static_dir}/systems/{system.lower()}.svg"
         # 0: Healthy, 10: Annotation, 20: Minor, 30: Medium, 40: Major, 50: Critical
         template_path = f"{static_dir}/templates/{health}.svg"
@@ -157,46 +149,7 @@ data:
             log.exception(f"Could not copy {template_path} to {image_path}")
 
 
-    def update_status(system, output_dir, svc, systems_status_list, static_dir):
-        if svc["health"] != systems_status_list.get(system.upper(), None):
-            update_status_file(system, output_dir, svc["health"])
-            update_status_image(system, static_dir, svc["health"])
-
-
-    def update_incident_systems_file(
-        system, output_dir, svc, systems_incidents_list, incident_threshold
-    ):
-        if svc["health"] > incident_threshold:
-            # System is over incident threshold, but not in the list
-            if system.upper() not in systems_incidents_list:
-                systems_incidents_list_update = read_json_file(
-                    f"{output_dir}/active_incidents.json"
-                )
-                systems_incidents_list_update.append(system.upper())
-                log.info(f"Write to active_incidents.json: {systems_incidents_list_update}")
-                write_to_file(
-                    f"{output_dir}/active_incidents.json",
-                    json.dumps(systems_incidents_list_update),
-                )
-        else:
-            # System is not over incident threshold, but still in the list
-            if system.upper() in systems_incidents_list:
-                systems_incidents_list_prev = read_json_file(
-                    f"{output_dir}/active_incidents.json"
-                )
-                systems_incidents_list_new = [
-                    x for x in systems_incidents_list_prev if x != system.upper()
-                ]
-                log.info(
-                    f"Write to {output_dir}/active_incidents.json: {systems_incidents_list_new}"
-                )
-                write_to_file(
-                    f"{output_dir}/active_incidents.json",
-                    json.dumps(systems_incidents_list_new),
-                )
-
-
-    def setup_incident(incidents_list, system, output_dir):
+    def get_info_msg(incidents_list):
         if len(incidents_list) > 1:
             log.warning(
                 "Multiple active incidents. Use first one in list"
@@ -212,54 +165,47 @@ data:
             end_time = incident["end_time"]
         else:
             end_time = "unknown"
-        info_msg = f"{start_time} - {end_time}: {description}"
-        write_to_file(f"{output_dir}/{system.upper()}.txt", info_msg)
+        info_msg = f"{start_time} - {end_time}:\n{description}"
+        return info_msg
 
 
-    def no_incidents(system, output_dir):
-        write_to_file(f"{output_dir}/{system.upper()}.txt", "")
+    def update_incidents(system, svc, active_svc_incidents):
+        systems_incidents = read_json_file(incidents_json)
+        if not systems_incidents.get(system, {}):
+            systems_incidents[system] = {}
 
-
-    def update_incidents(name, svc, active_svc_incidents, incident_threshold, systems_incidents_list, output_dir):
-        update_incident_systems_file(name, output_dir, svc, systems_incidents_list, incident_threshold)
-        active_incidents_over_threshold = [
-            x
-            for x in active_svc_incidents
-            if x["incident_severity"] > incident_threshold
-        ]
-        if active_incidents_over_threshold:
-            log.debug(
-                "Found active incident(s) over incident threshold"
-            )
-            setup_incident(active_incidents_over_threshold, name, output_dir)
-            return
-        next_maintenance = svc["next_maintenance"]
-        if next_maintenance:
+        # Service has active incidents
+        if active_svc_incidents:
+            log.debug(f"Found active incidents for {system}.")
+            systems_incidents[system]["incident"] = get_info_msg(active_svc_incidents)
+        elif svc["next_maintenance"]:
             next_maintenance_incidents = [
                 x
                 for x in active_svc_incidents
-                if parser.parse(x["start_time"]) == parser.parse(next_maintenance)
+                if parser.parse(x["start_time"]) == parser.parse(svc["next_maintenance"])
             ]
             if len(next_maintenance_incidents) == 0:
-                raise Exception(f"Could not find matching start time in incidents for maintenance for {name}")
-            log.debug(
-                "Found announced maintenance(s)"
-            )
-            setup_incident(next_maintenance_incidents, name, output_dir)
-            return
-        no_incidents(name, output_dir)
+                raise Exception(f"Could not find matching start time in incidents for maintenance for {system}.")
+            log.debug(f"Found announced maintenance(s) for {system}.")
+            systems_incidents[system]["incident"] = get_info_msg(next_maintenance_incidents)
+        else:
+            systems_incidents[system]["incident"] = ""
+        
+        # Change status image if service has a new health status
+        if svc["health"] != systems_incidents.get(system).get("health", 0):
+            update_status_image(system, svc["health"])
+        systems_incidents.get(system)["health"] = svc["health"]
+
+        write_to_file(incidents_json, json.dumps(systems_incidents, indent=2))
 
 
-    def check_incidents(config_mc, output_dir, static_dir):
-        api_url = config_mc.get("url", "https://status.jsc.fz-juelich.de/api")
-        incident_threshold = config_mc.get("health_threshold", 0)
-        systems_incidents_list = read_json_file(f"{output_dir}/active_incidents.json")
-        systems_status_list = read_json_file(f"{output_dir}/status.json")
+    def check_incidents(config):
+        api_url = config.get("url", "https://status.jsc.fz-juelich.de/api")
         try:
             all_incidents_r = requests.get(f"{api_url}/incidents", timeout=5)
             all_incidents_r.raise_for_status()
             all_incidents = all_incidents_r.json()
-            for name, id in config_mc["services"].items():
+            for name, id in config["services"].items():
                 try:
                     svc_r = requests.get(f"{api_url}/services/{id}", timeout=5)
                     svc_r.raise_for_status()
@@ -269,9 +215,7 @@ data:
                             if int(id) in x.get("affected_services", []) 
                             and not x.get("resolved", "")
                     ]
-
-                    update_status(name, output_dir, svc, systems_status_list, static_dir)
-                    update_incidents(name, svc, active_svc_incidents, incident_threshold, systems_incidents_list, output_dir)
+                    update_incidents(name, svc, active_svc_incidents)
                 except:
                     log.exception(f"Could not check for incidents for {name}")
         except:
@@ -280,21 +224,24 @@ data:
 
     if __name__ == "__main__":
         with open(os.environ["CUSTOM_CONFIG_PATH"], "r") as f:
-            config = json.load(f)
-        output_dir = os.environ["OUTPUT_DIR"]
-        static_dir = os.environ["STATIC_IMG_DIR"]
-        incidents_json = f"{output_dir}/active_incidents.json"
-        status_json = f"{output_dir}/status.json"
-        for name, logger_config in config["incident-check"].get("logger", {}).items():
+            config_all = json.load(f)
+            config = config_all["incident-check"]
+        for name, logger_config in config.get("logger", {}).items():
             setup_logger(name, logger_config)
-        for json_file in [incidents_json, status_json]:
-            if not os.path.exists(json_file):
-                with open(json_file, "w") as f:
-                    dump = [] if json_file == incidents_json else {}
-                    f.write(json.dumps(dump))
-            if not os.path.isfile(json_file):
-                log.error(f"{json_file} must be a file. Exit")
-                exit(1)
-        # while True:
-        check_incidents(config["incident-check"], output_dir, static_dir)
-        # time.sleep(config["incident-check"].get("interval", 60))
+        
+        incident_threshold = config.get("health_threshold", 0)
+        if not os.path.exists(incidents_json):
+            with open(incidents_json, "w") as f:
+                f.write(json.dumps({
+                    "threshold": incident_threshold
+                }))
+        if not os.path.isfile(incidents_json):
+            log.error(f"{incidents_json} must be a file. Exit")
+            exit(1)
+        incidents_data = read_json_file(incidents_json)
+        if not "threshold" in incidents_data:
+            incidents_data["threshold"] = incident_threshold
+            write_to_file(incidents_json, json.dumps(incidents_data))
+
+        check_incidents(config)
+

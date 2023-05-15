@@ -20,6 +20,7 @@ data:
 
         # git share specific variables
         SHARE_SPECIFIC_TEMPLATE_DIR_TMP="/tmp/share_specific_template"
+        SHARE_SPECIFIC_STATIC_DIR_TMP="/tmp/share_specific_static"
 
         # Static duplication
         STATIC_ONLY="/mnt/shared-data/static-files"
@@ -45,7 +46,12 @@ data:
     }
 
     git_config() {
-        CONFIG_BRANCH=jupyterhub-${HUB_NAME}-${JUPYTERHUB_STAGE}
+        if [[ "${HUB_NAME}" == "jupyterhub" ]]; then
+            CONFIG_BRANCH=jupyterhub-${JUPYTERHUB_STAGE}
+        else
+            CONFIG_BRANCH=jupyterhub-${HUB_NAME}-${JUPYTERHUB_STAGE}
+        fi
+
         # In case of pod restarts $CONFIG_DIR is not empty and 
         # `git clone` would fail
         rm -rf ${CONFIG_DIR}
@@ -65,9 +71,10 @@ data:
         # Some JupyterHub may have specific static/template files.
         # We clone these and override the default ones.
         if [[ -n ${TEMPLATE_GIT_REPO} ]]; then
-            git clone --single-branch --branch ${JUPYTERHUB_STAGE} https://${TEMPLATE_GIT_USERNAME}:${TEMPLATE_GIT_PASSWORD}@${TEMPLATE_GIT_REPO#"https://"} ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
-            cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/templates/* ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/templates/.
-            cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/static/* ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/static/.
+            git clone --single-branch --branch ${TEMPLATE_GIT_BRANCH} https://${TEMPLATE_GIT_USERNAME}:${TEMPLATE_GIT_PASSWORD}@${TEMPLATE_GIT_REPO#"https://"} ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
+            git clone --single-branch --branch ${STATIC_GIT_BRANCH} https://${STATIC_GIT_USERNAME}:${STATIC_GIT_PASSWORD}@${STATIC_GIT_REPO#"https://"} ${SHARE_SPECIFIC_STATIC_DIR_TMP}
+            cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/* ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/templates/.
+            cp -r ${SHARE_SPECIFIC_STATIC_DIR_TMP}/* ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/static/.
         fi
 
         # Now we place everything where JupyterHub will look for it

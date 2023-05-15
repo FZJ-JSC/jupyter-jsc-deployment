@@ -10,6 +10,7 @@ data:
     CONFIG_DIR="/mnt/shared-data/git_config"
     SHARE_JHUB_DIR_TMP="/tmp/share_jhub"
     SHARE_SPECIFIC_TEMPLATE_DIR_TMP="/tmp/share_specific_template"
+    SHARE_SPECIFIC_STATIC_DIR_TMP="/tmp/share_specific_static"
 
     
     # create temporary folders
@@ -22,7 +23,8 @@ data:
     git clone --single-branch --branch ${SHARE_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"} ${SHARE_JHUB_DIR_TMP}
 
     if [[ -n ${TEMPLATE_GIT_REPO} ]]; then
-      git clone --single-branch --branch ${JUPYTERHUB_STAGE} https://${TEMPLATE_GIT_USERNAME}:${TEMPLATE_GIT_PASSWORD}@${TEMPLATE_GIT_REPO#"https://"} ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
+      git clone --single-branch --branch ${TEMPLATE_GIT_BRANCH} https://${TEMPLATE_GIT_USERNAME}:${TEMPLATE_GIT_PASSWORD}@${TEMPLATE_GIT_REPO#"https://"} ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
+      git clone --single-branch --branch ${STATIC_GIT_BRANCH} https://${STATIC_GIT_USERNAME}:${STATIC_GIT_PASSWORD}@${STATIC_GIT_REPO#"https://"} ${SHARE_SPECIFIC_STATIC_DIR_TMP}
     fi
 
     git config --global pull.ff only
@@ -51,6 +53,7 @@ data:
     
     # git share specific variables
     SHARE_SPECIFIC_TEMPLATE_DIR_TMP="/tmp/share_specific_template"
+    SHARE_SPECIFIC_STATIC_DIR_TMP="/tmp/share_specific_static"
 
     # Static duplication
     STATIC_ONLY="/mnt/shared-data/static-files"
@@ -73,21 +76,30 @@ data:
       git fetch
       test "$(git rev-parse HEAD)" == "$(git rev-parse @{u})"
       SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE=$?
+    
+      cd ${SHARE_SPECIFIC_STATIC_DIR_TMP}
+      git fetch
+      test "$(git rev-parse HEAD)" == "$(git rev-parse @{u})"
+      SHARE_SPECIFIC_STATIC_HAS_UPDATE=$?
     else
       SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE=0
+      SHARE_SPECIFIC_STATIC_HAS_UPDATE=0
     fi
 
-    if [[ ${SHARE_JHUB_HAS_UPDATE} -eq 1 || ${SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE} -eq 1 ]]; then
+    if [[ ${SHARE_JHUB_HAS_UPDATE} -eq 1 || ${SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE} -eq 1 || ${SHARE_SPECIFIC_STATIC_HAS_UPDATE} -eq 1 ]]; then
       cd ${SHARE_JHUB_DIR_TMP}
       git pull origin ${SHARE_BRANCH}
       cp -r ${SHARE_JHUB_DIR_TMP} ${SHARE_JHUB_DIR_PREP}
 
-      if [[ ${SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE} -eq 1 ]]; then
+      if [[ ${SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE} -eq 1 || ${SHARE_SPECIFIC_STATIC_HAS_UPDATE} -eq 1 ]]; then
         cd ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
-        git pull origin ${JUPYTERHUB_STAGE}
+        git pull origin ${TEMPLATE_GIT_BRANCH}
+        
+        cd ${SHARE_SPECIFIC_STATIC_DIR_TMP}
+        git pull origin ${STATIC_GIT_BRANCH}
 
-        cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/templates/* ${SHARE_JHUB_DIR_PREP}/${JUPYTERHUB_VERSION}/templates/.
-        cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/static/* ${SHARE_JHUB_DIR_PREP}/${JUPYTERHUB_VERSION}/static/.
+        cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/* ${SHARE_JHUB_DIR_PREP}/${JUPYTERHUB_VERSION}/templates/.
+        cp -r ${SHARE_SPECIFIC_STATIC_DIR_TMP}/* ${SHARE_JHUB_DIR_PREP}/${JUPYTERHUB_VERSION}/static/.
       fi
 
       # Let's skip footer.systems. That's managed by incident check in another script
