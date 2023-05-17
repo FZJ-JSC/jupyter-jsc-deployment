@@ -26,3 +26,27 @@
     name: hub-juniq-generics
     key: TUNNEL_JUPYTERHUB_USER_PASS
     optional: false
+- op: add
+  path: "/spec/template/spec/containers/2/env/-"
+  value:
+    name: TEMPLATE_GIT_REPO
+    valueFrom:
+      secretKeyRef:
+        name: juniq-share-config
+        key: REPOSITORY
+- op: add
+  path: "/spec/template/spec/containers/2/env/-"
+  value:
+    name: TEMPLATE_GIT_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: juniq-share-config
+        key: USERNAME
+- op: add
+  path: "/spec/template/spec/containers/2/env/-"
+  value:
+    name: TEMPLATE_GIT_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: juniq-share-config
+        key: PASSWORD

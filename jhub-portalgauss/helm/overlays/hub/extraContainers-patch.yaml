@@ -27,19 +27,15 @@
     key: TUNNEL_JUPYTERHUB_USER_PASS
     optional: false
 # - op: add
-#   path: "/spec/template/spec/initContainers/0/env/-"
+#   path: "/spec/template/spec/containers/2/env/-"
 #   value:
 #     name: TEMPLATE_GIT_REPO
-#     value: "https://github.com/kochhlrs/jupyter_gcs_eurocc.git"
-# - op: add
-#   path: "/spec/template/spec/initContainers/0/env/-"
-#   value:
-#     name: TEMPLATE_GIT_BRANCH
 #     valueFrom:
-#       fieldRef:
-#         fieldPath: metadata.labels['TEMPLATE_GIT_BRANCH']
+#       secretKeyRef:
+#         name: portalgauss-share-config
+#         key: REPOSITORY
 # - op: add
-#   path: "/spec/template/spec/initContainers/0/env/-"
+#   path: "/spec/template/spec/containers/2/env/-"
 #   value:
 #     name: TEMPLATE_GIT_USERNAME
 #     valueFrom:
@@ -47,37 +43,9 @@
 #         name: portalgauss-share-config
 #         key: USERNAME
 # - op: add
-#   path: "/spec/template/spec/initContainers/0/env/-"
+#   path: "/spec/template/spec/containers/2/env/-"
 #   value:
 #     name: TEMPLATE_GIT_PASSWORD
-#     valueFrom:
-#       secretKeyRef:
-#         name: portalgauss-share-config
-#         key: PASSWORD
-# - op: add
-#   path: "/spec/template/spec/initContainers/0/env/-"
-#   value:
-#     name: STATIC_GIT_REPO
-#     value: "https://github.com/kochhlrs/jupyter_gcs_eurocc.git"
-# - op: add
-#   path: "/spec/template/spec/initContainers/0/env/-"
-#   value:
-#     name: STATIC_GIT_BRANCH
-#     valueFrom:
-#       fieldRef:
-#         fieldPath: metadata.labels['STATIC_GIT_BRANCH']
-# - op: add
-#   path: "/spec/template/spec/initContainers/0/env/-"
-#   value:
-#     name: STATIC_GIT_USERNAME
-#     valueFrom:
-#       secretKeyRef:
-#         name: portalgauss-share-config
-#         key: USERNAME
-# - op: add
-#   path: "/spec/template/spec/initContainers/0/env/-"
-#   value:
-#     name: STATIC_GIT_PASSWORD
 #     valueFrom:
 #       secretKeyRef:
 #         name: portalgauss-share-config
