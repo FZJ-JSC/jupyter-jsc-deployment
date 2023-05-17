@@ -1,7 +1,0 @@
-proxy:
-  chp:
-    defaultTarget: "https://default-hub:8081"
-    errorTarget: "https://default-hub:8081/hub/error"
-  https:
-    secret:
-      name: internal-ssl-default
