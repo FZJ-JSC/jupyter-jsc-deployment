@@ -112,7 +112,7 @@ targetCustomizations:
                 path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: staging
-            jhub_version: "3.1.1"
+            jhub_version: "4.0.0"
             hostname: "jupyter-jsc-staging.fz-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubStaging"
@@ -209,7 +209,7 @@ targetCustomizations:
                 path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: production
-            jhub_version: "3.1.1"
+            jhub_version: "4.0.0"
             hostname: "jupyter-jsc.fz-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubProduction"
