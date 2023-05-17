@@ -444,6 +444,17 @@ hub:
               "html_message": f"<details><summary>{now}: JupyterLab stopped.</summary></details>",
           }
 
+      async def progress_ready_hook(spawner, ready_event):
+          ready_msg = f"Service {spawner.name} started."
+          now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
+          url = ready_event["url"]
+          ready_event[
+              "html_message"
+          ] = f'<details><summary>{now}: {ready_msg}</summary>You will be redirected to <a href="{url}">{url}</a></details>'
+          spawner.latest_events.append(ready_event)
+          return ready_event
+
+      c.EventBackendSpawner.progress_ready_hook = progress_ready_hook
       c.EventBackendSpawner.cancelling_event = cancel_click_event
       c.EventBackendSpawner.stop_event = stop_event
       c.EventBackendSpawner.request_url_start = request_url_start
