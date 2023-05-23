@@ -542,7 +542,12 @@ hub:
       c.CustomGenericOAuthenticator.userdata_url = (
           f"https://{unity_host}/jupyter-oauth2/userinfo"
       )
-      c.CustomGenericOAuthenticator.username_key = "username_attr"
+      def safe_user_name(resp_json):
+          name = resp_json.get("username_attr")
+          safe_name = name.replace("@", "_at_")
+          return safe_name
+
+      c.CustomGenericOAuthenticator.username_key = safe_user_name
       c.CustomGenericOAuthenticator.scope = "single-logout;hpc_infos;x500;authenticator;eduperson_entitlement;username;profile".split(
           ";"
       )
