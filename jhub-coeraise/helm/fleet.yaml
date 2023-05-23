@@ -29,6 +29,7 @@ helm:
     - ../../hub-base/helm/hub/extraContainers.yaml
     - ../../hub-base/helm/hub/extraEnv.yaml
     - ../../hub-base/helm/hub/extraVolumeMounts.yaml
+    - ../../hub-base/helm/hub/extraVolumes.yaml
     - ../../hub-base/helm/hub/image.yaml
     - ../../hub-base/helm/hub/initContainers.yaml
     - ../../hub-base/helm/hub/services.yaml
