@@ -6,16 +6,20 @@ patches:
     name: eurocc
     group: networking.k8s.io
     version: v1
-  path: ingress-patch.yaml
+  path: base/ingress-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=eurocc,component=hub
-  path: hub/extraContainers-patch.yaml
+  path: base/hub/extraContainers-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=eurocc,component=hub
-  path: hub/extraEnv-patch.yaml
+  path: base/hub/extraEnv-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=eurocc,component=hub
-  path: hub/initContainers-patch.yaml
+  path: base/hub/initContainers-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=eurocc,component=hub
+  path: extraVolumes-patch.yaml
