@@ -1,0 +1,8 @@
+- op: replace
+  path: "/spec/template/spec/volumes/2/nfs/server"
+  value:
+    path: /mnt/storage/jupyterhub_eurocc
+    server: 10.0.94.248
+- op: replace
+  path: "/spec/template/spec/volumes/10/secret/secretName"
+  value: internal-ssl-eurocc
