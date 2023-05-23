@@ -32,7 +32,7 @@
     name: TEMPLATE_GIT_REPO
     valueFrom:
       secretKeyRef:
-        name: juniq-share-config
+        name: juniq-share-repository
         key: REPOSITORY
 - op: add
   path: "/spec/template/spec/containers/2/env/-"
@@ -40,7 +40,7 @@
     name: TEMPLATE_GIT_USERNAME
     valueFrom:
       secretKeyRef:
-        name: juniq-share-config
+        name: juniq-share-repository
         key: USERNAME
 - op: add
   path: "/spec/template/spec/containers/2/env/-"
@@ -48,5 +48,5 @@
     name: TEMPLATE_GIT_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: juniq-share-config
+        name: juniq-share-repository
         key: PASSWORD

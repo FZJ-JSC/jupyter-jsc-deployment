@@ -19,7 +19,7 @@ secrets:
 
 gitconfig:
   branch: "unicoremgr-dev"
-  secret: "jupyter-jsc-config"
+  secret: "config-repository"
 
 imagePullSecrets:
   - name: "gitlab-registry"

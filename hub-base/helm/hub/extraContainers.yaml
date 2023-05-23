@@ -120,17 +120,17 @@ hub:
         - name: GIT_REPO
           valueFrom:
             secretKeyRef:
-              name: "jupyter-jsc-config"
+              name: "config-repository"
               key: REPOSITORY
         - name: GIT_USERNAME
           valueFrom:
             secretKeyRef:
-              name: "jupyter-jsc-config"
+              name: "config-repository"
               key: USERNAME
         - name: GIT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: "jupyter-jsc-config"
+              name: "config-repository"
               key: PASSWORD
         - name: HUB_NAME
           valueFrom:
