@@ -11,3 +11,6 @@
 - op: replace
   path: "/spec/template/spec/volumes/3/nfs/server"
   value: "10.0.20.30"
+- op: replace
+  path: "/spec/template/spec/volumes/3/nfs/path"
+  value: "/mnt/storage/jupyterhub"
