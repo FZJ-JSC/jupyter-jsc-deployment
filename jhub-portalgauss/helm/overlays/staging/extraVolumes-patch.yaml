@@ -1,12 +1,15 @@
+# - op: add
+#   path: "/spec/template/spec/volumes/-"
+#   value:
+#     name: persistent
+#     nfs:
+#       path: /mnt/storage/jupyterhub_portalgauss
+#       server: 10.0.94.248
 - op: replace
   path: "/spec/template/spec/volumes/2/secret"
   value:
     defaultMode: 420
     secretName: "internal-ssl-portalgauss"
-- op: add
-  path: "/spec/template/spec/volumes/-"
-  value:
-    name: persistent
-    nfs:
-      path: /mnt/storage/jupyterhub_portalgauss
-      server: 10.0.94.248
+- op: replace
+  path: "/spec/template/spec/volumes/3/nfs/server"
+  value: "10.0.94.248"

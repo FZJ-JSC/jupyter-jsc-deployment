@@ -4,6 +4,10 @@ hub:
       secret:
         defaultMode: 420
         secretName: override
+    - name: persistent
+      nfs:
+        path: override
+        server: 0.0.0.0
     - name: shared-data
       emptyDir: {}
     - name: init-script
