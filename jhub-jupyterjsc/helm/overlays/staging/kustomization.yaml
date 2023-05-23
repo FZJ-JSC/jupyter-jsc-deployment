@@ -6,15 +6,15 @@ patches:
     name: jupyterjsc
     group: networking.k8s.io
     version: v1
-  path: ../base/ingress-patch.yaml
+  path: base/ingress-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=jupyterjsc,component=hub
-  path: ../base/hub/extraContainers-patch.yaml
+  path: base/hub/extraContainers-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=jupyterjsc,component=hub
-  path: ../base/hub/extraEnv-patch.yaml
+  path: base/hub/extraEnv-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=jupyterjsc,component=hub
