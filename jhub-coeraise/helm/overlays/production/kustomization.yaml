@@ -1,6 +1,3 @@
-resources:
-- monitor.yaml
-
 # https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/1.2.0/jupyterhub/templates/ingress.yaml#L28
 # No support for JupyterHub with ssl :(
 patches:
@@ -9,16 +6,20 @@ patches:
     name: coeraise
     group: networking.k8s.io
     version: v1
-  path: ingress-patch.yaml
+  path: base/ingress-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=coeraise,component=hub
-  path: hub/extraContainers-patch.yaml
+  path: base/hub/extraContainers-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=coeraise,component=hub
-  path: hub/extraEnv-patch.yaml
+  path: base/hub/extraEnv-patch.yaml
 - target:
     kind: Deployment
     labelSelector: app=coeraise,component=hub
-  path: hub/initContainers-patch.yaml
+  path: base/hub/initContainers-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=coeraise,component=hub
+  path: extraVolumes-patch.yaml

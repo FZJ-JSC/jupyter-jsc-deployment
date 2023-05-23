@@ -39,77 +39,16 @@ helm:
     # then the hub specific config 
     - values/common.yaml
     - values/proxy.yaml
-kustomize:
-  dir: overlays
 targetCustomizations:
   - name: staging
     clusterSelector:
       matchLabels:
         stage: staging
+    kustomize:
+      dir: overlays/staging
     helm:
       values:
         hub:
-          extraVolumes:
-            - name: persistent
-              nfs:
-                path: /mnt/storage/jupyterhub_portalgauss
-                server: 10.0.94.248
-            - name: shared-data
-              emptyDir: {}
-            - name: init-script
-              configMap:
-                defaultMode: 400
-                name: hub-all-init-script
-            - name: mount-watch
-              configMap:
-                defaultMode: 400
-                name: hub-all-mountwatch
-            - name: cleanup-sql
-              configMap:
-                defaultMode: 400
-                name: hub-all-cleanup-sql
-            - name: incident-check
-              configMap:
-                defaultMode: 400
-                name: hub-all-incident-check
-            - name: reservation-check
-              configMap:
-                defaultMode: 400
-                name: hub-all-reservation-check
-            - name: nginx-config
-              configMap:
-                defaultMode: 400
-                name: hub-all-static-files-nginx-config
-            - name: internal-ssl
-              secret:
-                secretName: internal-ssl-portalgauss
-            - name: reservation-keypair
-              secret:
-                secretName: reservation-keypair
-            - name: drf-tunnel-certs-public
-              secret:
-                secretName: drf-tunnel-certs-public
-                items:
-                  - key: tls.ca
-                    path: ca.pem
-            - name: drf-unicoremgr-certs-public
-              secret:
-                secretName: drf-unicoremgr-certs-public
-                items:
-                  - key: tls.ca
-                    path: ca.pem
-            - name: drf-k8smgr-certs-public
-              secret:
-                secretName: drf-k8smgr-certs-public
-                items:
-                  - key: tls.ca
-                    path: ca.pem
-            - name: unity-jsc-certs
-              secret:
-                secretName: unity-jsc-certs
-            - name: tz-config
-              hostPath:
-                path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: staging
             jhub_version: "4.0.0"
@@ -145,70 +84,11 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
+    kustomize:
+      dir: overlays/production
     helm:
       values:
         hub:
-          extraVolumes:
-            - name: persistent
-              nfs:
-                path: /mnt/storage/jupyterhub_portalgauss
-                server: 10.0.20.30
-            - name: shared-data
-              emptyDir: {}
-            - name: init-script
-              configMap:
-                defaultMode: 400
-                name: hub-all-init-script
-            - name: mount-watch
-              configMap:
-                defaultMode: 400
-                name: hub-all-mountwatch
-            - name: cleanup-sql
-              configMap:
-                defaultMode: 400
-                name: hub-all-cleanup-sql
-            - name: incident-check
-              configMap:
-                defaultMode: 400
-                name: hub-all-incident-check
-            - name: reservation-check
-              configMap:
-                defaultMode: 400
-                name: hub-all-reservation-check
-            - name: nginx-config
-              configMap:
-                defaultMode: 400
-                name: hub-all-static-files-nginx-config
-            - name: internal-ssl
-              secret:
-                secretName: internal-ssl-portalgauss
-            - name: reservation-keypair
-              secret:
-                secretName: reservation-keypair
-            - name: drf-tunnel-certs-public
-              secret:
-                secretName: drf-tunnel-certs-public
-                items:
-                  - key: tls.ca
-                    path: ca.pem
-            - name: drf-unicoremgr-certs-public
-              secret:
-                secretName: drf-unicoremgr-certs-public
-                items:
-                  - key: tls.ca
-                    path: ca.pem
-            - name: drf-k8smgr-certs-public
-              secret:
-                secretName: drf-k8smgr-certs-public
-                items:
-                  - key: tls.ca
-                    path: ca.pem
-            - name: unity-jsc-certs
-              secret:
-                secretName: unity-jsc-certs
-            - name: tz-config
-              hostPath:
-                path: /usr/share/zoneinfo/Europe/Berlin
           labels:
             stage: production
             jhub_version: "4.0.0"

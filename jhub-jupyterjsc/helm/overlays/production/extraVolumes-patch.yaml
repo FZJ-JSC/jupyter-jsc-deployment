@@ -2,7 +2,7 @@
   path: "/spec/template/spec/volumes/2/nfs/server"
   value:
     path: /mnt/storage/jupyterhub
-    server: 10.0.94.248
+    server: 10.0.20.30
 - op: replace
   path: "/spec/template/spec/volumes/10/secret/secretName"
   value: internal-ssl-jupyterjsc
