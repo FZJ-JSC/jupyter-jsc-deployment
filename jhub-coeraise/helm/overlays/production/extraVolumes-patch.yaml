@@ -5,9 +5,6 @@
     nfs:
       path: /mnt/storage/jupyterhub_coeraise
       server: 10.0.20.30
-- op: add
-  path: "/spec/template/spec/volumes/-"
-  value: 
-    name: internal-ssl
-    secret:
-      secretName: internal-ssl-coeraise
+- op: replace
+  path: "/spec/template/spec/volumes/2/secret/secretName"
+  value: internal-ssl-coeraise

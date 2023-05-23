@@ -1,5 +1,9 @@
 hub:
   extraVolumes:
+    - name: internal-ssl
+      secret:
+        defaultMode: 420
+        secretName: override
     - name: shared-data
       emptyDir: {}
     - name: init-script
