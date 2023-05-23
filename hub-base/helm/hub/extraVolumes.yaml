@@ -1,9 +1,5 @@
 hub:
   extraVolumes:
-    - name: persistent
-      nfs:
-        path: override-path
-        server: 0.0.0.0
     - name: shared-data
       emptyDir: {}
     - name: init-script
@@ -30,9 +26,6 @@ hub:
       configMap:
         defaultMode: 400
         name: hub-all-static-files-nginx-config
-    - name: internal-ssl
-      secret:
-        secretName: override-name
     - name: reservation-keypair
       secret:
         secretName: reservation-keypair

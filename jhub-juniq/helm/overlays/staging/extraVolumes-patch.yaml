@@ -1,8 +1,13 @@
-- op: replace
-  path: "/spec/template/spec/volumes/2/nfs"
+- op: add
+  path: "/spec/template/spec/volumes/-"
   value:
-    path: /mnt/storage/jupyterhub_juniq13
-    server: 10.0.94.248
-- op: replace
-  path: "/spec/template/spec/volumes/10/secret/secretName"
-  value: internal-ssl-juniq
+    name: persistent
+    nfs:
+      path: /mnt/storage/jupyterhub_juniq
+      server: 10.0.94.248
+- op: add
+  path: "/spec/template/spec/volumes/-"
+  value: 
+    name: internal-ssl
+    secret:
+      secretName: internal-ssl-juniq
