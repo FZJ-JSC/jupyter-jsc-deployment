@@ -6,5 +6,7 @@
       path: /mnt/storage/jupyterhub_portalgauss
       server: 10.0.94.248
 - op: replace
-  path: "/spec/template/spec/volumes/2/secret~1secretName"
-  value: "internal-ssl-portalgauss"
+  path: "/spec/template/spec/volumes/2/secret"
+  value:
+    defaultMode: 420
+    secretName: "internal-ssl-portalgauss"
