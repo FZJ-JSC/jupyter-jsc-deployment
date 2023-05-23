@@ -7,4 +7,4 @@
       server: 10.0.94.248
 - op: replace
   path: "/spec/template/spec/volumes/2/secret/secretName"
-  value: internal-ssl-portalgauss
+  value: "internal-ssl-portalgauss"
