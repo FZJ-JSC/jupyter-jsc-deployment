@@ -1,4 +1,4 @@
-defaultNamespace: jupyterjsc
+defaultnamespace: jupyter
 targetCustomizations:
   - name: staging
     clusterSelector:

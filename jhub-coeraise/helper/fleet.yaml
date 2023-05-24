@@ -1,4 +1,4 @@
-defaultNamespace: jupyterjsc
+defaultnamespace: jupyter
 helm:
   chart: /workspace/source/hub-base/helper-each
   releaseName: jupyterjsc-jhub-coeraise-helper 

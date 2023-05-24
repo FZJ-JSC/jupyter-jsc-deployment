@@ -9,7 +9,7 @@ jobs:
   # first cron
   - name: daily-user-metric
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -60,7 +60,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: daily-user-metric-juniq
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -111,7 +111,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: daily-user-metric-coe-raise
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -162,7 +162,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: daily-user-metric-eurocc-gcs
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -213,7 +213,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: daily-user-metric-portal-gauss-centre
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -264,7 +264,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: 7days-metric
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: alpine
@@ -424,7 +424,7 @@ jobs:
         mountPath: /mnt/persistent
   - name: cleanup-user-jobs-staging
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: staging
     image:
       repository: alpine
@@ -466,7 +466,7 @@ jobs:
         mountPath: /mnt/persistent
   - name: cleanup-user-jobs
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: alpine
@@ -508,7 +508,7 @@ jobs:
         mountPath: /mnt/persistent
   - name: hpc-account-update-check
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python

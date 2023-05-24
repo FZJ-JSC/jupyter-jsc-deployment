@@ -1,4 +1,4 @@
-defaultNamespace: jupyterjsc
+defaultnamespace: jupyter
 dependsOn:
   - name: jupyterjsc-hub-helper-once
   - name: jupyterjsc-jhub-eurocc-helper

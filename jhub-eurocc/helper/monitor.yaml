@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: eurocc-servicemonitor
-  namespace: jupyterjsc
+  namespace: jupyter
   labels:
     app: eurocc
     release: jupyterhub
@@ -11,7 +11,7 @@ spec:
   jobLabel: jupyterhub
   namespaceSelector:
     matchNames:
-      - jupyterjsc
+      - jupyter
   selector:
     matchLabels:
       app: eurocc

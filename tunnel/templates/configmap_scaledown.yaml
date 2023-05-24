@@ -62,7 +62,7 @@ data:
     def _get_tunnel_sts():
         api_instance = _k8s_get_api_instance()               
         sts_name = os.environ.get('DEPLOYMENT_NAME', 'drf-tunnel')
-        namespace = os.environ.get("DEPLOYMENT_NAMESPACE", "jupyterjsc")  
+        namespace = os.environ.get("DEPLOYMENT_NAMESPACE", "jupyter")  
         label = f"app.kubernetes.io/name={sts_name}"
         tunnel_sts = api_instance.list_namespaced_stateful_set(namespace, label_selector=label)
         if len(tunnel_sts.items) > 1:
@@ -87,7 +87,7 @@ data:
 
 
     def _create_tunnel_request(suffix="", method="GET", **kwargs):
-        url = os.environ.get("TUNNEL_URL", "https://drf-tunnel.jupyterjsc.svc/api/tunnel/")
+        url = os.environ.get("TUNNEL_URL", "https://drf-tunnel.jupyter.svc/api/tunnel/")
         if suffix:
             url += suffix if suffix.endswith("/") else suffix + "/"
         service_name = os.environ.get("TUNNEL_USERNAME", "tunnel")
@@ -148,7 +148,7 @@ data:
 
         tunnel_sts = _get_tunnel_sts()
         name = tunnel_sts.metadata.name
-        namespace = os.environ.get("DEPLOYMENT_NAMESPACE", "jupyterjsc")
+        namespace = os.environ.get("DEPLOYMENT_NAMESPACE", "jupyter")
         log.info(f"Scaling number of tunnel replicas to {desired_number_of_replicas}.")
         api_instance.patch_namespaced_stateful_set(
             name, namespace,

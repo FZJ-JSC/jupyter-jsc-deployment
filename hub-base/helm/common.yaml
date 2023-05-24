@@ -13,7 +13,7 @@ ingress:
     nginx.ingress.kubernetes.io/server-snippet: |
       # Managing requests to the users JupyterLab
       location ~* "^/user/([^/]+)/([^/]+)/" {
-          #proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
+          #proxy_pass                              http://jhub-maintenance.jupyter.svc;
           proxy_pass                              https://default-jhub-retries;
           #allow                                   134.94.0.0/16;
           #deny                                    all;
@@ -57,8 +57,8 @@ ingress:
           proxy_redirect                          off;
       }
       location ~* "^/((hub/static)|(2FA)|(2fa)|(2fadetails)|(jusufcloud)|(hdfaai))" {
-          #proxy_pass                              http://jhub-maintenance.jupyterjsc.svc;
-          proxy_pass                              http://jupyterhub-static-files.jupyterjsc.svc:8070;
+          #proxy_pass                              http://jhub-maintenance.jupyter.svc;
+          proxy_pass                              http://jupyterhub-static-files.jupyter.svc:8070;
           
           #allow                                   134.94.0.0/16;
           #deny                                    all;

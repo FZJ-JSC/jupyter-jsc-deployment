@@ -38,7 +38,7 @@ hub:
     - name: RESERVATIONS_FILE
       value: "/mnt/shared-data/reservation-check/reservation.json"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
-      value: "jupyterjsc"
+      value: "jupyter"
     - name: OAUTH_CLIENT_ID
       valueFrom:
         secretKeyRef:
