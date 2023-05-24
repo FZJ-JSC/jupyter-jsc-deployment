@@ -1,7 +1,7 @@
 defaultnamespace: jupyter
 dependsOn:
-  - name: jupyterjsc-hub-helper-once
-  - name: jupyterjsc-jhub-portalgauss-helper
+  - name: jupyter-hub-helper-once
+  - name: jupyter-jhub-portalgauss-helper
 helm:
   releaseName: jupyterhub-portalgauss
   repo: https://jupyterhub.github.io/helm-chart/

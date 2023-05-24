@@ -1,7 +1,7 @@
 defaultnamespace: jupyter
 dependsOn:
-  - name: jupyterjsc-hub-helper-once
-  - name: jupyterjsc-jhub-juniq-helper
+  - name: jupyter-hub-helper-once
+  - name: jupyter-jhub-juniq-helper
 helm:
   releaseName: jupyterhub-juniq
   repo: https://jupyterhub.github.io/helm-chart/

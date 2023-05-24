@@ -1,7 +1,7 @@
 defaultnamespace: jupyter
 helm:
   chart: /workspace/source/hub-base/helper-each
-  releaseName: jupyterjsc-jhub-jupyterjsc-helper 
+  releaseName: jupyter-jhub-jupyterjsc-helper 
   values:
     nameOverride: jhub-jupyterjsc-helper
     appName: jupyterjsc 

@@ -1,25 +1,28 @@
+resources:
+  - monitor.yaml
+
 # https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/1.2.0/jupyterhub/templates/ingress.yaml#L28
 # No support for JupyterHub with ssl :(
 patches:
+- target:
+    kind: Deployment
+    labelSelector: app=eurocc,component=hub
+  path: hub/extraContainers-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=eurocc,component=hub
+  path: hub/extraEnv-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=eurocc,component=hub
+  path: hub/initContainers-patch.yaml
+- target:
+    kind: Deployment
+    labelSelector: app=eurocc,component=hub
+  path: extraVolumes-patch.yaml
 - target:
     kind: Ingress
     name: eurocc
     group: networking.k8s.io
     version: v1
-  path: base/ingress-patch.yaml
-- target:
-    kind: Deployment
-    labelSelector: app=eurocc,component=hub
-  path: base/hub/extraContainers-patch.yaml
-- target:
-    kind: Deployment
-    labelSelector: app=eurocc,component=hub
-  path: base/hub/extraEnv-patch.yaml
-- target:
-    kind: Deployment
-    labelSelector: app=eurocc,component=hub
-  path: base/hub/initContainers-patch.yaml
-- target:
-    kind: Deployment
-    labelSelector: app=eurocc,component=hub
-  path: extraVolumes-patch.yaml
+  path: ingress-patch.yaml
