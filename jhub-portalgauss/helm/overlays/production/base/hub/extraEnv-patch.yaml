@@ -4,6 +4,11 @@
     name: hub-portalgauss-generics
     key: TUNNEL_JUPYTERHUB_USER_PASS
 - op: replace
+  path: "/spec/template/spec/containers/5/env/24/valueFrom/secretKeyRef"
+  value:
+    name: hub-portalgauss-generics
+    key: UNICOREMGR_JUPYTERHUB_USER_PASS
+- op: replace
   path: "/spec/template/spec/containers/5/env/25/valueFrom/secretKeyRef"
   value:
     name: hub-portalgauss-generics
