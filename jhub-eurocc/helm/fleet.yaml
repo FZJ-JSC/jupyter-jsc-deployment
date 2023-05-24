@@ -1,7 +1,7 @@
 defaultnamespace: jupyter
 dependsOn:
   - name: jupyterjsc-hub-helper-once
-  - name: jupyterhub-eurocc-helper
+  - name: jupyterjsc-jhub-eurocc-helper
 helm:
   releaseName: jupyterhub-eurocc
   repo: https://jupyterhub.github.io/helm-chart/

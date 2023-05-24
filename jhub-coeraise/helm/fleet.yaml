@@ -1,7 +1,7 @@
 defaultnamespace: jupyter
 dependsOn:
   - name: jupyterjsc-hub-helper-once
-  - name: jupyterhub-coeraise-helper
+  - name: jupyterjsc-jhub-coeraise-helper
 helm:
   releaseName: jupyterhub-coeraise
   repo: https://jupyterhub.github.io/helm-chart/

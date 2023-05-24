@@ -1,7 +1,7 @@
 defaultnamespace: jupyter
 helm:
   chart: /workspace/source/hub-base/helper-each
-  releaseName: jupyterhub-portalgauss-helper 
+  releaseName: jupyterjsc-jhub-portalgauss-helper 
   values:
     nameOverride: jhub-portalgauss-helper
     appName: portalgauss

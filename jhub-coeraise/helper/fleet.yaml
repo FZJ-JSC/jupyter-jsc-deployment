@@ -1,7 +1,7 @@
 defaultnamespace: jupyter
 helm:
   chart: /workspace/source/hub-base/helper-each
-  releaseName: jupyterhub-coeraise-helper 
+  releaseName: jupyterjsc-jhub-coeraise-helper 
   values:
     nameOverride: jhub-coeraise-helper
     appName: coeraise

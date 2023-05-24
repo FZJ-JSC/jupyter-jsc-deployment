@@ -1,7 +1,7 @@
 defaultnamespace: jupyter
 dependsOn:
   - name: jupyterjsc-hub-helper-once
-  - name: jupyterhub-jupyterjsc-helper
+  - name: jupyterjsc-jhub-jupyterjsc-helper
 helm:
   releaseName: jupyterhub-jupyterjsc
   repo: https://jupyterhub.github.io/helm-chart/
