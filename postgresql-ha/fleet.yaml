@@ -3,7 +3,7 @@ helm:
   releaseName: postgresql-ha
   repo: https://charts.bitnami.com/bitnami
   chart: postgresql-ha
-  version: 15.3.0
+  version: 11.7.2
   values:
     pgpool:
       existingSecret: "postgresql-ha-pgpool"
