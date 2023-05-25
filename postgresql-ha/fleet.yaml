@@ -13,13 +13,13 @@ helm:
       podAnnotations:
         proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
       replicaCount: 2
+    persistence:
+      storageClass: "csi-cinder-sc-retain"
+      size: "5Gi"
     postgresql:
       existingSecret: "postgresql-ha-auth"
       nodeSelector:
         worker: "true"
-      persistence:
-        storageClass: "csi-cinder-sc-retain"
-        size: "5Gi"
       podAnnotations:
         proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
       replicaCount: 3
