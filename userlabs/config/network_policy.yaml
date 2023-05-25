@@ -13,13 +13,12 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              name: userlabs
+              name: jupyter
           podSelector:
             matchLabels:
-              app: drf-k8smgr
+              component: hub
       ports:
         - port: 8443
-        - port: 8888
   egress:
     - to:
         - namespaceSelector: {}
@@ -29,18 +28,6 @@ spec:
       ports:
         - port: 53
           protocol: UDP
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              name: userlabs
-          podSelector:
-            matchLabels:
-              app: drf-k8smgr
-      ports:
-        - port: 56789
-        - port: 56788
-        - port: 56787
-        - port: 56786
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0
