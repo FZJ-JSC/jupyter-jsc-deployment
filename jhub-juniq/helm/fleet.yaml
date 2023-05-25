@@ -72,7 +72,7 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: true
+          enabled: false
           hosts:
           - juniq-staging.fz-juelich.de
           tls:
@@ -112,10 +112,10 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled: false, update ingress in maintenance/fleet.yaml
-          enabled: true
+          enabled: false
           hosts:
           - juniq.fz-juelich.de
           tls:
           - hosts:
             - juniq.fz-juelich.de
-            secretName: juniq-certs
+            secretName: juniq-tls

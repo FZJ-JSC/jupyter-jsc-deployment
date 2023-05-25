@@ -70,13 +70,13 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: true
+          enabled: false
           hosts:
           - jupyter-jsc-staging.fz-juelich.de
           tls:
           - hosts:
             - jupyter-jsc-staging.fz-juelich.de
-            secretName: jupyter-jsc-certs-jupyterjsc-le
+            secretName: jupyterjsc-tls
   - name: production
     clusterSelector:
       matchLabels:
@@ -111,10 +111,10 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: true
+          enabled: false
           hosts:
           - jupyter-jsc.fz-juelich.de
           tls:
           - hosts:
             - jupyter-jsc.fz-juelich.de
-            secretName: jupyter-jsc-certs-jupyterjsc-le
+            secretName: jupyterjsc-tls

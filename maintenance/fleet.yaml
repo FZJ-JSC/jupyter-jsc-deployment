@@ -13,7 +13,7 @@ targetCustomizations:
         # Set JupyterHub in maintenance:
           #   Set enabled here to true, update ingress in jhub[-juniq|-eurocc]/helm/fleet.yaml
           #   Update ingress.hosts and ingress.tls in this file, if only specific hubs should go in maintenance
-        enabled: false
+        enabled: true
         ingress:
           annotations:
             acme.cert-manager.io/http01-edit-in-place: "false"
@@ -37,8 +37,13 @@ targetCustomizations:
                   pathType: Prefix
               svcName: jhub-maintenance
               svcPort: 80
-            - host: zam10199.zam.kfa-juelich.de
-              #host: coeraise
+            - host: portal-staging.gauss-centre.eu
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
+            - host: jupyter-staging.coe-raise.eu
               paths:
                 - path: /
                   pathType: Prefix
@@ -47,7 +52,7 @@ targetCustomizations:
           tls:
             - hosts:
                 - jupyter-jsc-staging.fz-juelich.de
-              secretName: jupyter-jsc-tls
+              secretName: jupyterjsc-tls
             - hosts:
                 - jupyter-staging.eurocc-gcs.de
               secretName: eurocc-tls
@@ -55,7 +60,10 @@ targetCustomizations:
                 - juniq-staging.fz-juelich.de
               secretName: juniq-tls
             - hosts:
-                - zam10199.zam.kfa-juelich.de
+                - portal-staging.gauss-centre.eu
+              secretName: portalgauss-tls
+            - hosts:
+                - jupyter-staging.coe-raise.eu
               secretName: coeraise-tls
   - name: production
     clusterSelector:
@@ -67,7 +75,7 @@ targetCustomizations:
         # Set JupyterHub in maintenance:
           #   Set enabled here to true, update ingress in jhub[-juniq|-eurocc]/helm/fleet.yaml
           #   Update ingress.hosts and ingress.tls in this file, if only specific hubs should go in maintenance
-        enabled: false
+        enabled: true
         ingress:
           annotations:
             acme.cert-manager.io/http01-edit-in-place: "false"
@@ -91,13 +99,31 @@ targetCustomizations:
                   pathType: Prefix
               svcName: jhub-maintenance
               svcPort: 80
+            - host: jupyter.coe-raise.eu
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
+            - host: portal.gauss-centre.eu
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
           tls:
             - hosts:
                 - jupyter-jsc.fz-juelich.de
-              secretName: jupyter-jsc-tls
+              secretName: jupyterjsc-tls
             - hosts:
                 - jupyter.eurocc-gcs.de
               secretName: eurocc-tls
             - hosts:
                 - juniq.fz-juelich.de
-              secretName: juniq-certs
+              secretName: juniq-tls
+            - hosts:
+                - portal.gauss-centre.eu
+              secretName: portalgauss-tls
+            - hosts:
+                - jupyter.coe-raise.eu
+              secretName: coeraise-tls
