@@ -15,8 +15,8 @@ spec:
             matchLabels:
               name: jupyter
           podSelector:
-            matchLabels:
-              component: hub
+            matchExpressions:
+            - { key: component, operator: In, values: [hub, proxy] }
       ports:
         - port: 8443
   egress:
