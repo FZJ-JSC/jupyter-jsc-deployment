@@ -1,0 +1,28 @@
+defaultNamespace: database
+helm:
+  releaseName: postgresql-ha
+  repo: https://charts.bitnami.com/bitnami
+  chart: postgresql-ha
+  version: 15.3.0
+  values:
+    pgpool:
+      existingSecret: "postgresql-ha-pgpool"
+      nodeSelector:
+        worker: "true"
+      podAnnotations:
+        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      replicaCount: 2
+    postgresql:
+      customUsersSecret: "postgresql-ha-customusers"
+      existingSecret: "postgresql-ha-auth"
+      nodeSelector:
+        worker: "true"
+      persistence:
+        storageClass: "csi-cinder-sc-retain"
+        size: "5Gi"
+      podAnnotations:
+        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      replicaCount: 3
+dependsOn:
+  - name: basics-istio
+  - name: basics-storageclass
