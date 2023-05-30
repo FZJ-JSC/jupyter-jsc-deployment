@@ -71,8 +71,8 @@ data:
             else
                 git clone --single-branch --branch ${JUPYTERHUB_STAGE} ${TEMPLATE_GIT_REPO} ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
             fi
-            cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/templates/* ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/templates/.
-            cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/static/* ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/static/.
+            cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/templates/* ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/templates/
+            cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/static/* ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/static/
         fi
 
         # Now we place everything where JupyterHub will look for it
