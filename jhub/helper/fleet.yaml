@@ -1,4 +1,0 @@
-defaultNamespace: jupyterjsc
-helm:
-  values:
-    nameOverride: "jhub-helper"

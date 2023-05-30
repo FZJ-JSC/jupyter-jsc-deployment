@@ -1,4 +1,13 @@
-defaultNamespace: jupyterjsc
+defaultnamespace: jupyter
 helm:
+  chart: /workspace/source/hub-base/helper-each
+  releaseName: jupyter-jhub-portalgauss-helper 
   values:
-    nameOverride: "portalgauss-jhub-helper"
+    nameOverride: jhub-portalgauss-helper
+    appName: portalgauss
+    proxyBackup:
+      name: portalgauss-proxy-public
+      release: jupyterhub-portalgauss
+      numberOfBackups: 5
+    serviceStatic:
+      name: portalgauss-static-files

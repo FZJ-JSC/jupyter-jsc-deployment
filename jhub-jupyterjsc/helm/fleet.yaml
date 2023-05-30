@@ -1,0 +1,118 @@
+defaultnamespace: jupyter
+dependsOn:
+  - name: jupyter-hub-helper-once
+  - name: jupyter-jhub-jupyterjsc-helper
+helm:
+  releaseName: jupyterhub-jupyterjsc
+  repo: https://jupyterhub.github.io/helm-chart/
+  chart: jupyterhub
+  version: 2.0.0
+  values:
+    nameOverride: "jupyterjsc"
+    fullnameOverride: "jupyterjsc"
+    hub:
+      livenessProbe:
+        enabled: false
+      readinessProbe:
+        enabled: false
+      command: ["/bin/bash"]
+      args:
+        - -c
+        - >-
+          /bin/bash /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+      containerSecurityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        allowPrivilegeEscalation: true
+  valuesFiles:
+    - ../../hub-base/helm/common.yaml
+    - ../../hub-base/helm/hub/config.yaml
+    - ../../hub-base/helm/hub/extraContainers.yaml
+    - ../../hub-base/helm/hub/extraConfig.yaml
+    - ../../hub-base/helm/hub/extraEnv.yaml
+    - ../../hub-base/helm/hub/extraVolumeMounts.yaml
+    - ../../hub-base/helm/hub/extraVolumes.yaml
+    - ../../hub-base/helm/hub/image.yaml
+    - ../../hub-base/helm/hub/initContainers.yaml
+    - ../../hub-base/helm/hub/services.yaml
+    - ../../hub-base/helm/hub/others.yaml
+    - ../../hub-base/helm/proxy.yaml
+    # We overwrite some values in hub specific files
+    - values/common.yaml
+    - values/proxy.yaml
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    kustomize:
+      dir: overlays/staging
+    helm:
+      values:
+        hub:
+          labels:
+            stage: staging
+            jhub_version: "4.0.0"
+            hostname: "jupyter-jsc-staging.fz-juelich.de"
+            drf_username: "jupyterhub"
+            logger_name: "JupyterHubStaging"
+            NTS_GIT_BRANCH: "main"
+          resources:
+            requests:
+              cpu: 20m
+              memory: 256Mi
+        proxy:
+          chp:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+        ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+          enabled: true
+          hosts:
+          - jupyter-jsc-staging.fz-juelich.de
+          tls:
+          - hosts:
+            - jupyter-jsc-staging.fz-juelich.de
+            secretName: jupyterjsc-tls
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    kustomize:
+      dir: overlays/production
+    helm:
+      values:
+        hub:
+          labels:
+            stage: production
+            jhub_version: "4.0.0"
+            hostname: "jupyter-jsc.fz-juelich.de"
+            drf_username: "jupyterhub"
+            logger_name: "JupyterHubProduction"
+            NTS_GIT_BRANCH: "main"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 2048Mi
+            limits:
+              cpu: 1000m
+              memory: 3072Mi
+        proxy:
+          chp:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+        ingress:
+          # Set JupyterHub in maintenance:
+          #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+          enabled: true
+          hosts:
+          - jupyter-jsc.fz-juelich.de
+          tls:
+          - hosts:
+            - jupyter-jsc.fz-juelich.de
+            secretName: jupyterjsc-tls

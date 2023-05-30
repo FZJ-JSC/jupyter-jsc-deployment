@@ -355,7 +355,7 @@ data:
           "reverseYBuckets": false,
           "targets": [
             {
-              "expr": "time()\n- (\n  kube_service_created\n  * on (namespace, service)  \n  group(\n    kube_service_labels{ \n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\",\n      namespace=~\"jupyterjsc\"\n    }\n  ) by (service, namespace)\n)\n",
+              "expr": "time()\n- (\n  kube_service_created\n  * on (namespace, service)  \n  group(\n    kube_service_labels{ \n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\",\n      namespace=~\"jupyter\"\n    }\n  ) by (service, namespace)\n)\n",
               "format": "time_series",
               "interval": "600s",
               "intervalFactor": 1,
@@ -458,14 +458,14 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(jupyterhub_server_spawn_duration_seconds_bucket{service=\"$proxy\", namespace=\"jupyterjsc\"}[5m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(jupyterhub_server_spawn_duration_seconds_bucket{service=\"$proxy\", namespace=\"jupyter\"}[5m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99th percentile",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.5, sum(rate(jupyterhub_server_spawn_duration_seconds_bucket{service=\"$proxy\", namespace=\"jupyterjsc\"}[5m])) by (le))",
+              "expr": "histogram_quantile(0.5, sum(rate(jupyterhub_server_spawn_duration_seconds_bucket{service=\"$proxy\", namespace=\"jupyter\"}[5m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50th percentile",
@@ -564,14 +564,14 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(jupyterhub_request_duration_seconds_bucket{service=\"$proxy\", namespace=\"jupyterjsc\"}[5m])) by (le))",
+              "expr": "histogram_quantile(0.99, sum(rate(jupyterhub_request_duration_seconds_bucket{service=\"$proxy\", namespace=\"jupyter\"}[5m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "99th percentile",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.50, sum(rate(jupyterhub_request_duration_seconds_bucket{service=\"$proxy\", namespace=\"jupyterjsc\"}[5m])) by (le))",
+              "expr": "histogram_quantile(0.50, sum(rate(jupyterhub_request_duration_seconds_bucket{service=\"$proxy\", namespace=\"jupyter\"}[5m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "50th percentile",
@@ -671,7 +671,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\nirate(container_cpu_usage_seconds_total{name!=\"\"}[5m])\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{ namespace=~\"jupyterjsc\" }\n  ) by (pod, namespace)\n) by (pod)\n",
+              "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\nirate(container_cpu_usage_seconds_total{name!=\"\"}[5m])\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{ namespace=~\"jupyter\" }\n  ) by (pod, namespace)\n) by (pod)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ "{{" }} label_component }}",
@@ -772,7 +772,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\ncontainer_memory_working_set_bytes{name!=\"\"}\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{ namespace=~\"jupyterjsc\" }\n  ) by (pod, namespace)\n) by (pod)\n",
+              "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\ncontainer_memory_working_set_bytes{name!=\"\"}\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{ namespace=~\"jupyter\" }\n  ) by (pod, namespace)\n) by (pod)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ "{{" }} label_component }}",
@@ -868,7 +868,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(\n    # kube_pod_info.node identifies the pod node,\n    # while kube_pod_labels.node is the metrics exporter's node\n    kube_pod_info{node!=\"\"}\n    * on (namespace, pod) group_left() \n  group(\n    kube_pod_labels{ namespace=~\"jupyterjsc\" }\n  ) by (pod, namespace)\n) by (node)\n",
+              "expr": "sum(\n    # kube_pod_info.node identifies the pod node,\n    # while kube_pod_labels.node is the metrics exporter's node\n    kube_pod_info{node!=\"\"}\n    * on (namespace, pod) group_left() \n  group(\n    kube_pod_labels{ namespace=~\"jupyter\" }\n  ) by (pod, namespace)\n) by (node)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ "{{" }} node }}",
@@ -961,7 +961,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(\n  kube_pod_status_phase{phase!=\"Running\", namespace=\"jupyterjsc\"}\n) by (phase)\n",
+              "expr": "sum(\n  kube_pod_status_phase{phase!=\"Running\", namespace=\"jupyter\"}\n) by (phase)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ "{{" }} phase }}",
@@ -1062,7 +1062,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "(\n  time() \n  - (\n    kube_service_created\n    * on (namespace, service)  \n  group(\n    kube_service_labels{ \n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\",\n      namespace=~\"jupyterjsc\"\n    }\n  ) by (service, namespace)\n  )\n) > (24 * 60 * 60 * 30) # 30 days is our threshold\n",
+              "expr": "(\n  time() \n  - (\n    kube_service_created\n    * on (namespace, service)  \n  group(\n    kube_service_labels{ \n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\",\n      namespace=~\"jupyter\"\n    }\n  ) by (service, namespace)\n  )\n) > (24 * 60 * 60 * 30) # 30 days is our threshold\n",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,

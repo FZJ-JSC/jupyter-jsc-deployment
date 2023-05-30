@@ -1,4 +1,13 @@
-defaultNamespace: jupyterjsc
+defaultnamespace: jupyter
 helm:
+  chart: /workspace/source/hub-base/helper-each
+  releaseName: jupyter-jhub-eurocc-helper 
   values:
-    nameOverride: "eurocc-jhub-helper"
+    nameOverride: jhub-eurocc-helper
+    appName: eurocc
+    proxyBackup:
+      name: eurocc-proxy-public
+      release: jupyterhub-eurocc
+      numberOfBackups: 5
+    serviceStatic:
+      name: eurocc-static-files

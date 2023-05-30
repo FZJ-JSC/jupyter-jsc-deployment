@@ -1,11 +1,11 @@
-defaultNamespace: jupyterjsc
+defaultnamespace: jupyter
 helm:
   values:
     extraVolumeMounts:
       - name: persistent
         mountPath: /mnt/persistent
     image:
-      tag: "1.3.10"
+      tag: "1.3.11"
     nameOverride: "drf-unicoremgr"
     nodeSelector:
       worker: "true"

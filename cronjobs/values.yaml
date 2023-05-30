@@ -9,7 +9,7 @@ jobs:
   # first cron
   - name: daily-user-metric
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -47,7 +47,7 @@ jobs:
     - secretRef:
         name: cronjob-metrics
     - secretRef:
-        name: hub-generics
+        name: hub-jupyterjsc-generics
     nodeSelector:
       worker: "true"
     volumes:
@@ -60,7 +60,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: daily-user-metric-juniq
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -111,7 +111,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: daily-user-metric-coe-raise
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -162,7 +162,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: daily-user-metric-eurocc-gcs
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -211,9 +211,9 @@ jobs:
     volumeMounts:
       - name: cronjobs-cm
         mountPath: /mnt/volumes
-  - name: daily-user-metric-portal-gauss-centre
+  - name: daily-user-metric-portal-gauss
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -264,7 +264,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: 7days-metric
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: alpine
@@ -307,7 +307,7 @@ jobs:
     volumes:
       - name: persistent
         nfs:
-          path: /mnt/storage/jupyterhub
+          path: /mnt/storage/jupyterhub_jupyterjsc
           server: "10.0.20.30"
       - name: cronjobs-cm
         configMap:
@@ -339,13 +339,14 @@ jobs:
     args:
       - -c
       - >-
-          pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
-          pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
-          pg_dump -h postgresql -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
-          pg_dump -h postgresql -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
-          pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
-          pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
-          pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjupyterjsc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubportalgauss > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubportalgauss.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
     
     resources:
       limits:
@@ -391,12 +392,14 @@ jobs:
     args:
       - -c
       - >-
-          pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
-          pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
-          pg_dump -h postgresql -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
-          pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
-          pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
-          pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubportalgauss > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubportalgauss.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
     
     resources:
       limits:
@@ -424,7 +427,7 @@ jobs:
         mountPath: /mnt/persistent
   - name: cleanup-user-jobs-staging
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: staging
     image:
       repository: alpine
@@ -466,7 +469,7 @@ jobs:
         mountPath: /mnt/persistent
   - name: cleanup-user-jobs
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: alpine
@@ -508,7 +511,7 @@ jobs:
         mountPath: /mnt/persistent
   - name: hpc-account-update-check
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -536,27 +539,27 @@ jobs:
     - name: SQL_HOST
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_HOST
     - name: SQL_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_PASSWORD
     - name: SQL_DATABASE
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_DATABASE
     - name: SQL_PORT
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_PORT
     - name: SQL_USER
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_USER
     nodeSelector:
       worker: "true"

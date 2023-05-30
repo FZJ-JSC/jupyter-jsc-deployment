@@ -1,0 +1,52 @@
+hub:
+  initContainers:
+    - name: prepare-shared-data
+      image: alpine:3.14
+      imagePullPolicy: Always
+      env:
+        - name: JUPYTERHUB_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['jhub_version']
+        - name: JUPYTERHUB_STAGE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['stage']
+        - name: JUPYTERHUB_URL
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['hostname']
+        - name: HUB_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['app']
+        - name: GIT_REPO
+          valueFrom:
+            secretKeyRef:
+              name: "config-repository"
+              key: REPOSITORY
+        - name: GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: "config-repository"
+              key: USERNAME
+        - name: GIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "config-repository"
+              key: PASSWORD
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - >-
+          apk add bash git && /bin/bash /mnt/init_script/..data/initScript.sh
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: persistent
+          mountPath: /mnt/persistent
+        - name: internal-ssl
+          mountPath: /mnt/internal_ssl
+          readOnly: true
+        - name: init-script
+          mountPath: /mnt/init_script

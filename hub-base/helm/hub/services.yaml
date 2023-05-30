@@ -1,0 +1,7 @@
+hub:
+  services:
+    metrics:
+      name: metrics-prometheus-monitor
+  networkPolicy:
+    allowedIngressPorts:
+      - 8070

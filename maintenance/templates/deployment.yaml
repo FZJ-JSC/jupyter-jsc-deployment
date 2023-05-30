@@ -31,7 +31,7 @@ spec:
           imagePullPolicy: Always
           envFrom:
             - secretRef:
-                name: "jupyter-jsc-config"
+                name: "config-repository"
           env:
             - name: BRANCH
               value: {{ .Values.gitBranch }}

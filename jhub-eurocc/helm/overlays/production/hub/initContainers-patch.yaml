@@ -1,0 +1,5 @@
+- op: add
+  path: "/spec/template/spec/initContainers/0/env/-"
+  value:
+    name: TEMPLATE_GIT_REPO
+    value: "https://github.com/kochhlrs/jupyter_gcs_eurocc.git"

@@ -1,0 +1,13 @@
+defaultnamespace: jupyter
+helm:
+  chart: /workspace/source/hub-base/helper-each
+  releaseName: jupyter-jhub-jupyterjsc-helper 
+  values:
+    nameOverride: jhub-jupyterjsc-helper
+    appName: jupyterjsc 
+    proxyBackup:
+      name: jupyterjsc-proxy-public
+      release: jupyterhub-jupyterjsc
+      numberOfBackups: 5
+    serviceStatic:
+      name: jupyterjsc-static-files

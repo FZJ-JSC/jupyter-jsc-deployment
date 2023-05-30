@@ -1,4 +1,4 @@
-defaultNamespace: jupyterjsc
+defaultnamespace: jupyter
 helm:
   values:
     image:
@@ -7,6 +7,10 @@ helm:
       worker: "true"
     podAnnotations:
       proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+    ingress:
+      annotations:
+        acme.cert-manager.io/http01-edit-in-place: "false"
+        cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
 targetCustomizations:
   - name: staging
     clusterSelector:

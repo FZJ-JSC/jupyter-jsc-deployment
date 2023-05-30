@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hub-all-init-script
+data:
+  initScript.sh: |
+    #!/bin/bash
+
+    preparation() {
+        # Internal ssl variables
+        INTERNAL_SSL_SRC="/mnt/internal_ssl/*"
+        INTERNAL_SSL_DEST="/mnt/persistent/internal-ssl"
+
+        # git_config variables
+        CONFIG_DIR="/mnt/shared-data/git_config"
+
+        # git_share default variables
+        SHARE_JHUB_DIR_TMP="/tmp/share_jhub"
+        SHARE_JHUB_DIR="/mnt/shared-data/share/jupyterhub"
+
+        # git share specific variables
+        SHARE_SPECIFIC_TEMPLATE_DIR_TMP="/tmp/share_specific_template"
+
+        # Static duplication
+        STATIC_ONLY="/mnt/shared-data/static-files"
+    }
+
+    internal_ssl_dir() {
+        # Take the given internal_ssl (mounted via secret)
+        # and prepare it for JupyterHub in a persistent storage
+        mkdir -p ${INTERNAL_SSL_DEST}
+        for f in ${INTERNAL_SSL_SRC}; do
+            filename=$(basename $f)
+            if [[ ${filename} = certipy.json ]]; then
+                cp $f ${INTERNAL_SSL_DEST}/${filename}
+            elif [[ ! ${filename} = *_trust.crt ]]; then
+                dirname=${filename%%_*}
+                mkdir -p ${INTERNAL_SSL_DEST}/${dirname}
+                filename=${filename##*_}
+                cp $f ${INTERNAL_SSL_DEST}/${dirname}/${filename}
+            else
+                cp $f ${INTERNAL_SSL_DEST}/${filename}
+            fi
+        done
+    }
+
+    git_config() {
+        CONFIG_BRANCH=jupyterhub-${HUB_NAME}-${JUPYTERHUB_STAGE}
+        # In case of pod restarts $CONFIG_DIR is not empty and 
+        # `git clone` would fail
+        rm -rf ${CONFIG_DIR}
+        git clone --single-branch --branch ${CONFIG_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"} ${CONFIG_DIR}
+    }
+
+    git_share() {
+        # Ensure directory exists
+        mkdir -p ${SHARE_JHUB_DIR}
+
+        SHARE_BRANCH=jupyterhub-files-${JUPYTERHUB_STAGE}
+        # In case of pod restarts $SHARE_JHUB_DIR_TMP might not be
+        # empty and  `git clone` would fail
+        rm -rf ${SHARE_JHUB_DIR_TMP}
+        git clone --single-branch --branch ${SHARE_BRANCH} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"} ${SHARE_JHUB_DIR_TMP}
+
+        # Some JupyterHub may have specific static/template files.
+        # We clone these and override the default ones.
+        if [[ -n ${TEMPLATE_GIT_REPO} ]]; then
+            if [[ -n ${TEMPLATE_GIT_USERNAME} && -n ${TEMPLATE_GIT_PASSWORD} ]]
+            then
+                git clone --single-branch --branch ${JUPYTERHUB_STAGE} https://${TEMPLATE_GIT_USERNAME}:${TEMPLATE_GIT_PASSWORD}@${TEMPLATE_GIT_REPO#"https://"} ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
+            else
+                git clone --single-branch --branch ${JUPYTERHUB_STAGE} ${TEMPLATE_GIT_REPO} ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
+            fi
+            cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/templates/* ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/templates/
+            cp -r ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}/static/* ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/static/
+        fi
+
+        # Now we place everything where JupyterHub will look for it
+        cp -r ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/* ${SHARE_JHUB_DIR} 
+    }
+
+    wrap_up() {
+        # set ownership
+        chown -R 1000:100 /mnt/shared-data
+        chown -R 1000:100 /mnt/persistent
+    }
+
+    preparation
+    internal_ssl_dir
+    git_config
+    git_share
+    wrap_up
