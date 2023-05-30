@@ -86,8 +86,6 @@ targetCustomizations:
     helm:
       values:
         hub:
-          image:
-            tag: "dev620cc716"
           labels:
             stage: production
             jhub_version: "4.0.0"
