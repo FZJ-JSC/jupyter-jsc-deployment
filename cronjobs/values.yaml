@@ -339,7 +339,7 @@ jobs:
     args:
       - -c
       - >-
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjupyterjsc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
           pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
           pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
           pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
