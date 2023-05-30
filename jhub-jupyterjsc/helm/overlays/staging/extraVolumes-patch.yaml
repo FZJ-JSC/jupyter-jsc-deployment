@@ -3,7 +3,7 @@
 #   value:
 #     name: persistent
 #     nfs:
-#       path: /mnt/storage/jupyterhub
+#       path: /mnt/storage/jupyterhub_jupyterjsc
 #       server: 10.0.94.248
 - op: replace
   path: "/spec/template/spec/volumes/2/secret/secretName"
@@ -13,4 +13,4 @@
   value: "10.0.94.248"
 - op: replace
   path: "/spec/template/spec/volumes/3/nfs/path"
-  value: "/mnt/storage/jupyterhub"
+  value: "/mnt/storage/jupyterhub_jupyterjsc"

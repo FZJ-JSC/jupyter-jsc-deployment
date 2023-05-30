@@ -307,7 +307,7 @@ jobs:
     volumes:
       - name: persistent
         nfs:
-          path: /mnt/storage/jupyterhub
+          path: /mnt/storage/jupyterhub_jupyterjsc
           server: "10.0.20.30"
       - name: cronjobs-cm
         configMap:
