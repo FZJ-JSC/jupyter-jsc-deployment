@@ -211,7 +211,7 @@ jobs:
     volumeMounts:
       - name: cronjobs-cm
         mountPath: /mnt/volumes
-  - name: daily-user-metric-portal-gauss-centre
+  - name: daily-user-metric-portal-gauss
     enabled: true
     namespace: jupyter
     stage: production
