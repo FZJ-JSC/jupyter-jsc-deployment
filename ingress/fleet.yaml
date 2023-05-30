@@ -18,49 +18,67 @@ helm:
         ssl-session-cache-size: "50m"
         ssl-protocols: "TLSv1.2 TLSv1.3"
         http-snippet: |
-          upstream default-jhub-retries {
-              server proxy-public.jupyterjsc.svc:443 max_fails=0;
-              server proxy-public-0.jupyterjsc.svc:443 max_fails=0;
-              server proxy-public-1.jupyterjsc.svc:443 max_fails=0;
-              server proxy-public-2.jupyterjsc.svc:443 max_fails=0;
-              server proxy-public-3.jupyterjsc.svc:443 max_fails=0;
-              server proxy-public-4.jupyterjsc.svc:443 max_fails=0;
+          upstream jupyterjsc-retries {
+              server jupyterjsc-proxy-public.jupyter.svc:443 max_fails=0;
+              server jupyterjsc-proxy-public-0.jupyter.svc:443 max_fails=0;
+              server jupyterjsc-proxy-public-1.jupyter.svc:443 max_fails=0;
+              server jupyterjsc-proxy-public-2.jupyter.svc:443 max_fails=0;
+              server jupyterjsc-proxy-public-3.jupyter.svc:443 max_fails=0;
+              server jupyterjsc-proxy-public-4.jupyter.svc:443 max_fails=0;
               keepalive 32;
           }
           upstream juniq-retries {
-              server juniq-proxy-public.jupyterjsc.svc:443 max_fails=0;
-              server juniq-proxy-public-0.jupyterjsc.svc:443 max_fails=0;
-              server juniq-proxy-public-1.jupyterjsc.svc:443 max_fails=0;
-              server juniq-proxy-public-2.jupyterjsc.svc:443 max_fails=0;
-              server juniq-proxy-public-3.jupyterjsc.svc:443 max_fails=0;
-              server juniq-proxy-public-4.jupyterjsc.svc:443 max_fails=0;
+              server juniq-proxy-public.jupyter.svc:443 max_fails=0;
+              server juniq-proxy-public-0.jupyter.svc:443 max_fails=0;
+              server juniq-proxy-public-1.jupyter.svc:443 max_fails=0;
+              server juniq-proxy-public-2.jupyter.svc:443 max_fails=0;
+              server juniq-proxy-public-3.jupyter.svc:443 max_fails=0;
+              server juniq-proxy-public-4.jupyter.svc:443 max_fails=0;
               keepalive 32;
           }
           upstream eurocc-retries {
-              server eurocc-proxy-public.jupyterjsc.svc:443 max_fails=0;
-              server eurocc-proxy-public-0.jupyterjsc.svc:443 max_fails=0;
-              server eurocc-proxy-public-1.jupyterjsc.svc:443 max_fails=0;
-              server eurocc-proxy-public-2.jupyterjsc.svc:443 max_fails=0;
-              server eurocc-proxy-public-3.jupyterjsc.svc:443 max_fails=0;
-              server eurocc-proxy-public-4.jupyterjsc.svc:443 max_fails=0;
+              server eurocc-proxy-public.jupyter.svc:443 max_fails=0;
+              server eurocc-proxy-public-0.jupyter.svc:443 max_fails=0;
+              server eurocc-proxy-public-1.jupyter.svc:443 max_fails=0;
+              server eurocc-proxy-public-2.jupyter.svc:443 max_fails=0;
+              server eurocc-proxy-public-3.jupyter.svc:443 max_fails=0;
+              server eurocc-proxy-public-4.jupyter.svc:443 max_fails=0;
               keepalive 32;
           }
           upstream portalgauss-retries {
-              server portalgauss-proxy-public.jupyterjsc.svc:443 max_fails=0;
-              server portalgauss-proxy-public-0.jupyterjsc.svc:443 max_fails=0;
-              server portalgauss-proxy-public-1.jupyterjsc.svc:443 max_fails=0;
-              server portalgauss-proxy-public-2.jupyterjsc.svc:443 max_fails=0;
-              server portalgauss-proxy-public-3.jupyterjsc.svc:443 max_fails=0;
-              server portalgauss-proxy-public-4.jupyterjsc.svc:443 max_fails=0;
+              server portalgauss-proxy-public.jupyter.svc:443 max_fails=0;
+              server portalgauss-proxy-public-0.jupyter.svc:443 max_fails=0;
+              server portalgauss-proxy-public-1.jupyter.svc:443 max_fails=0;
+              server portalgauss-proxy-public-2.jupyter.svc:443 max_fails=0;
+              server portalgauss-proxy-public-3.jupyter.svc:443 max_fails=0;
+              server portalgauss-proxy-public-4.jupyter.svc:443 max_fails=0;
+              keepalive 32;
+          }
+          upstream dev1-retries {
+              server dev1-proxy-public.jupyterjscdev.svc:443 max_fails=0;
+              server dev1-proxy-public-0.jupyterjscdev.svc:443 max_fails=0;
+              server dev1-proxy-public-1.jupyterjscdev.svc:443 max_fails=0;
+              server dev1-proxy-public-2.jupyterjscdev.svc:443 max_fails=0;
+              server dev1-proxy-public-3.jupyterjscdev.svc:443 max_fails=0;
+              server dev1-proxy-public-4.jupyterjscdev.svc:443 max_fails=0;
+              keepalive 32;
+          }
+          upstream dev2-retries {
+              server dev2-proxy-public.jupyterjscdev.svc:443 max_fails=0;
+              server dev2-proxy-public-0.jupyterjscdev.svc:443 max_fails=0;
+              server dev2-proxy-public-1.jupyterjscdev.svc:443 max_fails=0;
+              server dev2-proxy-public-2.jupyterjscdev.svc:443 max_fails=0;
+              server dev2-proxy-public-3.jupyterjscdev.svc:443 max_fails=0;
+              server dev2-proxy-public-4.jupyterjscdev.svc:443 max_fails=0;
               keepalive 32;
           }
           upstream coeraise-retries {
-              server coeraise-proxy-public.jupyterjsc.svc:443 max_fails=0;
-              server coeraise-proxy-public-0.jupyterjsc.svc:443 max_fails=0;
-              server coeraise-proxy-public-1.jupyterjsc.svc:443 max_fails=0;
-              server coeraise-proxy-public-2.jupyterjsc.svc:443 max_fails=0;
-              server coeraise-proxy-public-3.jupyterjsc.svc:443 max_fails=0;
-              server coeraise-proxy-public-4.jupyterjsc.svc:443 max_fails=0;
+              server coeraise-proxy-public.jupyter.svc:443 max_fails=0;
+              server coeraise-proxy-public-0.jupyter.svc:443 max_fails=0;
+              server coeraise-proxy-public-1.jupyter.svc:443 max_fails=0;
+              server coeraise-proxy-public-2.jupyter.svc:443 max_fails=0;
+              server coeraise-proxy-public-3.jupyter.svc:443 max_fails=0;
+              server coeraise-proxy-public-4.jupyter.svc:443 max_fails=0;
               keepalive 32;
           }
       extraArgs:

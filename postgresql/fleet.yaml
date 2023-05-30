@@ -10,66 +10,7 @@ helm:
     primary:
       extraEnvVarsSecret: "postgresql-users"
       initdb:
-        scripts:
-          test_init_script.sh: |
-            #!/bin/sh
-            export PGPASSWORD=${POSTGRES_PASSWORD}
-
-            export JUPYTERHUB_SETUP=${JUPYTERHUB_SETUP:-"false"}
-            if [[ ${JUPYTERHUB_SETUP} == "true" ]]; then
-              psql -U postgres -c "CREATE DATABASE ${JUPYTERHUB_DATABASE};"
-              psql -U postgres -c "CREATE USER ${JUPYTERHUB_USER} WITH ENCRYPTED PASSWORD '${JUPYTERHUB_PASSWORD}';"
-              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${JUPYTERHUB_DATABASE} TO ${JUPYTERHUB_USER};"
-            fi
-
-            export JUPYTERHUB_JUNIQ_SETUP=${JUPYTERHUB_JUNIQ_SETUP:-"false"}
-            if [[ ${JUPYTERHUB_JUNIQ_SETUP} == "true" ]]; then
-              psql -U postgres -c "CREATE DATABASE ${JUPYTERHUB_JUNIQ_DATABASE};"
-              psql -U postgres -c "CREATE USER ${JUPYTERHUB_JUNIQ_USER} WITH ENCRYPTED PASSWORD '${JUPYTERHUB_JUNIQ_PASSWORD}';"
-              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${JUPYTERHUB_JUNIQ_DATABASE} TO ${JUPYTERHUB_JUNIQ_USER};"
-            fi
-
-            export JUPYTERHUB_EUROCC_SETUP=${JUPYTERHUB_EUROCC_SETUP:-"false"}
-            if [[ ${JUPYTERHUB_EUROCC_SETUP} == "true" ]]; then
-              psql -U postgres -c "CREATE DATABASE ${JUPYTERHUB_EUROCC_DATABASE};"
-              psql -U postgres -c "CREATE USER ${JUPYTERHUB_EUROCC_USER} WITH ENCRYPTED PASSWORD '${JUPYTERHUB_EUROCC_PASSWORD}';"
-              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${JUPYTERHUB_EUROCC_DATABASE} TO ${JUPYTERHUB_EUROCC_USER};"
-            fi
-
-            export JUPYTERHUB_PORTALGAUSS_SETUP=${JUPYTERHUB_PORTALGAUSS_SETUP:-"false"}
-            if [[ ${JUPYTERHUB_PORTALGAUSS_SETUP} == "true" ]]; then
-              psql -U postgres -c "CREATE DATABASE ${JUPYTERHUB_PORTALGAUSS_DATABASE};"
-              psql -U postgres -c "CREATE USER ${JUPYTERHUB_PORTALGAUSS_USER} WITH ENCRYPTED PASSWORD '${JUPYTERHUB_PORTALGAUSS_PASSWORD}';"
-              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${JUPYTERHUB_PORTALGAUSS_DATABASE} TO ${JUPYTERHUB_PORTALGAUSS_USER};"
-            fi
-
-            export JUPYTERHUB_COERAISE_SETUP=${JUPYTERHUB_COERAISE_SETUP:-"false"}
-            if [[ ${JUPYTERHUB_COERAISE_SETUP} == "true" ]]; then
-              psql -U postgres -c "CREATE DATABASE ${JUPYTERHUB_COERAISE_DATABASE};"
-              psql -U postgres -c "CREATE USER ${JUPYTERHUB_COERAISE_USER} WITH ENCRYPTED PASSWORD '${JUPYTERHUB_COERAISE_PASSWORD}';"
-              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${JUPYTERHUB_COERAISE_DATABASE} TO ${JUPYTERHUB_COERAISE_USER};"
-            fi
-
-            export UNICOREMGR_SETUP=${UNICOREMGR_SETUP:-"false"}
-            if [[ ${UNICOREMGR_SETUP} == "true" ]]; then
-              psql -U postgres -c "CREATE DATABASE ${UNICOREMGR_DATABASE};"
-              psql -U postgres -c "CREATE USER ${UNICOREMGR_USER} WITH ENCRYPTED PASSWORD '${UNICOREMGR_PASSWORD}';"
-              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${UNICOREMGR_DATABASE} TO ${UNICOREMGR_USER};"
-            fi
-
-            export TUNNEL_SETUP=${TUNNEL_SETUP:-"false"}
-            if [[ ${TUNNEL_SETUP} == "true" ]]; then
-              psql -U postgres -c "CREATE DATABASE ${TUNNEL_DATABASE};"
-              psql -U postgres -c "CREATE USER ${TUNNEL_USER} WITH ENCRYPTED PASSWORD '${TUNNEL_PASSWORD}';"
-              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${TUNNEL_DATABASE} TO ${TUNNEL_USER};"
-            fi
-
-            export K8SMGR_SETUP=${K8SMGR_SETUP:-"false"}
-            if [[ ${K8SMGR_SETUP} == "true" ]]; then
-              psql -U postgres -c "CREATE DATABASE ${K8SMGR_DATABASE};"
-              psql -U postgres -c "CREATE USER ${K8SMGR_USER} WITH ENCRYPTED PASSWORD '${K8SMGR_PASSWORD}';"
-              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE ${K8SMGR_DATABASE} TO ${K8SMGR_USER};"
-            fi
+        scriptsSecret: "init-db"
       nodeSelector:
         worker: "true"
       persistence:

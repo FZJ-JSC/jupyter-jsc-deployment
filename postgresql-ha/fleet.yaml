@@ -1,0 +1,25 @@
+defaultNamespace: database
+helm:
+  releaseName: postgresql-ha
+  repo: https://charts.bitnami.com/bitnami
+  chart: postgresql-ha
+  version: 11.7.2
+  values:
+    pgpool:
+      customUsersSecret: "postgresql-ha-customusers"
+      existingSecret: "postgresql-ha-pgpool"
+      nodeSelector:
+        worker: "true"
+      podAnnotations:
+        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      replicaCount: 2
+    postgresql:
+      existingSecret: "postgresql-ha-auth"
+      nodeSelector:
+        worker: "true"
+      podAnnotations:
+        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      replicaCount: 3
+dependsOn:
+  - name: basics-istio
+  - name: basics-storageclass

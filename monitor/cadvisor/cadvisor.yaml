@@ -77,12 +77,12 @@ spec:
           name: http
           protocol: TCP
         resources:
+          requests:
+            cpu: 200m
+            memory: 50Mi
           limits:
             cpu: 800m
-            memory: 2000Mi
-          requests:
-            cpu: 400m
-            memory: 400Mi
+            memory: 200Mi
         volumeMounts:
         - mountPath: /rootfs
           name: rootfs

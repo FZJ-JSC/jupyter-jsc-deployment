@@ -10,4 +10,4 @@ helm:
     nodeSelector:
       worker: "true"
 dependsOn:
-  - name: basics-postgresql
+  - name: basics-postgresql-ha
