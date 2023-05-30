@@ -16,7 +16,7 @@ hub:
         - name: OUTPUT_DIR
           value: "/mnt/shared-data/incident-check"
         - name: STATIC_IMG_DIR
-          value: "/mnt/shared-data/static-files/default/images/footer"
+          value: "/mnt/shared-data/share/jupyterhub/static/images/footer"
         - name: LOGGER_NAME
           value: "IncidentCheck"
       volumeMounts:
@@ -39,29 +39,29 @@ hub:
         - name: SQL_HOST
           valueFrom:
             secretKeyRef:
-              name: hub-generics
+              name: hub-jupyterjsc-generics
               key: SQL_HOST
         - name: JUPYTERHUB_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: hub-generics
+              name: hub-jupyterjsc-generics
               key: SQL_PASSWORD
         - name: UNICOREMGR_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:
-              name: hub-generics
+              name: hub-jupyterjsc-generics
               key: UNICOREMGR_JUPYTERHUB_USER_PASS
               optional: false
         - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:
-              name: hub-generics
+              name: hub-jupyterjsc-generics
               key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
               optional: false
         - name: TUNNEL_JUPYTERHUB_USER_PASS
           valueFrom:
             secretKeyRef:
-              name: hub-generics
+              name: hub-jupyterjsc-generics
               key: TUNNEL_JUPYTERHUB_USER_PASS
               optional: false
         - name: UNICOREMGR_JUPYTERHUB_USERNAME
@@ -107,7 +107,7 @@ hub:
       args:
         - -c
         - >-
-            apk add bash git && /bin/bash /mnt/volumes_mw/mount_watch/..data/run.sh
+            apk add bash git && /bin/bash /mnt/mount_watch/mount_watch/..data/run.sh
       env:
         - name: JUPYTERHUB_STAGE
           valueFrom:
@@ -117,11 +117,30 @@ hub:
           valueFrom:
             fieldRef:
               fieldPath: metadata.labels['jhub_version']
+        - name: GIT_REPO
+          valueFrom:
+            secretKeyRef:
+              name: "config-repository"
+              key: REPOSITORY
+        - name: GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: "config-repository"
+              key: USERNAME
+        - name: GIT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "config-repository"
+              key: PASSWORD
+        - name: HUB_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['app']
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
         - name:  mount-watch
-          mountPath: /mnt/volumes_mw/mount_watch
+          mountPath: /mnt/mount_watch/mount_watch
         - name: tz-config
           mountPath: /etc/localtime
     - name: static-files
@@ -133,10 +152,10 @@ hub:
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
-        - name: hub-nginx-config
+        - name: nginx-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
-        - name: hub-nginx-config
+        - name: nginx-config
           mountPath: /etc/nginx/conf.d/jupyter.conf
           subPath: jupyter.conf
         - name: tz-config

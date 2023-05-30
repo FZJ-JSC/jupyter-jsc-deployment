@@ -1,0 +1,17 @@
+defaultNamespace: hairpin-proxy
+
+targetCustomizations:
+- name: staging
+  clusterSelector:
+    matchLabels:
+      stage: staging
+  yaml:
+    overlays:
+      - staging
+- name: production
+  clusterSelector:
+    matchLabels:
+      stage: production
+  yaml:
+    overlays:
+      - production

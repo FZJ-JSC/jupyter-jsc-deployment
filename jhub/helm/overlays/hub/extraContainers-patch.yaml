@@ -1,7 +1,0 @@
-- op: add
-  path: "/spec/template/spec/containers/1/env/-"
-  value:
-    name: hub-coeraise-NTS_GIT_BRANCH
-    valueFrom:
-      fieldRef:
-        fieldPath: metadata.labels['NTS_GIT_BRANCH']

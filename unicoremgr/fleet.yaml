@@ -1,4 +1,4 @@
-defaultNamespace: jupyterjsc
+defaultnamespace: jupyter
 helm:
   values:
     extraVolumeMounts:

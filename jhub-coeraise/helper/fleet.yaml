@@ -1,18 +1,10 @@
-defaultNamespace: jupyterjsc
+defaultnamespace: jupyter
 helm:
-  chart: /workspace/source/hub-base/helper
-  releaseName: jupyterjsc-jhub-coeraise-helper 
+  chart: /workspace/source/hub-base/helper-each
+  releaseName: jupyter-jhub-coeraise-helper 
   values:
     nameOverride: jhub-coeraise-helper
     appName: coeraise
-    gitconfig:
-      branch: jupyterhub-coeraise
-    mountWatch:
-      safeDirectories:
-        - "/mnt/shared-data/jhub_files/2.3.1/templates/jupyter-staging.coe-raise.eu"
-        - "/mnt/shared-data/jhub_files/2.3.1/static/jupyter-staging.coe-raise.eu"
-        - "/mnt/shared-data/jhub_files/2.3.1/templates/jupyter.coe-raise.eu"
-        - "/mnt/shared-data/jhub_files/2.3.1/static/jupyter.coe-raise.eu"
     proxyBackup:
       name: coeraise-proxy-public
       release: jupyterhub-coeraise

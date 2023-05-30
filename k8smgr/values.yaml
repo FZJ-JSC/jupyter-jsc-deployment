@@ -18,7 +18,7 @@ deploymentNamespace: "userlabs"
 
 gitconfig:
   branch: "k8smgr-dev"
-  secret: "jupyter-jsc-git-config-userlabs"
+  secret: "userlabs-config-repository"
 
 secrets:
   keypairs: "drf-k8smgr-keypairs"

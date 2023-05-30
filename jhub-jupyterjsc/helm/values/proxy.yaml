@@ -1,0 +1,7 @@
+proxy:
+  chp:
+    defaultTarget: "https://jupyterjsc-hub:8081"
+    errorTarget: "https://jupyterjsc-hub:8081/hub/error"
+  https:
+    secret:
+      name: internal-ssl-jupyterjsc

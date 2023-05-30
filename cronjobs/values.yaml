@@ -9,7 +9,7 @@ jobs:
   # first cron
   - name: daily-user-metric
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -27,7 +27,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
     
     resources:
       limits:
@@ -40,14 +40,14 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
-      value: "jupyter-jsc.fz-juelich.de"
+      value: "main"
     - name: GIT_SUBDIR
-      value: "metrics"
+      value: "metrics/Jupyter-JSC"
     envFrom:
     - secretRef:
         name: cronjob-metrics
     - secretRef:
-        name: hub-generics
+        name: hub-jupyterjsc-generics
     nodeSelector:
       worker: "true"
     volumes:
@@ -60,7 +60,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: daily-user-metric-juniq
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -78,7 +78,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
     
     resources:
       limits:
@@ -91,9 +91,9 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
-      value: "juniq.fz-juelich.de"
+      value: "main"
     - name: GIT_SUBDIR
-      value: "metrics"
+      value: "metrics/JUNIQ"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -111,7 +111,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: daily-user-metric-coe-raise
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -129,7 +129,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
     
     resources:
       limits:
@@ -142,9 +142,9 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
-      value: "jupyter.coe-raise.eu"
+      value: "main"
     - name: GIT_SUBDIR
-      value: "metrics"
+      value: "metrics/coe-raise"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -162,7 +162,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: daily-user-metric-eurocc-gcs
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -180,7 +180,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
     
     resources:
       limits:
@@ -193,9 +193,9 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
-      value: "jupyter.eurocc-gcs.de"
+      value: "main"
     - name: GIT_SUBDIR
-      value: "metrics"
+      value: "metrics/eurocc-gcs"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -211,9 +211,9 @@ jobs:
     volumeMounts:
       - name: cronjobs-cm
         mountPath: /mnt/volumes
-  - name: daily-user-metric-portal-gauss
+  - name: daily-user-metric-portal-gauss-centre
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -231,7 +231,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
     
     resources:
       limits:
@@ -244,9 +244,9 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
-      value: "portal.gauss-centre.eu"
+      value: "main"
     - name: GIT_SUBDIR
-      value: "metrics"
+      value: "metrics/portal-gauss-centre"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -264,7 +264,7 @@ jobs:
         mountPath: /mnt/volumes
   - name: 7days-metric
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: alpine
@@ -339,13 +339,14 @@ jobs:
     args:
       - -c
       - >-
-          pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
-          pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
-          pg_dump -h postgresql -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
-          pg_dump -h postgresql -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
-          pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
-          pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
-          pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubportalgauss > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubportalgauss.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
     
     resources:
       limits:
@@ -391,12 +392,14 @@ jobs:
     args:
       - -c
       - >-
-          pg_dump -h postgresql -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
-          pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
-          pg_dump -h postgresql -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
-          pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
-          pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
-          pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhub > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubportalgauss > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubportalgauss.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
+          pg_dump -h postgresql-ha-pgpool -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
     
     resources:
       limits:
@@ -424,7 +427,7 @@ jobs:
         mountPath: /mnt/persistent
   - name: cleanup-user-jobs-staging
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: staging
     image:
       repository: alpine
@@ -466,7 +469,7 @@ jobs:
         mountPath: /mnt/persistent
   - name: cleanup-user-jobs
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: alpine
@@ -508,7 +511,7 @@ jobs:
         mountPath: /mnt/persistent
   - name: hpc-account-update-check
     enabled: true
-    namespace: jupyterjsc
+    namespace: jupyter
     stage: production
     image:
       repository: python
@@ -536,27 +539,27 @@ jobs:
     - name: SQL_HOST
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_HOST
     - name: SQL_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_PASSWORD
     - name: SQL_DATABASE
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_DATABASE
     - name: SQL_PORT
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_PORT
     - name: SQL_USER
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_USER
     nodeSelector:
       worker: "true"

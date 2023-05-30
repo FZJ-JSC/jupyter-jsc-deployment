@@ -38,17 +38,17 @@ hub:
     - name: RESERVATIONS_FILE
       value: "/mnt/shared-data/reservation-check/reservation.json"
     - name: TUNNEL_DEPLOYMENT_NAMESPACE
-      value: "jupyterjsc"
+      value: "jupyter"
     - name: OAUTH_CLIENT_ID
       valueFrom:
         secretKeyRef:
           name: hub-custom
-          key: oauth_client_id_password
+          key: oauth_client_id
     - name: OAUTH_CLIENT_SECRET
       valueFrom:
         secretKeyRef:
           name: hub-custom
-          key: oauth_client_secret_password
+          key: oauth_client_secret
     - name: DEPLOYMENT_NAMESPACE
       valueFrom:
         fieldRef:
@@ -69,41 +69,43 @@ hub:
     - name: TUNNEL_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: TUNNEL_JUPYTERHUB_USER_PASS
     - name: UNICOREMGR_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: UNICOREMGR_JUPYTERHUB_USER_PASS
     - name: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
     - name: SQL_DATABASE
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_DATABASE
     - name: SQL_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_PASSWORD
     - name: SQL_USER
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_USER
     - name: SQL_HOST
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_HOST
     # patch index 30:
     - name: SQL_PORT
       valueFrom:
         secretKeyRef:
-          name: hub-generics
+          name: hub-jupyterjsc-generics
           key: SQL_PORT
+    - name: CUSTOM_CONFIG_PATH
+      value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
