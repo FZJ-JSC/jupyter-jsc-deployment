@@ -415,12 +415,12 @@ hub:
 
           body["user_options"] = spawner.user_options
           body["env"] = env
-          body["auth_state"] = auth_state
           body["certs"] = {}
           for key, path in spawner.cert_paths.items():
             with open(path, "r") as f:
               body["certs"][key] = f.read()
           body["start_id"] = spawner.start_id
+          spawner.log.debug(f"{spawner.name} start request body", extra={ "user_options": body["user_options"], "env": body["env"], "start_id": spawner.start_id, "uuidcode": spawner.name })
           return body
 
       async def cancel_click_event(spawner):

@@ -30,7 +30,7 @@ hub:
     - name: LOGGING_METRICS_LOGFILE
       value: "/mnt/persistent/metrics.log"
     - name: SHOW_DRF_LOGS
-      value: "false"
+      value: "true"
     - name: INCIDENTS_PATH
       value: "/mnt/shared-data/incident-check"
     - name: INCIDENTS_FILE
