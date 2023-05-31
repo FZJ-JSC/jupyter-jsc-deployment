@@ -89,7 +89,7 @@ targetCustomizations:
           labels:
             stage: production
             jhub_version: "4.0.0"
-            hostname: "jupyter-jsc.fz-juelich.de"
+            hostname: "zam10054.zam.kfa-juelich.de"
             drf_username: "jupyterhub"
             logger_name: "JupyterHubProduction"
             NTS_GIT_BRANCH: "main"
@@ -109,10 +109,10 @@ targetCustomizations:
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-          enabled: false
+          enabled: true
           hosts:
-          - jupyter-jsc.fz-juelich.de
+          - zam10054.zam.kfa-juelich.de
           tls:
           - hosts:
-            - jupyter-jsc.fz-juelich.de
-            secretName: jupyterjsc-tls
+            - zam10054.zam.kfa-juelich.de
+            secretName: zam10054-tls
