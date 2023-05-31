@@ -415,7 +415,6 @@ hub:
 
           body["user_options"] = spawner.user_options
           body["env"] = env
-          body["auth_state"] = auth_state
           body["certs"] = {}
           for key, path in spawner.cert_paths.items():
             with open(path, "r") as f:
