@@ -12,7 +12,7 @@ helm:
         worker: "true"
       podAnnotations:
         proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
-      replicaCount: 2
+      replicaCount: 1
     postgresql:
       existingSecret: "postgresql-ha-auth"
       nodeSelector:
