@@ -329,7 +329,7 @@ hub:
                   gpus_range = resources.get(option, {}).get(system, {}).get(partition, {}).get("gpus", {}).get("minmax", [-1, -1])
                   if ( 
                       gpus < gpus_range[0]
-                      or gpus > gpus_range[0]
+                      or gpus > gpus_range[1]
                       ):
                       return False, f"Selected gpus ( {gpus} ) not within allowed range {gpus_range}"
               xserver = int(user_options.get("xserver", "-1"))
