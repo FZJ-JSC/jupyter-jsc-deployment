@@ -569,7 +569,8 @@ hub:
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
       c.JupyterHub.template_vars = {
           "spawn_progress_update_url": "users/progress/update",
-          "user_cancel_message": user_cancel_message
+          "user_cancel_message": user_cancel_message,
+          "hostname": os.environ.get("JUPYTERHUB_HOSTNAME", "jupyter-jsc.fz-juelich.de"),
       }
       c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
 
