@@ -415,7 +415,7 @@ hub:
 
           body["user_options"] = spawner.user_options
           add_env = {}
-          for options in config.get("additional_spawn_options", {}).items():
+          for options in custom_config.get("additional_spawn_options", {}).items():
               for key in options[1]:
                   add_env[f"JUPYTER_MODULE_{key.upper()}_ENABLED"] = int(
                       key in user_options.get("additional_spawn_options", {})
