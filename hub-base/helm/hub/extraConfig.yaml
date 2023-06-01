@@ -300,7 +300,7 @@ hub:
           else:
               resources = auth_state.get("options_form", {}).get("resources", {})
               reservation = user_options.get("reservation", "None")
-              if reservation != "None":
+              if reservation and reservation != "None":
                   reservation_list = dropdown_list.get(option, {}).get(system, {}).get(account, {}).get(project, {}).get(partition, ["None"])
                   reservation_names = [x["ReservationName"] for x in reservation_list if type(x) == dict and "ReservationName" in x.keys()]
                   if reservation not in reservation_names:
