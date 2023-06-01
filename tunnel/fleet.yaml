@@ -214,6 +214,7 @@ targetCustomizations:
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLrGzMMx/vAHIdhCotONtPKlIKMiMkdrMSFRCt1gt/e jureca'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAuOxijmL537nNcNIzD0Kms/jNyEvkJDlpdfw1tRyXkp hdfml'
           - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKDP9utiItuy9tQxM8fXJJ++JBXCl0KOdSazkUHFd67d jusuf'
+          - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCfMiYWIMc5CMLCQ3sWZabrgCvCN/lLHmC7kzTYXug7wHJDRmrz/T2LgHoNx0rHp34txmpx/vCvRBTxeE+FkkmUbx0WNwIy/M7rmHAD7b+r0+ldHgO2/rGra5ShGJb5O2eFLOXg5buRbl2O78sCQmrERyluss0s1ekYk43loaj0tMVEYOQpzmYPRaGiavrQ5L4tb2qu54GeQasKxxVGy4S4NTWejj/PO4hRDVEE0vHrJjena51ao5OX1Zv/cI4oJKts4ubo6lV6QX0zsm+rFgSQ9zVVY3vktJsMqb7D/RPJTysGC4XO8ADpwJYbMxZ6oDvWEs7VdcZxNUfLlHf9htLLPRLuLKGmGzXnr0hBzYekDN26lTPu1YpdZySCDfk7aPQaQ7zOVceHk8O1eTfFpO3A1ZD7tS2eFVOfdca0gJvC2lKy9sp0ClECFO5Dddjf5hpVJTvz4k8Djot49mMEe6wjQimrJuUoo36ghOB2s7AD5xtRedEsdD7X/mZYW6PIO2Pn4DpIyQiRdI8qFMvpHkA/92Y9vHqnenoNiR69lkTktWIlrxT6lk97IhQHGwHwob+uNzJgM3x2WR3sks7CgEFziclpQRks4bZrAV9XeaIvQ7IhnpYdDHNIs1AMBCZ8EV4+MV20jYuqfzhtTBwFpIz9Jd1AkWTUL3PAIurteDjFiQ== k8smgrlrz'
         servicessh:
           loadBalancerIP: "134.94.199.67"
         stage: staging
