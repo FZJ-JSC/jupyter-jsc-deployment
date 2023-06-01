@@ -329,7 +329,7 @@ hub:
                   gpus_range = resources.get(option, {}).get(system, {}).get(partition, {}).get("gpus", {}).get("minmax", [-1, -1])
                   if ( 
                       gpus < gpus_range[0]
-                      or gpus > gpus_range[0]
+                      or gpus > gpus_range[1]
                       ):
                       return False, f"Selected gpus ( {gpus} ) not within allowed range {gpus_range}"
               xserver = int(user_options.get("xserver", "-1"))
@@ -414,6 +414,13 @@ hub:
               env["JUPYTERHUB_STATUS_UNICORE_URL"] = f"https://{jhub_hostname}/hub/api/{url_path_join(*url_parts)}"
 
           body["user_options"] = spawner.user_options
+          add_env = {}
+          for options in custom_config.get("additional_spawn_options", {}).items():
+              for key in options[1]:
+                  add_env[f"JUPYTER_MODULE_{key.upper()}_ENABLED"] = int(
+                      key in spawner.user_options.get("additional_spawn_options", {})
+                  )
+          env.update(add_env)
           body["env"] = env
           body["certs"] = {}
           for key, path in spawner.cert_paths.items():
@@ -562,7 +569,8 @@ hub:
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
       c.JupyterHub.template_vars = {
           "spawn_progress_update_url": "users/progress/update",
-          "user_cancel_message": user_cancel_message
+          "user_cancel_message": user_cancel_message,
+          "hostname": os.environ.get("JUPYTERHUB_HOSTNAME", "jupyter-jsc.fz-juelich.de"),
       }
       c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
 
