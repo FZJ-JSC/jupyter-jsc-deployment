@@ -120,7 +120,7 @@ targetCustomizations:
         stage: production
         provider.cattle.io: rke
     helm:
-      releaseName: ingress-nginx-production
+      releaseName: ingress-nginx-production2
       values:
         controller:
           service:
