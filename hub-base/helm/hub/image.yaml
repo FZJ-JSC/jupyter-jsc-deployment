@@ -4,4 +4,4 @@ hub:
     pullSecrets:
       - "gitlab-registry"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
-    tag: "deva834aaf5"
+    tag: "devadaa7c8f"
