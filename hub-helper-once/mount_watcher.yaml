@@ -87,7 +87,7 @@ data:
       git pull origin ${SHARE_BRANCH}
       cp -r ${SHARE_JHUB_DIR_TMP} ${SHARE_JHUB_DIR_PREP}
 
-      if [[ ${SHARE_SPECIFIC_TEMPLATE_HAS_UPDATE} -eq 1 ]]; then
+      if [[ -n ${TEMPLATE_GIT_REPO} ]]; then
         cd ${SHARE_SPECIFIC_TEMPLATE_DIR_TMP}
         git pull origin ${JUPYTERHUB_STAGE}
 
