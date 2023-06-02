@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: hairpin-proxy-haproxy-cm
 data:
-  TARGET_SERVER: 'ingress-nginx-production-controller.ingress-nginx.svc.cluster.local'
+  TARGET_SERVER: 'ingress-nginx-production2-controller.ingress-nginx.svc.cluster.local'
