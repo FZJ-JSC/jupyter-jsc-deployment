@@ -521,7 +521,7 @@ hub:
           )
           return userlabsport
 
-      c.EventBackendSpawner.port = port
+      c.EventBackendSpawner.custom_port = port
 
       c.JupyterHub.authenticator_class = CustomGenericOAuthenticator
       c.Authenticator.admin_users = {
