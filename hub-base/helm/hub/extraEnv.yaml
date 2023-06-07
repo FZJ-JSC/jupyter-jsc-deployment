@@ -109,3 +109,8 @@ hub:
           key: SQL_PORT
     - name: CUSTOM_CONFIG_PATH
       value: "/mnt/shared-data/git_config/jupyterhub_custom_config.json"
+    - name: HPC_UPDATE_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: hub-custom
+          key: hpc_update_secret
