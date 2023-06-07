@@ -27,7 +27,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
     
     resources:
       limits:
@@ -78,7 +78,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
     
     resources:
       limits:
@@ -129,7 +129,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
     
     resources:
       limits:
@@ -180,7 +180,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
     
     resources:
       limits:
@@ -231,7 +231,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
     
     resources:
       limits:
@@ -283,7 +283,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
     
     resources:
       limits:
