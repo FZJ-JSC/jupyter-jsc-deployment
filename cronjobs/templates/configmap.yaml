@@ -8,7 +8,7 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 data:
-  dailyusermetric.sh: |
+  usermetric.sh: |
     #!/bin/bash
     git config --global user.email "cronjob@fz-juelich.de"
     git config --global user.name "CronJob"
@@ -18,11 +18,22 @@ data:
     fi
     cd ${GIT_SUBDIR}
     git add .
-    YESTERDAY=$(date -d "yesterday" +'%Y-%m-%d')
+    YESTERDAY=$(date -d "1 days ago" +'%Y-%m-%d')
     ACTIVE_USER=$(psql -t --csv --command "SELECT COUNT(id) FROM users WHERE last_activity >= '${YESTERDAY} 00:00:00.000000';"  postgresql://${SQL_USER}:${SQL_PASSWORD}@${SQL_HOST}:${SQL_PORT}/${SQL_DATABASE})
-    echo "${YESTERDAY};${ACTIVE_USER}" >> daily_active_user.csv
-    git add daily_active_user.csv
-    git commit -m "update daily metrics"
+    echo "${YESTERDAY};${ACTIVE_USER}" >> user_metrics_last_1_days.csv
+    git add user_metrics_last_1_days.csv
+
+    DAYS7=$(date -d "7 days ago" +'%Y-%m-%d')
+    ACTIVE_USER=$(psql -t --csv --command "SELECT COUNT(id) FROM users WHERE last_activity >= '${DAYS7} 00:00:00.000000';"  postgresql://${SQL_USER}:${SQL_PASSWORD}@${SQL_HOST}:${SQL_PORT}/${SQL_DATABASE})
+    echo "${YESTERDAY};${ACTIVE_USER}" >> user_metrics_last_7_days.csv
+    git add user_metrics_last_7_days.csv
+
+    DAYS30=$(date -d "30 days ago" +'%Y-%m-%d')
+    ACTIVE_USER=$(psql -t --csv --command "SELECT COUNT(id) FROM users WHERE last_activity >= '${DAYS30} 00:00:00.000000';"  postgresql://${SQL_USER}:${SQL_PASSWORD}@${SQL_HOST}:${SQL_PORT}/${SQL_DATABASE})
+    echo "${YESTERDAY};${ACTIVE_USER}" >> user_metrics_last_30_days.csv
+    git add user_metrics_last_30_days.csv
+
+    git commit -m "update metrics"
     git push origin ${GIT_BRANCH}
 
   metrics7dayhifis.sh: |
@@ -115,3 +126,4 @@ data:
       import traceback
       print(traceback.format_exc())
       sys.exit(1)
+
