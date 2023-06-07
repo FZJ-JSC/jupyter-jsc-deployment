@@ -40,9 +40,9 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
-      value: "main"
+      value: "jupyter-jsc.fz-juelich.de"
     - name: GIT_SUBDIR
-      value: "metrics/Jupyter-JSC"
+      value: "metrics"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -91,9 +91,9 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
-      value: "main"
+      value: "juniq.fz-juelich.de"
     - name: GIT_SUBDIR
-      value: "metrics/JUNIQ"
+      value: "metrics"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -142,9 +142,9 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
-      value: "main"
+      value: "jupyter.coe-raise.eu"
     - name: GIT_SUBDIR
-      value: "metrics/coe-raise"
+      value: "metrics"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -193,9 +193,9 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
-      value: "main"
+      value: "jupyter.eurocc-gcs.de"
     - name: GIT_SUBDIR
-      value: "metrics/eurocc-gcs"
+      value: "metrics"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -244,9 +244,9 @@ jobs:
     - name: GIT_REPO
       value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
     - name: GIT_BRANCH
-      value: "main"
+      value: "portal.gauss-centre.eu"
     - name: GIT_SUBDIR
-      value: "metrics/portal-gauss-centre"
+      value: "metrics"
     envFrom:
     - secretRef:
         name: cronjob-metrics
@@ -283,7 +283,7 @@ jobs:
     args:
       - -c
       - >-
-          apk add bash coreutils git && /bin/bash /mnt/volumes/metrics7dayhifis.sh
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/dailyusermetric.sh
     
     resources:
       limits:
@@ -301,7 +301,9 @@ jobs:
       value: "FZJ-Jupyter/stats"
     envFrom:
     - secretRef:
-        name: cronjobs
+        name: cronjob-metrics-hifis
+    - secretRef:
+        name: hub-jupyterjsc-generics
     nodeSelector:
       worker: "true"
     volumes:
