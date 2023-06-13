@@ -56,8 +56,6 @@ targetCustomizations:
             hostname: "portal-staging.gauss-centre.eu"
             drf_username: "jupyterhubportalgauss"
             logger_name: "JupyterHubPortalGaussStaging"
-            TEMPLATE_GIT_BRANCH: templates-staging
-            STATIC_GIT_BRANCH: static-staging
           resources:
             requests:
               cpu: 20m
@@ -96,8 +94,6 @@ targetCustomizations:
             hostname: "portal.gauss-centre.eu"
             drf_username: "jupyterhubportalgauss"
             logger_name: "JupyterHubPortalGaussProduction"
-            TEMPLATE_GIT_BRANCH: templates-production
-            STATIC_GIT_BRANCH: static-production
           resources:
             requests:
               cpu: 20m
