@@ -266,16 +266,6 @@ targetCustomizations:
             limits:
               cpu: 50m
               memory: 500Mi
-  - name: production
-    clusterSelector:
-      matchLabels:
-        stage: production
-    helm:
-      values:
-        grafana:
-          env:
-            - name: "STAGE"
-              value: production
 dependsOn:
   - name: basics-ingress
   - name: basics-monitor-cadvisor
