@@ -274,7 +274,7 @@ targetCustomizations:
       values:
         grafana:
           env:
-            - name: STAGE
+            - name: "STAGE"
               value: production
 dependsOn:
   - name: basics-ingress
