@@ -220,6 +220,8 @@ targetCustomizations:
                 cpu: 50m
                 memory: 250Mi
         grafana:
+          labels:
+            stage: staging
           resources:
             requests:
               cpu: 10m
