@@ -1,7 +1,0 @@
-# Default values for storage.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-storageClassName: "csi-cinder-sc-retain"
-size: "5Gi"
-name: "data-postgresql"
