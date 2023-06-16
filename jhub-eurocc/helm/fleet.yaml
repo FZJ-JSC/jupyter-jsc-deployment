@@ -56,8 +56,6 @@ targetCustomizations:
             hostname: "jupyter-staging.eurocc-gcs.de"
             drf_username: "jupyterhubeurocc"
             logger_name: "JupyterHubEuroCCStaging"
-            TEMPLATE_GIT_BRANCH: templates-staging
-            STATIC_GIT_BRANCH: static-staging
           resources:
             requests:
               cpu: 20m
@@ -96,8 +94,6 @@ targetCustomizations:
             hostname: "jupyter.eurocc-gcs.de"
             drf_username: "jupyterhubeurocc"
             logger_name: "JupyterHubEuroCCProduction"
-            TEMPLATE_GIT_BRANCH: templates-production
-            STATIC_GIT_BRANCH: static-production
           resources:
             requests:
               cpu: 100m

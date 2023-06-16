@@ -56,8 +56,6 @@ targetCustomizations:
             hostname: "jupyter-staging.coe-raise.eu"
             drf_username: "jupyterhubcoeraise"
             logger_name: "JupyterHubCoERaiseStaging"
-            TEMPLATE_GIT_BRANCH: templates-staging
-            STATIC_GIT_BRANCH: static-staging
           resources:
             requests:
               cpu: 20m
@@ -96,8 +94,6 @@ targetCustomizations:
             hostname: "jupyter.coe-raise.eu"
             drf_username: "jupyterhubcoeraise"
             logger_name: "JupyterHubCoERaiseProduction"
-            TEMPLATE_GIT_BRANCH: templates-production
-            STATIC_GIT_BRANCH: static-production
           resources:
             requests:
               cpu: 100m
