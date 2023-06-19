@@ -21,7 +21,38 @@ helm:
       tolerations:
         - key: "monitoring"
           value: "true"
-          effect: "NoExecute"    
+          effect: "NoExecute"
+      extraInitContainers:
+        - name: prepare-dashboards
+          image:
+            repository: python
+            tag: 3.9-alpine3.16
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args:
+            - '-c'
+            - >-
+              apk add git jsonnet && while true; do sleep 30; done
+          env:
+            - name: GIT_REPO
+              valueFrom:
+                secretKeyRef:
+                  name: "config-repository"
+                  key: REPOSITORY
+            - name: GIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: "config-repository"
+                  key: USERNAME
+            - name: GIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "config-repository"
+                  key: PASSWORD
+            - name: GIT_BRANCH_STAGE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['stage']
       persistence:
         enabled: true
         existingClaim: grafana-pvc
