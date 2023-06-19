@@ -22,13 +22,12 @@ helm:
         - key: "monitoring"
           value: "true"
           effect: "NoExecute"
-      securityContext:
-        runAsNonRoot: false
       extraInitContainers:
         - name: prepare-dashboards
           image: "python:3.9-alpine3.16"
           imagePullPolicy: Always
           securityContext:
+            runAsNonRoot: false
             runAsUser: 0
           command: ["/bin/sh"]
           args:
