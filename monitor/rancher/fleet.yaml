@@ -30,7 +30,7 @@ helm:
           args:
             - '-c'
             - >-
-              whoami && apk add git jsonnet && while true; do sleep 30; done
+              while true; do sleep 30; done
           env:
             - name: GIT_REPO
               valueFrom:
