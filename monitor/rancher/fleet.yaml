@@ -26,6 +26,8 @@ helm:
         - name: prepare-dashboards
           image: "python:3.9-alpine3.16"
           imagePullPolicy: Always
+          securityContext:
+            runAsUser: 0
           command: ["/bin/sh"]
           args:
             - '-c'
