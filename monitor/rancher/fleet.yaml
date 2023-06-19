@@ -28,11 +28,13 @@ helm:
           imagePullPolicy: Always
           securityContext:
             runAsUser: 0
+            runAsNonRoot: false
           command: ["/bin/sh"]
           args:
             - '-c'
             - >-
-              while true; do sleep 30; done
+              apk add git jsonnet && git clone -single-branch \
+              --branch grafana_${GIT_BRANCH_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
           env:
             - name: GIT_REPO
               valueFrom:
