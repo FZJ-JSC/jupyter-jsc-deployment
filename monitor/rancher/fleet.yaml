@@ -31,7 +31,7 @@ helm:
             runAsUser: 0
           command: ["/bin/sh"]
           args:
-            - '-c'
+            - -c
             - >-
               apk add git jsonnet && git clone --single-branch \
               --branch grafana-${GIT_BRANCH_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
