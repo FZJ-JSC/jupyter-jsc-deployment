@@ -255,6 +255,8 @@ targetCustomizations:
         grafana:
           podLabels:
             stage: staging
+          labels:
+            stage: staging
           resources:
             requests:
               cpu: 10m
