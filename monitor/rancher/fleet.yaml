@@ -282,10 +282,6 @@ targetCustomizations:
                     key: PASSWORD
               - name: GIT_BRANCH_STAGE
                 value: "staging"
-          podLabels:
-            stage: staging
-          labels:
-            stage: staging
           resources:
             requests:
               cpu: 10m
