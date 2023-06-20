@@ -15,9 +15,6 @@ helm:
         traffic.sidecar.istio.io/includeInboundPorts: ""
       ingressClassResource:
         default: true
-      admissionWebhooks:
-        patch:
-          enabled: false
       config:
         compute-full-forwarded-for: "true"
         proxy-real-ip-cidr: 0.0.0.0/0
