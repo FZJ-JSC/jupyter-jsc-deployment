@@ -34,7 +34,7 @@ helm:
             - -c
             - >-
               apk add git jsonnet && git clone --single-branch \
-              --branch grafana-${GIT_BRANCH_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
+              --branch grafana-production https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
           env:
             - name: GIT_REPO
               valueFrom:
@@ -51,8 +51,6 @@ helm:
                 secretKeyRef:
                   name: "config-repository"
                   key: PASSWORD
-            - name: GIT_BRANCH_STAGE
-              value: "production"
       persistence:
         enabled: true
         existingClaim: grafana-pvc
@@ -263,7 +261,7 @@ targetCustomizations:
               - -c
               - >-
                 apk add git jsonnet && git clone --single-branch \
-                --branch grafana-${GIT_BRANCH_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
+                --branch grafana-staging https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
             env:
               - name: GIT_REPO
                 valueFrom:
@@ -280,8 +278,6 @@ targetCustomizations:
                   secretKeyRef:
                     name: "config-repository"
                     key: PASSWORD
-              - name: GIT_BRANCH_STAGE
-                value: "staging"
           resources:
             requests:
               cpu: 10m
