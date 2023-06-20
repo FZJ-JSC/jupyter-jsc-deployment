@@ -33,8 +33,9 @@ helm:
           args:
             - -c
             - >-
-              apk add git jsonnet && git clone --single-branch \
-              --branch grafana-production https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
+              apk add git jsonnet && echo "Hello World"
+              #git clone --single-branch \
+              #--branch grafana-production https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
           env:
             - name: GIT_REPO
               valueFrom:
