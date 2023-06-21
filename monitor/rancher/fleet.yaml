@@ -248,36 +248,6 @@ targetCustomizations:
                 cpu: 50m
                 memory: 250Mi
         grafana:
-          extraInitContainers:
-          - name: prepare-dashboards
-            image: "python:3.9-alpine3.16"
-            imagePullPolicy: Always
-            securityContext:
-              runAsNonRoot: false
-              runAsUser: 0
-            command: ["/bin/sh"]
-            args:
-              - -c
-              - >-
-                apk add git jsonnet && echo "Hello World"
-                #git clone --single-branch \
-                #--branch grafana-staging https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
-            env:
-              - name: GIT_REPO
-                valueFrom:
-                  secretKeyRef:
-                    name: "config-repository"
-                    key: REPOSITORY
-              - name: GIT_USERNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: "config-repository"
-                    key: USERNAME
-              - name: GIT_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: "config-repository"
-                    key: PASSWORD
           resources:
             requests:
               cpu: 10m
