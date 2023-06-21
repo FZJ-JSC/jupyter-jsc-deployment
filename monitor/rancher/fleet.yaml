@@ -21,41 +21,7 @@ helm:
       tolerations:
         - key: "monitoring"
           value: "true"
-          effect: "NoExecute"
-      extraInitContainers:
-        - name: prepare-dashboards
-          image: "python:3.9-alpine3.16"
-          imagePullPolicy: Always
-          securityContext:
-            runAsNonRoot: false
-            runAsUser: 0
-          command: ["/bin/sh"]
-          args:
-            - -c
-            - >-
-              apk add git jsonnet && echo grafana-${GIT_BRANCH_STAGE} && \
-              echo https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
-            # && git clone --single-branch --branch grafana-${GIT_BRANCH_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
-          env:
-            - name: GIT_REPO
-              valueFrom:
-                secretKeyRef:
-                  name: "config-repository"
-                  key: REPOSITORY
-            - name: GIT_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: "config-repository"
-                  key: USERNAME
-            - name: GIT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: "config-repository"
-                  key: PASSWORD
-            - name: GIT_BRANCH_STAGE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.labels['stage']
+          effect: "NoExecute"    
       persistence:
         enabled: true
         existingClaim: grafana-pvc
