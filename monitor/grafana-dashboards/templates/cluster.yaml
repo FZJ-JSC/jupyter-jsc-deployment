@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    grafana_dashboard: "1"
+    {{- include "grafana-dashboards.labels" . | nindent 4 }}
+  name: cluster-information
+data:
+  cluster-information.json: |-
+    {{ .Files.Get "cluster.json" | indent 4 }}
