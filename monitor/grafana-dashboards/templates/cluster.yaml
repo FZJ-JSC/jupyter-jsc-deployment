@@ -7,4 +7,4 @@ metadata:
   name: cluster-information
 data:
   cluster-information.json: |-
-    {{ .Files.Get "cluster.json" | indent 4 }}
+    {{ .Files.Get "../dashboards/cluster.json" | indent 4 }}
