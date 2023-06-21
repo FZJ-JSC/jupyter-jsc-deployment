@@ -248,6 +248,10 @@ targetCustomizations:
                 cpu: 50m
                 memory: 250Mi
         grafana:
+          podLabels:
+            stage: staging
+          labels:
+            stage: staging
           resources:
             requests:
               cpu: 10m
