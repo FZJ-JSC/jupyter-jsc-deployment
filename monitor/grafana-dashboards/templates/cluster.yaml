@@ -966,7 +966,8 @@ data:
       "style": "dark",
       "tags": [
         "jupyterhub",
-        "kubernetes"
+        "kubernetes",
+        "jupyter"
       ],
       "templating": {
         "list": [
