@@ -33,7 +33,8 @@ helm:
           args:
             - -c
             - >-
-              apk add git jsonnet && echo $GIT_BRANCH_STAGE
+              apk add git jsonnet && echo grafana-${GIT_BRANCH_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
+            # && git clone --single-branch --branch grafana-${GIT_BRANCH_STAGE} https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO#"https://"}
           env:
             - name: GIT_REPO
               valueFrom:
