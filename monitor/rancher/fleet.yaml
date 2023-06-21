@@ -33,7 +33,7 @@ helm:
           args:
             - -c
             - >-
-              apk add git jsonnet && echo "Hello World"
+              apk add git jsonnet && while true; do sleep 30; done
           env:
             - name: GIT_REPO
               valueFrom:
@@ -50,6 +50,10 @@ helm:
                 secretKeyRef:
                   name: "config-repository"
                   key: PASSWORD
+            - name: GIT_BRANCH_STAGE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['stage']
       persistence:
         enabled: true
         existingClaim: grafana-pvc
@@ -249,8 +253,6 @@ targetCustomizations:
                 memory: 250Mi
         grafana:
           podLabels:
-            stage: staging
-          labels:
             stage: staging
           resources:
             requests:
