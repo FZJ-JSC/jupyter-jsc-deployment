@@ -2,7 +2,7 @@ defaultNamespace: jupyter
 helm:
   releaseName: public-grafana
   repo: https://grafana.github.io/helm-charts
-  chart: grafana/grafana
+  chart: grafana
   version: 6.57.3
   values:
     admin:
@@ -17,3 +17,6 @@ helm:
       hosts: 
         - jupyter-jsc-staging.fz-juelich.de
       path: "/grafana"
+    # sidecar:
+    #   datasources:
+    #     enabled: true
