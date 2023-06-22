@@ -1,0 +1,19 @@
+defaultNamespace: jupyter
+helm:
+  releaseName: public-grafana
+  repo: https://grafana.github.io/helm-charts
+  chart: grafana/grafana
+  version: 6.57.3
+  values:
+    admin:
+      existingSecret: grafana-admin
+    grafana.ini:
+      server:
+        domain: jupyter-jsc-staging.fz-juelich.de
+        root_url: "%(protocol)s://%(domain)s/grafana"
+        serve_from_sub_path: true
+    ingress: 
+      enabled: true
+      hosts: 
+        - jupyter-jsc-staging.fz-juelich.de
+      path: "/grafana"
