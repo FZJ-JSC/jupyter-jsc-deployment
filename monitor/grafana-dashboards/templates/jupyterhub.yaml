@@ -1952,8 +1952,7 @@ data:
       "schemaVersion": 37,
       "style": "dark",
       "tags": [
-        "jupyterhub",
-        "jupyter"
+        "jupyterhub"
       ],
       "templating": {
         "list": [

@@ -491,8 +491,7 @@ data:
       "style": "dark",
       "tags": [
         "monitoring",
-        "kubernetes",
-        # "jupyter"
+        "kubernetes"
       ],
       "templating": {
         "list": [
