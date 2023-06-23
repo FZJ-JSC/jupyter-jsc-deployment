@@ -2165,6 +2165,6 @@ data:
       },
       "timezone": "browser",
       "title": "JupyterHub Dashboard",
-      "uid": "hub-dashboard",
+      "uid": "",
       "version": 2
     }
