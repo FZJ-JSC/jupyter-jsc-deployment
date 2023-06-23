@@ -5,8 +5,8 @@ metadata:
     grafana_dashboard: "1"
     jupyter_dashboard: "1"
     {{- include "grafana-dashboards.labels" . | nindent 4 }}
-  annotations:
-    app: "JupyterHub Dashboards"
+  # annotations:
+  #   app: "JupyterHub Dashboards"
   name: monitoring-information
 data:
   monitoring-information.json: |-
@@ -492,7 +492,7 @@ data:
       "tags": [
         "monitoring",
         "kubernetes",
-        "jupyter"
+        # "jupyter"
       ],
       "templating": {
         "list": [
