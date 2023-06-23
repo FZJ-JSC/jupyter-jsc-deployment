@@ -4,10 +4,9 @@ metadata:
   labels:
     grafana_dashboard: "1"
     jupyter_dashboard: "1"
-    app: jupyterhub
     {{- include "grafana-dashboards.labels" . | nindent 4 }}
   annotations:
-    app: jupyterhub
+    app: "JupyterHub Dashboards"
   name: monitoring-information
 data:
   monitoring-information.json: |-
