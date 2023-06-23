@@ -38,3 +38,19 @@
   value:
     name: hub-portalgauss-generics
     key: SQL_PORT
+- op: add
+  path: "/spec/template/spec/containers/5/env/-"
+  value:
+    name: K8SMGRLRZ_JUPYTERHUB_USER_PASS
+    valueFrom:
+      secretKeyRef:
+        name: hub-portalgauss-generics
+        key: K8SMGRLRZ_JUPYTERHUB_USER_PASS
+- op: add
+  path: "/spec/template/spec/containers/5/env/-"
+  value:
+    name: K8SMGRLRZ_JUPYTERHUB_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: hub-portalgauss-generics
+        key: K8SMGRLRZ_JUPYTERHUB_USERNAME
