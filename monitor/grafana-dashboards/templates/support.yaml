@@ -548,6 +548,6 @@ data:
       },
       "timezone": "browser",
       "title": "Monitoring Information",
-      "uid": "",
+      "uid": null,
       "version": 1
     }

@@ -1026,6 +1026,6 @@ data:
       },
       "timezone": "browser",
       "title": "Cluster Information",
-      "uid": "",
+      "uid": null,
       "version": 1
     }
