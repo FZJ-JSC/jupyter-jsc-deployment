@@ -6,6 +6,8 @@ metadata:
     jupyter_dashboard: "1"
     app: jupyterhub
     {{- include "grafana-dashboards.labels" . | nindent 4 }}
+  annotations:
+    app: jupyterhub
   name: cluster-information
 data:
   cluster-information.json: |-
