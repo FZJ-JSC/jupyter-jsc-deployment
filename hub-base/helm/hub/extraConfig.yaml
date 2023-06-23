@@ -2,6 +2,7 @@ hub:
   extraConfig:
     customConfig: |-
       import asyncio
+      import base64
       import logging
       import os
       import random
@@ -158,10 +159,15 @@ hub:
           custom_config = get_custom_config()
           system = spawner.user_options.get("system", "None")
           drf_service = custom_config.get("systems", {}).get(system, {}).get("drf-service", "None")    
+          auth = os.environ.get(f"{drf_service.upper()}_AUTHENTICATION_TOKEN", None)
+          if not auth:
+              auth_username = os.environ.get(f"{drf_service.upper()}_JUPYTERHUB_USERNAME", "jupyterhub")
+              auth_password = os.environ.get(f"{drf_service.upper()}_JUPYTERHUB_USER_PASS", "none")
+              auth = "Basic " + base64.b64encode(f"{auth_username}:{auth_password}".encode()).decode()
           ret = {
               "Accept": "application/json",
               "Content-Type": "application/json",
-              "Authorization": os.environ.get(f"{drf_service.upper()}_AUTHENTICATION_TOKEN", None),
+              "Authorization": auth,
               "uuidcode": spawner.name
           }
           if custom_config.get("drf-services", {}).get(drf_service, {}).get("send_access_token", False):
