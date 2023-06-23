@@ -27,17 +27,14 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 336,
-      "iteration": 1687348926512,
+      "id": 1048,
+      "iteration": 1687521423504,
       "links": [],
       "panels": [
         {
           "collapse": false,
           "collapsed": false,
-          "datasource": {
-            "type": "prometheus",
-            "uid": "IHJft1uVk"
-          },
+          "datasource": null,
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -46,24 +43,16 @@ data:
           },
           "id": 2,
           "panels": [],
+          "repeat": null,
+          "repeatIteration": null,
+          "repeatRowId": null,
           "showTitle": true,
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "IHJft1uVk"
-              },
-              "refId": "A"
-            }
-          ],
           "title": "Hub usage stats",
           "titleSize": "h6",
           "type": "row"
         },
         {
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "fieldConfig": {
             "defaults": {
               "links": [],
@@ -117,12 +106,9 @@ data:
             "text": {},
             "textMode": "auto"
           },
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  kube_service_labels{ \n    label_app=\"$hub\",\n    label_component=\"singleuser-server\"\n  }\n)\n",
               "format": "time_series",
               "instant": true,
@@ -131,9 +117,6 @@ data:
               "refId": "A"
             },
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\"}\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "instant": true,
@@ -146,7 +129,10 @@ data:
           "type": "stat"
         },
         {
-          "cards": {},
+          "cards": {
+            "cardPadding": null,
+            "cardRound": null
+          },
           "color": {
             "cardColor": "#b4ff00",
             "colorScale": "sqrt",
@@ -155,22 +141,9 @@ data:
             "mode": "spectrum"
           },
           "dataFormat": "timeseries",
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "scaleDistribution": {
-                  "type": "linear"
-                }
-              }
-            },
+            "defaults": {},
             "overrides": []
           },
           "gridPos": {
@@ -186,56 +159,9 @@ data:
           "legend": {
             "show": false
           },
-          "options": {
-            "calculate": true,
-            "calculation": {
-              "xBuckets": {
-                "mode": "size",
-                "value": "600s"
-              }
-            },
-            "cellGap": 2,
-            "cellValues": {},
-            "color": {
-              "exponent": 0.5,
-              "fill": "#b4ff00",
-              "mode": "scheme",
-              "reverse": false,
-              "scale": "exponential",
-              "scheme": "Viridis",
-              "steps": 128
-            },
-            "exemplars": {
-              "color": "rgba(255,0,255,0.7)"
-            },
-            "filterValues": {
-              "le": 1e-9
-            },
-            "legend": {
-              "show": false
-            },
-            "rowsFrame": {
-              "layout": "auto"
-            },
-            "showValue": "never",
-            "tooltip": {
-              "show": true,
-              "yHistogram": false
-            },
-            "yAxis": {
-              "axisPlacement": "left",
-              "min": 0,
-              "reverse": false,
-              "unit": "s"
-            }
-          },
-          "pluginVersion": "9.1.5",
           "reverseYBuckets": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "(\n  time()\n  - (\n    kube_service_created\n    * on (namespace, service)  \n    group(\n      kube_service_labels{ \n        label_app=\"$hub\",\n        label_component=\"singleuser-server\",\n        label_hub_jupyter_org_system=~\"$system\",\n        namespace=~\"jupyter|userlabs\"\n      }\n    ) by (service, namespace)\n  )\n)\n",
               "format": "time_series",
               "interval": "600s",
@@ -253,24 +179,32 @@ data:
           "xAxis": {
             "show": true
           },
+          "xBucketNumber": null,
           "xBucketSize": "600s",
           "yAxis": {
+            "decimals": null,
             "format": "s",
             "logBase": 1,
+            "max": null,
             "min": 0,
-            "show": true
+            "show": true,
+            "splitFactor": null
           },
-          "yBucketBound": "auto"
+          "yBucketBound": "auto",
+          "yBucketNumber": null,
+          "yBucketSize": null
         },
         {
           "aliasColors": {},
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -289,6 +223,7 @@ data:
             "min": false,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": false
           },
@@ -300,19 +235,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  group(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n    }\n  ) by (label_hub_jupyter_org_username)\n)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -321,7 +254,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Currently Active Users",
           "tooltip": {
             "shared": true,
@@ -330,7 +265,9 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
@@ -338,20 +275,25 @@ data:
             {
               "decimals": 0,
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "decimals": 0,
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -359,11 +301,13 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
           "description": "Number of unique users who were active within the preceeding 24h period.\n\nRequires JupyterHub 3.1.\n",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -383,6 +327,7 @@ data:
             "min": false,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": false
           },
@@ -394,19 +339,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "max(\n  ( jupyterhub_active_users{period=\"24h\", service=~\"$proxy\"} )\n  * on (service) group_left(label_app)\n  (\n    group(\n      kube_service_labels{\n        namespace=\"jupyter\"\n      }\n    ) by (label_app, service)\n  )\n) by (label_app)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -415,7 +358,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Daily Active Users",
           "tooltip": {
             "shared": true,
@@ -424,7 +369,9 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
@@ -432,20 +379,25 @@ data:
             {
               "decimals": 0,
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "decimals": 0,
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -453,11 +405,13 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
           "description": "Number of unique users who were active within the preceeding 7d period.\n\nRequires JupyterHub 3.1.\n",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -477,6 +431,7 @@ data:
             "min": false,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": false
           },
@@ -488,19 +443,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "max(\n  ( jupyterhub_active_users{period=\"7d\", service=~\"$proxy\"} )\n  * on (service) group_left(label_app)\n  (\n    group(\n      kube_service_labels{\n        namespace=~\"jupyter\"\n      }\n    ) by (label_app, service)\n  )\n) by (label_app)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -509,7 +462,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Weekly Active Users",
           "tooltip": {
             "shared": true,
@@ -518,7 +473,9 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
@@ -526,20 +483,25 @@ data:
             {
               "decimals": 0,
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "decimals": 0,
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -547,11 +509,13 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
           "description": "Number of unique users who were active within the preceeding 7d period.\n\nRequires JupyterHub 3.1.\n",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -571,6 +535,7 @@ data:
             "min": false,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": false
           },
@@ -582,19 +547,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "max(\n  ( jupyterhub_active_users{period=\"30d\", service=~\"$proxy\"} )\n  * on (service) group_left(label_app)\n  (\n    group(\n      kube_service_labels{\n        namespace=~\"jupyter\"\n      }\n    ) by (label_app, service)\n  )\n) by (label_app)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -603,7 +566,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Monthly Active Users",
           "tooltip": {
             "shared": true,
@@ -612,7 +577,9 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
@@ -620,29 +587,31 @@ data:
             {
               "decimals": 0,
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "decimals": 0,
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
           "collapse": false,
           "collapsed": false,
-          "datasource": {
-            "type": "prometheus",
-            "uid": "IHJft1uVk"
-          },
+          "datasource": null,
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -651,16 +620,10 @@ data:
           },
           "id": 9,
           "panels": [],
+          "repeat": null,
+          "repeatIteration": null,
+          "repeatRowId": null,
           "showTitle": true,
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "IHJft1uVk"
-              },
-              "refId": "A"
-            }
-          ],
           "title": "Per system stats",
           "titleSize": "h6",
           "type": "row"
@@ -670,8 +633,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
+          "datasource": "$PROMETHEUS_DS",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
           },
           "fill": 1,
           "fillGradient": 0,
@@ -691,6 +656,7 @@ data:
             "min": true,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": false
           },
@@ -702,19 +668,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  kube_service_labels{label_app=\"$hub\", label_component=\"singleuser-server\"}\n)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -722,9 +686,6 @@ data:
               "refId": "A"
             },
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -733,7 +694,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Active servers",
           "tooltip": {
             "shared": true,
@@ -742,26 +705,33 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -769,8 +739,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
+          "datasource": "$PROMETHEUS_DS",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
           },
           "fill": 1,
           "fillGradient": 0,
@@ -790,6 +762,7 @@ data:
             "min": true,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": false
           },
@@ -801,19 +774,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  group(\n    kube_service_labels{label_app=\"$hub\", label_component=\"singleuser-server\"}\n  ) by (label_hub_jupyter_org_username)\n)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -821,9 +792,6 @@ data:
               "refId": "A"
             },
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  group(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n  ) by (label_hub_jupyter_org_username, label_hub_jupyter_org_system)\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -832,7 +800,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Active users",
           "tooltip": {
             "shared": true,
@@ -841,47 +811,58 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
           "aliasColors": {},
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
-              "custom": {
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                }
-              },
-              "mappings": []
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
             },
             "overrides": []
           },
@@ -903,7 +884,6 @@ data:
             "legend": {
               "displayMode": "list",
               "placement": "right",
-              "showLegend": true,
               "values": []
             },
             "pieType": "pie",
@@ -914,18 +894,11 @@ data:
               "fields": "",
               "values": false
             },
-            "text": {},
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+            "text": {}
           },
           "pieType": "pie",
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  kube_service_labels{label_app=\"$hub\", label_component=\"singleuser-server\"}\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -939,23 +912,27 @@ data:
         },
         {
           "aliasColors": {},
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
-              "custom": {
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                }
-              },
-              "mappings": []
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
             },
             "overrides": []
           },
@@ -977,7 +954,6 @@ data:
             "legend": {
               "displayMode": "list",
               "placement": "right",
-              "showLegend": true,
               "values": []
             },
             "pieType": "pie",
@@ -988,18 +964,11 @@ data:
               "fields": "",
               "values": false
             },
-            "text": {},
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+            "text": {}
           },
           "pieType": "pie",
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  group(\n    kube_service_labels{label_app=\"$hub\", label_component=\"singleuser-server\"}\n  ) by (label_hub_jupyter_org_username, label_hub_jupyter_org_system)\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -1013,23 +982,27 @@ data:
         },
         {
           "aliasColors": {},
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "palette-classic"
               },
-              "custom": {
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                }
-              },
-              "mappings": []
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
             },
             "overrides": []
           },
@@ -1037,6 +1010,76 @@ data:
             "h": 10,
             "w": 12,
             "x": 0,
+            "y": 52
+          },
+          "id": 14,
+          "legend": {
+            "percentage": true,
+            "show": true,
+            "values": true
+          },
+          "legendType": "Right side",
+          "options": {
+            "displayLabels": [],
+            "legend": {
+              "displayMode": "list",
+              "placement": "right",
+              "values": []
+            },
+            "pieType": "pie",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {}
+          },
+          "pieType": "pie",
+          "targets": [
+            {
+              "expr": "sum(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_service)\n",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_service}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Active services (try filtering by system in the dashboard submenu)",
+          "type": "piechart",
+          "valueName": "current"
+        },
+        {
+          "aliasColors": {},
+          "datasource": "$PROMETHEUS_DS",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
             "y": 52
           },
           "id": 15,
@@ -1051,7 +1094,6 @@ data:
             "legend": {
               "displayMode": "list",
               "placement": "right",
-              "showLegend": true,
               "values": []
             },
             "pieType": "pie",
@@ -1062,92 +1104,11 @@ data:
               "fields": "",
               "values": false
             },
-            "text": {},
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
+            "text": {}
           },
           "pieType": "pie",
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
-              "expr": "sum(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_service)\n",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_service}}",
-              "refId": "A"
-            }
-          ],
-          "title": "Active services (try filtering by system in the dashboard submenu)",
-          "type": "piechart",
-          "valueName": "current"
-        },
-        {
-          "aliasColors": {},
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                }
-              },
-              "mappings": []
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 12,
-            "y": 52
-          },
-          "id": 16,
-          "legend": {
-            "percentage": true,
-            "show": true,
-            "values": true
-          },
-          "legendType": "Right side",
-          "options": {
-            "displayLabels": [],
-            "legend": {
-              "displayMode": "list",
-              "placement": "right",
-              "showLegend": true,
-              "values": []
-            },
-            "pieType": "pie",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "tooltip": {
-              "mode": "single",
-              "sort": "none"
-            }
-          },
-          "pieType": "pie",
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_partition)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -1162,28 +1123,19 @@ data:
         {
           "collapse": false,
           "collapsed": false,
-          "datasource": {
-            "type": "prometheus",
-            "uid": "IHJft1uVk"
-          },
+          "datasource": null,
           "gridPos": {
             "h": 1,
             "w": 24,
             "x": 0,
             "y": 62
           },
-          "id": 17,
+          "id": 16,
           "panels": [],
+          "repeat": null,
+          "repeatIteration": null,
+          "repeatRowId": null,
           "showTitle": true,
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "IHJft1uVk"
-              },
-              "refId": "A"
-            }
-          ],
           "title": "Hub Diagnostics",
           "titleSize": "h6",
           "type": "row"
@@ -1193,8 +1145,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
+          "datasource": "$PROMETHEUS_DS",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
           },
           "fill": 1,
           "fillGradient": 0,
@@ -1205,7 +1159,7 @@ data:
             "y": 63
           },
           "hiddenSeries": false,
-          "id": 18,
+          "id": 17,
           "legend": {
             "alignAsTable": false,
             "avg": false,
@@ -1214,6 +1168,7 @@ data:
             "min": false,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": false
           },
@@ -1225,19 +1180,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 2,
           "points": true,
           "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "histogram_quantile(0.99, sum(rate(jupyterhub_server_spawn_duration_seconds_bucket{service=\"$proxy\", namespace=~\"jupyter|userlabs\"}[5m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
@@ -1245,9 +1198,6 @@ data:
               "refId": "A"
             },
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "histogram_quantile(0.5, sum(rate(jupyterhub_server_spawn_duration_seconds_bucket{service=\"$proxy\", namespace=~\"jupyter|userlabs\"}[5m])) by (le))",
               "format": "time_series",
               "intervalFactor": 2,
@@ -1256,7 +1206,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Server Start Times",
           "tooltip": {
             "shared": true,
@@ -1265,26 +1217,33 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "s",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1292,10 +1251,12 @@ data:
           "bars": true,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "description": "Attempts by users to start servers that failed.\n",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -1305,7 +1266,7 @@ data:
             "y": 63
           },
           "hiddenSeries": false,
-          "id": 19,
+          "id": 18,
           "legend": {
             "alignAsTable": false,
             "avg": false,
@@ -1315,6 +1276,7 @@ data:
             "min": false,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": false
           },
@@ -1326,19 +1288,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(increase(jupyterhub_server_spawn_duration_seconds_count{service=\"$proxy\", status!=\"success\"}[2m])) by (status)",
               "format": "time_series",
               "intervalFactor": 2,
@@ -1347,7 +1307,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Server Start Failures",
           "tooltip": {
             "shared": true,
@@ -1356,26 +1318,33 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1383,8 +1352,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
+          "datasource": "$PROMETHEUS_DS",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
           },
           "fill": 1,
           "fillGradient": 0,
@@ -1392,6 +1363,119 @@ data:
             "h": 10,
             "w": 12,
             "x": 0,
+            "y": 73
+          },
+          "hiddenSeries": false,
+          "id": 19,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.11",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "histogram_quantile(\n  0.99,\n  sum(\n    rate(\n      jupyterhub_request_duration_seconds_bucket{\n        service=\"$proxy\",\n        namespace=~\"jupyter|userlabs\",\n        # Ignore SpawnProgressAPIHandler, as it is a EventSource stream\n        # and keeps long lived connections open\n        handler!=\"jupyterhub.apihandlers.users.SpawnProgressAPIHandler\"\n      }[5m]\n    )\n  ) by (le))\n",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "99th percentile",
+              "refId": "A"
+            },
+            {
+              "expr": "histogram_quantile(\n  0.50,\n  sum(\n    rate(\n      jupyterhub_request_duration_seconds_bucket{\n        service=\"$proxy\",\n        namespace=~\"jupyter|userlabs\",\n        # Ignore SpawnProgressAPIHandler, as it is a EventSource stream\n        # and keeps long lived connections open\n        handler!=\"jupyterhub.apihandlers.users.SpawnProgressAPIHandler\"\n      }[5m]\n    )\n  ) by (le))\n",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "50th percentile",
+              "refId": "B"
+            },
+            {
+              "expr": "histogram_quantile(\n  0.25,\n  sum(\n    rate(\n      jupyterhub_request_duration_seconds_bucket{\n        service=\"$proxy\",\n        namespace=~\"jupyter|userlabs\",\n        # Ignore SpawnProgressAPIHandler, as it is a EventSource stream\n        # and keeps long lived connections open\n        handler!=\"jupyterhub.apihandlers.users.SpawnProgressAPIHandler\"\n      }[5m]\n    )\n  ) by (le))\n",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "25th percentile",
+              "refId": "C"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Hub response latency",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
             "y": 73
           },
           "hiddenSeries": false,
@@ -1404,6 +1488,7 @@ data:
             "min": false,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": false
           },
@@ -1415,128 +1500,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
-              "expr": "histogram_quantile(\n  0.99,\n  sum(\n    rate(\n      jupyterhub_request_duration_seconds_bucket{\n        service=\"$proxy\",\n        namespace=~\"jupyter|userlabs\",\n        # Ignore SpawnProgressAPIHandler, as it is a EventSource stream\n        # and keeps long lived connections open\n        handler!=\"jupyterhub.apihandlers.users.SpawnProgressAPIHandler\"\n      }[5m]\n    )\n  ) by (le))\n",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "99th percentile",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
-              "expr": "histogram_quantile(\n  0.50,\n  sum(\n    rate(\n      jupyterhub_request_duration_seconds_bucket{\n        service=\"$proxy\",\n        namespace=~\"jupyter|userlabs\",\n        # Ignore SpawnProgressAPIHandler, as it is a EventSource stream\n        # and keeps long lived connections open\n        handler!=\"jupyterhub.apihandlers.users.SpawnProgressAPIHandler\"\n      }[5m]\n    )\n  ) by (le))\n",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "50th percentile",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
-              "expr": "histogram_quantile(\n  0.25,\n  sum(\n    rate(\n      jupyterhub_request_duration_seconds_bucket{\n        service=\"$proxy\",\n        namespace=~\"jupyter|userlabs\",\n        # Ignore SpawnProgressAPIHandler, as it is a EventSource stream\n        # and keeps long lived connections open\n        handler!=\"jupyterhub.apihandlers.users.SpawnProgressAPIHandler\"\n      }[5m]\n    )\n  ) by (le))\n",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "25th percentile",
-              "refId": "C"
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Hub response latency",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 12,
-            "y": 73
-          },
-          "hiddenSeries": false,
-          "id": 21,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "9.1.5",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  increase(\n    jupyterhub_request_duration_seconds_bucket{\n      service=\"$proxy\",\n      namespace=~\"jupyter|userlabs\",\n    }[2m]\n  )\n) by (code)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -1545,7 +1519,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Hub response status codes",
           "tooltip": {
             "shared": true,
@@ -1554,26 +1530,33 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1581,9 +1564,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "type": "prometheus",
-            "uid": "IHJft1uVk"
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
           },
           "fill": 1,
           "fillGradient": 0,
@@ -1591,6 +1575,107 @@ data:
             "h": 12,
             "w": 12,
             "x": 0,
+            "y": 83
+          },
+          "hiddenSeries": false,
+          "id": 21,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideZero": true,
+            "max": true,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.11",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\nirate(container_cpu_usage_seconds_total{name!=\"\"}[5m])\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{label_app=~\"$hub|drf.+\", label_component!=\"singleuser-server\", namespace=~\"jupyter|userlabs\"}\n  ) by (label_component, pod, namespace)\n) by (pod)\n",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{ "{{" }} label_component }}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "All JupyterHub Components CPU",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 1,
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 12,
+            "w": 12,
+            "x": 12,
             "y": 83
           },
           "hiddenSeries": false,
@@ -1604,6 +1689,7 @@ data:
             "min": false,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": true
           },
@@ -1615,113 +1701,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "IHJft1uVk"
-              },
-              "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\nirate(container_cpu_usage_seconds_total{name!=\"\"}[5m])\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{label_app=~\"$hub|drf.+\", label_component!=\"singleuser-server\", namespace=~\"jupyter|userlabs\"}\n  ) by (label_component, pod, namespace)\n) by (pod)\n",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} label_component }}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "All JupyterHub Components CPU",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 1,
-              "format": "percentunit",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "min": 0,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "type": "prometheus",
-            "uid": "IHJft1uVk"
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 12,
-            "w": 12,
-            "x": 12,
-            "y": 83
-          },
-          "hiddenSeries": false,
-          "id": 23,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideZero": true,
-            "max": true,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "9.1.5",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "IHJft1uVk"
-              },
               "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\ncontainer_memory_working_set_bytes{name!=\"\"}\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{label_app=~\"$hub|drf.+\", label_component!=\"singleuser-server\", namespace=~\"jupyter|userlabs\"}\n  ) by (label_component, pod, namespace)\n) by (pod)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -1730,7 +1720,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "All JupyterHub Components Memory (Working Set)",
           "tooltip": {
             "shared": true,
@@ -1739,26 +1731,33 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
           "yaxes": [
             {
               "format": "bytes",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         },
         {
@@ -1766,17 +1765,121 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
+          "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
           "description": "% of disk space left in the disk storing the JupyterHub sqlite database. If goes to 0, the hub will fail.\n",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 10,
             "w": 12,
             "x": 0,
+            "y": 95
+          },
+          "hiddenSeries": false,
+          "id": 23,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "7.5.11",
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "# Free bytes available on the hub db PVC\nsum(kubelet_volume_stats_available_bytes{persistentvolumeclaim=~\"data-postgresql-ha-postgresql-.+\", namespace=\"database\"}) by (namespace) /\n# Total number of bytes available on the hub db PVC\nsum(kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~\"data-postgresql-ha-postgresql-.+\", namespace=\"database\"}) by (namespace)\n",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{ "{{" }} $hub }}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Hub DB Disk Space Availability %",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": true
+            },
+            {
+              "decimals": 0,
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "description": "Pods in a non-running state in the hub's namespace.\n\nPods stuck in non-running states often indicate an error condition\n",
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
             "y": 95
           },
           "hiddenSeries": false,
@@ -1789,6 +1892,7 @@ data:
             "min": false,
             "rightSide": false,
             "show": true,
+            "sideWidth": null,
             "total": false,
             "values": false
           },
@@ -1800,113 +1904,17 @@ data:
             "alertThreshold": true
           },
           "percentage": false,
-          "pluginVersion": "9.1.5",
+          "pluginVersion": "7.5.11",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
-              "expr": "# Free bytes available on the hub db PVC\nsum(kubelet_volume_stats_available_bytes{persistentvolumeclaim=~\"data-postgresql-ha-postgresql-.+\", namespace=\"database\"}) by (namespace) /\n# Total number of bytes available on the hub db PVC\nsum(kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~\"data-postgresql-ha-postgresql-.+\", namespace=\"database\"}) by (namespace)\n",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} $hub }}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Hub DB Disk Space Availability %",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "percentunit",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "decimals": 0,
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
-          "description": "Pods in a non-running state in the hub's namespace.\n\nPods stuck in non-running states often indicate an error condition\n",
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 12,
-            "y": 95
-          },
-          "hiddenSeries": false,
-          "id": 25,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "9.1.5",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
+          "repeat": null,
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "datasource": {
-                "uid": "$PROMETHEUS_DS"
-              },
               "expr": "sum(\n  kube_pod_status_phase{phase!=\"Running\", namespace=~\"jupyter|userlabs\"}\n) by (phase)\n",
               "format": "time_series",
               "intervalFactor": 2,
@@ -1915,7 +1923,9 @@ data:
             }
           ],
           "thresholds": [],
+          "timeFrom": null,
           "timeRegions": [],
+          "timeShift": null,
           "title": "Non Running Pods",
           "tooltip": {
             "shared": true,
@@ -1924,7 +1934,9 @@ data:
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
+            "name": null,
             "show": true,
             "values": []
           },
@@ -1932,24 +1944,29 @@ data:
             {
               "decimals": 0,
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             },
             {
               "format": "short",
+              "label": null,
               "logBase": 1,
+              "max": null,
               "min": 0,
               "show": true
             }
           ],
           "yaxis": {
-            "align": false
+            "align": false,
+            "alignLevel": null
           }
         }
       ],
       "refresh": "",
-      "schemaVersion": 37,
+      "schemaVersion": 27,
       "style": "dark",
       "tags": [
         "jupyterhub"
@@ -1962,8 +1979,11 @@ data:
               "text": "Prometheus",
               "value": "Prometheus"
             },
+            "description": null,
+            "error": null,
             "hide": 1,
             "includeAll": false,
+            "label": null,
             "multi": false,
             "name": "PROMETHEUS_DS",
             "options": [],
@@ -1974,8 +1994,8 @@ data:
             "type": "datasource"
           },
           {
+            "allValue": null,
             "current": {
-              "selected": true,
               "text": [
                 "jupyterjsc"
               ],
@@ -1983,32 +2003,51 @@ data:
                 "jupyterjsc"
               ]
             },
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$PROMETHEUS_DS"
-            },
+            "datasource": "$PROMETHEUS_DS",
             "definition": "",
+            "description": null,
+            "error": null,
             "hide": 0,
             "includeAll": false,
+            "label": null,
             "multi": true,
             "name": "hub",
-            "options": [],
-            "query": {
-              "query": "label_values(kube_service_labels{label_component=\"hub\", namespace=\"jupyter\"}, label_app)",
-              "refId": "Prometheus-hub-Variable-Query"
-            },
-            "refresh": 1,
+            "options": [
+              {
+                "text": "coeraise",
+                "value": "coeraise"
+              },
+              {
+                "text": "eurocc",
+                "value": "eurocc"
+              },
+              {
+                "text": "juniq",
+                "value": "juniq"
+              },
+              {
+                "text": "jupyterjsc",
+                "value": "jupyterjsc"
+              },
+              {
+                "text": "portalgauss",
+                "value": "portalgauss"
+              }
+            ],
+            "query": "label_values(kube_service_labels{label_component=\"hub\", namespace=\"jupyter\"}, label_app)",
+            "refresh": 0,
             "regex": "",
             "skipUrlSync": false,
             "sort": 2,
             "tagValuesQuery": "",
+            "tags": [],
             "tagsQuery": "",
             "type": "query",
             "useTags": false
           },
           {
+            "allValue": null,
             "current": {
-              "selected": true,
               "text": [
                 "jupyterjsc-proxy-public"
               ],
@@ -2016,25 +2055,23 @@ data:
                 "jupyterjsc-proxy-public"
               ]
             },
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$PROMETHEUS_DS"
-            },
+            "datasource": "$PROMETHEUS_DS",
             "definition": "",
+            "description": null,
+            "error": null,
             "hide": 0,
             "includeAll": true,
+            "label": null,
             "multi": true,
             "name": "proxy",
             "options": [],
-            "query": {
-              "query": "label_values(kube_service_labels{label_app=~\"$hub\", namespace=\"jupyter\", label_component=\"proxy-public\"}, service)",
-              "refId": "Prometheus-proxy-Variable-Query"
-            },
-            "refresh": 1,
+            "query": "label_values(kube_service_labels{label_app=~\"$hub\", namespace=\"jupyter\", label_component=\"proxy-public\"}, service)",
+            "refresh": 0,
             "regex": "",
             "skipUrlSync": false,
             "sort": 0,
             "tagValuesQuery": "",
+            "tags": [],
             "tagsQuery": "",
             "type": "query",
             "useTags": false
@@ -2048,6 +2085,8 @@ data:
                 "$__all"
               ]
             },
+            "description": null,
+            "error": null,
             "hide": 0,
             "includeAll": true,
             "label": "",
@@ -2055,7 +2094,7 @@ data:
             "name": "system",
             "options": [
               {
-                "selected": true,
+                "selected": false,
                 "text": "All",
                 "value": "$__all"
               },
@@ -2129,6 +2168,5 @@ data:
       "timezone": "browser",
       "title": "JupyterHub Dashboard",
       "uid": null,
-      "version": 1,
-      "weekStart": ""
+      "version": 3
     }
