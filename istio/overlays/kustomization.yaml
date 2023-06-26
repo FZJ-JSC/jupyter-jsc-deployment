@@ -1,9 +1,0 @@
-patches:
-- target:
-    kind: ConfigMap
-    labelSelector: grafana_dashboard=1
-    namespace: cattle-dashboards
-  patch: |-
-    - op: add
-      path: /metadata/annotations/grafana_folder
-      value: Istio
