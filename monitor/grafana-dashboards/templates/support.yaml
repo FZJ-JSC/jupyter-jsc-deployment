@@ -5,8 +5,8 @@ metadata:
     grafana_dashboard: "1"
     jupyter_dashboard: "1"
     {{- include "grafana-dashboards.labels" . | nindent 4 }}
-  # annotations:
-  #   grafana_folder: "JupyterHub Dashboards"
+  annotations:
+    grafana_folder: "Default"
   name: monitoring-information
 data:
   monitoring-information.json: |-
