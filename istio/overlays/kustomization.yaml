@@ -3,6 +3,7 @@ resources:
 
 patches:
   - target:
+      version: batch/v1
       kind: Job
       name: istioctl-installer
     patch: |-
