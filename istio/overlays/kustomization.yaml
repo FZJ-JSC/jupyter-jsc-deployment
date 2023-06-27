@@ -1,0 +1,22 @@
+resources:
+  - init_kubeconfig_cm.yaml
+
+patches:
+  - target:
+      kind: Job
+      name: istioctl-installer
+    patch: |-
+      - op: add
+        path: /spec/template/spec/volumes
+        value:
+          name: custom_create_istio_system
+          configMap:
+            name: create_istio_system
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts
+        value:
+          name: custom_create_istio_system
+          mountPath: /usr/local/app/scripts/create_istio_system.sh
+          subPath: create_istio_system.sh
+
+

@@ -9,6 +9,8 @@ helm:
       enabled: false
     kiali:
       enabled: false
+kustomize:
+  dir: overlays
 targetCustomizations:
   - name: staging
     clusterSelector:
