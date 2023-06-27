@@ -201,8 +201,6 @@ helm:
           - key: "monitoring"
             value: "true"
             effect: "NoExecute"
-kustomize:
-  dir: overlays
 targetCustomizations:
   - name: staging
     clusterSelector:
