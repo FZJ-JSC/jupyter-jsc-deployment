@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: create_istio_system
+  name: create-istio-system
 data:
   create_istio_system.sh: |-
     #!/bin/bash
