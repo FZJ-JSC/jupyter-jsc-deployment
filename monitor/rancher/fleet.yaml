@@ -28,6 +28,8 @@ helm:
       admin:
         # Run `grafana-cli --config "/etc/grafana/grafana.ini" admin reset-admin-password <PWD>`
         # in the grafana pod if the admin user already exists
+        # Run `grafana-cli --config "/etc/grafana/grafana.ini" admin reset-admin-password <PWD>`
+        # in the grafana pod if the admin user already exists
         existingSecret: grafana-generics
         userKey: admin-user
         passwordKey: admin-password
