@@ -1,5 +1,5 @@
 resources:
-  - init_kubeconfig_cm.yaml
+  - create_istio_system_cm.yaml
 
 patches:
   - target:
