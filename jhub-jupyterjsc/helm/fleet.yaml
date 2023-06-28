@@ -96,16 +96,16 @@ targetCustomizations:
           resources:
             requests:
               cpu: 100m
-              memory: 2048Mi
+              memory: 4096Mi
             limits:
               cpu: 1000m
-              memory: 3072Mi
+              memory: 6144Mi
         proxy:
           chp:
             resources:
               requests:
-                cpu: 20m
-                memory: 128Mi
+                cpu: 100m
+                memory: 256Mi
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
