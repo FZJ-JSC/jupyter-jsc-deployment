@@ -1,56 +1,40 @@
 - op: replace
   path: "/spec/template/spec/containers/5/env/23/valueFrom/secretKeyRef"
   value:
-    name: hub-portalgauss-generics
+    name: hub-coec-generics
     key: TUNNEL_JUPYTERHUB_USER_PASS
 - op: replace
   path: "/spec/template/spec/containers/5/env/24/valueFrom/secretKeyRef"
   value:
-    name: hub-portalgauss-generics
+    name: hub-coec-generics
     key: UNICOREMGR_JUPYTERHUB_USER_PASS
 - op: replace
   path: "/spec/template/spec/containers/5/env/25/valueFrom/secretKeyRef"
   value:
-    name: hub-portalgauss-generics
+    name: hub-coec-generics
     key: K8SMGRHDFCLOUD_JUPYTERHUB_USER_PASS
 - op: replace
   path: "/spec/template/spec/containers/5/env/26/valueFrom/secretKeyRef"
   value:
-    name: hub-portalgauss-generics
+    name: hub-coec-generics
     key: SQL_DATABASE
 - op: replace
   path: "/spec/template/spec/containers/5/env/27/valueFrom/secretKeyRef"
   value:
-    name: hub-portalgauss-generics
+    name: hub-coec-generics
     key: SQL_PASSWORD
 - op: replace
   path: "/spec/template/spec/containers/5/env/28/valueFrom/secretKeyRef"
   value:
-    name: hub-portalgauss-generics
+    name: hub-coec-generics
     key: SQL_USER
 - op: replace
   path: "/spec/template/spec/containers/5/env/29/valueFrom/secretKeyRef"
   value:
-    name: hub-portalgauss-generics
+    name: hub-coec-generics
     key: SQL_HOST
 - op: replace
   path: "/spec/template/spec/containers/5/env/30/valueFrom/secretKeyRef"
   value:
-    name: hub-portalgauss-generics
+    name: hub-coec-generics
     key: SQL_PORT
-- op: add
-  path: "/spec/template/spec/containers/5/env/-"
-  value:
-    name: K8SMGRLRZ_JUPYTERHUB_USER_PASS
-    valueFrom:
-      secretKeyRef:
-        name: hub-portalgauss-generics
-        key: K8SMGRLRZ_JUPYTERHUB_USER_PASS
-- op: add
-  path: "/spec/template/spec/containers/5/env/-"
-  value:
-    name: K8SMGRLRZ_JUPYTERHUB_USERNAME
-    valueFrom:
-      secretKeyRef:
-        name: hub-portalgauss-generics
-        key: K8SMGRLRZ_JUPYTERHUB_USERNAME
