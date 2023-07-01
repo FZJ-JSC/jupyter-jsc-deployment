@@ -1,9 +1,18 @@
 defaultNamespace: ingress-nginx
 helm:
   releaseName: ingress-nginx
-  chart: https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.4.0/ingress-nginx-4.4.0.tgz
+  chart: https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.7.0/ingress-nginx-4.7.0.tgz
   values:
     controller:
+      admissionWebhooks:
+        patch:
+          labels:
+            sidecar.istio.io/inject: "false"
+      annotations:
+        sidecar.istio.io/inject: "true"
+        traffic.sidecar.istio.io/excludeInboundPorts: 80,443
+        traffic.sidecar.istio.io/excludeOutboundIPRanges: 10.90.0.0/16,10.45.0.0/16
+        traffic.sidecar.istio.io/includeInboundPorts: ""
       ingressClassResource:
         default: true
       config:
@@ -91,7 +100,7 @@ targetCustomizations:
         stage: staging
         provider.cattle.io: rke
     helm:
-      releaseName: ingress-nginx-staging
+      releaseName: ingress-nginx-staging1
       values:
         controller:
           service:

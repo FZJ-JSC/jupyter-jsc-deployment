@@ -1,0 +1,5 @@
+resources:
+  - edit_dashboards_rb.yaml
+  - init_kubeconfig_cm.yaml
+
+

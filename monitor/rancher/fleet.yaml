@@ -21,16 +21,72 @@ helm:
       tolerations:
         - key: "monitoring"
           value: "true"
-          effect: "NoExecute"
+          effect: "NoExecute"    
       persistence:
         enabled: true
         existingClaim: grafana-pvc
+      admin:
+        # Run `grafana-cli --config "/etc/grafana/grafana.ini" admin reset-admin-password <PWD>`
+        # in the grafana pod if the admin user already exists
+        existingSecret: grafana-generics
+        userKey: admin-user
+        passwordKey: admin-password
       grafana.ini:
+        dashboards:
+          default_home_dashboard_path: /tmp/dashboards/JupyterHub Dashboards/hub-usage-stats.json
+        database:
+          type: postgres
+          host: $__file{/etc/secrets/grafana_generics/SQL_HOST}
+          user: $__file{/etc/secrets/grafana_generics/SQL_USER}
+          password: $__file{/etc/secrets/grafana_generics/SQL_PASSWORD}
+        server:
+          domain: jupyter-jsc.fz-juelich.de
+          root_url: "%(protocol)s://%(domain)s/grafana"
+          serve_from_sub_path: true
         smtp:
           enabled: true
           from_address: jupyter.jsc@fz-juelich.de
           from_name: Jupyter-JSC Monitoring
-          host: mail.fz-juelich.de:25
+          host: mail.fz-juelich.de:25      
+      extraSecretMounts:
+        - name: grafana-generics-secret-mount
+          secretName: grafana-generics
+          defaultMode: 0440
+          mountPath: /etc/secrets/grafana_generics
+          readOnly: true
+      sidecar:
+        dashboards:
+          enabled: true
+          label: grafana_dashboard
+          annotations: 
+            grafana_folder: Default
+          searchNamespace: ALL
+          folderAnnotation: grafana_folder
+          provider:
+            foldersFromFilesStructure: true
+      extraInitContainers:
+        - name: set-istio-dashboard-annotations
+          image: alpine/k8s:1.23.17
+          volumeMounts:
+            - name: init-kubeconfig
+              mountPath: /tmp/init_kubeconfig.sh
+              subPath: init_kubeconfig.sh
+          command:
+            - /bin/sh
+          args:
+          - '-c'
+          - source /tmp/init_kubeconfig.sh && kubectl annotate cm -n cattle-dashboards -l istio_dashboard=1 --overwrite grafana_folder=Istio
+      extraConfigmapMounts:
+        - name: init-kubeconfig
+          configMap: init-kubeconfig
+          mountPath: /tmp/init_kubeconfig.sh
+          subPath: init_kubeconfig.sh
+          readOnly: true
+      ingress:
+        enabled: true
+        hosts:
+          - "jupyter-jsc.fz-juelich.de"
+        path: "/grafana"
     ingressNginx:
       enabled: false
     # workaround for broken grafana dashboards. Deploy manual cAdvisor ( https://github.com/rancher/rancher/issues/38934#issuecomment-1294585708 )
@@ -145,6 +201,8 @@ helm:
           - key: "monitoring"
             value: "true"
             effect: "NoExecute"
+kustomize:
+  dir: overlays
 targetCustomizations:
   - name: staging
     clusterSelector:
@@ -162,6 +220,8 @@ targetCustomizations:
                 cpu: 50m
                 memory: 250Mi
         grafana:
+          podLabels:
+            stage: staging
           resources:
             requests:
               cpu: 10m
@@ -169,6 +229,12 @@ targetCustomizations:
             limits:
               cpu: 100m
               memory: 250Mi
+          grafana.ini:
+            server:
+              domain: jupyter-jsc-staging.fz-juelich.de
+          ingress:
+            hosts:
+              - "jupyter-jsc-staging.fz-juelich.de"
         kube-state-metrics:
           resources:
             requests:
