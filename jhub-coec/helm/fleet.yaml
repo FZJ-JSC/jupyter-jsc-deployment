@@ -1,15 +1,13 @@
 defaultnamespace: jupyter
 dependsOn:
   - name: jupyter-hub-helper-once
-  - name: jupyter-jhub-jupyterjsc-helper
+  - name: jupyter-jhub-coec-helper
 helm:
-  releaseName: jupyterhub-jupyterjsc
+  releaseName: jupyterhub-coec
   repo: https://jupyterhub.github.io/helm-chart/
   chart: jupyterhub
   version: 2.0.0
   values:
-    nameOverride: "jupyterjsc"
-    fullnameOverride: "jupyterjsc"
     hub:
       livenessProbe:
         enabled: false
@@ -27,8 +25,8 @@ helm:
   valuesFiles:
     - ../../hub-base/helm/common.yaml
     - ../../hub-base/helm/hub/config.yaml
-    - ../../hub-base/helm/hub/extraContainers.yaml
     - ../../hub-base/helm/hub/extraConfig.yaml
+    - ../../hub-base/helm/hub/extraContainers.yaml
     - ../../hub-base/helm/hub/extraEnv.yaml
     - ../../hub-base/helm/hub/extraVolumeMounts.yaml
     - ../../hub-base/helm/hub/extraVolumes.yaml
@@ -37,7 +35,9 @@ helm:
     - ../../hub-base/helm/hub/services.yaml
     - ../../hub-base/helm/hub/others.yaml
     - ../../hub-base/helm/proxy.yaml
-    # We overwrite some values in hub specific files
+    # We overwrite some values in hub specific files,
+    # so the import order needs to be hub-base,
+    # then the hub specific config 
     - values/common.yaml
     - values/proxy.yaml
 targetCustomizations:
@@ -53,14 +53,16 @@ targetCustomizations:
           labels:
             stage: staging
             jhub_version: "4.0.0"
-            hostname: "jupyter-jsc-staging.fz-juelich.de"
-            drf_username: "jupyterhub"
-            logger_name: "JupyterHubStaging"
-            NTS_GIT_BRANCH: "main"
+            hostname: "jupyter-coec-staging.jsc.fz-juelich.de"
+            drf_username: "jupyterhubcoec"
+            logger_name: "JupyterHubCoECStaging"
           resources:
             requests:
               cpu: 20m
               memory: 256Mi
+            limits:
+              cpu: 200m
+              memory: 1024Mi
         proxy:
           chp:
             resources:
@@ -72,11 +74,11 @@ targetCustomizations:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
           enabled: true
           hosts:
-          - jupyter-jsc-staging.fz-juelich.de
+          - jupyter-coec-staging.jsc.fz-juelich.de
           tls:
           - hosts:
-            - jupyter-jsc-staging.fz-juelich.de
-            secretName: jupyterjsc-tls
+            - jupyter-coec-staging.jsc.fz-juelich.de
+            secretName: coec-tls
   - name: production
     clusterSelector:
       matchLabels:
@@ -89,30 +91,29 @@ targetCustomizations:
           labels:
             stage: production
             jhub_version: "4.0.0"
-            hostname: "jupyter-jsc.fz-juelich.de"
-            drf_username: "jupyterhub"
-            logger_name: "JupyterHubProduction"
-            NTS_GIT_BRANCH: "main"
+            hostname: "jupyter-coec.jsc.fz-juelich.de"
+            drf_username: "jupyterhubcoec"
+            logger_name: "JupyterHubCoECProduction"
           resources:
             requests:
               cpu: 100m
-              memory: 4096Mi
+              memory: 512Mi
             limits:
               cpu: 1000m
-              memory: 6144Mi
+              memory: 2048Mi
         proxy:
           chp:
             resources:
               requests:
-                cpu: 100m
-                memory: 256Mi
+                cpu: 20m
+                memory: 128Mi
         ingress:
           # Set JupyterHub in maintenance:
           #   Set enabled here to false, update ingress in maintenance/fleet.yaml
           enabled: true
           hosts:
-          - jupyter-jsc.fz-juelich.de
+          - jupyter-coec.jsc.fz-juelich.de
           tls:
           - hosts:
-            - jupyter-jsc.fz-juelich.de
-            secretName: jupyterjsc-tls
+            - jupyter-coec.jsc.fz-juelich.de
+            secretName: coec-tls

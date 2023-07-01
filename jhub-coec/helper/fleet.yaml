@@ -1,0 +1,13 @@
+defaultnamespace: jupyter
+helm:
+  chart: /workspace/source/hub-base/helper-each
+  releaseName: jupyter-jhub-coec-helper 
+  values:
+    nameOverride: jhub-coec-helper
+    appName: coec
+    proxyBackup:
+      name: coec-proxy-public
+      release: jupyterhub-coec
+      numberOfBackups: 5
+    serviceStatic:
+      name: coec-static-files
