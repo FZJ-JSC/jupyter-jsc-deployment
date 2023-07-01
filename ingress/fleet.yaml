@@ -63,6 +63,15 @@ helm:
               server portalgauss-proxy-public-4.jupyter.svc:443 max_fails=0;
               keepalive 32;
           }
+          upstream coec-retries {
+              server coec-proxy-public.jupyter.svc:443 max_fails=0;
+              server coec-proxy-public-0.jupyter.svc:443 max_fails=0;
+              server coec-proxy-public-1.jupyter.svc:443 max_fails=0;
+              server coec-proxy-public-2.jupyter.svc:443 max_fails=0;
+              server coec-proxy-public-3.jupyter.svc:443 max_fails=0;
+              server coec-proxy-public-4.jupyter.svc:443 max_fails=0;
+              keepalive 32;
+          }
           upstream coeraise-retries {
               server coeraise-proxy-public.jupyter.svc:443 max_fails=0;
               server coeraise-proxy-public-0.jupyter.svc:443 max_fails=0;
