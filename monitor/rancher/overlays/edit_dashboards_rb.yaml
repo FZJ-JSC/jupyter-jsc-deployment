@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: edit-dashboards
+  namespace: cattle-dashboards
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: monitoring-dashboard-edit
+subjects:
+  - kind: ServiceAccount
+    name: rancher-monitoring-grafana
+    namespace: cattle-monitoring-system
