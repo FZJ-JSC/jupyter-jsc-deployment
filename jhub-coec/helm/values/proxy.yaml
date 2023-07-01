@@ -1,0 +1,7 @@
+proxy:
+  chp:
+    defaultTarget: "https://coec-hub:8081"
+    errorTarget: "https://coec-hub:8081/hub/error"
+  https:
+    secret:
+      name: internal-ssl-coec
