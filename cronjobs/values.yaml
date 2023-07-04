@@ -327,7 +327,7 @@ jobs:
     stage: production
     image:
       repository: postgres
-      tag: 14.2-alpine
+      tag: 15.3-alpine
       imagePullPolicy: Always
     schedule: "0 2 * * *"
     podAnnotations:
@@ -380,7 +380,7 @@ jobs:
     stage: staging
     image:
       repository: postgres
-      tag: 14.2-alpine
+      tag: 15.3-alpine
       imagePullPolicy: Always
     schedule: "0 2 * * *"
     podAnnotations:
