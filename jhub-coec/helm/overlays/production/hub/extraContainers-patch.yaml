@@ -30,23 +30,4 @@
   path: "/spec/template/spec/containers/2/env/-"
   value:
     name: TEMPLATE_GIT_REPO
-    valueFrom:
-      secretKeyRef:
-        name: coec-share-repository
-        key: REPOSITORY
-- op: add
-  path: "/spec/template/spec/containers/2/env/-"
-  value:
-    name: TEMPLATE_GIT_USERNAME
-    valueFrom:
-      secretKeyRef:
-        name: coec-share-repository
-        key: USERNAME
-- op: add
-  path: "/spec/template/spec/containers/2/env/-"
-  value:
-    name: TEMPLATE_GIT_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: coec-share-repository
-        key: PASSWORD
+    value: https://github.com/mathisbode/cfd-jupyter.git
