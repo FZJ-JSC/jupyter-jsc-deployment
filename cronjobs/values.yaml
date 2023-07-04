@@ -262,6 +262,57 @@ jobs:
     volumeMounts:
       - name: cronjobs-cm
         mountPath: /mnt/volumes
+  - name: daily-user-metric-coe-c
+    enabled: true
+    namespace: jupyter
+    stage: production
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "10 0 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash coreutils git postgresql-client && /bin/bash /mnt/volumes/usermetric.sh
+    
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: GIT_REPO
+      value: "gitlab.jsc.fz-juelich.de/jupyterjsc/k8s/metrics.git"
+    - name: GIT_BRANCH
+      value: "jupyter-coec.jsc.fz-juelich.de"
+    - name: GIT_SUBDIR
+      value: "metrics"
+    envFrom:
+    - secretRef:
+        name: cronjob-metrics
+    - secretRef:
+        name: hub-coec-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
   - name: 7days-metric
     enabled: true
     namespace: jupyter
