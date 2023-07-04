@@ -262,7 +262,7 @@ jobs:
     volumeMounts:
       - name: cronjobs-cm
         mountPath: /mnt/volumes
-  - name: daily-user-metric-coe-c
+  - name: daily-user-metric-coe-combustion
     enabled: true
     namespace: jupyter
     stage: production
