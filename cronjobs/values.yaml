@@ -413,7 +413,7 @@ jobs:
     - name: PGPASSWORD
       valueFrom:
         secretKeyRef:
-          name: postgresql-auth
+          name: postgresql-ha-auth
           key: postgres-password
     nodeSelector:
       worker: "true"
@@ -467,7 +467,7 @@ jobs:
     - name: PGPASSWORD
       valueFrom:
         secretKeyRef:
-          name: postgresql-auth
+          name: postgresql-ha-auth
           key: postgres-password
     nodeSelector:
       worker: "true"
