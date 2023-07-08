@@ -20,7 +20,7 @@ helm:
           - name: "k8smgr_lrz"
             user: "k8smgr"
             port: 2222
-            hostname: "138.246.238.7"
+            hostname: "138.246.238.63"
           - name: "k8smgr_lrz_staging"
             user: "k8smgr"
             port: 2222
