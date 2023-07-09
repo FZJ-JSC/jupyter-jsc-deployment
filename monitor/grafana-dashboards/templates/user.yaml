@@ -985,8 +985,33 @@ data:
             "options": [
               {
                 "selected": true,
-                "text": "s-usernode-1",
+                "text": "staging-usernode-1",
                 "value": "s-usernode-1"
+              },
+              {
+                "selected": false,
+                "text": "production-usernode-1",
+                "value": "production-usernode-1"
+              },
+              {
+                "selected": false,
+                "text": "production-usernode-2",
+                "value": "production-usernode-2"
+              },
+              {
+                "selected": false,
+                "text": "production-usernode-3",
+                "value": "production-usernode-3"
+              },
+              {
+                "selected": false,
+                "text": "production-usernode-4",
+                "value": "production-usernode-4"
+              },
+              {
+                "selected": false,
+                "text": "production-usernode-5",
+                "value": "production-usernode-5"
               }
             ],
             "query": {
