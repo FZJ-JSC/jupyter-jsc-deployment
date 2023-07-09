@@ -86,9 +86,14 @@ helm:
           readOnly: true
       ingress:
         enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "nginx"
+          nginx.ingress.kubernetes.io/rewrite-target: /$1
+          nginx.ingress.kubernetes.io/use-regex: "true"
+
+        path: /grafana/?(.*)
         hosts:
           - "jupyter-jsc.fz-juelich.de"
-        path: "/grafana"
     ingressNginx:
       enabled: false
     # workaround for broken grafana dashboards. Deploy manual cAdvisor ( https://github.com/rancher/rancher/issues/38934#issuecomment-1294585708 )
