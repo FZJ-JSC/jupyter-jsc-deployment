@@ -120,7 +120,7 @@ data:
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
+              "legendFormat": "{{label_hub_jupyter_org_system}}",
               "refId": "B"
             }
           ],
@@ -248,7 +248,7 @@ data:
               "expr": "sum(\n  group(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n    }\n  ) by (label_hub_jupyter_org_username)\n)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}namespace}}",
+              "legendFormat": "{{namespace}}",
               "refId": "A"
             }
           ],
@@ -352,7 +352,7 @@ data:
               "expr": "max(\n  ( jupyterhub_active_users{period=\"24h\", service=~\"$proxy\"} )\n  * on (service) group_left(label_app)\n  (\n    group(\n      kube_service_labels{\n        namespace=\"jupyter\"\n      }\n    ) by (label_app, service)\n  )\n) by (label_app)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_app}}",
+              "legendFormat": "{{label_app}}",
               "refId": "A"
             }
           ],
@@ -456,7 +456,7 @@ data:
               "expr": "max(\n  ( jupyterhub_active_users{period=\"7d\", service=~\"$proxy\"} )\n  * on (service) group_left(label_app)\n  (\n    group(\n      kube_service_labels{\n        namespace=~\"jupyter\"\n      }\n    ) by (label_app, service)\n  )\n) by (label_app)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_app}}",
+              "legendFormat": "{{label_app}}",
               "refId": "A"
             }
           ],
@@ -560,7 +560,7 @@ data:
               "expr": "max(\n  ( jupyterhub_active_users{period=\"30d\", service=~\"$proxy\"} )\n  * on (service) group_left(label_app)\n  (\n    group(\n      kube_service_labels{\n        namespace=~\"jupyter\"\n      }\n    ) by (label_app, service)\n  )\n) by (label_app)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_app}}",
+              "legendFormat": "{{label_app}}",
               "refId": "A"
             }
           ],
@@ -688,7 +688,7 @@ data:
               "expr": "sum(\n  kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
+              "legendFormat": "{{label_hub_jupyter_org_system}}",
               "refId": "B"
             }
           ],
@@ -794,7 +794,7 @@ data:
               "expr": "sum(\n  group(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n  ) by (label_hub_jupyter_org_username, label_hub_jupyter_org_system)\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
+              "legendFormat": "{{label_hub_jupyter_org_system}}",
               "refId": "B"
             }
           ],
@@ -901,7 +901,7 @@ data:
               "expr": "sum(\n  kube_service_labels{label_app=\"$hub\", label_component=\"singleuser-server\"}\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
+              "legendFormat": "{{label_hub_jupyter_org_system}}",
               "refId": "A"
             }
           ],
@@ -971,7 +971,7 @@ data:
               "expr": "sum(\n  group(\n    kube_service_labels{label_app=\"$hub\", label_component=\"singleuser-server\"}\n  ) by (label_hub_jupyter_org_username, label_hub_jupyter_org_system)\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_system}}",
+              "legendFormat": "{{label_hub_jupyter_org_system}}",
               "refId": "A"
             }
           ],
@@ -1041,7 +1041,7 @@ data:
               "expr": "sum(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_service)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_service}}",
+              "legendFormat": "{{label_hub_jupyter_org_service}}",
               "refId": "A"
             }
           ],
@@ -1111,7 +1111,7 @@ data:
               "expr": "sum(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_partition)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_hub_jupyter_org_partition}}",
+              "legendFormat": "{{label_hub_jupyter_org_partition}}",
               "refId": "A"
             }
           ],
@@ -1288,7 +1288,7 @@ data:
               "expr": "sum(increase(jupyterhub_server_spawn_duration_seconds_count{service=\"$proxy\", status!=\"success\"}[2m])) by (status)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}status}}",
+              "legendFormat": "{{status}}",
               "refId": "A"
             }
           ],
@@ -1482,7 +1482,7 @@ data:
               "expr": "sum(\n  increase(\n    jupyterhub_request_duration_seconds_bucket{\n      service=\"$proxy\",\n      namespace=~\"jupyter|userlabs\",\n    }[2m]\n  )\n) by (code)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} code }}",
+              "legendFormat": "{{ code }}",
               "refId": "A"
             }
           ],
@@ -1573,7 +1573,7 @@ data:
               "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\nirate(container_cpu_usage_seconds_total{name!=\"\"}[5m])\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{label_app=~\"$hub|drf.+\", label_component!=\"singleuser-server\", namespace=~\"userlabs\"}\n  ) by (label_app, pod, uid, namespace)\n) by (pod)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} label_component }}",
+              "legendFormat": "{{ label_component }}",
               "refId": "A"
             }
           ],
@@ -1665,7 +1665,7 @@ data:
               "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\ncontainer_memory_working_set_bytes{name!=\"\"}\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{label_app=~\"$hub|drf.+\", label_component!=\"singleuser-server\", namespace=~\"userlabs\"}\n  ) by (label_app, pod, uid, namespace)\n) by (pod)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} label_component }}",
+              "legendFormat": "{{ label_component }}",
               "refId": "A"
             }
           ],
@@ -1757,7 +1757,7 @@ data:
               "expr": "# Free bytes available on the hub db PVC\nsum(kubelet_volume_stats_available_bytes{persistentvolumeclaim=~\"data-postgresql-ha-postgresql-.+\", namespace=\"database\"}) by (namespace) /\n# Total number of bytes available on the hub db PVC\nsum(kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~\"data-postgresql-ha-postgresql-.+\", namespace=\"database\"}) by (namespace)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} $hub }}",
+              "legendFormat": "{{ $hub }}",
               "refId": "A"
             }
           ],
@@ -1850,7 +1850,7 @@ data:
               "expr": "sum(\n  kube_pod_status_phase{phase!=\"Running\", namespace=~\"jupyter|userlabs\"}\n) by (phase)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}phase}}",
+              "legendFormat": "{{phase}}",
               "refId": "A"
             }
           ],

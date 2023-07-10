@@ -105,7 +105,7 @@ data:
               "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n  # with both no name and `name=k8s_...`,\n  # in which case sum() by (uid) reports double the actual metric\n  container_memory_working_set_bytes{name!=\"\", node=~\"$instance\"}\n  * on (namespace, pod) group_left(uid) #(container)\n  group(\n      kube_pod_labels{label_app=\"$hub\", label_component=\"singleuser-server\", namespace=~\"userlabs\"} #, pod=~\"$user_pod\"}\n  ) by (uid,  pod, namespace)\n# ) by (pod, namespace)\n) by (uid, node)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} uid }} ({{ "{{" }} node }})",
+              "legendFormat": "{{ uid }} ({{ node }})",
               "refId": "A"
             }
           ],
@@ -205,7 +205,7 @@ data:
               "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n  # with both no name and `name=k8s_...`,\n  # in which case sum() by (uid) reports double the actual metric\n  irate(container_cpu_usage_seconds_total{name!=\"\", node=~\"$instance\"}[5m])\n  * on (namespace, pod) group_left(uid) #(container)\n  group(\n      kube_pod_labels{label_app=\"$hub\", label_component=\"singleuser-server\", namespace=~\"userlabs\"} #, pod=~\"$user_pod\"}\n  ) by (uid, pod, namespace)\n# ) by (pod, namespace)\n) by (uid, node)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} uid }} ({{ "{{" }} node }})",
+              "legendFormat": "{{ uid }} ({{ node }})",
               "refId": "A"
             }
           ],
@@ -437,7 +437,7 @@ data:
               "expr": "sum(\n  kube_pod_container_resource_requests{resource=\"memory\", namespace=~\"userlabs\", node=~\"$instance\"}\n# ) by (pod, namespace)\n) by (uid, node)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} uid }} ({{ "{{" }} node }})",
+              "legendFormat": "{{ uid }} ({{ node }})",
               "refId": "A"
             }
           ],
@@ -537,7 +537,7 @@ data:
               "expr": "sum(\n  kube_pod_container_resource_requests{resource=\"cpu\", namespace=~\"userlabs\", node=~\"$instance\"}\n# ) by (pod, namespace)\n) by (uid, node)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} uid }} ({{ "{{" }} node }})",
+              "legendFormat": "{{ uid }} ({{ node }})",
               "refId": "A"
             }
           ],
@@ -637,7 +637,7 @@ data:
               "expr": "sum(\n    # kube_pod_info.node identifies the pod node,\n    # while kube_pod_labels.node is the metrics exporter's node\n    kube_pod_info{node!=\"\"}\n    * on (namespace, pod) group_left() \n  group(\n    kube_pod_labels{label_app=~\".+\", label_component=\"singleuser-server\", namespace=~\"userlabs\"}\n  ) by (label_app, pod, uid, namespace)\n) by (node)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }} node }}",
+              "legendFormat": "{{ node }}",
               "refId": "A"
             }
           ],
@@ -748,7 +748,7 @@ data:
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_app}}/{{ "{{" }}uid}}",
+              "legendFormat": "{{label_app}}/{{uid}}",
               "refId": "A"
             }
           ],
@@ -802,7 +802,7 @@ data:
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_app}}/{{ "{{" }}uid}}",
+              "legendFormat": "{{label_app}}/{{uid}}",
               "refId": "A"
             }
           ],
@@ -856,7 +856,7 @@ data:
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
-              "legendFormat": "{{ "{{" }}label_app}}/{{ "{{" }}uid}}",
+              "legendFormat": "{{label_app}}/{{uid}}",
               "refId": "A"
             }
           ],
