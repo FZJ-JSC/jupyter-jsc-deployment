@@ -4,7 +4,6 @@ metadata:
   labels:
     grafana_dashboard: "1"
     jupyter_dashboard: "1"
-    {{- include "grafana-dashboards.labels" . | nindent 4 }}
   annotations:
     grafana_folder: "JupyterHub Dashboards"
   name: hub-usage-stats
@@ -27,8 +26,8 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 1048,
-      "iteration": 1687521423504,
+      "id": 433,
+      "iteration": 1688986462745,
       "links": [],
       "panels": [
         {
@@ -1611,7 +1610,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\nirate(container_cpu_usage_seconds_total{name!=\"\"}[5m])\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{label_app=~\"$hub|drf.+\", label_component!=\"singleuser-server\", namespace=~\"jupyter|userlabs\"}\n  ) by (label_component, pod, namespace)\n) by (pod)\n",
+              "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\nirate(container_cpu_usage_seconds_total{name!=\"\"}[5m])\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{label_app=~\"$hub|drf.+\", label_component!=\"singleuser-server\", namespace=~\"userlabs\"}\n  ) by (label_app, pod, uid, namespace)\n) by (pod)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ "{{" }} label_component }}",
@@ -1712,7 +1711,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\ncontainer_memory_working_set_bytes{name!=\"\"}\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{label_app=~\"$hub|drf.+\", label_component!=\"singleuser-server\", namespace=~\"jupyter|userlabs\"}\n  ) by (label_component, pod, namespace)\n) by (pod)\n",
+              "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\ncontainer_memory_working_set_bytes{name!=\"\"}\n\n  * on (namespace, pod) group_left(container, label_component) \n  group(\n    kube_pod_labels{label_app=~\"$hub|drf.+\", label_component!=\"singleuser-server\", namespace=~\"userlabs\"}\n  ) by (label_app, pod, uid, namespace)\n) by (pod)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{ "{{" }} label_component }}",
@@ -2171,6 +2170,6 @@ data:
       },
       "timezone": "browser",
       "title": "JupyterHub Dashboard",
-      "uid": null,
-      "version": 3
+      "uid": "hub-dashboard",
+      "version": 1
     }

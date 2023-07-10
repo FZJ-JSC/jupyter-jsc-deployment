@@ -4,7 +4,6 @@ metadata:
   labels:
     grafana_dashboard: "1"
     jupyter_dashboard: "1"
-    {{- include "grafana-dashboards.labels" . | nindent 4 }}
   annotations:
     grafana_folder: "Default"
   name: monitoring-information
@@ -27,8 +26,8 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 358,
-      "iteration": 1687348959082,
+      "id": 434,
+      "iteration": 1688986463323,
       "links": [],
       "panels": [
         {
@@ -548,6 +547,6 @@ data:
       },
       "timezone": "browser",
       "title": "Monitoring Information",
-      "uid": null,
+      "uid": "hVIITmCVz",
       "version": 1
     }
