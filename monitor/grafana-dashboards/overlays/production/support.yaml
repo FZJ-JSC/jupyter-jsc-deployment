@@ -26,8 +26,8 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 434,
-      "iteration": 1688986463323,
+      "id": 100,
+      "iteration": 1688990034430,
       "links": [],
       "panels": [
         {
@@ -547,6 +547,6 @@ data:
       },
       "timezone": "browser",
       "title": "Monitoring Information",
-      "uid": "hVIITmCVz",
+      "uid": "wgHYbmC4z",
       "version": 1
     }

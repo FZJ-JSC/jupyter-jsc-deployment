@@ -10,5 +10,5 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-    # kustomize:
-    #   dir: overlays/production
+    kustomize:
+      dir: overlays/production
