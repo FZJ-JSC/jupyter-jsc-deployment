@@ -26,8 +26,8 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 433,
-      "iteration": 1688986462745,
+      "id": 99,
+      "iteration": 1688990034032,
       "links": [],
       "panels": [
         {
@@ -1157,7 +1157,6 @@ data:
             "x": 0,
             "y": 63
           },
-          "hiddenSeries": false,
           "id": 17,
           "legend": {
             "alignAsTable": false,
@@ -1175,9 +1174,6 @@ data:
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
           "percentage": false,
           "pluginVersion": "7.5.11",
           "pointradius": 2,
@@ -1206,7 +1202,6 @@ data:
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Server Start Times",
           "tooltip": {
@@ -1239,11 +1234,7 @@ data:
               "min": 0,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -1264,7 +1255,6 @@ data:
             "x": 12,
             "y": 63
           },
-          "hiddenSeries": false,
           "id": 18,
           "legend": {
             "alignAsTable": false,
@@ -1283,9 +1273,6 @@ data:
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
           "percentage": false,
           "pluginVersion": "7.5.11",
           "pointradius": 2,
@@ -1307,7 +1294,6 @@ data:
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Server Start Failures",
           "tooltip": {
@@ -1340,11 +1326,7 @@ data:
               "min": 0,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -1364,7 +1346,6 @@ data:
             "x": 0,
             "y": 73
           },
-          "hiddenSeries": false,
           "id": 19,
           "legend": {
             "alignAsTable": false,
@@ -1382,9 +1363,6 @@ data:
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
           "percentage": false,
           "pluginVersion": "7.5.11",
           "pointradius": 5,
@@ -1420,7 +1398,6 @@ data:
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Hub response latency",
           "tooltip": {
@@ -1453,11 +1430,7 @@ data:
               "min": 0,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -1477,7 +1450,6 @@ data:
             "x": 12,
             "y": 73
           },
-          "hiddenSeries": false,
           "id": 20,
           "legend": {
             "alignAsTable": false,
@@ -1495,9 +1467,6 @@ data:
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
           "percentage": false,
           "pluginVersion": "7.5.11",
           "pointradius": 5,
@@ -1519,7 +1488,6 @@ data:
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Hub response status codes",
           "tooltip": {
@@ -1552,11 +1520,7 @@ data:
               "min": 0,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -1576,7 +1540,6 @@ data:
             "x": 0,
             "y": 83
           },
-          "hiddenSeries": false,
           "id": 21,
           "legend": {
             "alignAsTable": true,
@@ -1595,9 +1558,6 @@ data:
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
           "percentage": false,
           "pluginVersion": "7.5.11",
           "pointradius": 5,
@@ -1619,7 +1579,6 @@ data:
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "All JupyterHub Components CPU",
           "tooltip": {
@@ -1653,11 +1612,7 @@ data:
               "min": 0,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -1677,7 +1632,6 @@ data:
             "x": 12,
             "y": 83
           },
-          "hiddenSeries": false,
           "id": 22,
           "legend": {
             "alignAsTable": true,
@@ -1696,9 +1650,6 @@ data:
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
           "percentage": false,
           "pluginVersion": "7.5.11",
           "pointradius": 5,
@@ -1720,7 +1671,6 @@ data:
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "All JupyterHub Components Memory (Working Set)",
           "tooltip": {
@@ -1753,11 +1703,7 @@ data:
               "min": 0,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -1779,7 +1725,6 @@ data:
             "x": 0,
             "y": 95
           },
-          "hiddenSeries": false,
           "id": 23,
           "legend": {
             "alignAsTable": false,
@@ -1797,9 +1742,6 @@ data:
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
           "percentage": false,
           "pluginVersion": "7.5.11",
           "pointradius": 5,
@@ -1821,7 +1763,6 @@ data:
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Hub DB Disk Space Availability %",
           "tooltip": {
@@ -1856,11 +1797,7 @@ data:
               "min": 0,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -1881,7 +1818,6 @@ data:
             "x": 12,
             "y": 95
           },
-          "hiddenSeries": false,
           "id": 24,
           "legend": {
             "alignAsTable": false,
@@ -1899,9 +1835,6 @@ data:
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
           "percentage": false,
           "pluginVersion": "7.5.11",
           "pointradius": 5,
@@ -1923,7 +1856,6 @@ data:
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Non Running Pods",
           "tooltip": {
@@ -1957,11 +1889,7 @@ data:
               "min": 0,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         }
       ],
       "refresh": "",
