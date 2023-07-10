@@ -229,12 +229,6 @@ targetCustomizations:
             limits:
               cpu: 100m
               memory: 250Mi
-          grafana.ini:
-            server:
-              domain: jupyter-jsc-staging.fz-juelich.de
-          ingress:
-            hosts:
-              - "jupyter-jsc-staging.fz-juelich.de"
         kube-state-metrics:
           resources:
             requests:

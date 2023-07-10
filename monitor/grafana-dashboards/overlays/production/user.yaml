@@ -26,8 +26,8 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 430,
-      "iteration": 1688986463662,
+      "id": 97,
+      "iteration": 1688990034871,
       "links": [],
       "panels": [
         {
@@ -501,7 +501,6 @@ data:
             "x": 0,
             "y": 47
           },
-          "hiddenSeries": false,
           "id": 8,
           "legend": {
             "alignAsTable": false,
@@ -519,9 +518,6 @@ data:
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
           "percentage": false,
           "pluginVersion": "7.5.11",
           "pointradius": 5,
@@ -543,7 +539,6 @@ data:
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "CPU Requests",
           "tooltip": {
@@ -576,11 +571,7 @@ data:
               "min": null,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "aliasColors": {},
@@ -601,7 +592,6 @@ data:
             "x": 0,
             "y": 59
           },
-          "hiddenSeries": false,
           "id": 9,
           "legend": {
             "alignAsTable": false,
@@ -619,9 +609,6 @@ data:
           "linewidth": 1,
           "links": [],
           "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
           "percentage": false,
           "pluginVersion": "7.5.11",
           "pointradius": 5,
@@ -643,7 +630,6 @@ data:
           ],
           "thresholds": [],
           "timeFrom": null,
-          "timeRegions": [],
           "timeShift": null,
           "title": "Users per node",
           "tooltip": {
@@ -678,11 +664,7 @@ data:
               "min": 0,
               "show": true
             }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          ]
         },
         {
           "collapse": false,
@@ -712,7 +694,6 @@ data:
             "defaults": {},
             "overrides": []
           },
-          "fontSize": "100%",
           "gridPos": {
             "h": 12,
             "w": 12,
@@ -721,8 +702,6 @@ data:
           },
           "id": 11,
           "links": [],
-          "pageSize": null,
-          "showHeader": true,
           "sort": {
             "col": 2,
             "desc": true
@@ -766,7 +745,6 @@ data:
             "defaults": {},
             "overrides": []
           },
-          "fontSize": "100%",
           "gridPos": {
             "h": 12,
             "w": 12,
@@ -775,8 +753,6 @@ data:
           },
           "id": 12,
           "links": [],
-          "pageSize": null,
-          "showHeader": true,
           "sort": {
             "col": 2,
             "desc": true
@@ -820,7 +796,6 @@ data:
             "defaults": {},
             "overrides": []
           },
-          "fontSize": "100%",
           "gridPos": {
             "h": 12,
             "w": 12,
@@ -829,8 +804,6 @@ data:
           },
           "id": 13,
           "links": [],
-          "pageSize": null,
-          "showHeader": true,
           "sort": {
             "col": 2,
             "desc": true
@@ -957,10 +930,10 @@ data:
               "selected": true,
               "tags": [],
               "text": [
-                "s-usernode-1"
+                "production-usernode-1"
               ],
               "value": [
-                "s-usernode-1"
+                "production-usernode-1"
               ]
             },
             "datasource": "$PROMETHEUS_DS",
@@ -975,8 +948,24 @@ data:
             "options": [
               {
                 "selected": true,
-                "text": "s-usernode-1",
-                "value": "s-usernode-1"
+                "text": "production-usernode-1",
+                "value": "production-usernode-1"
+              },
+              {
+                "text": "production-usernode-2",
+                "value": "production-usernode-2"
+              },
+              {
+                "text": "production-usernode-3",
+                "value": "production-usernode-3"
+              },
+              {
+                "text": "production-usernode-4",
+                "value": "production-usernode-4"
+              },
+              {
+                "text": "production-usernode-5",
+                "value": "production-usernode-5"
               }
             ],
             "query": "label_values(kube_node_info{node=~\".*usernode.*\"}, node)",
@@ -993,7 +982,7 @@ data:
         ]
       },
       "time": {
-        "from": "now-15min",
+        "from": "now-6h",
         "to": "now"
       },
       "timepicker": {
@@ -1024,5 +1013,5 @@ data:
       "timezone": "browser",
       "title": "User Diagnostics Dashboard",
       "uid": "user-pod-diagnostics-dashboard",
-      "version": 3
+      "version": 1
     }
