@@ -28,8 +28,6 @@ helm:
       admin:
         # Run `grafana-cli --config "/etc/grafana/grafana.ini" admin reset-admin-password <PWD>`
         # in the grafana pod if the admin user already exists
-        # Run `grafana-cli --config "/etc/grafana/grafana.ini" admin reset-admin-password <PWD>`
-        # in the grafana pod if the admin user already exists
         existingSecret: grafana-generics
         userKey: admin-user
         passwordKey: admin-password
@@ -231,12 +229,6 @@ targetCustomizations:
             limits:
               cpu: 100m
               memory: 250Mi
-          grafana.ini:
-            server:
-              domain: jupyter-jsc-staging.fz-juelich.de
-          ingress:
-            hosts:
-              - "jupyter-jsc-staging.fz-juelich.de"
         kube-state-metrics:
           resources:
             requests:
