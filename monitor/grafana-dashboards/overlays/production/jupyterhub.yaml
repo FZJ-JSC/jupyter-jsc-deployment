@@ -200,6 +200,7 @@ data:
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
+          "description": "Number of unique users with running servers.\n",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -245,10 +246,10 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(\n  group(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n    }\n  ) by (label_hub_jupyter_org_username)\n)\n",
+              "expr": "sum(\n  group(\n    kube_service_labels{\n      label_app=~\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n    }\n  ) by (label_hub_jupyter_org_username, label_app)\n) by (label_app)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{namespace}}",
+              "legendFormat": "{{label_app}}",
               "refId": "A"
             }
           ],
@@ -256,7 +257,7 @@ data:
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Currently Active Users",
+          "title": "Number of users with running servers",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -302,7 +303,7 @@ data:
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
-          "description": "Number of unique users who were active within the preceeding 24h period.\n\nRequires JupyterHub 3.1.\n",
+          "description": "Number of unique users who were active on JupyterHub within the preceeding 24h period.\n\nIncludes non-server activities.\n",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -406,7 +407,7 @@ data:
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
-          "description": "Number of unique users who were active within the preceeding 7d period.\n\nRequires JupyterHub 3.1.\n",
+          "description": "Number of unique users who were active on JupyterHub within the preceeding 7d period.\n\nIncludes non-server activities.\n",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -510,7 +511,7 @@ data:
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
-          "description": "Number of unique users who were active within the preceeding 7d period.\n\nRequires JupyterHub 3.1.\n",
+          "description": "Number of unique users who were active on JupyterHub within the preceeding 30d period.\n\nIncludes non-server activities.\n",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -1108,10 +1109,10 @@ data:
           "pieType": "pie",
           "targets": [
             {
-              "expr": "sum(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_partition)\n",
+              "expr": "sum(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_partition, label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_partition}}",
+              "legendFormat": "{{label_hub_jupyter_org_system}}/{{label_hub_jupyter_org_partition}}",
               "refId": "A"
             }
           ],
@@ -1935,7 +1936,7 @@ data:
             "description": null,
             "error": null,
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
             "label": null,
             "multi": true,
             "name": "hub",

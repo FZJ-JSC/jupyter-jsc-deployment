@@ -27,7 +27,7 @@ data:
       "gnetId": null,
       "graphTooltip": 0,
       "id": 433,
-      "iteration": 1688986462745,
+      "iteration": 1689181678558,
       "links": [],
       "panels": [
         {
@@ -200,6 +200,7 @@ data:
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
+          "description": "Number of unique users with running servers.\n",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -245,10 +246,10 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(\n  group(\n    kube_service_labels{\n      label_app=\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n    }\n  ) by (label_hub_jupyter_org_username)\n)\n",
+              "expr": "sum(\n  group(\n    kube_service_labels{\n      label_app=~\"$hub\",\n      label_component=\"singleuser-server\",\n      label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\"\n    }\n  ) by (label_hub_jupyter_org_username, label_app)\n) by (label_app)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{namespace}}",
+              "legendFormat": "{{label_app}}",
               "refId": "A"
             }
           ],
@@ -256,7 +257,7 @@ data:
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Currently Active Users",
+          "title": "Number of users with running servers",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -302,7 +303,7 @@ data:
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
-          "description": "Number of unique users who were active within the preceeding 24h period.\n\nRequires JupyterHub 3.1.\n",
+          "description": "Number of unique users who were active on JupyterHub within the preceeding 24h period.\n\nIncludes non-server activities.\n",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -406,7 +407,7 @@ data:
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
-          "description": "Number of unique users who were active within the preceeding 7d period.\n\nRequires JupyterHub 3.1.\n",
+          "description": "Number of unique users who were active on JupyterHub within the preceeding 7d period.\n\nIncludes non-server activities.\n",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -510,7 +511,7 @@ data:
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 0,
-          "description": "Number of unique users who were active within the preceeding 7d period.\n\nRequires JupyterHub 3.1.\n",
+          "description": "Number of unique users who were active on JupyterHub within the preceeding 30d period.\n\nIncludes non-server activities.\n",
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -557,8 +558,10 @@ data:
           "steppedLine": false,
           "targets": [
             {
+              "exemplar": true,
               "expr": "max(\n  ( jupyterhub_active_users{period=\"30d\", service=~\"$proxy\"} )\n  * on (service) group_left(label_app)\n  (\n    group(\n      kube_service_labels{\n        namespace=~\"jupyter\"\n      }\n    ) by (label_app, service)\n  )\n) by (label_app)\n",
               "format": "time_series",
+              "interval": "",
               "intervalFactor": 2,
               "legendFormat": "{{label_app}}",
               "refId": "A"
@@ -1108,10 +1111,10 @@ data:
           "pieType": "pie",
           "targets": [
             {
-              "expr": "sum(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_partition)\n",
+              "expr": "sum(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\",}\n) by (label_hub_jupyter_org_partition, label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{label_hub_jupyter_org_partition}}",
+              "legendFormat": "{{label_hub_jupyter_org_system}}/{{label_hub_jupyter_org_partition}}",
               "refId": "A"
             }
           ],
@@ -1995,6 +1998,8 @@ data:
           {
             "allValue": null,
             "current": {
+              "selected": true,
+              "tags": [],
               "text": [
                 "jupyterjsc"
               ],
@@ -2007,37 +2012,46 @@ data:
             "description": null,
             "error": null,
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
             "label": null,
             "multi": true,
             "name": "hub",
             "options": [
               {
+                "selected": false,
                 "text": "coec",
                 "value": "coec"
               },
               {
+                "selected": false,
                 "text": "coeraise",
                 "value": "coeraise"
               },
               {
+                "selected": false,
                 "text": "eurocc",
                 "value": "eurocc"
               },
               {
+                "selected": false,
                 "text": "juniq",
                 "value": "juniq"
               },
               {
+                "selected": true,
                 "text": "jupyterjsc",
                 "value": "jupyterjsc"
               },
               {
+                "selected": false,
                 "text": "portalgauss",
                 "value": "portalgauss"
               }
             ],
-            "query": "label_values(kube_service_labels{label_component=\"hub\", namespace=\"jupyter\"}, label_app)",
+            "query": {
+              "query": "label_values(kube_service_labels{label_component=\"hub\", namespace=\"jupyter\"}, label_app)",
+              "refId": "Prometheus-hub-Variable-Query"
+            },
             "refresh": 0,
             "regex": "",
             "skipUrlSync": false,
@@ -2051,12 +2065,9 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": [
-                "jupyterjsc-proxy-public"
-              ],
-              "value": [
-                "jupyterjsc-proxy-public"
-              ]
+              "selected": false,
+              "text": "All",
+              "value": "$__all"
             },
             "datasource": "$PROMETHEUS_DS",
             "definition": "",
@@ -2067,8 +2078,22 @@ data:
             "label": null,
             "multi": true,
             "name": "proxy",
-            "options": [],
-            "query": "label_values(kube_service_labels{label_app=~\"$hub\", namespace=\"jupyter\", label_component=\"proxy-public\"}, service)",
+            "options": [
+              {
+                "selected": true,
+                "text": "All",
+                "value": "$__all"
+              },
+              {
+                "selected": false,
+                "text": "jupyterjsc-proxy-public",
+                "value": "jupyterjsc-proxy-public"
+              }
+            ],
+            "query": {
+              "query": "label_values(kube_service_labels{label_app=~\"$hub\", namespace=\"jupyter\", label_component=\"proxy-public\"}, service)",
+              "refId": "Prometheus-proxy-Variable-Query"
+            },
             "refresh": 0,
             "regex": "",
             "skipUrlSync": false,
@@ -2082,8 +2107,10 @@ data:
           {
             "allValue": ".*",
             "current": {
-              "selected": true,
-              "text": "all",
+              "selected": false,
+              "text": [
+                "All"
+              ],
               "value": [
                 "$__all"
               ]
@@ -2097,7 +2124,7 @@ data:
             "name": "system",
             "options": [
               {
-                "selected": false,
+                "selected": true,
                 "text": "All",
                 "value": "$__all"
               },
@@ -2171,5 +2198,5 @@ data:
       "timezone": "browser",
       "title": "JupyterHub Dashboard",
       "uid": "hub-dashboard",
-      "version": 1
+      "version": 6
     }
