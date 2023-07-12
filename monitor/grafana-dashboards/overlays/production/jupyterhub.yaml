@@ -27,7 +27,7 @@ data:
       "gnetId": null,
       "graphTooltip": 0,
       "id": 99,
-      "iteration": 1688990034032,
+      "iteration": 1689182592551,
       "links": [],
       "panels": [
         {
@@ -1924,6 +1924,8 @@ data:
           {
             "allValue": null,
             "current": {
+              "selected": true,
+              "tags": [],
               "text": [
                 "jupyterjsc"
               ],
@@ -1942,31 +1944,40 @@ data:
             "name": "hub",
             "options": [
               {
+                "selected": false,
                 "text": "coec",
                 "value": "coec"
               },
               {
+                "selected": false,
                 "text": "coeraise",
                 "value": "coeraise"
               },
               {
+                "selected": false,
                 "text": "eurocc",
                 "value": "eurocc"
               },
               {
+                "selected": false,
                 "text": "juniq",
                 "value": "juniq"
               },
               {
+                "selected": true,
                 "text": "jupyterjsc",
                 "value": "jupyterjsc"
               },
               {
+                "selected": false,
                 "text": "portalgauss",
                 "value": "portalgauss"
               }
             ],
-            "query": "label_values(kube_service_labels{label_component=\"hub\", namespace=\"jupyter\"}, label_app)",
+            "query": {
+              "query": "label_values(kube_service_labels{label_component=\"hub\", namespace=\"jupyter\"}, label_app)",
+              "refId": "Prometheus-hub-Variable-Query"
+            },
             "refresh": 0,
             "regex": "",
             "skipUrlSync": false,
@@ -1980,11 +1991,12 @@ data:
           {
             "allValue": null,
             "current": {
+              "selected": true,
               "text": [
-                "jupyterjsc-proxy-public"
+                "All"
               ],
               "value": [
-                "jupyterjsc-proxy-public"
+                "$__all"
               ]
             },
             "datasource": "$PROMETHEUS_DS",
@@ -1996,8 +2008,22 @@ data:
             "label": null,
             "multi": true,
             "name": "proxy",
-            "options": [],
-            "query": "label_values(kube_service_labels{label_app=~\"$hub\", namespace=\"jupyter\", label_component=\"proxy-public\"}, service)",
+            "options": [
+              {
+                "selected": true,
+                "text": "All",
+                "value": "$__all"
+              },
+              {
+                "selected": false,
+                "text": "jupyterjsc-proxy-public",
+                "value": "jupyterjsc-proxy-public"
+              }
+            ],
+            "query": {
+              "query": "label_values(kube_service_labels{label_app=~\"$hub\", namespace=\"jupyter\", label_component=\"proxy-public\"}, service)",
+              "refId": "Prometheus-proxy-Variable-Query"
+            },
             "refresh": 0,
             "regex": "",
             "skipUrlSync": false,
@@ -2011,8 +2037,10 @@ data:
           {
             "allValue": ".*",
             "current": {
-              "selected": true,
-              "text": "all",
+              "selected": false,
+              "text": [
+                "All"
+              ],
               "value": [
                 "$__all"
               ]
@@ -2026,7 +2054,7 @@ data:
             "name": "system",
             "options": [
               {
-                "selected": false,
+                "selected": true,
                 "text": "All",
                 "value": "$__all"
               },
