@@ -397,6 +397,7 @@ hub:
           env = spawner.get_env()
           env["JUPYTERHUB_USER_ID"] = spawner.user.orm_user.id
           env["JUPYTERHUB_STAGE"] = os.environ.get("JUPYTERHUB_STAGE", "")
+          env["JUPYTERHUB_DOMAIN"] = os.environ.get("JUPYTERHUB_HOSTNAME", "")
 
           # HDF-Cloud does not use setup Tunnel, it uses updateLab instead
           drf_service = (

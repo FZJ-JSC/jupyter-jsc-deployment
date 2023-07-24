@@ -1,0 +1,10 @@
+- op: add
+  path: "/spec/template/spec/containers/5/volumeMounts/-"
+  value:
+    name: twofa-remove-keypair
+    mountPath: /mnt/twofa_remove_keypair
+- op: add
+  path: "/spec/template/spec/containers/5/volumeMounts/-"
+  value:
+    name: twofa-keypair
+    mountPath: /mnt/twofa_keypair
