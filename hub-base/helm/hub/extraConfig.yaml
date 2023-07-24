@@ -479,6 +479,7 @@ hub:
       c.EventBackendSpawner.request_headers_poll = request_headers
       c.EventBackendSpawner.request_url_stop = request_url_poll_stop
       c.EventBackendSpawner.request_headers_stop = request_headers
+      c.EventBackendSpawner.request_failed_poll_keep_running = True
       c.EventBackendSpawner.ssl_alt_names = [f"DNS:{jhub_hostname}", "DNS:default-hub"]
 
       # async def post_spawn_request_hook(spawner, resp_json):
