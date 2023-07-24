@@ -52,7 +52,7 @@
   path: "/spec/template/spec/containers/5/env/-"
   value:
     name: TWOFA_SSH_USER
-    value: "ubuntu"
+    value: "unity"
 - op: add
   path: "/spec/template/spec/containers/5/env/-"
   value:
@@ -67,7 +67,7 @@
   path: "/spec/template/spec/containers/5/env/-"
   value:
     name: TWOFA_REMOVE_SSH_USER
-    value: "ubuntu"
+    value: "unity"
 - op: add
   path: "/spec/template/spec/containers/5/env/-"
   value:
