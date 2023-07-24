@@ -47,7 +47,7 @@
   path: "/spec/template/spec/containers/5/env/-"
   value:
     name: TWOFA_SSH_KEY
-    value: "/mnt/twofa_keypair/..data/twofa"
+    value: "/mnt/shared-data/twofa/twofa"
 - op: add
   path: "/spec/template/spec/containers/5/env/-"
   value:
@@ -62,7 +62,7 @@
   path: "/spec/template/spec/containers/5/env/-"
   value:
     name: TWOFA_REMOVE_SSH_KEY
-    value: "/mnt/twofa_remove_keypair/..data/twofa"
+    value: "/mnt/shared-data/twofa/twofaremove"
 - op: add
   path: "/spec/template/spec/containers/5/env/-"
   value:

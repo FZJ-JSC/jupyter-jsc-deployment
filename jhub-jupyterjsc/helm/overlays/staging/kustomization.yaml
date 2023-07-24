@@ -15,10 +15,6 @@ patches:
 - target:
     kind: Deployment
     labelSelector: app=jupyterjsc,component=hub
-  path: hub/extraVolumeMounts-patch.yaml
-- target:
-    kind: Deployment
-    labelSelector: app=jupyterjsc,component=hub
   path: extraVolumes-patch.yaml
 - target:
     kind: Ingress

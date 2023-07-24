@@ -50,3 +50,7 @@ hub:
           readOnly: true
         - name: init-script
           mountPath: /mnt/init_script
+        - name: twofa-keypair
+          mountPath: /mnt/twofa_keypair
+        - name: twofa-remove-keypair
+          mountPath: /mnt/twofa_remove_keypair
