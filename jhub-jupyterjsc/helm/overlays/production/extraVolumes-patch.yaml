@@ -14,23 +14,3 @@
 - op: replace
   path: "/spec/template/spec/volumes/3/nfs/path"
   value: "/mnt/storage/jupyterhub_jupyterjsc"
-- op: add
-  path: "/spec/template/spec/volumes/-"
-  value:
-    name: twofa-keypair
-    secret:
-      secretName: twofa-keypair
-      items:
-        - key: twofa
-          path: twofa
-          mode: 0444
-- op: add
-  path: "/spec/template/spec/volumes/-"
-  value:
-    name: twofa-remove-keypair
-    secret:
-      secretName: twofa-remove-keypair
-      items:
-        - key: twofa
-          path: twofa
-          mode: 0444

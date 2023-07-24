@@ -79,6 +79,23 @@ data:
         cp -r ${SHARE_JHUB_DIR_TMP}/${JUPYTERHUB_VERSION}/* ${SHARE_JHUB_DIR} 
     }
 
+    twofa_setup() {
+        # Fix twofa ssh keys permissions
+        if [[ -f /mnt/twofa_keypair/..data/twofa ]]
+        then
+          mkdir -p /mnt/shared-data/twofa
+          cp -r /mnt/twofa_keypair/..data/twofa /mnt/shared-data/twofa/twofa
+          chmod 400 /mnt/shared-data/twofa/twofa
+        fi
+
+        if [[ -f /mnt/twofa_remove_keypair/..data/twofa ]]
+        then
+          mkdir -p /mnt/shared-data/twofa
+          cp -r /mnt/twofa_remove_keypair/..data/twofa /mnt/shared-data/twofa/twofaremove
+          chmod 400 /mnt/shared-data/twofa/twofaremove
+        fi
+    }
+
     wrap_up() {
         # set ownership
         chown -R 1000:100 /mnt/shared-data
@@ -89,4 +106,5 @@ data:
     internal_ssl_dir
     git_config
     git_share
+    twofa_setup
     wrap_up
