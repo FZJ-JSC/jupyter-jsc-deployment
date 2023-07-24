@@ -31,4 +31,4 @@
       secretName: twofa-remove-keypair
       items:
         - key: twofa
-        - path: twofa
+          path: twofa
