@@ -23,6 +23,7 @@
       items:
         - key: twofa
           path: twofa
+          mode: 0444
 - op: add
   path: "/spec/template/spec/volumes/-"
   value:
@@ -32,3 +33,4 @@
       items:
         - key: twofa
           path: twofa
+          mode: 0444
