@@ -901,7 +901,7 @@ data:
           "pieType": "pie",
           "targets": [
             {
-              "expr": "sum(\n  kube_service_labels{label_app=\"$hub\", label_component=\"singleuser-server\"}\n) by (label_hub_jupyter_org_system)\n",
+              "expr": "sum(\n  kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\"}\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{label_hub_jupyter_org_system}}",
@@ -971,7 +971,7 @@ data:
           "pieType": "pie",
           "targets": [
             {
-              "expr": "sum(\n  group(\n    kube_service_labels{label_app=\"$hub\", label_component=\"singleuser-server\"}\n  ) by (label_hub_jupyter_org_username, label_hub_jupyter_org_system)\n) by (label_hub_jupyter_org_system)\n",
+              "expr": "sum(\n  group(\n    kube_service_labels{label_app=\"$hub\", label_hub_jupyter_org_system=~\"$system\", label_component=\"singleuser-server\"}\n  ) by (label_hub_jupyter_org_username, label_hub_jupyter_org_system)\n) by (label_hub_jupyter_org_system)\n",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{label_hub_jupyter_org_system}}",
@@ -1742,210 +1742,6 @@ data:
           "yaxes": [
             {
               "format": "bytes",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 0,
-          "description": "% of disk space left in the disk storing the JupyterHub sqlite database. If goes to 0, the hub will fail.\n",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 0,
-            "y": 95
-          },
-          "hiddenSeries": false,
-          "id": 23,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.11",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "# Free bytes available on the hub db PVC\nsum(kubelet_volume_stats_available_bytes{persistentvolumeclaim=~\"data-postgresql-ha-postgresql-.+\", namespace=\"database\"}) by (namespace) /\n# Total number of bytes available on the hub db PVC\nsum(kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~\"data-postgresql-ha-postgresql-.+\", namespace=\"database\"}) by (namespace)\n",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{ $hub }}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Hub DB Disk Space Availability %",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "percentunit",
-              "label": null,
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": true
-            },
-            {
-              "decimals": 0,
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "description": "Pods in a non-running state in the hub's namespace.\n\nPods stuck in non-running states often indicate an error condition\n",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 12,
-            "y": 95
-          },
-          "hiddenSeries": false,
-          "id": 24,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "sideWidth": null,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "7.5.11",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(\n  kube_pod_status_phase{phase!=\"Running\", namespace=~\"jupyter|userlabs\"}\n) by (phase)\n",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{phase}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Non Running Pods",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "short",
               "label": null,
               "logBase": 1,
               "max": null,
