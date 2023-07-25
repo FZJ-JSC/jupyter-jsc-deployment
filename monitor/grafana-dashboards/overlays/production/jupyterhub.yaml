@@ -1727,17 +1727,16 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 7,
+            "h": 4,
             "w": 24,
             "x": 0,
             "y": 96
           },
           "id": 26,
           "options": {
-            "folderId": null,
             "maxItems": 10,
             "query": "",
-            "showHeadings": true,
+            "showHeadings": false,
             "showRecentlyViewed": false,
             "showSearch": true,
             "showStarred": false,
