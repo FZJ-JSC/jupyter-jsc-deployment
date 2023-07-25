@@ -1761,6 +1761,51 @@ data:
             "align": false,
             "alignLevel": null
           }
+        },
+        {
+          "collapsed": false,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 95
+          },
+          "id": 24,
+          "panels": [],
+          "title": "Additional Dashboards",
+          "type": "row"
+        },
+        {
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 96
+          },
+          "id": 26,
+          "options": {
+            "folderId": null,
+            "maxItems": 10,
+            "query": "",
+            "showHeadings": true,
+            "showRecentlyViewed": false,
+            "showSearch": true,
+            "showStarred": false,
+            "tags": [
+              "jupyterhub"
+            ]
+          },
+          "pluginVersion": "7.5.11",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "All JupyterHub Dashboards",
+          "type": "dashlist"
         }
       ],
       "refresh": "",
