@@ -3,7 +3,7 @@ resources:
   - init_kubeconfig_cm.yaml
 
 configMapGenerator:
-  - name: nginx-config
+  - name: grafana-nginx-proxy-config
     behavior: merge
     files:
       - nginx-config.yaml
