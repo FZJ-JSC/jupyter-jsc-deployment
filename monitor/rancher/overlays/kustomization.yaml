@@ -2,10 +2,6 @@ resources:
   - edit_dashboards_rb.yaml
   - init_kubeconfig_cm.yaml
 
-configMapGenerator:
-  - name: grafana-nginx-proxy-config
-    namespace: cattle-monitoring-system
-    behavior: merge
-    files:
-      - nginx-config.yaml
+patchesStrategicMerge:
+  - nginx-config.yaml
 
