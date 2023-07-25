@@ -4,6 +4,7 @@ resources:
 
 configMapGenerator:
   - name: grafana-nginx-proxy-config
+    namespace: cattle-monitoring-system
     behavior: merge
     files:
       - nginx-config.yaml
