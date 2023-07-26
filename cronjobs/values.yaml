@@ -1251,3 +1251,628 @@ jobs:
     volumeMounts:
       - name: cronjobs-cm
         mountPath: /mnt/volumes
+  - name: cleanup-services-j-jupyterjsc
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "jupyterjsc"
+    - name: NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    envFrom:
+    - secretRef:
+        name: hub-jupyterjsc-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: cleanup-services-u-jupyterjsc
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "jupyterjsc"
+    - name: NAMESPACE
+      value: "userlabs"
+    envFrom:
+    - secretRef:
+        name: hub-jupyterjsc-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: cleanup-services-j-coec
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "coec"
+    - name: NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    envFrom:
+    - secretRef:
+        name: hub-coec-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: cleanup-services-u-coec
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "coec"
+    - name: NAMESPACE
+      value: "userlabs"
+    envFrom:
+    - secretRef:
+        name: hub-coec-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: cleanup-services-j-coeraise
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "coeraise"
+    - name: NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    envFrom:
+    - secretRef:
+        name: hub-coeraise-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: cleanup-services-u-coeraise
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "coeraise"
+    - name: NAMESPACE
+      value: "userlabs"
+    envFrom:
+    - secretRef:
+        name: hub-coeraise-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: cleanup-services-j-eurocc
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "eurocc"
+    - name: NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    envFrom:
+    - secretRef:
+        name: hub-eurocc-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: cleanup-services-u-eurocc
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "eurocc"
+    - name: NAMESPACE
+      value: "userlabs"
+    envFrom:
+    - secretRef:
+        name: hub-eurocc-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+
+  - name: cleanup-services-j-juniq
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "juniq"
+    - name: NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    envFrom:
+    - secretRef:
+        name: hub-juniq-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: cleanup-services-u-juniq
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "juniq"
+    - name: NAMESPACE
+      value: "userlabs"
+    envFrom:
+    - secretRef:
+        name: hub-juniq-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: cleanup-services-j-portalgauss
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "portalgauss"
+    - name: NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    envFrom:
+    - secretRef:
+        name: hub-portalgauss-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
+  - name: cleanup-services-u-portalgauss
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "portalgauss"
+    - name: NAMESPACE
+      value: "userlabs"
+    envFrom:
+    - secretRef:
+        name: hub-portalgauss-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
