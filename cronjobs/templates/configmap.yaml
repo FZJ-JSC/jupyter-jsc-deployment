@@ -19,6 +19,14 @@ data:
         # /tmp/kubectl -n ${NAMESPACE} delete $SVC
       fi
     done
+    if [[ "${NAMESPACE}" == "jupyter" ]]; then
+      STRANGE_SVC=($(/tmp/kubectl -n ${NAMESPACE} get svc --selector='!app' --no-headers -o name | grep -E 'service/unicoremgr-'))
+      for SVC in "${STRANGE_SVC[@]}"
+      do
+        echo "We should delete $SVC"
+        # /tmp/kubectl -n ${NAMESPACE} delete $SVC
+      fi
+    fi
   usermetric.sh: |
     #!/bin/bash
     git config --global user.email "cronjob@fz-juelich.de"
