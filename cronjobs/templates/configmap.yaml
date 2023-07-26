@@ -11,7 +11,7 @@ data:
   cleanup_services.sh: |
     #!/bin/bash
     ALL_UNICORE_SERVER=($(psql -t --csv --command "SELECT CONCAT('service/', REPLACE(ip,'.${NAMESPACE}.svc','')) FROM servers WHERE ip ~ '.${NAMESPACE}.svc';" postgresql://${SQL_USER}:${SQL_PASSWORD}@${SQL_HOST}:${SQL_PORT}/${SQL_DATABASE}))
-    ALL_UNICORE_SVC=($(kubectl -n ${NAMESPACE} get svc --no-headers -o name --selector=app=${JUPYTERHUB_APP},component=singleuser-server))
+    ALL_UNICORE_SVC=($(/tmp/kubectl -n ${NAMESPACE} get svc --no-headers -o name --selector=app=${JUPYTERHUB_APP},component=singleuser-server))
     for SVC in "${ALL_UNICORE_SVC}"
     do
       if [[ ! "${ALL_UNICORE_SERVER[*]}" =~ "$SVC" ]]; then
