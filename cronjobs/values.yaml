@@ -649,7 +649,7 @@ jobs:
       - -c
       - >-
           apk add bash curl coreutils git postgresql-client &&
-          curl --outputdir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          curl --output-dir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
           chmod +x /tmp/kubectl &&
           /bin/bash /mnt/volumes/cleanup_services.sh
     resources:
