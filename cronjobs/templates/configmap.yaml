@@ -16,7 +16,7 @@ data:
     echo ${ALL_UNICORE_SERVER[@]}
     echo ${#ALL_UNICORE_SVC[@]}
     echo ${ALL_UNICORE_SVC[@]}
-    for SVC in "${ALL_UNICORE_SVC}"
+    for SVC in "${ALL_UNICORE_SVC[@]}"
     do
       echo ${SVC}
       if [[ ! "${ALL_UNICORE_SERVER[*]}" =~ "$SVC" ]]; then
