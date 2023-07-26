@@ -25,7 +25,7 @@ data:
       do
         echo "We should delete $SVC"
         # /tmp/kubectl -n ${NAMESPACE} delete $SVC
-      fi
+      done
     fi
   usermetric.sh: |
     #!/bin/bash
