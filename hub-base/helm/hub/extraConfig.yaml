@@ -188,7 +188,7 @@ hub:
                       "failed": False,
                       "ready": False,
                       "progress": 15,
-                      "html_message": f"{now}: <span style=\"color:darkorange;\">JupyterLab {version} is deprecated - you might want to switch to 3.6</span>",
+                      "html_message": f"<details><summary>{now}: <span style=\"color:darkorange;\">JupyterLab {version} is deprecated - you might want to switch to 3.6</summary>JupyterLab versions < 3.6 are no longer actively supported even though they will be operational.</span>",
                   }
                   spawner.latest_events.append(deprecated_warning_event)
           except ValueError:
