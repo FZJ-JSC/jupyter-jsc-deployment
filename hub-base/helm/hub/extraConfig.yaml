@@ -179,6 +179,21 @@ hub:
           spawner_events = get_spawner_events(spawner.user.id)
           spawner_events["start"].set()
 
+          service, version = spawner.user_options.get("service", "").split("/")
+          try:
+              version_number = float(version)
+              if version_number < 3.6:
+                  now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
+                  deprecated_warning_event = {
+                      "failed": False,
+                      "ready": False,
+                      "progress": 15,
+                      "html_message": f"{now}: <span style=\"color:darkorange;\">JupyterLab {version} is deprecated - you might want to switch to 3.6</span>",
+                  }
+                  spawner.latest_events.append(deprecated_warning_event)
+          except ValueError:
+              pass
+
       async def post_stop_hook(spawner):
           try:
               # Stop ssh tunnel, if it was used
