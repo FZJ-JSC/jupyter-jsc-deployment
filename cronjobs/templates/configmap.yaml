@@ -15,16 +15,14 @@ data:
     for SVC in "${ALL_UNICORE_SVC[@]}"
     do
       if [[ ! "${ALL_UNICORE_SERVER[*]}" =~ "$SVC" ]]; then
-        echo "We should delete $SVC"
-        # /tmp/kubectl -n ${NAMESPACE} delete $SVC
+        /tmp/kubectl -n ${NAMESPACE} delete $SVC
       fi
     done
     if [[ "${NAMESPACE}" == "jupyter" ]]; then
       STRANGE_SVC=($(/tmp/kubectl -n ${NAMESPACE} get svc --selector='!app' --no-headers -o name | grep -E 'service/unicoremgr-'))
       for SVC in "${STRANGE_SVC[@]}"
       do
-        echo "We should delete $SVC"
-        # /tmp/kubectl -n ${NAMESPACE} delete $SVC
+        /tmp/kubectl -n ${NAMESPACE} delete $SVC
       done
     fi
   usermetric.sh: |
