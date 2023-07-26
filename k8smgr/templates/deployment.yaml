@@ -123,6 +123,8 @@ spec:
               value: "{{ .Values.deploymentNamespace }}"
             - name: LOGGER_NAME
               value: "{{ .Values.loggerName }}"
+            - name: PYTHONUNBUFFERED
+              value: "1"
             - name: STAGE
               valueFrom:
                 fieldRef:

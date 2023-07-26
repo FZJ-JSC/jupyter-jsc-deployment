@@ -110,6 +110,8 @@ spec:
                   fieldPath: metadata.labels['stage']
             - name: LOGGER_NAME
               value: "{{ .Values.loggerName }}"
+            - name: PYTHONUNBUFFERED
+              value: "1"
           ports:
             - name: https
               containerPort: 8443
