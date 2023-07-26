@@ -626,3 +626,56 @@ jobs:
     volumeMounts:
       - name: cronjobs-cm
         mountPath: /mnt/volumes
+  - name: daily-cleanup-services-jupyterjsc
+    enabled: true
+    namespace: jupyter
+    stage: staging
+    image:
+      repository: python
+      tag: 3.9-alpine3.16
+      imagePullPolicy: Always
+    schedule: "0 2 * * *"
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+    failedJobsHistoryLimit: 1
+    serviceAccount:
+      name: "cleanup-services-jupyter-svc-acc"
+    successfulJobsHistoryLimit: 1
+    concurrencyPolicy: Forbid
+    backoffLimit: 0
+    restartPolicy: Never
+    command: ["/bin/sh"]
+    args:
+      - -c
+      - >-
+          apk add bash curl coreutils git postgresql-client &&
+          curl --outputdir /tmp -LO https://dl.k8s.io/release/v1.24.8/bin/linux/amd64/kubectl &&
+          chmod +x /tmp/kubectl &&
+          /bin/bash /mnt/volumes/cleanup_services.sh
+    resources:
+      limits:
+        cpu: 50m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    env:
+    - name: JUPYTERHUB_APP
+      value: "jupyterjsc"
+    - name: NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    envFrom:
+    - secretRef:
+        name: hub-jupyterjsc-generics
+    nodeSelector:
+      worker: "true"
+    volumes:
+      - name: cronjobs-cm
+        configMap:
+          defaultMode: 400
+          name: cronjobs
+    volumeMounts:
+      - name: cronjobs-cm
+        mountPath: /mnt/volumes
