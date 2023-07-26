@@ -104,6 +104,8 @@ spec:
                   fieldPath: metadata.namespace
             - name: LOGGER_NAME
               value: "{{ .Values.loggerName }}"
+            - name: PYTHONUNBUFFERED
+              value: "1"
             - name: ACTIVE_REPLICAS_PATH
               value: "/mnt/replicas/desired_replicas"
           ports:
