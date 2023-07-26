@@ -626,7 +626,7 @@ jobs:
     volumeMounts:
       - name: cronjobs-cm
         mountPath: /mnt/volumes
-  - name: daily-cleanup-services-jupyterjsc
+  - name: cleanup-services-jupyterjsc
     enabled: true
     namespace: jupyter
     stage: staging
