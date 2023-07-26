@@ -629,7 +629,7 @@ jobs:
   - name: cleanup-services-j-jupyterjsc
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -682,7 +682,7 @@ jobs:
   - name: cleanup-services-u-jupyterjsc
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -733,7 +733,7 @@ jobs:
   - name: cleanup-services-j-coec
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -786,7 +786,7 @@ jobs:
   - name: cleanup-services-u-coec
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -837,7 +837,7 @@ jobs:
   - name: cleanup-services-j-coeraise
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -890,7 +890,7 @@ jobs:
   - name: cleanup-services-u-coeraise
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -941,7 +941,7 @@ jobs:
   - name: cleanup-services-j-eurocc
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -994,7 +994,7 @@ jobs:
   - name: cleanup-services-u-eurocc
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -1046,7 +1046,7 @@ jobs:
   - name: cleanup-services-j-juniq
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -1099,7 +1099,7 @@ jobs:
   - name: cleanup-services-u-juniq
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -1150,7 +1150,7 @@ jobs:
   - name: cleanup-services-j-portalgauss
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
@@ -1203,7 +1203,7 @@ jobs:
   - name: cleanup-services-u-portalgauss
     enabled: true
     namespace: jupyter
-    stage: staging
+    stage: production
     image:
       repository: python
       tag: 3.9-alpine3.16
