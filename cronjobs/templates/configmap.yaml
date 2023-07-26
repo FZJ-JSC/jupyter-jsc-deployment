@@ -12,16 +12,11 @@ data:
     #!/bin/bash
     ALL_UNICORE_SERVER=($(psql -t --csv --command "SELECT CONCAT('service/', REPLACE(ip,'.${NAMESPACE}.svc','')) FROM servers WHERE ip ~ '.${NAMESPACE}.svc';" postgresql://${SQL_USER}:${SQL_PASSWORD}@${SQL_HOST}:${SQL_PORT}/${SQL_DATABASE}))
     ALL_UNICORE_SVC=($(/tmp/kubectl -n ${NAMESPACE} get svc --no-headers -o name --selector=app=${JUPYTERHUB_APP},component=singleuser-server))
-    echo ${#ALL_UNICORE_SERVER[@]}
-    echo ${ALL_UNICORE_SERVER[@]}
-    echo ${#ALL_UNICORE_SVC[@]}
-    echo ${ALL_UNICORE_SVC[@]}
     for SVC in "${ALL_UNICORE_SVC[@]}"
     do
-      echo ${SVC}
       if [[ ! "${ALL_UNICORE_SERVER[*]}" =~ "$SVC" ]]; then
         echo "We should delete $SVC"
-        # kubectl -n jupyter delete $SVC
+        # /tmp/kubectl -n ${NAMESPACE} delete $SVC
       fi
     done
   usermetric.sh: |
