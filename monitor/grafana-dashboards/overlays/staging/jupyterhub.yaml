@@ -886,9 +886,11 @@ data:
             "legend": {
               "displayMode": "list",
               "placement": "right",
-              "values": []
+              "values": [
+                "percent"
+              ]
             },
-            "pieType": "pie",
+            "pieType": "donut",
             "reduceOptions": {
               "calcs": [
                 "lastNotNull"
@@ -956,9 +958,11 @@ data:
             "legend": {
               "displayMode": "list",
               "placement": "right",
-              "values": []
+              "values": [
+                "percent"
+              ]
             },
-            "pieType": "pie",
+            "pieType": "donut",
             "reduceOptions": {
               "calcs": [
                 "lastNotNull"
@@ -1026,9 +1030,11 @@ data:
             "legend": {
               "displayMode": "list",
               "placement": "right",
-              "values": []
+              "values": [
+                "percent"
+              ]
             },
-            "pieType": "pie",
+            "pieType": "donut",
             "reduceOptions": {
               "calcs": [
                 "lastNotNull"
@@ -1096,9 +1102,11 @@ data:
             "legend": {
               "displayMode": "list",
               "placement": "right",
-              "values": []
+              "values": [
+                "percent"
+              ]
             },
-            "pieType": "pie",
+            "pieType": "donut",
             "reduceOptions": {
               "calcs": [
                 "lastNotNull"
