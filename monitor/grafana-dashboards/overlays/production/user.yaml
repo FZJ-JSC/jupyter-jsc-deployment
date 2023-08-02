@@ -927,13 +927,20 @@ data:
           {
             "allValue": null,
             "current": {
-              "selected": true,
-              "tags": [],
+              "selected": false,
               "text": [
-                "production-usernode-1"
+                "production-usernode-1",
+                "production-usernode-2",
+                "production-usernode-3",
+                "production-usernode-4",
+                "production-usernode-5"
               ],
               "value": [
-                "production-usernode-1"
+                "production-usernode-1",
+                "production-usernode-2",
+                "production-usernode-3",
+                "production-usernode-4",
+                "production-usernode-5"
               ]
             },
             "datasource": "$PROMETHEUS_DS",
@@ -952,18 +959,22 @@ data:
                 "value": "production-usernode-1"
               },
               {
+                "selected": true,
                 "text": "production-usernode-2",
                 "value": "production-usernode-2"
               },
               {
+                "selected": true,
                 "text": "production-usernode-3",
                 "value": "production-usernode-3"
               },
               {
+                "selected": true,
                 "text": "production-usernode-4",
                 "value": "production-usernode-4"
               },
               {
+                "selected": true,
                 "text": "production-usernode-5",
                 "value": "production-usernode-5"
               }
@@ -1011,7 +1022,7 @@ data:
         ]
       },
       "timezone": "browser",
-      "title": "User Diagnostics Dashboard",
+      "title": "User Cloud Pods Diagnostics Dashboard",
       "uid": "user-pod-diagnostics-dashboard",
       "version": 1
     }

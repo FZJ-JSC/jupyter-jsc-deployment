@@ -1022,7 +1022,7 @@ data:
         ]
       },
       "timezone": "browser",
-      "title": "User Diagnostics Dashboard",
+      "title": "User Cloud Pods Diagnostics Dashboard",
       "uid": "user-pod-diagnostics-dashboard",
       "version": 3
     }
