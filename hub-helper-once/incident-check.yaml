@@ -138,6 +138,16 @@ data:
         return ret
 
 
+    def update_thresholds(config):
+        interactive_threshold = config.get("health_threshold", {}).get("interactive", 40)
+        compute_threshold = config.get("health_threshold", {}).get("compute", 50)
+
+        systems_incidents = read_json_file(incidents_json)
+        systems_incidents["interactive_threshold"] = interactive_threshold
+        systems_incidents["compute_threshold"] = compute_threshold
+        write_to_file(incidents_json, json.dumps(systems_incidents, indent=2))
+        
+
     def update_status_image(system, health):
         image_path = f"{static_dir}/systems/{system.lower()}.svg"
         # 0: Healthy, 10: Annotation, 20: Minor, 30: Medium, 40: Major, 50: Critical
@@ -200,6 +210,8 @@ data:
 
 
     def check_incidents(config):
+        update_thresholds(config)
+
         api_url = config.get("url", "https://status.jsc.fz-juelich.de/api")
         try:
             all_incidents_r = requests.get(f"{api_url}/incidents", timeout=5)
@@ -229,19 +241,12 @@ data:
         for name, logger_config in config.get("logger", {}).items():
             setup_logger(name, logger_config)
         
-        incident_threshold = config.get("health_threshold", 0)
         if not os.path.exists(incidents_json):
             with open(incidents_json, "w") as f:
-                f.write(json.dumps({
-                    "threshold": incident_threshold
-                }))
+                f.write(json.dumps({}))
         if not os.path.isfile(incidents_json):
             log.error(f"{incidents_json} must be a file. Exit")
             exit(1)
-        incidents_data = read_json_file(incidents_json)
-        if not "threshold" in incidents_data:
-            incidents_data["threshold"] = incident_threshold
-            write_to_file(incidents_json, json.dumps(incidents_data))
 
         check_incidents(config)
 

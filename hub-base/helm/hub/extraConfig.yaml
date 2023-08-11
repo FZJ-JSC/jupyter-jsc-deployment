@@ -316,6 +316,13 @@ hub:
           account = user_options.get("account", "")
           project = user_options.get("project", "")
           partition = user_options.get("partition", "")
+          # Let's check if the system is in maintenance
+          incidents_dict = get_incidents()
+          threshold_health = incidents_dict.get("threshold", 0)
+          system_health = incidents_dict.get(system, {}).get("health", threshold_health-1)
+          if system_health >= threshold_health:
+              # System is in maintenance
+              return False, f"System is currently in maintenance. Current health level: {system_health} (threshold: {threshold_health})"
           if not partition:
               # No partition: just check if system is allowed by group resources
               systems_list = [*dropdown_list.get(option, {})]
@@ -368,13 +375,6 @@ hub:
                       or xserver > xserver_range[1]
                       ):
                       return False, f"Selected xserver gpu index ( {xserver} ) not within allowed range {xserver_range}"
-          # Let's check if the system is in maintenance
-          incidents_dict = get_incidents()
-          threshold_health = incidents_dict.get("threshold", 0)
-          system_health = incidents_dict.get(system, {}).get("health", threshold_health-1)
-          if system_health >= threshold_health:
-              # System is in maintenance
-              return False, f"System is currently in maintenance. Current health level: {system_health} (threshold: {threshold_health})"
           return True, ""
                   
 
