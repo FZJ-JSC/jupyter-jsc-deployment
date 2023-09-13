@@ -8,10 +8,19 @@ helm:
     prePuller:
       hook:
         enabled: false
+      continuous:
+        enabled: false
+    scheduling:
+      userScheduler:
+        enabled: false
     ingress:
       enabled: true
+      annotations:
+        acme.cert-manager.io/http01-edit-in-place: "false"
+        cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
       hosts:
         - zam12065.zam.kfa-juelich.de
+        secretName: jupyterhub-tls-certmanager
     proxy:
       service:
         type: ClusterIP
