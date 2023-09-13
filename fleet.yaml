@@ -4,3 +4,7 @@ helm:
   repo: https://hub.jupyter.org/helm-chart/
   chart: jupyterhub
   version: 3.0.3
+  values:
+    prePuller:
+      hook:
+        enabled: false
