@@ -20,7 +20,7 @@ helm:
         cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
       hosts:
         - zam12065.zam.kfa-juelich.de
-        secretName: jupyterhub-tls-certmanager
+      secretName: jupyterhub-tls-certmanager
     proxy:
       service:
         type: ClusterIP
