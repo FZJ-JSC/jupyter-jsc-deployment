@@ -12,3 +12,6 @@ helm:
       enabled: true
       hosts:
         - zam12065.zam.kfa-juelich.de
+    proxy:
+      service:
+        type: ClusterIP
