@@ -159,10 +159,28 @@ data:
             log.exception(f"Could not copy {template_path} to {image_path}")
 
 
+    def filter_and_sort_incidents(incidents_list):
+        def _sort(incidents):
+            incidents.sort(key=lambda x: x.get('incident_severity', 0), reverse=True)
+            return incidents
+        # FAIL > DEG > MAINT > ANNOT
+        failures = [x for x in incidents_list if x.get('incident_type') == 'FAIL']
+        if failures:
+            return _sort(failures)
+        degradations = [x for x in incidents_list if x.get('incident_type') == 'DEG']
+        if degradations:
+            return _sort(degradations)
+        maintenances = [x for x in incidents_list if x.get('incident_type') == 'MAINT']
+        if maintenances:
+            return _sort(maintenances)
+        # Do not return annotations as their short description is mostly unhelpful
+        return []
+        
+
     def get_info_msg(incidents_list):
         if len(incidents_list) > 1:
             log.warning(
-                "Multiple active incidents. Use first one in list"
+                "Multiple active incidents of the same type. Use the highest severity one."
             )
         incident = incidents_list[0]
         short_description = incident["short_description"]
@@ -227,6 +245,7 @@ data:
                             if int(id) in x.get("affected_services", []) 
                             and not x.get("resolved", "")
                     ]
+                    active_svc_incidents = filter_and_sort_incidents(active_svc_incidents)
                     update_incidents(name, svc, active_svc_incidents)
                 except:
                     log.exception(f"Could not check for incidents for {name}")
