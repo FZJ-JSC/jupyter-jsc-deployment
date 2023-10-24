@@ -1,0 +1,14 @@
+defaultNamespace: jupyter
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    kustomize:
+      dir: overlays/staging
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    kustomize:
+      dir: overlays/production

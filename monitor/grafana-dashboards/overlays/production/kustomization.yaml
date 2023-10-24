@@ -1,0 +1,5 @@
+resources:
+  - cluster.yaml
+  - jupyterhub.yaml
+  - support.yaml
+  - user.yaml
