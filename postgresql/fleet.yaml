@@ -1,0 +1,17 @@
+defaultNamespace: database
+helm:
+  releaseName: postgresql
+  repo: https://charts.bitnami.com/bitnami
+  chart: postgresql
+  version: 13.1.5
+  values:
+    auth:
+      existingSecret: "postgresql-auth"
+    primary:
+      nodeSelector:
+        worker: "true"
+    persistence:
+      existingClaim: "data-postgresql"
+dependsOn:
+  - name: basics-istio
+  - name: basics-storageclass

@@ -1,0 +1,3 @@
+defaultNamespace: database
+dependsOn:
+  - name: basics-storageclass
