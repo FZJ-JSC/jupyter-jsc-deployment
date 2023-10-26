@@ -50,6 +50,8 @@ targetCustomizations:
     helm:
       values:
         hub:
+          image:
+            tag: "4.0.0.8"
           labels:
             stage: staging
             jhub_version: "4.0.0"
@@ -88,6 +90,8 @@ targetCustomizations:
     helm:
       values:
         hub:
+          image:
+            tag: "4.0.0.8"
           labels:
             stage: production
             jhub_version: "4.0.0"
