@@ -7,20 +7,29 @@ helm:
   values:
     nameOverride: "jupyterjsc"
     fullnameOverride: "jupyterjsc"
+    ingress:
+      # Set JupyterHub in maintenance:
+      #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+      enabled: true
+    hub:
+      resources: {}
+    proxy:
+      chp:
+        resources: {}
   valuesFiles:
-    - ../../values/files/common.yaml
-    - ../../values/files/proxy.yaml
-    - ../../values/files/hub/config.yaml
-    - ../../values/files/hub/extraConfig.yaml
-    - ../../values/files/hub/extraContainers.yaml
-    - ../../values/files/hub/extraVolumeMounts.yaml
-    - ../../values/files/hub/extraVolumes.yaml
-    - ../../values/files/hub/initContainers.yaml
-    - ../../values/files/hub/services.yaml
+    - ../../base-values/common.yaml
+    - ../../base-values/proxy.yaml
+    - ../../base-values/hub/config.yaml
+    - ../../base-values/hub/extraConfig.yaml
+    - ../../base-values/hub/extraContainers.yaml
+    - ../../base-values/hub/extraVolumeMounts.yaml
+    - ../../base-values/hub/extraVolumes.yaml
+    - ../../base-values/hub/initContainers.yaml
+    - ../../base-values/hub/services.yaml
   valuesFrom:
     - configMapKeyRef:
         name: jupyterjsc-custom-values-file
         namespace: jupyter
         key: values.yaml
   kustomize:
-    dir: ../../values/kustomize/jupyterjsc
+    dir: ./kustomize

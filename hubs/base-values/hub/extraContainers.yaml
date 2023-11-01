@@ -23,7 +23,7 @@ hub:
         - name: shared-data
           mountPath: /mnt/shared-data
         - name: hub-config
-          mountPaht: /mnt/hub_config
+          mountPath: /mnt/hub_config
         - name: check-incidents
           mountPath: /mnt/incidents
         - name: tz-config
