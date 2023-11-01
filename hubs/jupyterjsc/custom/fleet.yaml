@@ -1,0 +1,17 @@
+defaultNamespace: jupyter
+helm:
+  releaseName: jupyterjsc-custom
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyter-hub-customizations
+  version: 0.1.0
+  values:
+    hub:
+      name: jupyterjsc
+    jupyter-metrics:
+      enabled: false
+      jobs: {}
+        # - name: vanilla
+        #   namespace: jupyter
+        #   gitRepoCm: hub-metrics-git-repo
+        #   gitTokenSecret: metrics-git-token
+        #   dbSecret: hub-generics
