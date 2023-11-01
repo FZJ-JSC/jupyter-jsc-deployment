@@ -31,40 +31,40 @@ patches:
     kind: Deployment
     labelSelector: app=jupyterjsc,component=hub
   patch: |-
-  - op: add
-    path: /spec/template/spec/initContainers/0/envFrom
-    value:
-      - secretRef:
-          name: hub-jupyterjsc-frontend-git
-  - op: add
-    path: /spec/template/spec/containers/3/envFrom
-    value:
-      - secretRef:
-          name: hub-jupyterjsc-frontend-git
-  - op: add
-    path: /spec/template/spec/containers/4/envFrom
-    value:
-      - secretRef:
-          name: hub-jupyterjsc-generics
-      - secretRef:
-          name: hub-jupyterjsc-twofa
-  - op: add
-    path: /spec/template/spec/volumes
-    value:
-      - name: internal-ssl
-        secret:
-          defaultMode: 420
-          secretName: internal-ssl-jupyterjsc
-      - name: persistent
-        nfs:
-          path: /mnt/storage/jupyterhub_jupyterjsc
-          server: 10.0.20.30
+    - op: add
+      path: /spec/template/spec/initContainers/0/envFrom
+      value:
+        - secretRef:
+            name: hub-jupyterjsc-frontend-git
+    - op: add
+      path: /spec/template/spec/containers/3/envFrom
+      value:
+        - secretRef:
+            name: hub-jupyterjsc-frontend-git
+    - op: add
+      path: /spec/template/spec/containers/4/envFrom
+      value:
+        - secretRef:
+            name: hub-jupyterjsc-generics
+        - secretRef:
+            name: hub-jupyterjsc-twofa
+    - op: add
+      path: /spec/template/spec/volumes
+      value:
+        - name: internal-ssl
+          secret:
+            defaultMode: 420
+            secretName: internal-ssl-jupyterjsc
+        - name: persistent
+          nfs:
+            path: /mnt/storage/jupyterhub_jupyterjsc
+            server: 10.0.20.30
 - target:
     kind: Ingress
     name: jupyterjsc
     group: networking.k8s.io
     version: v1
   patch: |-
-  - op: replace
-  path: "/spec/rules/0/http/paths/0/backend/service/port/name"
-  value: https
+    - op: replace
+      path: "/spec/rules/0/http/paths/0/backend/service/port/name"
+      value: https
