@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-script
+data:
+  run.sh: |
+    #!/bin/bash
+
+    preparation() {
+        # Internal ssl variables
+        INTERNAL_SSL_SRC="/mnt/internal_ssl/*"
+        INTERNAL_SSL_DEST="/mnt/persistent/internal-ssl"
+    }
+
+    internal_ssl_dir() {
+        # Take the given internal_ssl (mounted via secret)
+        # and prepare it for JupyterHub in a persistent storage
+        mkdir -p ${INTERNAL_SSL_DEST}
+        for f in ${INTERNAL_SSL_SRC}; do
+            filename=$(basename $f)
+            if [[ ${filename} = certipy.json ]]; then
+                cp $f ${INTERNAL_SSL_DEST}/${filename}
+            elif [[ ! ${filename} = *_trust.crt ]]; then
+                dirname=${filename%%_*}
+                mkdir -p ${INTERNAL_SSL_DEST}/${dirname}
+                filename=${filename##*_}
+                cp $f ${INTERNAL_SSL_DEST}/${dirname}/${filename}
+            else
+                cp $f ${INTERNAL_SSL_DEST}/${filename}
+            fi
+        done
+    }
+
+    twofa_setup() {
+        # Fix twofa ssh keys permissions
+        if [[ -f /mnt/twofa_keypair/..data/twofa ]]; then
+            mkdir -p /mnt/shared-data/twofa
+            cp -r /mnt/twofa_keypair/..data/twofa /mnt/shared-data/twofa/twofa
+            chmod 400 /mnt/shared-data/twofa/twofa
+        fi
+
+        if [[ -f /mnt/twofa_remove_keypair/..data/twofa ]]; then
+            mkdir -p /mnt/shared-data/twofa
+            cp -r /mnt/twofa_remove_keypair/..data/twofa /mnt/shared-data/twofa/twofaremove
+            chmod 400 /mnt/shared-data/twofa/twofaremove
+        fi
+    }
+
+    wrap_up() {
+        # set ownership
+        chown -R 1000:100 /mnt/shared-data
+        chown -R 1000:100 /mnt/persistent
+    }
+
+    preparation
+    internal_ssl_dir
+    twofa_setup
+    wrap_up
