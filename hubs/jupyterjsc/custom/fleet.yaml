@@ -5,6 +5,7 @@ helm:
   chart: jupyter-hub-customizations
   version: 0.1.0
   values:
+    fullnameOverride: jupyterjsc-custom
     hub:
       name: jupyterjsc
     jupyter-metrics:
