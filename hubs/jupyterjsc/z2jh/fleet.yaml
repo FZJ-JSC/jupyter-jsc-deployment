@@ -1,0 +1,29 @@
+defaultnamespace: jupyter
+dependsOn:
+  - name: jupyter-hubs-helper
+  - name: jupyter-hubs-jupyterjsc-additional-svcs
+helm:
+  releaseName: jupyterhub-jupyterjsc
+  repo: https://jupyterhub.github.io/helm-chart/
+  chart: jupyterhub
+  version: 3.1.0
+  values:
+    nameOverride: "jupyterjsc"
+    fullnameOverride: "jupyterjsc"
+  valuesFiles:
+    - ../../values/files/common.yaml
+    - ../../values/files/proxy.yaml
+    - ../../values/files/hub/config.yaml
+    - ../../values/files/hub/extraConfig.yaml
+    - ../../values/files/hub/extraContainers.yaml
+    - ../../values/files/hub/extraVolumeMounts.yaml
+    - ../../values/files/hub/extraVolumes.yaml
+    - ../../values/files/hub/initContainers.yaml
+    - ../../values/files/hub/services.yaml
+  valuesFrom:
+    - configMapKeyRef:
+        name: jupyterjsc-custom-values-file
+        namespace: jupyter
+        key: values.yaml
+  kustomize:
+    dir: ../../values/kustomize/jupyterjsc

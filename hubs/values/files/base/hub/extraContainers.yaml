@@ -1,0 +1,85 @@
+hub:
+  extraContainers:
+    - name: check-incidents
+      image: python:3.12-alpine3.18
+      imagePullPolicy: Always
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - >-
+            pip install jsonformatter python-dateutil requests &&
+            mkdir -p $OUTPUT_DIR &&
+            source /mnt/incidents/run.sh
+      env:
+        - name: CUSTOM_CONFIG_PATH
+          value: "/mnt/hub_config/jupyterhub_custom_config.json"
+        - name: OUTPUT_DIR
+          value: "/mnt/shared-data/incidents"
+        - name: STATIC_IMG_DIR
+          value: "/mnt/shared-data/share/jupyterhub/static/images/footer"
+        - name: LOGGER_NAME
+          value: "IncidentCheck"
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: hub-config
+          mountPaht: /mnt/hub_config
+        - name: check-incidents
+          mountPath: /mnt/incidents
+        - name: tz-config
+          mountPath: /etc/localtime
+    - name: check-reservations
+      image: python:3.12-alpine3.18
+      imagePullPolicy: Always
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - >-
+            apk add bash openssh &&
+            mkdir -p /mnt/ssh &&
+            cp -rp /mnt/reservation-keypair/..data/* /mnt/ssh/. &&
+            chmod 400 /mnt/ssh/* &&
+            mkdir -p /mnt/shared-data/reservation-check &&
+            source /mnt/reservation/..data/run.sh
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: reservation-keypair
+          mountPath: /mnt/reservation-keypair
+        - name: check-reservations
+          mountPath: /mnt/reservation
+        - name: tz-config
+          mountPath: /etc/localtime
+    - name: check-frontend-files
+      image: alpine:3.18
+      imagePullPolicy: Always
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - >-
+            apk add bash git &&
+            /bin/bash /mnt/check_frontend_files/..data/run.sh
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name:  check-frontend-files
+          mountPath: /mnt/check_frontend_files
+        - name: tz-config
+          mountPath: /etc/localtime
+    - name: sidecar-nginx
+      image: nginx:1.25.3-alpine3.18-slim
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 8070
+          protocol: TCP
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: sidecar-nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        - name: sidecar-nginx-config
+          mountPath: /etc/nginx/conf.d/jupyter.conf
+          subPath: jupyter.conf
+        - name: tz-config
+          mountPath: /etc/localtime

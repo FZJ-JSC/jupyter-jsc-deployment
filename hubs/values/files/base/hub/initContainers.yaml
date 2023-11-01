@@ -1,0 +1,28 @@
+hub:
+  initContainers:
+    - name: prepare-shared-data
+      image: alpine:3.18
+      imagePullPolicy: Always
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - >-
+          apk add bash git &&
+          /bin/bash /mnt/init_script/..data/run.sh &&
+          /bin/bash /mnt/check_frontend_files/..data/run.sh once
+      volumeMounts:
+        - name: shared-data
+          mountPath: /mnt/shared-data
+        - name: persistent
+          mountPath: /mnt/persistent
+        - name: internal-ssl
+          mountPath: /mnt/internal_ssl
+          readOnly: true
+        - name: init-script
+          mountPath: /mnt/init_script
+        - name: check-frontend-files
+          mountPath: /mnt/check_frontend_files
+        - name: twofa-keypair
+          mountPath: /mnt/twofa_keypair
+        - name: twofa-remove-keypair
+          mountPath: /mnt/twofa_remove_keypair

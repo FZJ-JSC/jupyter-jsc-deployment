@@ -1,0 +1,21 @@
+cull:
+  enabled: false
+ingress:
+  enabled: true
+  annotations:
+    acme.cert-manager.io/http01-edit-in-place: "false"
+    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/proxy-body-size: "2g"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+  ingressClassName: "nginx"
+prePuller:
+  hook:
+    enabled: false
+  continuous:
+    enabled: false
+scheduling:
+  userScheduler:
+    enabled: false

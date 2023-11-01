@@ -1,0 +1,56 @@
+proxy:
+  service:
+    type: ClusterIP
+    extraPorts:
+      # We're using 5 backup ports pointing to the same targetPort.
+      # If nginx receives a 503 error, it will retry it with the next
+      # port (8443-8447), this leads to a more stable JupyterLab
+      - name: https-backup-1
+        port: 8443
+        protocol: TCP
+        targetPort: https
+      - name: https-backup-2
+        port: 8444
+        protocol: TCP
+        targetPort: https
+      - name: https-backup-3
+        port: 8445
+        protocol: TCP
+        targetPort: https
+      - name: https-backup-4
+        port: 8446
+        protocol: TCP
+        targetPort: https
+      - name: https-backup-5
+        port: 8447
+        protocol: TCP
+        targetPort: https
+  chp:
+    extraCommandLineFlags:
+     - "--api-ssl-key=/etc/chp/tls/proxy-api_proxy-api.key"
+     - "--api-ssl-cert=/etc/chp/tls/proxy-api_proxy-api.crt"
+     - "--api-ssl-ca=/etc/chp/tls/proxy-api-ca_trust.crt"
+     - "--api-ssl-request-cert"
+     - "--api-ssl-reject-unauthorized"
+     - "--client-ssl-key=/etc/chp/tls/proxy-client_proxy-client.key"
+     - "--client-ssl-cert=/etc/chp/tls/proxy-client_proxy-client.crt"
+     - "--client-ssl-ca=/etc/chp/tls/proxy-client-ca_trust.crt"
+     - "--client-ssl-request-cert"
+     - "--client-ssl-reject-unauthorized"
+     - "--timeout=60000"
+     - "--proxy-timeout=180000"
+     # - "--log-level=debug"
+    networkPolicy:
+      ingress:
+        - from:
+          - namespaceSelector:
+              matchLabels:
+                name: cattle-monitoring-system
+    nodeSelector:
+      worker: "true"
+  https:
+    enabled: true
+    type: secret
+    secret:
+      key: proxy-client_proxy-client.key
+      crt: proxy-client_proxy-client.crt
