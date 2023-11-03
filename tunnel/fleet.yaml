@@ -1,0 +1,30 @@
+defaultNamespace: jupyter
+helm:
+  releaseName: tunnel
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyter-tunnel
+  version: 0.1.1
+  valuesFiles:
+    - overlays/base/jupyterhubs.yaml
+    - overlays/base/misc.yaml
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      valuesFiles:
+        - overlays/staging/misc.yaml
+      values:
+        replicas: 2
+        image:
+          tag: 3.0.0-dev.1
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      valuesFiles:
+        - overlays/production/misc.yaml
+      values:
+        replicas: 2

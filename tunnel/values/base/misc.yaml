@@ -1,0 +1,20 @@
+image:
+  tag: "2.0.4"
+sshtimeout: 3
+nameOverride: "drf-tunnel"
+nodeSelector:
+  worker: "true"
+podAnnotations:
+  proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 2048Mi
+gunicorn:
+  processes: 4
+  threads: 8
+  maxRequests: 200
+  maxRequestsJitter: 50
