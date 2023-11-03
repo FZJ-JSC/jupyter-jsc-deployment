@@ -6,3 +6,5 @@ hub:
       mountPath: /mnt/persistent
     - name: tz-config
       mountPath: /etc/localtime
+    - name: custom-config
+      mountPath: /mnt/custom-config

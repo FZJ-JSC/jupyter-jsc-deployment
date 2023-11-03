@@ -7,18 +7,9 @@ hub:
       args:
         - -c
         - >-
-            pip install jsonformatter python-dateutil requests &&
+            pip install jsonformatter python-dateutil pyyaml requests &&
             mkdir -p $OUTPUT_DIR &&
             source /mnt/incidents/run.sh
-      env:
-        - name: CUSTOM_CONFIG_PATH
-          value: "/mnt/hub_config/jupyterhub_custom_config.json"
-        - name: OUTPUT_DIR
-          value: "/mnt/shared-data/incidents"
-        - name: STATIC_IMG_DIR
-          value: "/mnt/shared-data/share/jupyterhub/static/images/footer"
-        - name: LOGGER_NAME
-          value: "IncidentCheck"
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
@@ -36,6 +27,7 @@ hub:
         - -c
         - >-
             apk add bash openssh &&
+            pip install pyyaml &&
             mkdir -p /mnt/ssh &&
             cp -rp /mnt/reservation-keypair/..data/* /mnt/ssh/. &&
             chmod 400 /mnt/ssh/* &&
@@ -46,6 +38,8 @@ hub:
           mountPath: /mnt/shared-data
         - name: reservation-keypair
           mountPath: /mnt/reservation-keypair
+        - name: hub-config
+          mountPath: /mnt/hub_config
         - name: check-reservations
           mountPath: /mnt/reservation
         - name: tz-config

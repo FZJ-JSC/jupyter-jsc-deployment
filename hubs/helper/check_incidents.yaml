@@ -6,13 +6,13 @@ data:
   run.sh: |
     #!/bin/sh
 
-    while [ ! -d ${STATIC_IMG_DIR} ]; do echo "Waiting for ${STATIC_IMG_DIR} ..." ; sleep 5; done
+    while [ ! -d /mnt/shared-data/share/jupyterhub/static/images/footer ]; do echo "Waiting for /mnt/shared-data/share/jupyterhub/static/images/footer ..." ; sleep 5; done
 
-    SLEEP=$(/usr/local/bin/python3 -c 'import json, os; f=open(os.environ["CUSTOM_CONFIG_PATH"], "r"); config = json.load(f); f.close(); print(config["incident-check"].get("interval", 60))')
+    SLEEP=$(/usr/local/bin/python3 -c 'import yaml; f=open("/mnt/hub_config/jupyterhub_custom_config.yaml", "r"); config = yaml.full_load(f); f.close(); print(config.get("incident-check", {}).get("interval", 60))')
     while true
     do
         echo "$(date) - Run incident check ..."
-        /usr/local/bin/python3 -u /mnt/incidents/incident_check.py
+        /usr/local/bin/python3 -u /mnt/incidents/check_incidents.py
         echo "$(date) - Run incident check ... done"
         sleep ${SLEEP}
     done
@@ -26,18 +26,16 @@ data:
     import shutil
     import socket
     import sys
-    import time
+    import yaml
 
     import requests
     from dateutil import parser
     from jsonformatter import JsonFormatter
 
-    output_dir = os.environ["OUTPUT_DIR"]
-    static_dir = os.environ["STATIC_IMG_DIR"]
-    incidents_json = f"{output_dir}/active_incidents.json"
+    static_dir = "/mnt/shared-data/share/jupyterhub/static/images/footer"
+    incidents_json = "/mnt/shared-data/incidents/active_incidents.json"
 
-    LOGGER_NAME = os.environ.get("LOGGER_NAME", "IncidentCheck")
-    log = logging.getLogger(LOGGER_NAME)
+    log = logging.getLogger("IncidentCheck")
     log.level = 20
 
     supported_handler_classes = {
@@ -74,8 +72,6 @@ data:
                     configuration["socktype"] = socket.SOCK_STREAM
                 elif value == "ext://socket.SOCK_DGRAM":
                     configuration["socktype"] = socket.SOCK_DGRAM
-            elif key == "address":
-                configuration["address"] = tuple(value)
         handler = supported_handler_classes[handler_name](**configuration)
         formatter = supported_formatter_classes[formatter_name](
             **supported_formatter_kwargs[formatter_name]
@@ -254,9 +250,9 @@ data:
 
 
     if __name__ == "__main__":
-        with open(os.environ["CUSTOM_CONFIG_PATH"], "r") as f:
-            config_all = json.load(f)
-            config = config_all["incident-check"]
+        with open("/mnt/hub_config/jupyterhub_custom_config.yaml", "r") as f:
+            config_all = yaml.full_load(f)
+        config = config_all.get("incident-check", {})
         for name, logger_config in config.get("logger", {}).items():
             setup_logger(name, logger_config)
         
