@@ -3,10 +3,10 @@ helm:
   releaseName: tunnel
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-tunnel
-  version: 0.1.1
+  version: 0.1.9
   valuesFiles:
-    - overlays/base/jupyterhubs.yaml
-    - overlays/base/misc.yaml
+    - values/base/jupyterhubs.yaml
+    - values/base/misc.yaml
 targetCustomizations:
   - name: staging
     clusterSelector:
@@ -14,17 +14,25 @@ targetCustomizations:
         stage: staging
     helm:
       valuesFiles:
-        - overlays/staging/misc.yaml
+        - values/overlays/staging/misc.yaml
       values:
         replicas: 2
         image:
-          tag: 3.0.0-dev.1
+          tag: 3.0.0-dev.4
   - name: production
     clusterSelector:
       matchLabels:
         stage: production
     helm:
       valuesFiles:
-        - overlays/production/misc.yaml
+        - values/overlays/production/misc.yaml
       values:
         replicas: 2
+diff:
+  comparePatches:
+  - apiVersion: apps/v1
+    kind: StatefulSet
+    labels:
+      helm.sh/chart-name: jupyter-tunnel
+    operations:
+    - {"op":"remove", "path":"/spec/replicas"}

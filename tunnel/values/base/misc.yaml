@@ -1,7 +1,7 @@
 image:
   tag: "2.0.4"
 sshtimeout: 3
-nameOverride: "drf-tunnel"
+nameOverride: "tunnel"
 nodeSelector:
   worker: "true"
 podAnnotations:
