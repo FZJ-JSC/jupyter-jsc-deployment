@@ -8,7 +8,7 @@ hub:
         - -c
         - >-
             pip install jsonformatter python-dateutil pyyaml requests &&
-            mkdir -p $OUTPUT_DIR &&
+            mkdir -p /mnt/shared-data/incidents &&
             source /mnt/incidents/run.sh
       volumeMounts:
         - name: shared-data
