@@ -1,0 +1,10 @@
+hub:
+  extraVolumeMounts:
+    - name: shared-data
+      mountPath: /mnt/shared-data
+    - name: persistent
+      mountPath: /mnt/persistent
+    - name: tz-config
+      mountPath: /etc/localtime
+    - name: custom-config
+      mountPath: /mnt/custom-config
