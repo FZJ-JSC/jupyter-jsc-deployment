@@ -3,7 +3,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.1.3
+  version: 0.1.4
   values:
     fullnameOverride: jupyterjsc-custom
     hub:

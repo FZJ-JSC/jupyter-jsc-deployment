@@ -28,7 +28,7 @@ helm:
     - ../../base-values/hub/services.yaml
   valuesFrom:
     - configMapKeyRef:
-        name: jupyterjsc-custom-values-file
+        name: jupyterjsc-custom-values
         namespace: jupyter
         key: values.yaml
   kustomize:
