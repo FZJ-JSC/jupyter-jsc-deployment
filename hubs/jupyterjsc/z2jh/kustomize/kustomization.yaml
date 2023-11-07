@@ -17,19 +17,3 @@ patches:
     group: networking.k8s.io
     version: v1
   path: patch_ingress.yaml
-
-# Can be removed, once Unity was updated and has it's own two fa setup
-secretGenerator:
-- name: jupyterjsc-twofa
-  literals:
-  - SEND2FA_CONFIG_PATH=/mnt/shared-data/git_config/send_mail_config.json
-  - TWOFA_SSH_KEY=/mnt/shared-data/twofa/twofa
-  - TWOFA_SSH_USER=unity
-  - TWOFA_SSH_HOST=zam2041.zam.kfa-juelich.de
-  - TWOFA_REMOVE_SSH_KEY=/mnt/shared-data/twofa/twofaremove
-  - TWOFA_REMOVE_SSH_USER=unity
-  - TWOFA_REMOVE_SSH_HOST=zam2041.zam.kfa-juelich.de
-  options:
-    disableNameSuffixHash: true
-    labels:
-      app: jupyterjsc
