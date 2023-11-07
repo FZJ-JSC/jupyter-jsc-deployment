@@ -30,6 +30,7 @@ helm:
     - ../../base-values/hub/extraVolumeMounts.yaml
     - ../../base-values/hub/extraVolumes.yaml
     - ../../base-values/hub/initContainers.yaml
+    - ../../base-values/hub/others.yaml
     - ../../base-values/hub/services.yaml
   valuesFrom:
     - configMapKeyRef:
