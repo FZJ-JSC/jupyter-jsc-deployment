@@ -16,20 +16,20 @@
     - secretRef:
         name: jupyterjsc-twofa
 - op: add
-  path: /spec/template/spec/volumes/-
+  path: /spec/template/spec/volumes
   value:
     name: internal-ssl
     secret:
       defaultMode: 420
       secretName: jupyterjsc-internal-ssl
 - op: add
-  path: /spec/template/spec/volumes/-
+  path: /spec/template/spec/volumes
   value:
     name: persistent
     persistentVolumeClaim:
       claimName: jupyterjsc-pvc
 - op: add
-  path: /spec/template/spec/volumes/-
+  path: /spec/template/spec/volumes
   value:
     name: custom-config
     configMap:
