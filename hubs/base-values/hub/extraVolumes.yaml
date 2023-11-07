@@ -35,14 +35,14 @@ hub:
       secret:
         secretName: twofa-keypair
         items:
-          - key: twofa
+          - key: ssh-privatekey
             path: twofa
             mode: 0400
     - name: twofa-remove-keypair
       secret:
         secretName: twofa-remove-keypair
         items:
-          - key: twofa
+          - key: ssh-privatekey
             path: twofa
             mode: 0400
     - name: tz-config
