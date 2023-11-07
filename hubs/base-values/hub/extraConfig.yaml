@@ -21,7 +21,6 @@ hub:
       sys.path.append("/mnt/customized")
 
       namespace = os.environ.get("POD_NAMESPACE", "default")
-      jupyterhub_version = os.environ.get("JUPYTERHUB_VERSION", "4.0.0")
       jupyterhub_host = get_name("hub")
       unity_host = "unity-jsc.fz-juelich.de"
       jhub_hostname = os.environ.get("JUPYTERHUB_HOSTNAME", "default")

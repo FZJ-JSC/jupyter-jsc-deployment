@@ -16,6 +16,12 @@ helm:
       # Set JupyterHub in maintenance:
       #   Set enabled here to false, update ingress in maintenance/fleet.yaml
       enabled: true
+      hosts:
+        - zam12065.zam.kfa-juelich.de
+      tls:
+        - secretName: jupyterjsc-tls
+          hosts:
+          - zam12065.zam.kfa-juelich.de
     hub:
       resources: {}
     proxy:
