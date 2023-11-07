@@ -1,4 +1,7 @@
 defaultNamespace: jupyter
+labels:
+  app: jupyterjsc
+  component: custom
 helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts

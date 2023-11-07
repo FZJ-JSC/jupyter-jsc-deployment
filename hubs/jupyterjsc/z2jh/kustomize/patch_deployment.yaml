@@ -1,0 +1,37 @@
+- op: add
+  path: /spec/template/spec/initContainers/0/envFrom
+  value:
+    - secretRef:
+        name: jupyterjsc-frontend-git
+- op: add
+  path: /spec/template/spec/containers/3/envFrom
+  value:
+    - secretRef:
+        name: jupyterjsc-frontend-git
+- op: add
+  path: /spec/template/spec/containers/4/envFrom
+  value:
+    - secretRef:
+        name: jupyterjsc-generics
+    - secretRef:
+        name: jupyterjsc-twofa
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: internal-ssl
+    secret:
+      defaultMode: 420
+      secretName: jupyterjsc-internal-ssl
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: persistent
+    persistentVolumeClaim:
+      claimName: jupyterjsc-pvc
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: custom-config
+    configMap:
+      defaultMode: 400
+      name: jupyterjsc-custom-config

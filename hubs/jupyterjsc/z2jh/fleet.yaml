@@ -1,4 +1,7 @@
 defaultnamespace: jupyter
+labels:
+  app: jupyterjsc
+  component: z2jh
 helm:
   releaseName: jupyterhub-jupyterjsc
   repo: https://jupyterhub.github.io/helm-chart/
@@ -32,4 +35,10 @@ helm:
         namespace: jupyter
         key: values.yaml
   kustomize:
-    dir: ./kustomize
+    dir: kustomize
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: jupyterjsc
+        component: custom

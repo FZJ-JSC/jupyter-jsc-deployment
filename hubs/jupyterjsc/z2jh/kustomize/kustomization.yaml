@@ -1,3 +1,23 @@
+# InitContainer list in hub component:
+# 0 - prepare-shared-data
+# Container list in hub component:
+# 0 - check-incidents
+# 1 - check-reservations
+# 2 - check-frontend-files
+# 3 - sidecar-nginx
+# 4 - hub
+patches:
+- target:
+    kind: Deployment
+    labelSelector: app=jupyterjsc,component=hub
+  path: patch_deployment.yaml
+- target:
+    kind: Ingress
+    name: jupyterjsc
+    group: networking.k8s.io
+    version: v1
+  path: patch_ingress.yaml
+
 # Can be removed, once Unity was updated and has it's own two fa setup
 secretGenerator:
 - name: jupyterjsc-twofa
@@ -13,63 +33,3 @@ secretGenerator:
     disableNameSuffixHash: true
     labels:
       app: jupyterjsc
-
-# InitContainer list in hub component:
-# 0 - prepare-shared-data
-# Container list in hub component:
-# 0 - check-incidents
-# 1 - check-reservations
-# 2 - check-frontend-files
-# 3 - sidecar-nginx
-# 4 - hub
-patches:
-- target:
-    kind: Deployment
-    labelSelector: app=jupyterjsc,component=hub
-  patch: |-
-    - op: add
-      path: /spec/template/spec/initContainers/0/envFrom
-      value:
-        - secretRef:
-            name: jupyterjsc-frontend-git
-    - op: add
-      path: /spec/template/spec/containers/3/envFrom
-      value:
-        - secretRef:
-            name: jupyterjsc-frontend-git
-    - op: add
-      path: /spec/template/spec/containers/4/envFrom
-      value:
-        - secretRef:
-            name: jupyterjsc-generics
-        - secretRef:
-            name: jupyterjsc-twofa
-    - op: add
-      path: /spec/template/spec/volumes/-
-      value:
-        name: internal-ssl
-        secret:
-          defaultMode: 420
-          secretName: jupyterjsc-internal-ssl
-    - op: add
-      path: /spec/template/spec/volumes/-
-      value:
-        name: persistent
-        persistentVolumeClaim:
-          claimName: jupyterjsc-pvc
-    - op: add
-      path: /spec/template/spec/volumes/-
-      value:
-        name: custom-config
-        configMap:
-          defaultMode: 400
-          name: jupyterjsc-custom-config
-- target:
-    kind: Ingress
-    name: jupyterjsc
-    group: networking.k8s.io
-    version: v1
-  patch: |-
-    - op: replace
-      path: "/spec/rules/0/http/paths/0/backend/service/port/name"
-      value: https
