@@ -56,7 +56,7 @@ patches:
       value:
         name: persistent
         persistentVolumeClaim:
-          claimName: jupyterjsc-persistent
+          claimName: jupyterjsc-pvc
     - op: add
       path: /spec/template/spec/volumes/-
       value:

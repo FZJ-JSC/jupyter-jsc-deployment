@@ -8,7 +8,7 @@ data:
 
     while [ ! -d /mnt/shared-data/share/jupyterhub/static/images/footer ]; do echo "Waiting for /mnt/shared-data/share/jupyterhub/static/images/footer ..." ; sleep 5; done
 
-    SLEEP=$(/usr/local/bin/python3 -c 'import yaml; f=open("/mnt/hub_config/jupyterhub_custom_config.yaml", "r"); config = yaml.full_load(f); f.close(); print(config.get("incident-check", {}).get("interval", 60))')
+    SLEEP=$(/usr/local/bin/python3 -c 'import yaml; f=open("/mnt/custom_config/jupyterhub_custom_config.yaml", "r"); config = yaml.full_load(f); f.close(); print(config.get("incident-check", {}).get("interval", 60))')
     while true
     do
         echo "$(date) - Run incident check ..."
@@ -250,7 +250,7 @@ data:
 
 
     if __name__ == "__main__":
-        with open("/mnt/hub_config/jupyterhub_custom_config.yaml", "r") as f:
+        with open("/mnt/custom_config/jupyterhub_custom_config.yaml", "r") as f:
             config_all = yaml.full_load(f)
         config = config_all.get("incident-check", {})
         for name, logger_config in config.get("logger", {}).items():

@@ -13,8 +13,8 @@ hub:
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
-        - name: hub-config
-          mountPath: /mnt/hub_config
+        - name: custom-config
+          mountPath: /mnt/custom_config
         - name: check-incidents
           mountPath: /mnt/incidents
         - name: tz-config
@@ -38,8 +38,8 @@ hub:
           mountPath: /mnt/shared-data
         - name: reservation-keypair
           mountPath: /mnt/reservation-keypair
-        - name: hub-config
-          mountPath: /mnt/hub_config
+        - name: custom-config
+          mountPath: /mnt/custom_config
         - name: check-reservations
           mountPath: /mnt/reservation
         - name: tz-config
