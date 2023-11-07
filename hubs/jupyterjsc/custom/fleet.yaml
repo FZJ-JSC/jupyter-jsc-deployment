@@ -12,6 +12,7 @@ helm:
     hub:
       name: jupyterjsc
       namespace: jupyter
+      hostname: zam12065.zam.kfa-juelich.de
     jupyter-metrics:
       enabled: false
       jobs: {}
