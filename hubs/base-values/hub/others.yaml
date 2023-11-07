@@ -21,3 +21,7 @@ hub:
     limits:
       cpu: 1000m
       memory: 1024Mi
+  readinessProbe:
+    enabled: false
+  livenessProbe:
+    enabled: false
