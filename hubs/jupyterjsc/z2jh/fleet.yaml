@@ -3,7 +3,7 @@ labels:
   app: jupyterjsc
   component: z2jh
 kustomize:
-  dir: kustomize
+  dir: ./kustomize
 helm:
   releaseName: jupyterhub-jupyterjsc
   repo: https://jupyterhub.github.io/helm-chart/
