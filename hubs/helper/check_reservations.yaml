@@ -20,6 +20,8 @@ data:
             if [[ -f ${OUTPUT_PATH} ]]; then
                 echo "$(date) - diff:"
                 diff ${TMP_PATH} ${OUTPUT_PATH}
+            else
+                cat ${TMP_PATH}
             fi
             cp ${TMP_PATH} ${OUTPUT_PATH}
         fi
@@ -32,6 +34,7 @@ data:
     import copy
     import json
     import re
+    import traceback
     import yaml
     from subprocess import check_output
     from subprocess import STDOUT
@@ -63,11 +66,13 @@ data:
         return value
 
       try:
+        print(" ".join(li))
         output = check_output(li, stderr=STDOUT, timeout=reservation_timeout).decode("utf8").rstrip()
         system_list_n = output.split("\n\n")
         system_list = [x.replace("\n", "") for x in system_list_n]
       except:
         print(f"Could not check reservation for {system}. Use previous values.")
+        print(traceback.format_exc())
         if system in previous_dict.keys():
           output_dict[system] = previous_dict[system]
       else:
