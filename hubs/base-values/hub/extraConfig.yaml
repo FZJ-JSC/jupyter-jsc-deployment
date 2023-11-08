@@ -79,7 +79,7 @@ hub:
       db_database = os.environ.get("SQL_DATABASE")
       c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
       # juypterhub upgrade-db
-      #  --db=postgresql://${SQL_USER}:${SQL_PASSWORD}@${SQL_HOST}:${SQL_PORT}/${SQL_DATABASE} 
+      #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE 
       ## Static files + Templates
       from forwardbasespawner.api_events import user_cancel_message
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
