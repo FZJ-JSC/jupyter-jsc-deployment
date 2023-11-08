@@ -50,6 +50,12 @@ data:
     update() {
       echo "$(date) - Check for updates in templates and static files"
 
+      if [[ ${1} == "force" ]]; then
+          FORCE=1
+      else
+          FORCE=0
+      fi
+
       # Check if base templates got an update
 
       check_git_update() {
@@ -68,13 +74,13 @@ data:
       fi
 
       # If one was updated, we have to prepare a new directory
-      if [[ ${SHARE_BASE_UPDATED} -eq 1 || ${SHARE_OVERLAYS_UPDATED} -eq 1 ]]; then
+      if [[ ${SHARE_BASE_UPDATED} -eq 1 || ${SHARE_OVERLAYS_UPDATED} -eq 1 || FORCE -eq 1 ]]; then
           echo "$(date) - Shared files update (Base: ${SHARE_BASE_UPDATED} , Overlays: ${SHARE_OVERLAYS_UPDATED})"
           mk_clean_dir ${SHARE_COPY_DIR}
           cd ${SHARE_BASE_DIR}
           git pull origin ${SHARE_BASE_GIT_BRANCH}
 
-          if [[ ${SHARE_OVERLAYS_UPDATED} -eq 1 ]]; then
+          if [[ ${SHARE_OVERLAYS_UPDATED} -eq 1 || (FORCE -eq 1 && -d ${SHARE_OVERLAYS_GIT_REPO}) ]]; then
               cp -r ${SHARE_BASE_DIR} ${SHARE_COPY_DIR}
               git pull origin ${SHARE_OVERLAYS_GIT_BRANCH}
 
@@ -101,10 +107,9 @@ data:
       fi
     }
 
-    if [[ ${1} == "once" ]]; then
-        # Called with "once" as parameter in init container
-        update
-    else
+    update force
+
+    if [[ ! ${1} == "once" ]]; then
         while true; do
             update
             sleep 60
