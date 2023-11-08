@@ -23,6 +23,23 @@ helm:
           - "gitlab-registry"
         name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
         tag: "devel"
+      # args:
+      #   - -c
+      #   - >-
+      #     while true; do sleep 30; done ; pip install jupyterhub-unicorespawner jupyterhub-outpostspawner &&
+      #     jupyterhub --config /usr/local/etc/jupyterhub/jupyterhub_config.py
+      # command:
+      #   - /bin/bash
+      args:
+        - -c
+        - >-
+          /src/entrypoint.sh
+      command:
+        - /bin/bash
+      containerSecurityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        allowPrivilegeEscalation: true
       resources: {}
 
     proxy:
