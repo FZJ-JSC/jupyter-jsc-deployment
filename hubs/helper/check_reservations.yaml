@@ -39,7 +39,7 @@ data:
     from subprocess import check_output
     from subprocess import STDOUT
 
-    reservation_key = "/mnt/ssh/reservation"
+    reservation_key = "/mnt/ssh/ssh-privatekey"
     reservation_timeout = 5
     output_path = "/tmp/reservation.json"
     config_path = "/mnt/custom_config/jupyterhub_custom_config.yaml"
