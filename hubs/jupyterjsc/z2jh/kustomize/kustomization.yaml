@@ -33,7 +33,7 @@ patches:
         - secretRef:
             name: jupyterjsc-frontend-git
     - op: add
-      path: /spec/template/spec/containers/3/envFrom
+      path: /spec/template/spec/containers/2/envFrom
       value:
         - secretRef:
             name: jupyterjsc-frontend-git
