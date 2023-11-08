@@ -6,15 +6,6 @@ data:
   run.sh: |
     #!/bin/bash
 
-    mk_clean_dir() {
-        # Remove directory content before running git clone
-        if [[ -d ${1} ]]; then
-            rm -rf ${1}/*
-        else
-            mkdir -p ${1}
-        fi
-    }
-
     # Variables used for git clone commands
     SHARE_BASE_DIR="/tmp/share_base"
     SHARE_OVERLAYS_DIR="/tmp/share_overlays"
@@ -31,16 +22,27 @@ data:
     mkdir -p ${SHARE_NGINX_DIR}
 
     # create temporary folders
-    mk_clean_dir ${SHARE_BASE_DIR}
+    mkdir -p $(dirname ${SHARE_BASE_DIR})
 
-    git clone --single-branch --branch ${SHARE_BASE_GIT_BRANCH} https://${SHARE_BASE_GIT_USERNAME}:${SHARE_BASE_GIT_PASSWORD}@${SHARE_BASE_GIT_REPO#"https://"} ${SHARE_BASE_DIR}
+    if [[ -e ${SHARE_BASE_DIR} ]]; then
+        rm -rf ${SHARE_BASE_DIR}
+    fi
+
+    cd $(dirname ${SHARE_BASE_DIR})
+    git clone --single-branch --branch ${SHARE_BASE_GIT_BRANCH} https://${SHARE_BASE_GIT_USERNAME}:${SHARE_BASE_GIT_PASSWORD}@${SHARE_BASE_GIT_REPO#"https://"} $(basename ${SHARE_BASE_DIR})
 
     if [[ -n ${SHARE_OVERLAYS_GIT_REPO} ]]; then
-        mk_clean_dir ${SHARE_OVERLAYS_DIR}
+        mkdir -p $(dirname ${SHARE_OVERLAYS_DIR})
+
+        if [[ -e ${SHARE_OVERLAYS_DIR} ]]; then
+            rm -rf ${SHARE_OVERLAYS_DIR}
+        fi
+
+        cd $(dirname ${SHARE_OVERLAYS_DIR})
         if [[ -n ${SHARE_OVERLAYS_GIT_USERNAME} && -n ${SHARE_OVERLAYS_GIT_PASSWORD} ]]; then
-            git clone --single-branch --branch ${SHARE_OVERLAYS_GIT_BRANCH} https://${SHARE_OVERLAYS_GIT_USERNAME}:${SHARE_OVERLAYS_GIT_PASSWORD}@${SHARE_OVERLAYS_GIT_REPO#"https://"} ${SHARE_OVERLAYS_DIR}
+            git clone --single-branch --branch ${SHARE_OVERLAYS_GIT_BRANCH} https://${SHARE_OVERLAYS_GIT_USERNAME}:${SHARE_OVERLAYS_GIT_PASSWORD}@${SHARE_OVERLAYS_GIT_REPO#"https://"} $(basename ${SHARE_OVERLAYS_DIR})
         else
-            git clone --single-branch --branch ${SHARE_OVERLAYS_GIT_BRANCH} ${SHARE_OVERLAYS_GIT_REPO} ${SHARE_OVERLAYS_DIR}
+            git clone --single-branch --branch ${SHARE_OVERLAYS_GIT_BRANCH} ${SHARE_OVERLAYS_GIT_REPO} $(basename ${SHARE_OVERLAYS_DIR})
         fi
     fi
 
@@ -75,13 +77,14 @@ data:
 
       # If one was updated, we have to prepare a new directory
       if [[ ${SHARE_BASE_UPDATED} -eq 1 || ${SHARE_OVERLAYS_UPDATED} -eq 1 || FORCE -eq 1 ]]; then
-          echo "$(date) - Shared files update (Base: ${SHARE_BASE_UPDATED} , Overlays: ${SHARE_OVERLAYS_UPDATED})"
-          mk_clean_dir ${SHARE_COPY_DIR}
+          echo "$(date) - Shared files update (Base: ${SHARE_BASE_UPDATED} , Overlays: ${SHARE_OVERLAYS_UPDATED}, Force ${FORCE})"
+          mkdir -p ${SHARE_COPY_DIR}
           cd ${SHARE_BASE_DIR}
           git pull origin ${SHARE_BASE_GIT_BRANCH}
+          cp -r ${SHARE_BASE_DIR}/* ${SHARE_COPY_DIR}/.
 
           if [[ ${SHARE_OVERLAYS_UPDATED} -eq 1 || (FORCE -eq 1 && -d ${SHARE_OVERLAYS_GIT_REPO}) ]]; then
-              cp -r ${SHARE_BASE_DIR} ${SHARE_COPY_DIR}
+              cd ${SHARE_OVERLAYS_DIR}
               git pull origin ${SHARE_OVERLAYS_GIT_BRANCH}
 
               copy_overlays_subdir() {
@@ -94,6 +97,7 @@ data:
               }
               copy_overlays_subdir templates
               copy_overlays_subdir static
+
           fi
           # Remove footer.systems images. These are managed by check_incidents in antoher script.
           if [[ -d ${SHARE_COPY_DIR}/static/images/footer/systems ]]; then
