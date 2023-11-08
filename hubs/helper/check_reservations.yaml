@@ -15,9 +15,12 @@ data:
     do
         echo "$(date) - Run Reservation check ..."
         /usr/local/bin/python3 -u /mnt/reservation/..data/reservation_check.py
-        diff ${TMP_PATH} ${OUTPUT_PATH}
-        EC=$?
-        if [[ $EC -eq 1 ]]; then
+        if cmp -s ${TMP_PATH} ${OUTPUT_PATH} || ! test -f ${OUTPUT_PATH} ; then
+            echo "$(date) - Update reservation file"
+            if [[ -f ${OUTPUT_PATH} ]]; then
+                echo "$(date) - diff:"
+                diff ${TMP_PATH} ${OUTPUT_PATH}
+            fi
             cp ${TMP_PATH} ${OUTPUT_PATH}
         fi
         echo "$(date) - Run Reservation check ... done"
