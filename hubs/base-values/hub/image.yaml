@@ -1,0 +1,12 @@
+hub:
+  args:
+    - -c
+    - >-
+      pip install --force-reinstall jupyter-jsc-custom &&
+      /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+  command:
+    - /bin/bash
+  containerSecurityContext:
+    runAsUser: 0
+    runAsGroup: 0
+    allowPrivilegeEscalation: true

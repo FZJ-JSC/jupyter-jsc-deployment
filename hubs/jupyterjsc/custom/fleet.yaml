@@ -6,7 +6,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.1.6
+  version: 0.1.10
   values:
     fullnameOverride: jupyterjsc-custom
     hub:
@@ -15,7 +15,7 @@ helm:
       hostname: zam12065.zam.kfa-juelich.de
     jupyter-metrics:
       enabled: false
-      jobs: {}
+      jobs: []
         # - name: vanilla
         #   namespace: jupyter
         #   gitRepoCm: hub-metrics-git-repo

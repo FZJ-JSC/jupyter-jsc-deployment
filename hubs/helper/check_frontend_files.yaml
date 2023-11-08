@@ -61,7 +61,11 @@ data:
       }
 
       SHARE_BASE_UPDATED=$(check_git_update ${SHARE_BASE_DIR})
-      SHARE_OVERLAYS_UPDATED=$(check_git_update ${SHARE_OVERLAYS_DIR})
+      if [[ -n ${SHARE_OVERLAYS_GIT_REPO} ]]; then
+          SHARE_OVERLAYS_UPDATED=$(check_git_update ${SHARE_OVERLAYS_DIR})
+      else
+          SHARE_OVERLAYS_UPDATED=0
+      fi
 
       # If one was updated, we have to prepare a new directory
       if [[ ${SHARE_BASE_UPDATED} -eq 1 || ${SHARE_OVERLAYS_UPDATED} -eq 1 ]]; then

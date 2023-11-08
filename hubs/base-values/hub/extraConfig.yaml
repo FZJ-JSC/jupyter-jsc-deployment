@@ -8,7 +8,6 @@ hub:
       ## Generic information
       app_name_dash = get_name("fullname-dash")
       app_name_dash_hub = get_name("hub")
-      jhub_hostname = jsc_custom.spawner.jhub_hostname()
       namespace = os.environ.get("POD_NAMESPACE", "default")
       jupyterhub_host = get_name("hub")
       unity_host = "unity-jsc.fz-juelich.de"
@@ -23,7 +22,7 @@ hub:
 
       ## Logging
       c.JupyterHub.log_level = 10
-      c.JupyterHub.extra_log_handlers = jsc_custom.misc.update_extra_handlers()
+      jhub_hostname = jsc_custom.spawner.jhub_hostname()
 
       class AppLogLoggingFilter(logging.Filter):
           def filter(self, record):
@@ -187,7 +186,7 @@ hub:
       ## Spawner
       c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
       c.CustomJSCSpawner.ssh_during_startup = False
-      c.CustomJSCSpawner.extra_labels = extra_labels
+      c.CustomJSCSpawner.extra_labels = jsc_custom.spawner.extra_labels
       c.CustomJSCSpawner.ssh_custom_forward = jsc_custom.spawner.ssh_custom_forward
       c.CustomJSCSpawner.ssh_custom_forward_remove = jsc_custom.spawner.ssh_custom_forward_remove
       c.CustomJSCSpawner.custom_port = jsc_custom.spawner.custom_port
