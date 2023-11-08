@@ -17,7 +17,14 @@ helm:
       #   Set enabled here to false, update ingress in maintenance/fleet.yaml
       enabled: true
     hub:
+      image:
+        pullPolicy: "Always"
+        pullSecrets:
+          - "gitlab-registry"
+        name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
+        tag: "devel"
       resources: {}
+
     proxy:
       chp:
         resources: {}
