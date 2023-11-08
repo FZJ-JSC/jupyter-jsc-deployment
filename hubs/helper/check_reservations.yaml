@@ -10,7 +10,6 @@ data:
     
     OUTPUT_PATH="/mnt/shared-data/reservation-check/reservation.json"
     TMP_PATH="/tmp/reservation.json"
-    /usr/local/bin/python3 -u /mnt/reservation/..data/reservation_check.py
     while true
     do
         echo "$(date) - Run Reservation check ..."
