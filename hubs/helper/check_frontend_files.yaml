@@ -101,7 +101,7 @@ data:
           fi
           # Remove footer.systems images. These are managed by check_incidents in antoher script.
           if [[ -d ${SHARE_COPY_DIR}/static/images/footer/systems ]]; then
-              rm -r ${SHARE_COPY_DIR}/static/images/footer/systems
+              rm -r ${SHARE_COPY_DIR}/static/images/footer/systems/*
           fi
 
           chown -R 1000:100 ${SHARE_COPY_DIR}

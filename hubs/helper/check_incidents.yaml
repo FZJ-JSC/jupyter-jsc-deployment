@@ -35,7 +35,8 @@ data:
     static_dir = "/mnt/shared-data/share/jupyterhub/static/images/footer"
     incidents_json = "/mnt/shared-data/incidents/active_incidents.json"
 
-    log = logging.getLogger("IncidentCheck")
+    LOGGER_NAME = "IncidentCheck"
+    log = logging.getLogger(LOGGER_NAME)
     log.level = 20
 
     supported_handler_classes = {
