@@ -18,7 +18,7 @@ targetCustomizations:
       values:
         replicas: 2
         image:
-          tag: 3.0.0-dev.4
+          tag: 3.0.0-dev.5
   - name: production
     clusterSelector:
       matchLabels:
