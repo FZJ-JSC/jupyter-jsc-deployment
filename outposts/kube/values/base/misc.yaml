@@ -2,3 +2,5 @@ cryptSecret: outpost-cryptkey
 outpostUsers: outpost-users
 extraEnvVarsSecrets:
   - outpost-db
+nameOverride: "outpost-kube"
+fullnameOverride: "outpost-kube"
