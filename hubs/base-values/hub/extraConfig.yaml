@@ -20,6 +20,15 @@ hub:
       )
       c.JupyterHub.tornado_settings = {'slow_spawn_timeout': 0, 'slow_stop_timeout': 20, 'static_path': '/mnt/shared-data/share/jupyterhub/static'}
 
+      c.JupyterHub.custom_scopes = {
+          "custom:servers:list": {
+              "description": "List all user-id and name of all running servers",
+          },
+          "custom:sshnode:restart": {
+              "description": "Restart port forward processes, when a proxy node was restarted"
+          }
+      }
+
       ## Logging
       c.JupyterHub.log_level = 10
       jhub_hostname = jsc_custom.spawner.jhub_hostname()

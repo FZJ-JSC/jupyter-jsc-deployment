@@ -2,6 +2,23 @@ hub:
   services:
     metrics:
       name: metrics-prometheus-monitor
+    tunnellist:
+      name: tunnel_list_servers
+    tunnelrestart:
+      name: tunnel_restart_nodes
+  loadRoles:
+    - name: "tunnel_list_servers-role"
+      description: "List running servers"
+      scopes:
+        - "custom:servers:list"
+      services:
+        - "tunnel_list_servers"
+    - name: "restart_forward-role"
+      description: "Restart port forward processes, when a proxy node was restarted."
+      scopes:
+        - "custom:sshnode:restart"
+      services:
+        - "tunnel_restart_nodes"
   networkPolicy:
     allowedIngressPorts:
       - 8070
