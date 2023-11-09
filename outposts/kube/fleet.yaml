@@ -1,0 +1,19 @@
+defaultNamespace: outpost
+helm:
+  releaseName: kube
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyterhub-outpost
+  version: 0.1.0
+  valuesFiles:
+    - values/base/misc.yaml
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        image:
+          tag: 0.4.2
+        sshPublicKeys:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINan8WoRnl2t9a8g/y236hg9Uxn8OHVHepUSUMXS9Rfy
