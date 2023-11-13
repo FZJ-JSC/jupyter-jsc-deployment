@@ -17,7 +17,8 @@ hub:
       last_activity_interval: 60
 
       load_roles:
-        - name: read-metrics
+        read_metrics:
+          name: read-metrics
           description: Access to metrics information
           scopes: 
             - read:metrics
