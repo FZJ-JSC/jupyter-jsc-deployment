@@ -1,7 +1,8 @@
 hub:
+  allowNamedServers: true
+  concurrentSpawnLimit: 40
   config:
     JupyterHub:
-      allow_named_servers: true
       cleanup_proxy: false
       default_url: /hub/home
       # hub_ip: 0.0.0.0
@@ -13,7 +14,6 @@ hub:
         slow_spawn_timeout: 0
 
       init_spawners_timeout: 0
-      concurrent_spawn_limit: 40
       last_activity_interval: 60
 
       jinja_environment_options:

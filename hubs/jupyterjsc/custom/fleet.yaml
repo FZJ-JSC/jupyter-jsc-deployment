@@ -14,7 +14,7 @@ helm:
       namespace: jupyter
       hostname: zam12065.zam.kfa-juelich.de
     ingress:
-      enabled: false
+      enabled: true
     jupyter-metrics:
       enabled: false
       jobs: []
