@@ -16,15 +16,6 @@ hub:
       concurrent_spawn_limit: 40
       last_activity_interval: 60
 
-      load_roles:
-        read_metrics:
-          name: read-metrics
-          description: Access to metrics information
-          scopes: 
-            - read:metrics
-          services:
-            - metrics-prometheus-monitor
-
       jinja_environment_options:
         extensions:
           - jinja2.ext.do
