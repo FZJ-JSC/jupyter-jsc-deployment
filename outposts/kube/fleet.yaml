@@ -3,7 +3,7 @@ helm:
   releaseName: kube
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyterhub-outpost
-  version: 0.1.3
+  version: 0.1.5
   valuesFiles:
     - values/base/misc.yaml
 targetCustomizations:
@@ -15,5 +15,3 @@ targetCustomizations:
       values:
         image:
           tag: 0.4.2
-        sshPublicKeys:
-          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINan8WoRnl2t9a8g/y236hg9Uxn8OHVHepUSUMXS9Rfy
