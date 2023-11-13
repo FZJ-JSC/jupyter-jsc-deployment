@@ -22,7 +22,7 @@ hub:
           - jinja2.ext.loopcontrols
 
       internal_ssl: true
-      internal_certs_location: /mnt/persistent/internal-ssl/overlays
+      internal_certs_location: /tmp/internal-ssl
       external_ssl_authorities:
         services-ca:
           key: /mnt/persistent/internal-ssl/services-ca/services-ca.key
@@ -44,5 +44,5 @@ hub:
           key: /mnt/persistent/internal-ssl/hub-ca/hub-ca.key
           cert: /mnt/persistent/internal-ssl/hub-ca/hub-ca.crt
           ca: /mnt/persistent/internal-ssl/hub-ca_trust.crt
-      ssl_cert: /mnt/persistent/internal-ssl/hub-internal/hub-internal.crt
-      ssl_key: /mnt/persistent/internal-ssl/hub-internal/hub-internal.key
+      ssl_cert: /tmp/internal-ssl/hub-internal.crt
+      ssl_key: //tmp/internal-ssl/hub-internal.key

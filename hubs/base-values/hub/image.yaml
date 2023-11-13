@@ -2,10 +2,16 @@ hub:
   args:
     - -c
     - >-
-      pip install --force-reinstall jupyter-jsc-custom &&
+      pip install --force-reinstall jupyter-jsc-custom jupyterhub-forwardbasespawner jupyterhub-unicorespawner jupyterhub-outpostspawner &&
       /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
   command:
     - /bin/bash
+  image:
+    pullPolicy: "Always"
+    pullSecrets:
+      - "gitlab-registry"
+    name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
+    tag: 4.0.2dev.1
   containerSecurityContext:
     runAsUser: 0
     runAsGroup: 0
