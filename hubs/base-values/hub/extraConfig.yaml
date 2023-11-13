@@ -204,9 +204,9 @@ hub:
       c.CustomJSCSpawner.check_allowed = jsc_custom.spawner.is_system_allowed
       c.CustomJSCSpawner.request_headers = jsc_custom.spawner.request_headers
       c.CustomJSCSpawner.request_url = jsc_custom.spawner.request_url
+      c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}/hub/api"
       # c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_env
       # c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_misc
-      # c.CustomJSCSpawner.public_api_url = jsc_custom.spawner.custom_public_api_url
 
       helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
       c.CustomJSCSpawner.svc_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
