@@ -1,4 +1,6 @@
 defaultNamespace: unicore
+kustomize:
+  dir: ./kustomize
 helm:
   releaseName: unicore
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
