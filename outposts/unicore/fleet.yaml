@@ -1,4 +1,4 @@
-defaultNamespace: outpost
+defaultNamespace: unicore
 helm:
   releaseName: unicore
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
