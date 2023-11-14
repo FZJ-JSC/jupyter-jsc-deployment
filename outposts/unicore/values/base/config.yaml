@@ -3,11 +3,17 @@ extraPythonPackages:
 extraVolumes:
   - configMap:
       defaultMode: 256
-      name: unicore-jobs
-    name: job-descriptions
+      name: unicore-jobs-common
+    name: job-descriptions-common
+  - configMap:
+      defaultMode: 256
+      name: unicore-jobs-3.6
+    name: job-descriptions-3.6
 extraVolumeMounts:
-  - mountPath: /mnt/jobs
-    name: job-descriptions
+  - mountPath: /mnt/jobs/common
+    name: job-descriptions-common
+  - mountPath: /mnt/jobs/3.6
+    name: job-descriptions-3.6
 outpostConfig: |-
   import os
 
@@ -29,11 +35,8 @@ outpostConfig: |-
     if system not in system_config.keys():
       raise Exception(f"{spwaner._log_name} - system {system} currently not configured")
     
-    job_prefix = f"{job}_input_"
-    common_prefix = "common_"
-    
-    job_description = f"/mnt/jobs/{job}_job_description.json"
-    common_job_description = f"/mnt/jobs/{common_prefix}job_description.json"
+    job_description = f"/mnt/jobs/{job}/job_description.json"
+    common_job_description = f"/mnt/jobs/common/job_description.json"
     if os.path.isfile(job_description):
       with open(job_description, "r") as f:
         job_description = json.load(f)
@@ -45,19 +48,20 @@ outpostConfig: |-
     
     job_description["Imports"] = {}
     
+    prefix = "input_"
     # First collect common input files
-    for subdir, dirs, files in os.walk("/mnt/jobs"):
+    for subdir, dirs, files in os.walk("/mnt/jobs/common"):
       for file in files:
-        if file.startswith(common_prefix):
+        if file.startswith(prefix):
           with open(os.path.join(subdir, file), "r") as f:
-            job_description["Imports"][file[len(common_prefix):]] = f.read()
+            job_description["Imports"][file[len(prefix)]:] = f.read()
 
     # Afterwards collect job specific files. Allows easy override of common files
-    for subdir, dirs, files in os.walk("/mnt/jobs"):
+    for subdir, dirs, files in os.walk("/mnt/jobs/{job}"):
       for file in files:
-        if file.startswith(job_prefix):
+        if file.startswith(prefix):
           with open(os.path.join(subdir, file), "r") as f:
-            job_description["Imports"][file[len(job_prefix):]] = f.read()
+            job_description["Imports"][file[len(prefix):]] = f.read()
     
     if partition in system_config[system]["interactive_partitions"]:
       job_description["Job type"] = "on_login_node"
