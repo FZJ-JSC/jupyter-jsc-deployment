@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: unicore-jobs-3.6
+  name: unicore-jobs-3-6
   namespace: unicore
 data:
   input_start.sh: |

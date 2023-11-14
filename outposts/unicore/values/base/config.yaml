@@ -7,13 +7,13 @@ extraVolumes:
     name: job-descriptions-common
   - configMap:
       defaultMode: 256
-      name: unicore-jobs-3.6
-    name: job-descriptions-3.6
-# extraVolumeMounts:
-#   - mountPath: /mnt/jobs/common
-#     name: job-descriptions-common
-#   - mountPath: /mnt/jobs/3.6
-#     name: job-descriptions-3.6
+      name: unicore-jobs-3-6
+    name: job-descriptions-3-6
+extraVolumeMounts:
+  - mountPath: /mnt/jobs/common
+    name: job-descriptions-common
+  - mountPath: /mnt/jobs/3.6
+    name: job-descriptions-3-6
 outpostConfig: |-
   import os
 
