@@ -1,0 +1,6 @@
+cryptSecret: outpost-cryptkey
+outpostUsers: outpost-users
+extraEnvVarsSecrets:
+  - outpost-db
+nameOverride: "outpost-unicore"
+fullnameOverride: "outpost-unicore"

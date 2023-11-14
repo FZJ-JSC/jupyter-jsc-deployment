@@ -1,0 +1,183 @@
+extraPythonPackages:
+  - jupyterhub-unicorespawner
+extraVolumes:
+  - configMap:
+      defaultMode: 256
+      name: job-test
+    name: job-descriptions
+extraVolumeMounts:
+  - mountPath: /mnt/jobs
+    name: job-descriptions
+outpostConfig: |-
+  import os
+
+  from unicorespawner import UnicoreSpawner
+
+  logged_logger_name = os.environ.get("LOGGER_NAME", "OutpostUnicore")
+  c.JupyterHubOutpost.log_format = f"%(color)s[%(levelname)1.1s %(asctime)s.%(msecs).03d {logged_logger_name} %(name)s %(module)s:%(lineno)d]%(end_color)s %(message)s"
+
+  c.JupyterHubOutpost.spawner_class = UnicoreSpawner
+
+  async def job_description(spawner):
+    job = spawner.user_options.get("job", "default")
+    system = spawner.user_options["system"]
+    account = spawner.user_options["account"]
+    project = spawner.user_options["project"]
+    partition = spawner.user_options["partition"]
+    nodes = spawner.user_options.get("nodes", False)
+    runtime = spawner.user_options.get("runtime", False)
+    gpus = spawner.user_options.get("gpus", False)
+    xserver = spawner.user_options.get("xserver", False)
+    reservation = spawner.user_options.get("reservation", False)
+    
+    
+    # Check if system is configured
+    if system not in system_config.keys():
+      raise Exception(f"{spwaner._log_name} - system {system} currently not configured")
+    
+    job_prefix = f"{job}_input_"
+    common_prefix = "common_"
+    
+    with open(f"/mnt/jobs/{job}_job_description.json", "r") as f:
+      job_description = json.load(f)
+    
+    job_description["Imports"] = {}
+    
+    # First collect common input files
+    for subdir, dirs, files in os.walk("/mnt/jobs"):
+      for file in files:
+        if file.startswith(common_prefix):
+          with open(os.path.join(subdir, file), "r") as f:
+            job_description["Imports"][file[len(common_prefix):]] = f.read()
+
+    # Afterwards collect job specific files. Allows easy override of common files
+    for subdir, dirs, files in os.walk("/mnt/jobs"):
+      for file in files:
+        if file.startswith(job_prefix):
+          with open(os.path.join(subdir, file), "r") as f:
+            job_description["Imports"][file[len(job_prefix):]] = f.read()
+    
+    if partition in system_config[system]["interactive_partitions"]:
+      job_description["Job type"] = "on_login_node"
+      job_description["Login node"] = system_config[system]["interactive_partitions"][partition]
+    else:
+      job_description["Job type"] = "batch"
+      job_description["Resources"] = {}
+      job_description["Resources"]["Nodes"] = nodes
+      job_description["Resources"]["Runtime"] = runtime
+      if gpus:
+        job_description["Resources"]["GPUS"] = gpus
+      if xserver:
+        job_description["Resources"]["StartXServer"] = xserver
+      if reservation: 
+        job_description["Resources"]["Reservation"] = reservation
+      
+    return job_description
+
+
+  additional_replacements = {
+    "system": {
+      "JUWELS": {
+        "hostname_base": "jwlogin",
+        "hostname_cpulimit": "login|vis",
+        "hostname_all": "'jwlogin02i' 'jwlogin03i' 'jwlogin04i' 'jwlogin05i' 'jwlogin06i' 'jwlogin07i' 'jwlogin08i' 'jwlogin09i' 'jwlogin10i' 'jwlogin11i'"
+      },
+      "JURECA": {
+        "hostname_base": "jrlogin",
+        "hostname_cpulimit": "login|vis",
+        "hostname_all": "'jrlogin01i' 'jrlogin02i' 'jrlogin03i' 'jrlogin04i' 'jrlogin05i' 'jrlogin06i' 'jrlogin07i' 'jrlogin08i' 'jrlogin09i' 'jrlogin10i' 'jrlogin11i' 'jrlogin12i'"
+      },
+      "JUSUF": {
+        "hostname_base": "jsfl",
+        "hostname_cpulimit": "login|vis",
+        "hostname_all": "'jsfl01i' 'jsfl02i' 'jsfl03i' 'jsfl04i'"
+      },
+      "HDFML": {
+        "hostname_base": "hdfmll",
+        "hostname_cpulimit": "login|vis",
+        "hostname_all": "'hdfmll01i' 'hdfmll02i'"
+      },
+      "DEEP": {
+        "hostname_base": "deepv",
+        "hostname_cpulimit": "login|vis",
+        "hostname_all": "'deepv'"
+      }
+    },
+    "job": {
+      "job-1": {
+          "version": "1.0.0"
+      },
+      "job-2": {
+          "version": "1.1.0"
+      }
+    }
+  }
+
+  system_config = {
+    "JURECA": {
+      "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JURECA/rest/core",
+      "interactive_partitions": {
+        "LoginNode": "jureca??.fz-juelich.de"
+      }
+    },
+    "JUWELS": {
+      "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core",
+      "interactive_partitions": {
+        "LoginNode": "juwels0?.fz-juelich.de",
+        "LoginNodeVis": "juwelsvis??.fz-juelich.de",
+        "LoginNodeBooster": "juwels2?.fz-juelich.de"
+      }
+    },
+    "JUSUF": {
+      "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUSUF/rest/core",
+      "interactive_partitions": {
+        "LoginNode": "jusuf?.fz-juelich.de"
+      }
+    },
+    "HDFML": {
+      "site_url": "https://zam2125.zam.kfa-juelich.de:9112/HDFML/rest/core",
+      "interactive_partitions": {
+        "LoginNode": "hdfmll??.fz-juelich.de"
+      }
+    },
+    "DEEP": {
+      "site_url": "https://zam2125.zam.kfa-juelich.de:9112/DEEP/rest/core",
+      "interactive_partitions": {
+        "LoginNode": "deep.fz-juelich.de"
+      }
+    }
+  }
+
+  async def unicore_site_url(spawner):
+    system = spawner.user_options.get("system", "None")
+    url = system_config.get(system, {}).get("site_url", False)
+    if not url:
+      raise Exception(f"URL for system {system} not configured. Available systems: {list(site_urls.keys())}")
+    return url
+
+  async def transport_kwargs(spawner):
+    auth_state = await spawner.user.get_auth_state()
+    return {
+        "credential": auth_state["access_token"],
+        "oidc": False,
+        # "verify": "/mnt/unicore/cert.crt",
+        "verify": False,
+        "timeout": 30
+    }
+
+  async def transport_preferences(spawner):
+    account = spawner.user_options.get("account", False)
+    project = spawner.user_options.get("project", False)
+    if account and project:
+      return f"uid:{account},group:{project}"
+    else:
+      spawner.log.warning(f"{spawner._log_name} - account ({account}) or project ({project}) not set in user_options ({spawner.user_options}). Do not set preferences in UNICORE transport.")
+      return False
+
+
+  c.UnicoreSpawner.unicore_internal_forwarding = False
+  c.UnicoreSpawner.job_description = job_description
+  c.UnicoreSpawner.additional_replacements = additional_replacements
+  c.UnicoreSpawner.unicore_site_url = unicore_site_url
+  c.UnicoreSpawner.unicore_transport_kwargs = transport_kwargs
+  c.UnicoreSpawner.unicore_transport_preferences = transport_preferences

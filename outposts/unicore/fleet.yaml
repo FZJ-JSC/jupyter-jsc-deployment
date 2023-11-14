@@ -1,0 +1,18 @@
+defaultNamespace: outpost
+helm:
+  releaseName: unicore
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyterhub-outpost
+  version: 0.1.6
+  valuesFiles:
+    - values/base/misc.yaml
+    - values/base/config.yaml
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        image:
+          tag: 0.4.2
