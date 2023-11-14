@@ -203,6 +203,7 @@ hub:
       c.CustomJSCSpawner.pre_spawn_hook = jsc_custom.spawner.pre_spawn_hook
       c.CustomJSCSpawner.check_allowed = jsc_custom.spawner.is_system_allowed
       c.CustomJSCSpawner.request_headers = jsc_custom.spawner.request_headers
+      c.CustomJSCSpawner.request_kwargs = jsc_custom.spawner.request_kwargs
       c.CustomJSCSpawner.request_url = jsc_custom.spawner.request_url
       c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}/hub/api"
       # c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_env
