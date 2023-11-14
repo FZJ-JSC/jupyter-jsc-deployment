@@ -25,6 +25,7 @@ outpostConfig: |-
   c.JupyterHubOutpost.spawner_class = UnicoreSpawner
 
   async def job_description(spawner):
+    jhub = spawner.jupyterhub_name
     job = spawner.user_options.get("job", "default")
     system = spawner.user_options["system"]
     account = spawner.user_options["account"]
@@ -35,10 +36,15 @@ outpostConfig: |-
     if system not in system_config.keys():
       raise Exception(f"{spwaner._log_name} - system {system} currently not configured")
     
-    job_description = f"/mnt/jobs/{job}/job_description.json"
+    jhub_job_description = f"/mnt/jobs/{job}/{jhub}_job_description.json"
+    version_job_description = f"/mnt/jobs/{job}/job_description.json"
     common_job_description = f"/mnt/jobs/common/job_description.json"
-    if os.path.isfile(job_description):
-      with open(job_description, "r") as f:
+
+    if os.path.isfile(jhub_job_description):
+      with open(jhub_job_description, "r") as f:
+        job_description = json.load(f)
+    elif os.path.isfile(version_job_description):
+      with open(version_job_description, "r") as f:
         job_description = json.load(f)
     elif os.path.isfile(common_job_description):
       with open(common_job_description, "r") as f:
@@ -49,6 +55,7 @@ outpostConfig: |-
     job_description["Imports"] = {}
     
     prefix = "input_"
+    jhub_prefix = f"{jhub}_input_"
     # First collect common input files
     for subdir, dirs, files in os.walk("/mnt/jobs/common"):
       for file in files:
@@ -62,6 +69,13 @@ outpostConfig: |-
         if file.startswith(prefix):
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"][file[len(prefix):]] = f.read()
+    
+    # Afterwards collect jhub specific files. Allows easy override of previous files
+    for subdir, dirs, files in os.walk("/mnt/jobs/{job}"):
+      for file in files:
+        if file.startswith(jhub_prefix):
+          with open(os.path.join(subdir, file), "r") as f:
+            job_description["Imports"][file[len(jhub_prefix):]] = f.read()
     
     if partition in system_config[system]["interactive_partitions"]:
       job_description["Job type"] = "on_login_node"
