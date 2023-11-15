@@ -6,7 +6,7 @@ data:
   run.sh: |
     #!/bin/sh
 
-    SLEEP=$(/usr/local/bin/python3 -c 'import yaml; f=open("/mnt/custom_config/jupyterhub_custom_config.yaml", "r"); config = yaml.full_load(f); f.close(); print(config.get("reservation-check", {}).get("interval", 300))')
+    SLEEP=$(/usr/local/bin/python3 -c 'import yaml; f=open("/mnt/custom_config/jupyterhub_custom_config.yaml", "r"); config = yaml.full_load(f); f.close(); print(config.get("reservationCheck", {}).get("interval", 300))')
     
     OUTPUT_PATH="/mnt/shared-data/reservation-check/reservation.json"
     TMP_PATH="/tmp/reservation.json"
@@ -54,13 +54,13 @@ data:
       previous_dict = {}
     output_dict = {}
 
-    for system, infos in config.get("reservation-check", {}).get("systems", {}).items():
+    for system, infos in config.get("reservationCheck", {}).get("systems", {}).items():
       if system not in output_dict.keys():
         output_dict[system] = []
       li = [ "ssh", "-i", reservation_key, "-oLogLevel=ERROR", "-oStrictHostKeyChecking=no", "-oUserKnownHostsFile=/dev/null", "{}@{}".format(infos.get("user", "kreuzer1"), infos.get("host", "")), "-T"]
 
       def null_to_empty(key, value, infos):
-        if key in infos.get("null_replace_keys", ["Accounts", "Users", "PartitionName"]) and value == infos.get("null_string", "(null)"):
+        if key in infos.get("nullReplaceKeys", ["Accounts", "Users", "PartitionName"]) and value == infos.get("nullString", "(null)"):
           return ""
         return value
 

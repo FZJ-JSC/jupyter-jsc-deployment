@@ -8,7 +8,7 @@ data:
 
     while [ ! -d /mnt/shared-data/share/jupyterhub/static/images/footer ]; do echo "Waiting for /mnt/shared-data/share/jupyterhub/static/images/footer ..." ; sleep 5; done
 
-    SLEEP=$(/usr/local/bin/python3 -c 'import yaml; f=open("/mnt/custom_config/jupyterhub_custom_config.yaml", "r"); config = yaml.full_load(f); f.close(); print(config.get("incident-check", {}).get("interval", 60))')
+    SLEEP=$(/usr/local/bin/python3 -c 'import yaml; f=open("/mnt/custom_config/jupyterhub_custom_config.yaml", "r"); config = yaml.full_load(f); f.close(); print(config.get("incidentCheck", {}).get("interval", 60))')
     while true
     do
         echo "$(date) - Run incident check ..."
@@ -136,8 +136,8 @@ data:
 
 
     def update_thresholds(config):
-        interactive_threshold = config.get("health_threshold", {}).get("interactive", 40)
-        compute_threshold = config.get("health_threshold", {}).get("compute", 50)
+        interactive_threshold = config.get("healthThreshold", {}).get("interactive", 40)
+        compute_threshold = config.get("healthThreshold", {}).get("compute", 50)
 
         systems_incidents = read_json_file(incidents_json)
         systems_incidents["interactive_threshold"] = interactive_threshold
@@ -253,7 +253,7 @@ data:
     if __name__ == "__main__":
         with open("/mnt/custom_config/jupyterhub_custom_config.yaml", "r") as f:
             config_all = yaml.full_load(f)
-        config = config_all.get("incident-check", {})
+        config = config_all.get("incidentCheck", {})
         for name, logger_config in config.get("logger", {}).items():
             setup_logger(name, logger_config)
         
