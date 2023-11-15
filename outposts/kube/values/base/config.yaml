@@ -16,7 +16,7 @@ outpostConfig: |-
   c.KubeSpawner.volumes = [
     {
       "name": "nfs-software", 
-      "nfs": {
+      "hostPath": {
         "path": "/p/software/jsccloud", 
         "type": ""
       }
