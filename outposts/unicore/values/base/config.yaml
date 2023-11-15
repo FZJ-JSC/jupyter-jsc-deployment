@@ -24,13 +24,13 @@ outpostConfig: |-
 
   c.JupyterHubOutpost.spawner_class = UnicoreSpawner
 
-  async def job_description(spawner):
+  async def job_description(spawner, user_options):
     jhub = spawner.jupyterhub_name
-    job = spawner.user_options.get("job", "default")
-    system = spawner.user_options["system"]
-    account = spawner.user_options["account"]
-    project = spawner.user_options["project"]
-    partition = spawner.user_options["partition"]    
+    job = user_options.get("job", "default")
+    system = user_options["system"]
+    account = user_options["account"]
+    project = user_options["project"]
+    partition = user_options["partition"]
     
     # Check if system is configured
     if system not in system_config.keys():
@@ -81,11 +81,11 @@ outpostConfig: |-
       job_description["Job type"] = "on_login_node"
       job_description["Login node"] = system_config[system]["interactive_partitions"][partition]
     else:
-      nodes = spawner.user_options["nodes"]
-      runtime = spawner.user_options["runtime"]
-      gpus = spawner.user_options.get("gpus", False)
-      xserver = spawner.user_options.get("xserver", False)
-      reservation = spawner.user_options.get("reservation", False)
+      nodes = user_options["nodes"]
+      runtime = user_options["runtime"]
+      gpus = user_options.get("gpus", False)
+      xserver = user_options.get("xserver", False)
+      reservation = user_options.get("reservation", False)
 
       job_description["Job type"] = "batch"
       job_description["Resources"] = {
@@ -208,3 +208,4 @@ outpostConfig: |-
   c.UnicoreSpawner.unicore_site_url = unicore_site_url
   c.UnicoreSpawner.unicore_transport_kwargs = transport_kwargs
   c.UnicoreSpawner.unicore_transport_preferences = transport_preferences
+
