@@ -15,6 +15,7 @@ extraVolumeMounts:
   - mountPath: /mnt/jobs/3.6
     name: job-descriptions-3-6
 outpostConfig: |-
+  import json
   import os
 
   from unicorespawner import UnicoreSpawner
