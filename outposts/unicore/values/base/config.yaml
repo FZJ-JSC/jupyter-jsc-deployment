@@ -62,6 +62,8 @@ outpostConfig: |-
       for file in files:
         if file.startswith(prefix):
           with open(os.path.join(subdir, file), "r") as f:
+            spawner.log.info(job_description["Imports"])
+            spawner.log.info(file[len(prefix):])
             job_description["Imports"][file[len(prefix):]] = f.read()
 
     # Afterwards collect job specific files. Allows easy override of common files
