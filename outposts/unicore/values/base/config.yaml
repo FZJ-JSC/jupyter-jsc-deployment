@@ -187,19 +187,23 @@ outpostConfig: |-
 
   async def transport_kwargs(spawner):
     auth_state = await spawner.user.get_auth_state()
-    return {
+    transport_kwargs = {
         "credential": auth_state["access_token"],
-        "oidc": False,
+        "oidc": True,
         # "verify": "/mnt/unicore/cert.crt",
         "verify": False,
         "timeout": 30
     }
+    spawner.log.info(f"{spawner._log_name} - Unicore transport kwargs: {transport_kwargs}")
+    return transport_kwargs
 
   async def transport_preferences(spawner):
     account = spawner.user_options.get("account", False)
     project = spawner.user_options.get("project", False)
     if account and project:
-      return f"uid:{account},group:{project}"
+      preference = f"uid:{account},group:{project}"
+      spawner.log.info(f"{spawner._log_name} - Set preference: {preference}")
+      return preference
     else:
       spawner.log.warning(f"{spawner._log_name} - account ({account}) or project ({project}) not set in user_options ({spawner.user_options}). Do not set preferences in UNICORE transport.")
       return False
