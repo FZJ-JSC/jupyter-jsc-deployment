@@ -8,3 +8,5 @@ hub:
       mountPath: /etc/localtime
     - name: custom-config
       mountPath: /mnt/custom-config
+    - name: jupyter-modules
+      mountPath: /tmp/custom

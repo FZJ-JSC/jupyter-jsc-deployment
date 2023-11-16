@@ -18,6 +18,10 @@ hub:
       configMap:
         defaultMode: 400
         name: check-frontend-files
+    - name: jupyter-modules
+      configMap:
+        defaultMode: 400
+        name: jupyter-modules
     - name: sidecar-nginx-config
       configMap:
         defaultMode: 400
