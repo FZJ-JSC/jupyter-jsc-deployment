@@ -11,14 +11,16 @@ outpostConfig: |-
   c.KubeSpawner.image = "jupyter/minimal-notebook:notebook-7.0.3"
   c.KubeSpawner.start_timeout = 300
   c.KubeSpawner.volume_mounts = [
-    {"name": "nfs-software", "mountPath": "/p/jsccloud"}
+    {"name": "nfs-software", "mountPath": "/p/software/jsccloud", "readOnly": True}
   ]
   c.KubeSpawner.volumes = [
     {
       "name": "nfs-software", 
-      "nfs": {
-        "server": "134.94.198.179", 
-        "path": "/p/software"
+      "hostPath": {
+        "path": "/p/software/jsccloud", 
+        "type": ""
       }
     }
   ]
+
+
