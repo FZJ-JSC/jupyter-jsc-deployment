@@ -60,7 +60,7 @@ outpostConfig: |-
     else:
       raise Exception(f"{spawner._log_name} - Could not find job_description for job {service}")
     
-    job_description["Imports"] = {}
+    job_description["Imports"] = []
     
     prefix = "input_"
     jhub_prefix = f"{jhub}_input_"
@@ -69,7 +69,11 @@ outpostConfig: |-
       for file in files:
         if file.startswith(prefix):
           with open(os.path.join(subdir, file), "r") as f:
-            job_description["Imports"][file[len(prefix):]] = f.read()
+            job_description["Imports"].append({
+              "From": "inline://dummy",
+              "To": file[len(prefix):],
+              "Data": f.read()
+            })
 
     # Afterwards collect job specific files. Allows easy override of common files
     spawner.log.info(f"{spawner._log_name} - Walk through: /mnt/jobs/{service}")
@@ -79,14 +83,22 @@ outpostConfig: |-
         if file.startswith(prefix):
           spawner.log.info(f"{spawner._log_name} - Add as filename: {file[len(prefix):]}")
           with open(os.path.join(subdir, file), "r") as f:
-            job_description["Imports"][file[len(prefix):]] = f.read()
+            job_description["Imports"].append({
+              "From": "inline://dummy",
+              "To": file[len(prefix):],
+              "Data": f.read()
+            })
     
     # Afterwards collect jhub specific files. Allows easy override of previous files
     for subdir, dirs, files in os.walk(f"/mnt/jobs/{service}"):
       for file in files:
         if file.startswith(jhub_prefix):
           with open(os.path.join(subdir, file), "r") as f:
-            job_description["Imports"][file[len(jhub_prefix):]] = f.read()
+            job_description["Imports"].append({
+              "From": "inline://dummy",
+              "To": file[len(jhub_prefix):],
+              "Data": f.read()
+            })
     
     spawner.log.info(f"{spawner._log_name} - Start job with these input files: {list(job_description['Imports'].keys())}")
 
