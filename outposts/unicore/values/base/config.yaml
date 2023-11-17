@@ -72,9 +72,12 @@ outpostConfig: |-
             job_description["Imports"][file[len(prefix):]] = f.read()
 
     # Afterwards collect job specific files. Allows easy override of common files
+    spawner.log.info(f"{spawner._log_name} - Walk through: /mnt/jobs/{service}")
     for subdir, dirs, files in os.walk("/mnt/jobs/{service}"):
       for file in files:
+        spawner.log.info(f"{spawner._log_name} - Service specific file: {file}")
         if file.startswith(prefix):
+          spawner.log.info(f"{spawner._log_name} - Add as filename: {[file[len(prefix):]}")
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"][file[len(prefix):]] = f.read()
     
