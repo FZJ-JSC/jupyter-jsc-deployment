@@ -242,3 +242,5 @@ hub:
         if not url:
           raise Exception(f"URL for system {system} not configured. Available systems: {list(site_urls.keys())}")
         return url
+      
+      c.CustomJSCSpawner.unicore_site_url = unicore_site_url
