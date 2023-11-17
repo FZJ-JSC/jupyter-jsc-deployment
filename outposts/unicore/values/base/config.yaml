@@ -77,7 +77,7 @@ outpostConfig: |-
       for file in files:
         spawner.log.info(f"{spawner._log_name} - Service specific file: {file}")
         if file.startswith(prefix):
-          spawner.log.info(f"{spawner._log_name} - Add as filename: {[file[len(prefix):]}")
+          spawner.log.info(f"{spawner._log_name} - Add as filename: {file[len(prefix):]}")
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"][file[len(prefix):]] = f.read()
     
