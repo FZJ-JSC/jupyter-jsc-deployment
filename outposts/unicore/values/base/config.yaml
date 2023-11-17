@@ -34,7 +34,7 @@ outpostConfig: |-
   async def job_description(spawner, user_options):
     jhub = spawner.jupyterhub_name
     spawner.log.info(f"{spawner._log_name} - Spawn for {jhub} with user_options: {user_options}")
-    job = user_options.get("job", "default")
+    service = user_options["service"].replace("/", "_")
     system = user_options["system"]
     account = user_options["account"]
     project = user_options["project"]
@@ -44,8 +44,8 @@ outpostConfig: |-
     if system not in system_config.keys():
       raise Exception(f"{spwaner._log_name} - system {system} currently not configured")
     
-    jhub_job_description = f"/mnt/jobs/{job}/{jhub}_job_description.json"
-    version_job_description = f"/mnt/jobs/{job}/job_description.json"
+    jhub_job_description = f"/mnt/jobs/{service}/{jhub}_job_description.json"
+    version_job_description = f"/mnt/jobs/{service}/job_description.json"
     common_job_description = f"/mnt/jobs/common/job_description.json"
 
     if os.path.isfile(jhub_job_description):
@@ -58,7 +58,7 @@ outpostConfig: |-
       with open(common_job_description, "r") as f:
         job_description = json.load(f)
     else:
-      raise Exception(f"{spawner._log_name} - Could not find job_description for job {job}")
+      raise Exception(f"{spawner._log_name} - Could not find job_description for job {service}")
     
     job_description["Imports"] = {}
     
@@ -72,19 +72,21 @@ outpostConfig: |-
             job_description["Imports"][file[len(prefix):]] = f.read()
 
     # Afterwards collect job specific files. Allows easy override of common files
-    for subdir, dirs, files in os.walk("/mnt/jobs/{job}"):
+    for subdir, dirs, files in os.walk("/mnt/jobs/{service}"):
       for file in files:
         if file.startswith(prefix):
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"][file[len(prefix):]] = f.read()
     
     # Afterwards collect jhub specific files. Allows easy override of previous files
-    for subdir, dirs, files in os.walk("/mnt/jobs/{job}"):
+    for subdir, dirs, files in os.walk("/mnt/jobs/{service}"):
       for file in files:
         if file.startswith(jhub_prefix):
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"][file[len(jhub_prefix):]] = f.read()
     
+    spawner.log.info(f"{spawner._log_name} - Start job with these input files: {list(job_description['Imports'].keys())}")
+
     if partition in system_config[system]["interactive_partitions"]:
       job_description["Job type"] = "on_login_node"
       job_description["Login node"] = system_config[system]["interactive_partitions"][partition]
