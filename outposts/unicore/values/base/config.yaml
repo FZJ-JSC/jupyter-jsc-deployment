@@ -73,7 +73,7 @@ outpostConfig: |-
 
     # Afterwards collect job specific files. Allows easy override of common files
     spawner.log.info(f"{spawner._log_name} - Walk through: /mnt/jobs/{service}")
-    for subdir, dirs, files in os.walk("/mnt/jobs/{service}"):
+    for subdir, dirs, files in os.walk(f"/mnt/jobs/{service}"):
       for file in files:
         spawner.log.info(f"{spawner._log_name} - Service specific file: {file}")
         if file.startswith(prefix):
@@ -82,7 +82,7 @@ outpostConfig: |-
             job_description["Imports"][file[len(prefix):]] = f.read()
     
     # Afterwards collect jhub specific files. Allows easy override of previous files
-    for subdir, dirs, files in os.walk("/mnt/jobs/{service}"):
+    for subdir, dirs, files in os.walk(f"/mnt/jobs/{service}"):
       for file in files:
         if file.startswith(jhub_prefix):
           with open(os.path.join(subdir, file), "r") as f:
