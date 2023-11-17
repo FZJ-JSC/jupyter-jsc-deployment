@@ -216,3 +216,29 @@ hub:
       c.CustomJSCSpawner.progress_ready_hook = jsc_custom.spawner.progress_ready_hook
       c.CustomJSCSpawner.ssl_alt_names = [f"DNS:{jhub_hostname}", "DNS:default-hub"]
       c.CustomJSCSpawner.http_timeout = 7200
+
+      ### UNICORE specific config
+      system_config = {
+        "JURECA": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JURECA/rest/core",
+        },
+        "JUWELS": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core",
+        },
+        "JUSUF": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUSUF/rest/core",
+        },
+        "HDFML": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/HDFML/rest/core",
+        },
+        "DEEP": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/DEEP/rest/core",
+        }
+      }
+
+      async def unicore_site_url(spawner):
+        system = spawner.user_options.get("system", "None")
+        url = system_config.get(system, {}).get("site_url", False)
+        if not url:
+          raise Exception(f"URL for system {system} not configured. Available systems: {list(site_urls.keys())}")
+        return url
