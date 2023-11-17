@@ -100,7 +100,7 @@ outpostConfig: |-
               "Data": f.read()
             })
     
-    spawner.log.info(f"{spawner._log_name} - Start job with these input files: {list(job_description['Imports'].keys())}")
+    spawner.log.info(f"{spawner._log_name} - Start job with these input files: {[x.get("To") for x in job_description['Imports']]}")
 
     if partition in system_config[system]["interactive_partitions"]:
       job_description["Job type"] = "on_login_node"
