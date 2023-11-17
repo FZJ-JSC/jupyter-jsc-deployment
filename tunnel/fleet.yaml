@@ -18,7 +18,10 @@ targetCustomizations:
       values:
         replicas: 2
         image:
-          tag: 3.0.0-dev.5
+          tag: 3.0.1
+        logging:
+          stream:
+            level: 10
   - name: production
     clusterSelector:
       matchLabels:
