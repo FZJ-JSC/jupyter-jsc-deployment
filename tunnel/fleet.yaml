@@ -3,7 +3,7 @@ helm:
   releaseName: tunnel
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-tunnel
-  version: 0.1.10
+  version: 0.1.11
   valuesFiles:
     - values/base/jupyterhubs.yaml
     - values/base/misc.yaml
