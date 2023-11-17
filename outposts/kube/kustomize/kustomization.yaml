@@ -1,0 +1,3 @@
+resources:
+  - modules-3.6.yaml
+  - modules-common.yaml

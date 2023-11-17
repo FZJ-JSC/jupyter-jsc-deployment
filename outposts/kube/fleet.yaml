@@ -1,4 +1,6 @@
 defaultNamespace: outpost
+kustomize:
+  dir: ./kustomize
 helm:
   releaseName: kube
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts

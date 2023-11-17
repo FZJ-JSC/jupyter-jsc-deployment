@@ -9,13 +9,26 @@ outpostConfig: |-
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
   c.KubeSpawner.image = "jupyter/minimal-notebook:notebook-7.0.3"
-  c.KubeSpawner.start_timeout = 300
   c.KubeSpawner.node_selector = {"usernode": "true"}
   c.KubeSpawner.tolerations = [
     {"key": "usernode", "value": "true", "effect": "NoExecute"}
   ]  
   c.KubeSpawner.volume_mounts = [
-    {"name": "nfs-software", "mountPath": "/p/software/jsccloud", "readOnly": True}
+    {
+      "name": "nfs-software", 
+      "mountPath": "/p/software/jsccloud", 
+      "readOnly": True
+    },
+    {
+      "name": "modules-3.6", 
+      "mountPath": "/p/custom/load_jupyter_version.sh", 
+      "subpath": "load_jupyter_version.sh"
+    },
+    {
+      "name": "modules-common", 
+      "mountPath": "/p/custom/load_jupyter_modules.sh",
+      "subpath": "load_jupyter_modules.sh"
+    }
   ]
   c.KubeSpawner.volumes = [
     {
@@ -23,6 +36,20 @@ outpostConfig: |-
       "hostPath": {
         "path": "/p/software/jsccloud", 
         "type": ""
+      }
+    },
+    {
+      "name": "modules-3.6",
+      "configMap": {
+        "defaultMode": 400,
+        "name": "modules-3.6"
+      }
+    },
+    {
+      "name": "modules-common",
+      "configMap": {
+        "defaultMode": 400,
+        "name": "modules-common"
       }
     }
   ]
