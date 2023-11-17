@@ -12,7 +12,7 @@ extraVolumes:
 extraVolumeMounts:
   - mountPath: /mnt/jobs/common
     name: job-descriptions-common
-  - mountPath: /mnt/jobs/3.6
+  - mountPath: /mnt/jobs/JupyterLab_3.6
     name: job-descriptions-3-6
 outpostConfig: |-
   import json
@@ -33,6 +33,7 @@ outpostConfig: |-
 
   async def job_description(spawner, user_options):
     jhub = spawner.jupyterhub_name
+    spawner.log.info(f"{spawner._log_name} - Spawn for {jhub} with user_options: {user_options}")
     job = user_options.get("job", "default")
     system = user_options["system"]
     account = user_options["account"]
