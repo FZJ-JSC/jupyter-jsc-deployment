@@ -4,3 +4,8 @@ servicessh:
   loadBalancerIP: "134.94.198.218"
 stage: staging
 loggerName: "TunnelStagingJSC"
+image:
+  tag: 3.0.1
+logging:
+  stream:
+    level: 5 
