@@ -21,12 +21,12 @@ outpostConfig: |-
     },
     {
       "name": "modules-3-6", 
-      "mountPath": "/p/custom/load_jupyter_version.sh", 
+      "mountPath": "/tmp/custom/load_jupyter_version.sh", 
       "subpath": "load_jupyter_version.sh"
     },
     {
       "name": "modules-common", 
-      "mountPath": "/p/custom/load_jupyter_modules.sh",
+      "mountPath": "/tmp/custom/load_jupyter_modules.sh",
       "subpath": "load_jupyter_modules.sh"
     }
   ]
