@@ -243,4 +243,30 @@ hub:
           raise Exception(f"URL for system {system} not configured. Available systems: {list(site_urls.keys())}")
         return url
       
+      async def transport_kwargs(spawner):
+        auth_state = await spawner.user.get_auth_state()
+        transport_kwargs = {
+            "credential": auth_state["access_token"],
+            "oidc": True,
+            # "verify": "/mnt/unicore/cert.crt",
+            "verify": False,
+            "timeout": 30
+        }
+        spawner.log.info(f"{spawner._log_name} - Unicore transport kwargs: {transport_kwargs}")
+        return transport_kwargs
+
+      async def transport_preferences(spawner):
+        account = spawner.user_options.get("account", False)
+        project = spawner.user_options.get("project", False)
+        if account and project:
+          preference = f"uid:{account},group:{project}"
+          spawner.log.info(f"{spawner._log_name} - Set preference: {preference}")
+          return preference
+        else:
+          spawner.log.warning(f"{spawner._log_name} - account ({account}) or project ({project}) not set in user_options ({spawner.user_options}). Do not set preferences in UNICORE transport.")
+          return False
+
+
       c.CustomJSCSpawner.unicore_site_url = unicore_site_url
+      c.CustomJSCSpawner.unicore_transport_kwargs = transport_kwargs
+      c.CustomJSCSpawner.unicore_transport_preferences = transport_preferences
