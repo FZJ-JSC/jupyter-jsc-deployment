@@ -225,4 +225,5 @@ outpostConfig: |-
   c.UnicoreSpawner.unicore_site_url = unicore_site_url
   c.UnicoreSpawner.unicore_transport_kwargs = transport_kwargs
   c.UnicoreSpawner.unicore_transport_preferences = transport_preferences
+  c.UnicoreSpawner.unicore_job_delete = False
 
