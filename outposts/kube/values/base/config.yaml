@@ -20,7 +20,7 @@ outpostConfig: |-
       "readOnly": True
     },
     {
-      "name": "modules-3.6", 
+      "name": "modules-3-6", 
       "mountPath": "/p/custom/load_jupyter_version.sh", 
       "subpath": "load_jupyter_version.sh"
     },
@@ -39,10 +39,10 @@ outpostConfig: |-
       }
     },
     {
-      "name": "modules-3.6",
+      "name": "modules-3-6",
       "configMap": {
         "defaultMode": 400,
-        "name": "modules-3.6"
+        "name": "modules-3-6"
       }
     },
     {
