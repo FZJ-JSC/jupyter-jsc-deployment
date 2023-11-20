@@ -7,8 +7,5 @@ data:
   load_jupyter_version.sh: |
     #!/bin/bash
 
-    export MODULEPATH=/p/software/jsccloud/productionstages
-    export OTHERSTAGES=/p/software/jsccloud/productionstages
-
     module purge
     module load Stages/2023 GCCcore/.11.3.0 Python JupyterLab/2023.3.6

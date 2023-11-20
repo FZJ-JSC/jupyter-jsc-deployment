@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: modules-common
+  name: modules-user-3-6
   namespace: outpost
 data:
   load_jupyter_modules.sh: |
@@ -46,6 +46,3 @@ data:
     if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
       module load JupyterExtension-nglview/3.0.6-2023.3.6
     fi
-
-    # Temporarily put this here for testing purposes
-    jupyterhub-singleuser
