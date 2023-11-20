@@ -158,7 +158,7 @@ outpostConfig: |-
       job_description["Job type"] = "batch"
       job_description["Resources"] = {
         "Nodes": nodes,
-        "Runtime": runtime
+        "Runtime": f"{runtime}min"
       }
       if gpus:
         job_description["Resources"]["GPUS"] = gpus

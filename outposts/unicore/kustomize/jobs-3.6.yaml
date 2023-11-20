@@ -444,7 +444,7 @@ data:
     pre_start
     load_modules
     update_config
-    load_hooks
+    load_project_specific_kernel
     start
 
 
