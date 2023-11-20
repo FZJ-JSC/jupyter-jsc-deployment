@@ -74,21 +74,21 @@ outpostConfig: |-
     if spawner.internal_ssl:
       # First add Import files for certificates.
       # Allows to override them later, if necessary
-      with open(spawner.cert_paths["keyfile"], "r") as file:
+      with open(spawner.cert_paths["keyfile"], "r") as f:
         job_description["Imports"].append({
           "From": "inline://dummy",
           "To": "service_cert.key",
           "Data": f.read()
         })
-      with open(spawner.cert_paths["certfile"], "r") as file:
+      with open(spawner.cert_paths["certfile"], "r") as f:
         job_description["Imports"].append({
           "From": "inline://dummy",
           "To": "service_cert.crt",
           "Data": f.read()
         })
-      with open(spawner.cert_paths["cafile"], "r") as file:
+      with open(spawner.cert_paths["cafile"], "r") as f:
         cafile = f.read()
-      with open(spawner.internal_trust_bundles['hub-ca'], "r") as file:
+      with open(spawner.internal_trust_bundles['hub-ca'], "r") as f:
         hubca = f.read()
       job_description["Imports"].append({
         "From": "inline://dummy",
