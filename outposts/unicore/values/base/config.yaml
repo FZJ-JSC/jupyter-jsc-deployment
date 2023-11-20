@@ -69,6 +69,35 @@ outpostConfig: |-
       raise Exception(f"{spawner._log_name} - Could not find job_description for job {service}")
     
     job_description["Imports"] = []
+    job_description["Environment"] = spawner.get_env()
+    
+    if spawner.internal_ssl:
+      # First add Import files for certificates.
+      # Allows to override them later, if necessary
+      with open(spawner.cert_paths["keyfile"], "r") as file:
+        job_description["Imports"].append({
+          "From": "inline://dummy",
+          "To": "service_cert.key",
+          "Data": f.read()
+        })
+      with open(spawner.cert_paths["certfile"], "r") as file:
+        job_description["Imports"].append({
+          "From": "inline://dummy",
+          "To": "service_cert.crt",
+          "Data": f.read()
+        })
+      with open(spawner.cert_paths["cafile"], "r") as file:
+        cafile = f.read()
+      with open(spawner.internal_trust_bundles['hub-ca'], "r") as file:
+        hubca = f.read()
+      job_description["Imports"].append({
+        "From": "inline://dummy",
+        "To": "notebooks-ca_trust.crt",
+        "Data": cafile + hubca
+      })
+      job_description["Environment"]["JUPYTERHUB_SSL_CERTFILE"] = "service_cert.crt"
+      job_description["Environment"]["JUPYTERHUB_SSL_KEYFILE"] = "service_cert.key"
+      job_description["Environment"]["JUPYTERHUB_SSL_CLIENT_CA"] = "notebooks-ca_trust.crt"
     
     prefix = "input_"
     jhub_prefix = f"{jhub}_input_"
@@ -108,11 +137,16 @@ outpostConfig: |-
               "Data": f.read()
             })
     
-    spawner.log.info(f"{spawner._log_name} - Start job with these input files: {[x.get('To') for x in job_description['Imports']]}")
 
     if partition in system_config[system]["interactive_partitions"]:
       job_description["Job type"] = "on_login_node"
       job_description["Login node"] = system_config[system]["interactive_partitions"][partition]
+
+      # if internal_ssl is used, we don't need the ca variable. We're using the public_api_url, not
+      # the internal one
+      if "JUPYTERHUB_SSL_CLIENT_CA" in job_description["Environment"].keys():
+        del job_description["Environment"]["JUPYTERHUB_SSL_CLIENT_CA"]
+    
     else:
       nodes = user_options["nodes"]
       runtime = user_options["runtime"]
@@ -131,7 +165,11 @@ outpostConfig: |-
         job_description["Resources"]["StartXServer"] = xserver
       if reservation: 
         job_description["Resources"]["Reservation"] = reservation
-      
+    
+    
+
+    spawner.log.info(f"{spawner._log_name} - Start job with these input files: {[x.get('To') for x in job_description['Imports']]}")
+    spawner.log.info(f"{spawner._log_name} - Start job with these environment variables: {list(job_description['Environment'])}")
     return job_description
 
 
