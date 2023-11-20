@@ -25,7 +25,7 @@ outpostConfig: |-
       "subPath": "load_jupyter_version.sh"
     },
     {
-      "name": "modules-common", 
+      "name": "modules-user-3-6", 
       "mountPath": "/tmp/custom/load_jupyter_modules.sh",
       "subPath": "load_jupyter_modules.sh"
     }
@@ -46,10 +46,10 @@ outpostConfig: |-
       }
     },
     {
-      "name": "modules-common",
+      "name": "modules-user-3-6",
       "configMap": {
         "defaultMode": 292,
-        "name": "modules-common"
+        "name": "modules-user-3-6"
       }
     }
   ]
