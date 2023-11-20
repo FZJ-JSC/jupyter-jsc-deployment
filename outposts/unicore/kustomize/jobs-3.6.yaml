@@ -45,6 +45,7 @@ data:
 
     # set env_variables correctly
     set_env () {
+      env > env_before.txt
       echo "$(date) - Set environment variables ..."
       export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
       export PID_PATH=${DIR}/service.pid
@@ -60,7 +61,7 @@ data:
       export CURL_HEADERS="-H \"Authorization: token ${JUPYTERHUB_API_TOKEN}\" -H \"Content-Type: application/json\" -H \"Accept: application/json\""
       export HUB_PROTO="https"
 
-      echo "$(date) - JupyterLab's running on ${HOSTNAME_S}"
+      echo "$(date) - JupyterLab is running on ${HOSTNAME_S}"
       # If this JupyterLab is running on a LoginNode, we'll use the external api url.
       # Otherwise we have to use a LoginNode as Proxy, because there's no internet
       # connection for batch nodes
@@ -89,7 +90,7 @@ data:
         for _ in ${ALL_REMOTE_NODES[@]}
         do
           HTTPCODE=$(curl -X "GET" ${CURL_ARGS} ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api)
-          if [[ ${HTTPCODE} -ge 200 || ${HTTPCODE} -lt 299 ]] ; then
+          if [[ ${HTTPCODE} -ge 200 || ${HTTPCODE} -lt 299 ]]; then
             # Add additional maintenance check
             STATUSOUT=$(curl -s -w '%{http_code}' http://${ALL_REMOTE_NODES[$index]}:9100/metrics)
             STATUSOUTCODE=$(echo "${STATUSOUT}" | tail -n 1)
@@ -137,6 +138,7 @@ data:
       #  cmd line arguments are ignored as in the new implementation of jupyterhub-singleuser
       export JUPYTERHUB_SERVICE_URL=${JUPYTERHUB_SERVICE_URL/:$PREVIOUS_PORT/:$PORT}
       echo "$(date) - Set environment variables done"
+      env > env_after.txt
     }
 
     grace_runtime_kill() {
@@ -186,7 +188,7 @@ data:
           exit 0
         fi
         rm ${HOME}/.${JUPYTERHUB_SERVER_NAME}
-        send_spawn_update 50 "Disk quota checked." "If Jupyter-JSC couldn't create files in ${HOME}, JupyterLab would not be able to start."
+        send_spawn_update 50 "Disk quota checked." "If Jupyter-JSC could not create files in ${HOME}, JupyterLab would not be able to start."
       else
         echo "$(date) - Could not check quota"
       fi
@@ -200,7 +202,7 @@ data:
       echo "$(date) - Pre start ..."
       if [[ -f ${HOME}/.jupyter/pre_jupyter-jsc.sh ]]; then
         echo "$(date) - Pre start if ..."
-        send_spawn_update_warning 60 "Use customized start script." "You're using a customized environment, defined in ${HOME}/.jupyter/pre_jupyter-jsc.sh."
+        send_spawn_update_warning 60 "Use customized start script." "You are using a customized environment, defined in ${HOME}/.jupyter/pre_jupyter-jsc.sh."
         echo "------ pre_jupyter-jsc.sh file ------"
         cat ${HOME}/.jupyter/pre_jupyter-jsc.sh
         echo "------ pre_jupyter-jsc.sh file ------"
@@ -215,12 +217,12 @@ data:
     load_modules () {
       echo "$(date) - Load modules ..."
       if [[ -f ${HOME}/.jupyter/start_jupyter-jsc.sh ]]; then
-        send_spawn_update_warning 70 "Load customized modules ..." "You're using a customized modules script, defined in ${HOME}/.jupyter/start_jupyter-jsc.sh."
+        send_spawn_update_warning 70 "Load customized modules ..." "You are using a customized modules script, defined in ${HOME}/.jupyter/start_jupyter-jsc.sh."
         echo "------ start_jupyter-jsc.sh file ------"
         cat ${HOME}/.jupyter/start_jupyter-jsc.sh
         echo "------ start_jupyter-jsc.sh file ------"
         source ${HOME}/.jupyter/start_jupyter-jsc.sh
-        send_spawn_update_warning 80 "Load customized modules done" "You're using a customized modules script, defined in ${HOME}/.jupyter/start_jupyter-jsc.sh."
+        send_spawn_update_warning 80 "Load customized modules done" "You are using a customized modules script, defined in ${HOME}/.jupyter/start_jupyter-jsc.sh."
       else
         send_spawn_update 70 "Load default modules ..." "Loading Jupyter/2023.3.6 in Stages/2023."
 
@@ -334,10 +336,8 @@ data:
     }
 
     send_event() {
-      BODY=$1
+      BODY=${1//\'/}
       CURL_CMD="curl ${CURL_ARGS} ${CURL_HEADERS} -d '${BODY}' -X \"POST\" ${JUPYTERHUB_EVENTS_URL}"
-      echo "send_event"
-      echo $CURL_CMD
       eval " $CURL_CMD"
     }
 
@@ -348,7 +348,7 @@ data:
       DETAILS=$3
       BODY="{\"progress\": ${PROGRESS}, \"failed\": false, \"html_message\": \"<details><summary>${SUMMARY}</summary>${DETAILS}</details>\"}"
       HTTPCODE=$(send_event "$BODY")
-      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]] ; then
+      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
         echo "$(date) - Could not send status update (${HTTPCODE} - ${PROGRESS}%: ${SUMMARY} - ${DETAILS}). Cancel start."
         exit 1
       else
@@ -363,7 +363,7 @@ data:
       DETAILS=$3
       BODY="{\"progress\": ${PROGRESS}, \"failed\": false, \"html_message\": \"<details><summary><span style=\"color:darkorange;\">${SUMMARY}</span></summary>${DETAILS}</details>\"}"
       HTTPCODE=$(send_event "$BODY")
-      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]] ; then
+      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
         echo "$(date) - Could not send status update (${HTTPCODE} - ${PROGRESS}%: ${SUMMARY} - ${DETAILS}). Cancel start."
         exit 1
       else
@@ -377,7 +377,7 @@ data:
       DETAILS=$2
       BODY="{\"progress\": 100, \"failed\": true, \"html_message\": \"<details><summary>${SUMMARY}</summary>${DETAILS}</details>\"}"
       HTTPCODE=$(send_event "$BODY")
-      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]] ; then
+      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
         echo "$(date) - Could not send fail status update (${HTTPCODE} - ${PROGRESS}%: ${SUMMARY} - ${DETAILS}). Cancel start."
         exit 1
       else
@@ -392,7 +392,7 @@ data:
       CURL_CMD="curl ${CURL_ARGS} ${CURL_HEADERS} -d '${BODY}' -X \"POST\" ${JUPYTERHUB_SETUPTUNNEL_URL}"
       echo "$CURL_CMD"
       HTTPCODE=$(eval " $CURL_CMD")
-      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]] ; then
+      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
         echo "Could not setup tunnel. Cancel start."
         exit 1
       fi
