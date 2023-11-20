@@ -59,7 +59,12 @@ data:
       export HOSTNAME_I=$(hostname -s)i
       export CURL_ARGS="--silent --write-out %{http_code} --output /dev/null"
       export CURL_HEADERS="-H \"Authorization: token ${JUPYTERHUB_API_TOKEN}\" -H \"Content-Type: application/json\" -H \"Accept: application/json\""
-      export HUB_PROTO="https"
+
+      if [[ $JUPYTERHUB_SERVICE_URL == "https"* ]]; then
+        export HUB_PROTO="https"
+      else
+        export HUB_PROTO="http"
+      fi
 
       echo "$(date) - JupyterLab is running on ${HOSTNAME_S}"
       # If this JupyterLab is running on a LoginNode, we'll use the external api url.
@@ -126,17 +131,17 @@ data:
       export JUPYTERHUB_OAUTH_ACCESS_SCOPES=$(cat ${DIR}/.oauth.scopes)
       export JUPYTERHUB_SINGLEUSER_APP="jupyter_server.serverapp.ServerApp"
 
+      export PORT=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
+      # Replace previously defined port as ip and port passed via
+      #  cmd line arguments are ignored as in the new implementation of jupyterhub-singleuser
+      export JUPYTERHUB_SERVICE_URL=${HUB_PROTO}://0.0.0.0:${PORT}${JUPYTERHUB_SERVICE_PREFIX}
+
       if [[ $HUB_PROTO == "https" ]]; then
         export JUPYTERHUB_SSL_KEYFILE="${DIR}/service_cert.key"
         export JUPYTERHUB_SSL_CERTFILE="${DIR}/service_cert.crt"
       fi
 
       export JUPYTERJSC_CMD_ARGS=""
-      PREVIOUS_PORT=${PORT}
-      export PORT=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
-      # Replace previously defined port as ip and port passed via
-      #  cmd line arguments are ignored as in the new implementation of jupyterhub-singleuser
-      export JUPYTERHUB_SERVICE_URL=${JUPYTERHUB_SERVICE_URL/:$PREVIOUS_PORT/:$PORT}
       echo "$(date) - Set environment variables done"
       env > env_after.txt
     }
