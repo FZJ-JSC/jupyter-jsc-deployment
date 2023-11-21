@@ -4,3 +4,7 @@ extraEnvVarsSecrets:
   - outpost-db
 nameOverride: "outpost-unicore"
 fullnameOverride: "outpost-unicore"
+logging:
+  syslog:
+    enabled: true
+    level: 10

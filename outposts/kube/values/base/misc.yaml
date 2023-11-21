@@ -4,3 +4,7 @@ extraEnvVarsSecrets:
   - outpost-db
 nameOverride: "outpost-kube"
 fullnameOverride: "outpost-kube"
+logging:
+  syslog:
+    enabled: true
+    level: 10

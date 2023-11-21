@@ -18,3 +18,7 @@ gunicorn:
   threads: 8
   maxRequests: 200
   maxRequestsJitter: 50
+logging:
+  syslog:
+    enabled: true
+    level: 10

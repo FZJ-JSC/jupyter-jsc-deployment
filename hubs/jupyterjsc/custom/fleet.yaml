@@ -24,3 +24,7 @@ helm:
         #   gitRepoCm: hub-metrics-git-repo
         #   gitTokenSecret: metrics-git-token
         #   dbSecret: hub-generics
+    logging:
+      syslog:
+        enabled: true
+        level: 10
