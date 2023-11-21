@@ -4,7 +4,7 @@ metadata:
   name: uftp
   namespace: outpost
 data:
-  utfp.py: |
+  uftp.py: |
     import json
     import os
     from contextlib import closing
