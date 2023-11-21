@@ -26,5 +26,5 @@ helm:
         #   dbSecret: hub-generics
     logging:
       syslog:
-        enabled: true
+        enabled: false
         level: 10

@@ -20,5 +20,5 @@ gunicorn:
   maxRequestsJitter: 50
 logging:
   syslog:
-    enabled: true
+    enabled: false
     level: 10

@@ -6,5 +6,5 @@ nameOverride: "outpost-unicore"
 fullnameOverride: "outpost-unicore"
 logging:
   syslog:
-    enabled: true
+    enabled: false
     level: 10
