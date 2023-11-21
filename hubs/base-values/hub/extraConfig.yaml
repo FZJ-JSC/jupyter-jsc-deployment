@@ -13,6 +13,7 @@ hub:
       unity_host = "unity-jsc.fz-juelich.de"
 
       ## Misc Hub configs
+      base_url = c.JupyterHub.get("base_url", "/")
       c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
       c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
       c.JupyterHub.hub_connect_url = (
@@ -97,7 +98,7 @@ hub:
       c.JupyterHub.template_vars = {
           "spawn_progress_update_url": "users/progress/events",
           "user_cancel_message": user_cancel_message,
-          "hostname": jhub_hostname,
+          "hostname": jhub_hostname
       }
       c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
 
@@ -168,7 +169,7 @@ hub:
           f"https://{unity_host}/jupyter-oauth2-as/oauth2-authz"
       )
       c.CustomGenericOAuthenticator.oauth_callback_url = (
-          f"https://{jhub_hostname}/hub/oauth_callback"
+          f"https://{jhub_hostname}{base_url}hub/oauth_callback"
       )
       c.CustomGenericOAuthenticator.token_url = (
           f"https://{unity_host}/jupyter-oauth2/token"
@@ -208,7 +209,7 @@ hub:
       c.CustomJSCSpawner.request_headers = jsc_custom.spawner.request_headers
       c.CustomJSCSpawner.request_kwargs = jsc_custom.spawner.request_kwargs
       c.CustomJSCSpawner.request_url = jsc_custom.spawner.request_url
-      c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}/hub/api"
+      c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}{base_url}hub/api"
       c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_env
       # c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_misc
 
