@@ -1,3 +1,4 @@
 resources:
+  - uftp.yaml
   - modules-3.6.yaml
   - modules-user-3.6.yaml

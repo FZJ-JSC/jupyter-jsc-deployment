@@ -8,50 +8,78 @@ outpostConfig: |-
 
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
+
+  def get_profile_volume_mounts(profile):
+    common_mounts = [
+        {
+            "name": "nfs-software", 
+            "mountPath": "/p/software/jsccloud", 
+            "readOnly": True
+        },
+        {
+            "name": "uftp", 
+            "mountPath": "/tmp/custom/uftp.py",
+            "subPath": "uftp.py"
+        }
+    ]
+    profile_mounts = [
+       {
+            "name": f"modules-{profile}", 
+            "mountPath": "/tmp/custom/load_jupyter_version.sh", 
+            "subPath": "load_jupyter_version.sh"
+        },
+        {
+            "name": f"modules-user-{profile}", 
+            "mountPath": "/tmp/custom/load_jupyter_modules.sh",
+            "subPath": "load_jupyter_modules.sh"
+        } 
+    ]
+    return common_mounts + profile_mounts
+  
+
+    def get_profile_volumes(profile):
+        common_volumes = [
+            {
+                "name": "nfs-software", 
+                "hostPath": {
+                    "path": "/p/software/jsccloud", 
+                    "type": ""
+                }
+            },
+            {
+                "name": "uftp", 
+                "configMap": {
+                    "defaultMode": 292,
+                    "name": "uftp"
+                }
+            }
+        ]
+        profile_volumes = [
+          {
+                "name": f"modules-{profile}", 
+                "configMap": {
+                    "defaultMode": 292,
+                    "name": f"modules-{profile}"
+                }
+            },
+            {
+                "name": f"modules-user-{profile}", 
+                "configMap": {
+                    "defaultMode": 292,
+                    "name": f"modules-user-{profile}"
+                }
+            } 
+        ]
+        return common_volumes + profile_volumes
+
+
   c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.1-2"
+  c.KubeSpawner.image_pull_policy = "Always"
   c.KubeSpawner.node_selector = {"usernode": "true"}
   c.KubeSpawner.tolerations = [
     {"key": "usernode", "value": "true", "effect": "NoExecute"}
   ]  
-  c.KubeSpawner.volume_mounts = [
-    {
-      "name": "nfs-software", 
-      "mountPath": "/p/software/jsccloud", 
-      "readOnly": True
-    },
-    {
-      "name": "modules-3-6", 
-      "mountPath": "/tmp/custom/load_jupyter_version.sh", 
-      "subPath": "load_jupyter_version.sh"
-    },
-    {
-      "name": "modules-user-3-6", 
-      "mountPath": "/tmp/custom/load_jupyter_modules.sh",
-      "subPath": "load_jupyter_modules.sh"
-    }
-  ]
-  c.KubeSpawner.volumes = [
-    {
-      "name": "nfs-software", 
-      "hostPath": {
-        "path": "/p/software/jsccloud", 
-        "type": ""
-      }
-    },
-    {
-      "name": "modules-3-6",
-      "configMap": {
-        "defaultMode": 292,
-        "name": "modules-3-6"
-      }
-    },
-    {
-      "name": "modules-user-3-6",
-      "configMap": {
-        "defaultMode": 292,
-        "name": "modules-user-3-6"
-      }
-    }
-  ]
+  c.KubeSpawner.volume_mounts = get_profile_volume_mounts("3-6")
+  c.KubeSpawner.volumes = get_profile_volumes("3-6")
 
 
