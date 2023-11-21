@@ -6,6 +6,8 @@ hub:
       name: tunnel_list_servers
     tunnelrestart:
       name: tunnel_restart_nodes
+    hpcupdate:
+      name: hpcinfos_update
   loadRoles:
     tunnel_list:
       name: "tunnel_list_servers-role"
@@ -21,6 +23,13 @@ hub:
         - "custom:sshnode:restart"
       services:
         - "tunnel_restart_nodes"
+    hpcinfos_update:
+      name: "hpcinfos_update-role"
+      description: "Update hpc infos for each user"
+      scopes:
+        - "custom:hpcinfos:update"
+      services:
+        - "hpcinfos_update"
     read_metrics:
       name: read-metrics
       description: Access to metrics information

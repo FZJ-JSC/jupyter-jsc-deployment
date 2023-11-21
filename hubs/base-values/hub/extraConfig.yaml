@@ -26,6 +26,9 @@ hub:
           },
           "custom:sshnode:restart": {
               "description": "Restart port forward processes, when a proxy node was restarted"
+          },
+          "custom:hpcinfos:update": {
+              "description": "Update hpc infos for each user"
           }
       }
 
