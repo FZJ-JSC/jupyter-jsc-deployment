@@ -73,7 +73,6 @@ data:
       if [[ ${HOSTNAME_S} == "<hostname_base>"* ]]; then
         # LoginNode
         # This is the internal jupyterhub certificate, only used when connecting through proxy on login node
-        unset JUPYTERHUB_SSL_CLIENT_CA
         export SSH_NODE=${HOSTNAME_I}
         echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub. Jump node for tunnel: ${SSH_NODE}"
       else
@@ -124,6 +123,8 @@ data:
           export JUPYTERHUB_SSL_CLIENT_CA="${DIR}/service_ca.crt"
         fi
         export JUPYTERHUB_ACTIVITY_URL=${JUPYTERHUB_ACTIVITY_URL/${PREVIOUS_API_URL}/${JUPYTERHUB_API_URL}}
+        export JUPYTERHUB_EVENTS_URL=${JUPYTERHUB_EVENTS_URL/${PREVIOUS_API_URL}/${JUPYTERHUB_API_URL}}
+        export JUPYTERHUB_SETUPTUNNEL_URL=${JUPYTERHUB_SETUPTUNNEL_URL/${PREVIOUS_API_URL}/${JUPYTERHUB_API_URL}}
       fi
 
       export JUPYTERHUB_API_TOKEN=$(cat ${DIR}/.jupyter.token)
@@ -446,35 +447,3 @@ data:
     update_config
     load_project_specific_kernel
     start
-
-
-
-    # export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
-    # export JUPYTERHUB_API_TOKEN=$(cat ${DIR}/jupyter.token)
-    # export JUPYTERHUB_OAUTH_SCOPES=$(cat ${DIR}/.oauth.scopes)
-    # export JUPYTERHUB_OAUTH_ACCESS_SCOPES=$(cat ${DIR}/.oauth.scopes)
-    # curl --write-out %{http_code} -X "POST" -H "Authorization: token $JUPYTERHUB_API_TOKEN" -d '{"progress": "30", "html_message": "Setup tunnel..."}' ${JUPYTERHUB_EVENTS_URL}
-    # PORT=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
-    # SSH_NODE="jusuf1.fz-juelich.de"
-    # INTERN_NODE=$(hostname -s)i
-    # echo "$(date) - send request to ${JUPYTERHUB_SETUPTUNNEL_URL}"
-    # echo "$(date) - 1st .. = $SSH_NODE"
-    # echo "$(date) - 2nd .. = $INTERN_NODE"
-    # echo "curl -s --write-out %{http_code} --output /dev/null -X \"POST\" -H \"Authorization: token $JUPYTERHUB_API_TOKEN\" -d '{\"ssh_node\": \"${SSH_NODE}\", \"service\": \"${INTERN_NODE}:${PORT}\"}' ${JUPYTERHUB_SETUPTUNNEL_URL}"
-    # #curl -s --write-out %{http_code} --output /dev/null -X "POST" -H "Authorization: token $JUPYTERHUB_API_TOKEN" -d '{"ssh_node": "'"${SSH_NODE}"'", "service": "'"${INTERN_NODE}:${PORT}"'"}' ${JUPYTERHUB_SETUPTUNNEL_URL}
-    # curl --write-out %{http_code} -X "POST" -H "Authorization: token $JUPYTERHUB_API_TOKEN" -d '{"ssh_node": "'"${SSH_NODE}"'", "service": "'"${INTERN_NODE}:${PORT}"'"}' ${JUPYTERHUB_SETUPTUNNEL_URL}
-    # curl --write-out %{http_code} -X "POST" -H "Authorization: token $JUPYTERHUB_API_TOKEN" -d '{"progress": "30", "html_message": "Setup tunnel ... done"}' ${JUPYTERHUB_EVENTS_URL}
-    # echo "$(date) - load modules"
-    # curl --write-out %{http_code} -X "POST" -H "Authorization: token $JUPYTERHUB_API_TOKEN" -d '{"progress": "60", "html_message": "Load modules ..."}' ${JUPYTERHUB_EVENTS_URL}
-    # module purge
-    # module load Stages/2023 GCCcore/.11.3.0 Python JupyterLab/2023.3.6
-    # curl --write-out %{http_code} -X "POST" -H "Authorization: token $JUPYTERHUB_API_TOKEN" -d '{"progress": "60", "html_message": "Load modules ... done"}' ${JUPYTERHUB_EVENTS_URL}
-    # export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
-    # export JUPYTERHUB_ACTIVITY_URL=${JUPYTERHUB_API_URL}/users/${JUPYTERHUB_USER}/activity
-    # export JUPYTERHUB_API_TOKEN=$(cat ${DIR}/jupyter.token)
-    # export JUPYTERHUB_OAUTH_SCOPES=$(cat ${DIR}/.oauth.scopes)
-    # export JUPYTERHUB_OAUTH_ACCESS_SCOPES=$(cat ${DIR}/.oauth.scopes)
-    # sed -i -e "s|_port_|${PORT}|g" -e "s|_home_|${HOME}|g" ${DIR}/config.py
-    # echo "$(date) - start jupyterhub-singleuser"
-    # curl --write-out %{http_code} -X "POST" -H "Authorization: token $JUPYTERHUB_API_TOKEN" -d '{"progress": "95", "html_message": "Start JupyterLab"}' ${JUPYTERHUB_EVENTS_URL}
-    # timeout 10m jupyterhub-singleuser --config ${DIR}/config.py
