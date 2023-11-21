@@ -17,4 +17,4 @@ targetCustomizations:
     helm:
       values:
         image:
-          tag: 0.4.3
+          tag: 0.6.1
