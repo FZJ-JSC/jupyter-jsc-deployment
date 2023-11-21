@@ -15,6 +15,7 @@ hub:
       ## Misc Hub configs
       base_url = c.JupyterHub.get("base_url", "/")
       c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
+      c.JupyterHub.default_url = f"{base_url}hub/home"
       c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
       c.JupyterHub.hub_connect_url = (
           f'https://{jupyterhub_host}:{get_name_env("hub", "_SERVICE_PORT")}'
