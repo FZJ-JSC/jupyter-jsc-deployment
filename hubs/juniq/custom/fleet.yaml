@@ -1,0 +1,31 @@
+defaultNamespace: jupyter
+labels:
+  app: juniq
+  component: custom
+helm:
+  releaseName: juniq-custom
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyter-hub-customizations
+  version: 0.2.5
+  values:
+    fullnameOverride: juniq-custom
+    hub:
+      name: juniq
+      namespace: jupyter
+      hostname: zam12065.zam.kfa-juelich.de
+      loggerName: JSCCloudJUNIQ
+      baseUrl: "/juniq/"
+    ingress:
+      enabled: true
+    jupyter-metrics:
+      enabled: false
+      jobs: []
+        # - name: vanilla
+        #   namespace: jupyter
+        #   gitRepoCm: hub-metrics-git-repo
+        #   gitTokenSecret: metrics-git-token
+        #   dbSecret: hub-generics
+    logging:
+      syslog:
+        enabled: false
+        level: 10
