@@ -237,6 +237,7 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        replicas: 2
         resources:
           requests:
             cpu: 100m
