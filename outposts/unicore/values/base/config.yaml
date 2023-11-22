@@ -174,7 +174,7 @@ outpostConfig: |-
     return job_description
 
 
-  additional_replacements = {
+  additional_replacements_base = {
     "system": {
       "JUWELS": {
         "hostname_base": "jwlogin",
@@ -201,16 +201,52 @@ outpostConfig: |-
         "hostname_cpulimit": "login|vis",
         "hostname_all": "'deepv'"
       }
-    },
-    "job": {
-      "job-1": {
-          "version": "1.0.0"
+    }
+  }
+
+  stage_system_replacements = {
+    "production": {
+      "JUWELS": {
+        "remote_port": "25182",
       },
-      "job-2": {
-          "version": "1.1.0"
+      "JURECA": {
+        "remote_port": "25182",
+      },
+      "JUSUF": {
+        "remote_port": "25182",
+      },
+      "HDFML": {
+        "remote_port": "25182",
+      },
+      "DEEP": {
+        "remote_port": "25182",
+      }
+    },
+    "staging": {
+      "JUWELS": {
+        "remote_port": "25182",
+      },
+      "JURECA": {
+        "remote_port": "25182",
+      },
+      "JUSUF": {
+        "remote_port": "25182",
+      },
+      "HDFML": {
+        "remote_port": "25182",
+      },
+      "DEEP": {
+        "remote_port": "25182",
       }
     }
   }
+
+  async def additional_replacements(spawner):
+    stage = os.environ.get("STAGE", "undefined")
+    system = spawner.user_options.get("system", "undefined")
+    ret = additional_replacements_base.copy()
+    ret["system"][system].update(stage_system_replacements.get(stage, {}).get(system, {}))
+    return ret
 
   system_config = {
     "JURECA": {
