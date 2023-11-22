@@ -73,7 +73,7 @@ outpostConfig: |-
       return common_volumes + profile_volumes
 
 
-  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.1-2"
+  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.2"
   c.KubeSpawner.image_pull_policy = "Always"
   c.KubeSpawner.node_selector = {"usernode": "true"}
   c.KubeSpawner.tolerations = [
