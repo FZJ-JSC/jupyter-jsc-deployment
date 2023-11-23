@@ -93,12 +93,12 @@ outpostConfig: |-
         hubca = f.read()
       job_description["Imports"].append({
         "From": "inline://dummy",
-        "To": "notebooks-ca_trust.crt",
+        "To": "service_ca.crt",
         "Data": cafile + hubca
       })
       job_description["Environment"]["JUPYTERHUB_SSL_CERTFILE"] = "service_cert.crt"
       job_description["Environment"]["JUPYTERHUB_SSL_KEYFILE"] = "service_cert.key"
-      job_description["Environment"]["JUPYTERHUB_SSL_CLIENT_CA"] = "notebooks-ca_trust.crt"
+      job_description["Environment"]["JUPYTERHUB_SSL_CLIENT_CA"] = "service_ca.crt"
     
     prefix = "input_"
     jhub_prefix = f"{jhub}_input_"
@@ -143,11 +143,10 @@ outpostConfig: |-
       job_description["Job type"] = "on_login_node"
       job_description["Login node"] = system_config[system]["interactive_partitions"][partition]
 
-      # if internal_ssl is used, we don't need the ca variable. We're using the public_api_url, not
-      # the internal one
+      # if internal_ssl is usedon login node, we don't need the ca variable. 
+      # We're using the public_api_url, not the internal one
       if "JUPYTERHUB_SSL_CLIENT_CA" in job_description["Environment"].keys():
-        del job_description["Environment"]["JUPYTERHUB_SSL_CLIENT_CA"]
-    
+        del job_description["Environment"]["JUPYTERHUB_SSL_CLIENT_CA"]    
     else:
       nodes = user_options["nodes"]
       runtime = user_options["runtime"]

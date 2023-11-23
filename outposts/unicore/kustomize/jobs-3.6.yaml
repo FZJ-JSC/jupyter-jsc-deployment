@@ -119,9 +119,6 @@ data:
             exit 1
           fi
         done
-        if [[ $HUB_PROTO == "https" ]]; then
-          export JUPYTERHUB_SSL_CLIENT_CA="${DIR}/service_ca.crt"
-        fi
         export JUPYTERHUB_ACTIVITY_URL=${JUPYTERHUB_ACTIVITY_URL/${PREVIOUS_API_URL}/${JUPYTERHUB_API_URL}}
         export JUPYTERHUB_EVENTS_URL=${JUPYTERHUB_EVENTS_URL/${PREVIOUS_API_URL}/${JUPYTERHUB_API_URL}}
         export JUPYTERHUB_SETUPTUNNEL_URL=${JUPYTERHUB_SETUPTUNNEL_URL/${PREVIOUS_API_URL}/${JUPYTERHUB_API_URL}}
