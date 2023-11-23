@@ -79,7 +79,7 @@ data:
         # batch node, no internet connection to the outside world
         export PREVIOUS_API_URL=${JUPYTERHUB_API_URL}
         export REMOTE_PORT="<remote_port>"
-        export JUPYTERHUB_CERTIFICATE="${DIR}/notebooks-ca_trust.crt"
+        export JUPYTERHUB_CERTIFICATE="${DIR}/service_ca.crt"
 
         if [[ $HUB_PROTO == "https" ]]; then
           export CURL_ARGS="${CURL_ARGS} --cacert ${JUPYTERHUB_CERTIFICATE}"
