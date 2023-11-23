@@ -367,7 +367,7 @@ data:
       PROGRESS=$1
       SUMMARY=$2
       DETAILS=$3
-      BODY="{\"progress\": ${PROGRESS}, \"failed\": false, \"html_message\": \"<details><summary><span style=\"color:darkorange;\">${SUMMARY}</span></summary>${DETAILS}</details>\"}"
+      BODY="{\"progress\": ${PROGRESS}, \"failed\": false, \"html_message\": \"<details><summary><span style=\'color:darkorange;\'>${SUMMARY}</span></summary>${DETAILS}</details>\"}"
       HTTPCODE=$(send_event "$BODY")
       if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
         echo "$(date) - Could not send status update (${HTTPCODE} - ${PROGRESS}%: ${SUMMARY} - ${DETAILS}). Cancel start."
