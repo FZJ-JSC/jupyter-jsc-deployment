@@ -83,7 +83,7 @@ data:
 
         if [[ $HUB_PROTO == "https" ]]; then
           export CURL_ARGS="${CURL_ARGS} --cacert ${JUPYTERHUB_CERTIFICATE}"
-          export JUPYTERHUB_SSL_CA_FILE="${JUPYTERHUB_CERTIFICATE}"
+          export JUPYTERHUB_SSL_CLIENT_CA="${JUPYTERHUB_CERTIFICATE}"
         fi
 
         # Look for random LoginNode to use it as proxy
