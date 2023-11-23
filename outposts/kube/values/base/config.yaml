@@ -24,7 +24,8 @@ outpostConfig: |-
       }
   }
 
-  c.KubeSpawner.delete_grace_period = 5
+  # Might need longer delete grace periods for unmounting in production
+  # c.KubeSpawner.delete_grace_period = 5
   c.KubeSpawner.lifecycle_hooks = {
       "preStop": {
           "exec": {
