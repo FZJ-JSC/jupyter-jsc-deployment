@@ -104,7 +104,15 @@ outpostConfig: |-
       return common_volumes + profile_volumes
 
 
-  c.KubeSpawner.volume_mounts = get_profile_volume_mounts("3-6")
-  c.KubeSpawner.volumes = get_profile_volumes("3-6")
+  c.KubeSpawner.profile_list = [
+      {
+          "display_name": "JupyterLab - 3.6",
+          "slug": "JupyterLab/3.6",
+          "kubespawner_override": {
+              "volume_mounts": get_profile_volume_mounts("3-6"),
+              "volumes": get_profile_volumes("3-6")
+          }
+      }
+  ]
 
 
