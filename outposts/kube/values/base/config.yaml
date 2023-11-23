@@ -36,8 +36,8 @@ outpostConfig: |-
 
   c.KubeSpawner.cpu_guarantee = 0.1
   c.KubeSpawner.cpu_limit = 2
-  c.KubeSpawner.mem_guarantee = "537M"
-  c.KubeSpawner.mem_limit = "4205M"
+  c.KubeSpawner.mem_guarantee = "512M"
+  c.KubeSpawner.mem_limit = "4096M"
 
 
   def get_profile_volume_mounts(profile):
