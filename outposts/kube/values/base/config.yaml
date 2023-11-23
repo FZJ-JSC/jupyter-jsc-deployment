@@ -28,7 +28,7 @@ outpostConfig: |-
   c.KubeSpawner.lifecycle_hooks = {
       "preStop": {
           "exec": {
-              "command": ["/bin/sh", "-c", "umount /mnt/B2DROP && umount /mnt/JUST_HOME"]
+              "command": ["/bin/sh", "-c", "kill $(ps x | grep '[t]imeout .* jupyterhub-singleuser' | awk '{print $1}')"]
           }
       }
   }
