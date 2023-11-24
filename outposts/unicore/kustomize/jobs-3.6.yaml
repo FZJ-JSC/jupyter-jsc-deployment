@@ -73,6 +73,7 @@ data:
       if [[ ${HOSTNAME_S} == "<hostname_base>"* ]]; then
         # LoginNode
         # This is the internal jupyterhub certificate, only used when connecting through proxy on login node
+        unset JUPYTERHUB_SSL_CLIENT_CA
         export SSH_NODE=${HOSTNAME_I}
         echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub. Jump node for tunnel: ${SSH_NODE}"
       else
