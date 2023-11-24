@@ -214,7 +214,7 @@ hub:
 
       async def custom_env(spawner, user_options, jupyterhub_api_url):
           env = {}
-          custom_config = get_custom_config()
+          custom_config = jsc_custom.misc.get_custom_config()
           for module_type, modules in custom_config.get("userModules", {}).items():
               for module in modules:
                   env[f"JUPYTER_MODULE_{module.upper()}_ENABLED"] = int(
