@@ -37,6 +37,8 @@ outpostConfig: |-
 
   c.JupyterHubOutpost.sanitize_start_response = sanitize_start_response
 
+  c.JupyterHubOutpost.send_event = False
+
   c.JupyterHubOutpost.spawner_class = UnicoreSpawner
 
   async def job_description(spawner, user_options):
