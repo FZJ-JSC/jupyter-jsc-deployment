@@ -211,7 +211,23 @@ hub:
       c.CustomJSCSpawner.request_kwargs = jsc_custom.spawner.request_kwargs
       c.CustomJSCSpawner.request_url = jsc_custom.spawner.request_url
       c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}{base_url}hub/api"
-      c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_env
+
+      async def custom_env(spawner, user_options, jupyterhub_api_url):
+          env = {}
+          custom_config = get_custom_config()
+          for module_type, modules in custom_config.get("userModules", {}).items():
+              for module in modules:
+                  env[f"JUPYTER_MODULE_{module.upper()}_ENABLED"] = int(
+                      module in spawner.user_options.get("userModules", [])
+                  )
+          system = user_options.get("system", "")
+          if system in ["JSC-Cloud"]:
+              env[
+                  "JUPYTERHUB_FLAVORS_UPDATE_URL"
+              ] = f"{jupyterhub_api_url.rstrip('/')}/outpostflavors/{system}"
+          return env
+
+      c.CustomJSCSpawner.custom_env = custom_env
       # c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_misc
 
       helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
