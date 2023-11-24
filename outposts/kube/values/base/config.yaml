@@ -8,6 +8,38 @@ outpostConfig: |-
 
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
+  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.2"
+  c.KubeSpawner.image_pull_policy = "Always"
+  c.KubeSpawner.node_selector = {"usernode": "true"}
+  c.KubeSpawner.tolerations = [
+      {"key": "usernode", "value": "true", "effect": "NoExecute"}
+  ]
+
+  c.KubeSpawner.fs_gid = 100
+  c.KubeSpawner.container_security_context = {
+      "allowPrivilegeEscalation": True,
+      "privileged": True,
+      "capabilities": {
+          "add": ["CAP_SYS_ADMIN"]
+      }
+  }
+
+  # Might need longer delete grace periods for unmounting in production
+  # c.KubeSpawner.delete_grace_period = 5
+  c.KubeSpawner.lifecycle_hooks = {
+      "preStop": {
+          "exec": {
+              "command": ["/bin/sh", "-c", "kill $(ps x | grep '[t]imeout .* jupyterhub-singleuser' | awk '{print $1}')"]
+          }
+      }
+  }
+  c.KubeSpawner.delete_stopped_pods = False
+
+  c.KubeSpawner.cpu_guarantee = 0.1
+  c.KubeSpawner.cpu_limit = 2
+  c.KubeSpawner.mem_guarantee = "512M"
+  c.KubeSpawner.mem_limit = "4096M"
+
 
   def get_profile_volume_mounts(profile):
       common_mounts = [
@@ -73,13 +105,15 @@ outpostConfig: |-
       return common_volumes + profile_volumes
 
 
-  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.2"
-  c.KubeSpawner.image_pull_policy = "Always"
-  c.KubeSpawner.node_selector = {"usernode": "true"}
-  c.KubeSpawner.tolerations = [
-    {"key": "usernode", "value": "true", "effect": "NoExecute"}
-  ]  
-  c.KubeSpawner.volume_mounts = get_profile_volume_mounts("3-6")
-  c.KubeSpawner.volumes = get_profile_volumes("3-6")
+  c.KubeSpawner.profile_list = [
+      {
+          "display_name": "JupyterLab - 3.6",
+          "slug": "JupyterLab/3.6",
+          "kubespawner_override": {
+              "volume_mounts": get_profile_volume_mounts("3-6"),
+              "volumes": get_profile_volumes("3-6")
+          }
+      }
+  ]
 
 
