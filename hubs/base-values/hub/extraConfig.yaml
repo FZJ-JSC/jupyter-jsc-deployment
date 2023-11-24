@@ -31,6 +31,9 @@ hub:
           },
           "custom:hpcinfos:update": {
               "description": "Update hpc infos for each user"
+          },
+          "custom:outpostflavors:set": {
+              "description": "Update used flavors in backends"
           }
       }
 

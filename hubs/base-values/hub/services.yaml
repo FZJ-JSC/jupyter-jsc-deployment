@@ -8,6 +8,8 @@ hub:
       name: tunnel_restart_nodes
     hpcupdate:
       name: hpcinfos_update
+    outpostflavors:
+      name: outpost_flavors
   loadRoles:
     tunnel_list:
       name: "tunnel_list_servers-role"
@@ -30,6 +32,13 @@ hub:
         - "custom:hpcinfos:update"
       services:
         - "hpcinfos_update"
+    outpost_flavors:
+      name: "outpost_flavors-role"
+      description: "Update usage of flavors in outpost"
+      scopes:
+        - "custom:outpostflavors:set"
+      services:
+        - "outpost_flavors"
     read_metrics:
       name: read-metrics
       description: Access to metrics information
