@@ -91,10 +91,10 @@ outpostConfig: |-
 
       def copy_dir(src, dst):
           shutil.copytree(src=src, dst=dst)
-              for dirpath, dirnames, filenames in os.walk(dst):
-                  shutil.chown(dirpath, userhome_uid, userhome_gid)
-                  for filename in filenames:
-                      shutil.chown(os.path.join(dirpath, filename), userhome_uid, userhome_gid)
+          for dirpath, dirnames, filenames in os.walk(dst):
+              shutil.chown(dirpath, userhome_uid, userhome_gid)
+              for filename in filenames:
+                  shutil.chown(os.path.join(dirpath, filename), userhome_uid, userhome_gid)
 
       if not os.path.exists(userhome_dir):
           spawner.log.info(f"{spawner._log_name} - Create home directory {userhome_dir}")
