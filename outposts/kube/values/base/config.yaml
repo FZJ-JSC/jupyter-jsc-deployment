@@ -1,14 +1,13 @@
 outpostConfig: |-
+  import logging
   import os
   import shutil
 
   from kubespawner import KubeSpawner
 
-
   class HealthCheckFilter(logging.Filter):
       def filter(self, record: logging.LogRecord) -> bool:
           return record.getMessage().find("/ping") == -1
-
 
   # Remove health from application server logs
   logging.getLogger("uvicorn.access").addFilter(HealthCheckFilter()) 
@@ -22,7 +21,6 @@ outpostConfig: |-
       if not token:
           raise Exception(f"Flavor auth token for {jupyterhub_name} not configured.")
       return token
-
 
   async def flavors(jupyterhub_name):
       if jupyterhub_name == "jupyterjsc":
