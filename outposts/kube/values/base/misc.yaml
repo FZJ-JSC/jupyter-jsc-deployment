@@ -12,8 +12,7 @@ extraVolumes:
   - name: nfs-userhomes
     hostPath:
       path: /p/home/jusers
-      type: DirectoryOrCreate
+      type: ''
 extraVolumeMounts:
   - name: nfs-userhomes
     mountPath: /p/home/jusers
-    readOnly: false
