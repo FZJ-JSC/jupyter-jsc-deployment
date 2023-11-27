@@ -81,7 +81,9 @@ outpostConfig: |-
       userhome_gid = 1000
 
       if not os.path.exists(userhome_dir):
-          spawner.log.info(f"Create home directory {userhome_dir}")
+          spawner.log.info(f"{spawner._log_name} - Create home directory {userhome_dir}")
+          spawner.log.info(f"{spawner._log_name} - Skeleton dir: {userhome_skel}")
+          spawner.log.info(f"{spawner._log_name} - user_options: {spawner.user_options}")
           os.makedirs(userhome_skel, exist_ok=True)
           shutil.copytree(src=userhome_skel, dst=userhome_dir)
           for dirpath, dirnames, filenames in os.walk(userhome_dir):
