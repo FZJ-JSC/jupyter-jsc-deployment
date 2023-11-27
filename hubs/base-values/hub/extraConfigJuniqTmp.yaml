@@ -1,0 +1,297 @@
+hub:
+  extraConfig:
+    customConfig: |-
+      import logging
+      import os
+      import jsc_custom
+
+      ## Generic information
+      app_name_dash = get_name("fullname-dash")
+      app_name_dash_hub = get_name("hub")
+      namespace = os.environ.get("POD_NAMESPACE", "default")
+      jupyterhub_host = get_name("hub")
+      unity_host = "unity-jsc.fz-juelich.de"
+
+      ## Misc Hub configs
+      base_url = c.JupyterHub.get("base_url", "/")
+      c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
+      c.JupyterHub.default_url = f"{base_url}hub/home"
+      c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
+      c.JupyterHub.hub_connect_url = (
+          f'https://{jupyterhub_host}:{get_name_env("hub", "_SERVICE_PORT")}'
+      )
+      c.JupyterHub.tornado_settings = {'slow_spawn_timeout': 0, 'slow_stop_timeout': 20, 'static_path': '/mnt/shared-data/share/jupyterhub/static'}
+
+      c.JupyterHub.custom_scopes = {
+          "custom:servers:list": {
+              "description": "List all user-id and name of all running servers",
+          },
+          "custom:sshnode:restart": {
+              "description": "Restart port forward processes, when a proxy node was restarted"
+          },
+          "custom:hpcinfos:update": {
+              "description": "Update hpc infos for each user"
+          },
+          "custom:outpostflavors:set": {
+              "description": "Update used flavors in backends"
+          }
+      }
+
+      ## Logging
+      c.JupyterHub.log_level = 10
+      jhub_hostname = jsc_custom.spawner.jhub_hostname()
+
+      class AppLogLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if str(record.msg).startswith("Authenticated with token"):
+                  return False
+              if record.filename in ["scopes.py"]:
+                  return False
+              if str(record.msg).startswith("Failed to connect to"):
+                  return False
+              return True
+
+      class AccessLogLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if record.funcName in ["log_request"]:
+                  return False
+              return True
+
+      class JupyterHubLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if str(record.msg).startswith("Refreshing auth for"):            
+                  return False
+              return True
+
+      class TornadoGeneralLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if str(record.msg).startswith("Could not open static file"):
+                  return False
+              return True
+
+      # available usual logger keys:
+      # "JupyterHub", "tornado", "tornado.application", "tornado.access", "tornado.general", "oauthlib"
+      logging_filter_classes = {
+          "tornado.application": AppLogLoggingFilter,
+          "tornado.access": AccessLogLoggingFilter,
+          "JupyterHub": JupyterHubLoggingFilter,
+          "tornado.general": TornadoGeneralLoggingFilter
+      }
+      all_loggers = {name: logging.getLogger(name) for name in logging.root.manager.loggerDict if name in logging_filter_classes.keys()}
+      all_loggers_true = {name: logging.getLogger(name) for name in logging.root.manager.loggerDict}
+      for key, value in logging_filter_classes.items():
+          all_loggers[key].addFilter(value())
+
+
+      logged_logger_name = os.environ.get("LOGGER_NAME", "JupyterHubDev")
+      c.JupyterHub.log_format = f"%(color)s[%(levelname)1.1s %(asctime)s.%(msecs).03d {logged_logger_name} %(name)s %(module)s:%(lineno)d]%(end_color)s %(message)s"
+
+
+      ## Database
+      db_host = os.environ.get("SQL_HOST")
+      db_port = os.environ.get("SQL_PORT")
+      db_user = os.environ.get("SQL_USER")
+      db_password = os.environ.get("SQL_PASSWORD")
+      db_database = os.environ.get("SQL_DATABASE")
+      c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
+      # juypterhub upgrade-db
+      #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE 
+      ## Static files + Templates
+      from forwardbasespawner.api_events import user_cancel_message
+      c.JupyterHub.template_paths = ["/mnt/shared-data-2/share/jupyterhub/templates"]
+      c.JupyterHub.template_vars = {
+          "spawn_progress_update_url": "users/progress/events",
+          "user_cancel_message": user_cancel_message,
+          "hostname": jhub_hostname
+      }
+      c.JupyterHub.data_files_path = "/mnt/shared-data-2/share/jupyterhub/static"
+
+      ## SSL
+      c.JupyterHub.trusted_alt_names = [
+          f"DNS:{app_name_dash_hub}",
+          f"DNS:{app_name_dash}proxy-public",
+          f"DNS:{app_name_dash}proxy-public.{namespace}.svc",
+          f"DNS:{jhub_hostname}",
+          "DNS:jrlogin01i",
+          "DNS:jrlogin02i",
+          "DNS:jrlogin03i",
+          "DNS:jrlogin04i",
+          "DNS:jrlogin05i",
+          "DNS:jrlogin06i",
+          "DNS:jrlogin07i",
+          "DNS:jrlogin08i",
+          "DNS:jrlogin09i",
+          "DNS:jrlogin10i",
+          "DNS:jrlogin11i",
+          "DNS:jrlogin12i",
+          "DNS:jrlogin13i",
+          "DNS:jrlogin14i",
+          "DNS:jwlogin00i",
+          "DNS:jwlogin01i",
+          "DNS:jwlogin02i",
+          "DNS:jwlogin03i",
+          "DNS:jwlogin04i",
+          "DNS:jwlogin05i",
+          "DNS:jwlogin06i",
+          "DNS:jwlogin07i",
+          "DNS:jwlogin08i",
+          "DNS:jwlogin09i",
+          "DNS:jwlogin10i",
+          "DNS:jwlogin11i",
+          "DNS:jwvis00i",
+          "DNS:jwvis01i",
+          "DNS:jwvis02i",
+          "DNS:jwvis03i",
+          "DNS:jwlogin21i",
+          "DNS:jwlogin22i",
+          "DNS:jwlogin23i",
+          "DNS:jwlogin24i",
+          "DNS:hdfmll01i",
+          "DNS:hdfmll02i",
+          "DNS:deepv",
+          "DNS:jsfl01i",
+          "DNS:jsfl02i",
+          "DNS:jsfl03i",
+          "DNS:jsfl04i",
+      ]
+
+
+
+      ## Authenticator
+      c.JupyterHub.authenticator_class = jsc_custom.authenticator.CustomGenericOAuthenticator
+      c.Authenticator.admin_users = {
+          'a.grosch_at_fz-juelich.de', 
+          't.kreuzer_at_fz-juelich.de',
+      }
+
+      c.CustomGenericOAuthenticator.manage_groups = True
+      c.CustomGenericOAuthenticator.enable_auth_state = True
+      c.CustomGenericOAuthenticator.refresh_pre_spawn = True
+      c.CustomGenericOAuthenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
+      c.CustomGenericOAuthenticator.client_secret = os.environ.get("OAUTH_CLIENT_SECRET")
+      c.CustomGenericOAuthenticator.authorize_url = (
+          f"https://{unity_host}/jupyter-oauth2-as/oauth2-authz"
+      )
+      c.CustomGenericOAuthenticator.oauth_callback_url = (
+          f"https://{jhub_hostname}{base_url}hub/oauth_callback"
+      )
+      c.CustomGenericOAuthenticator.token_url = (
+          f"https://{unity_host}/jupyter-oauth2/token"
+      )
+      c.CustomGenericOAuthenticator.tokeninfo_url = (
+          f"https://{unity_host}/jupyter-oauth2/tokeninfo"
+      )
+      c.CustomGenericOAuthenticator.userdata_url = (
+          f"https://{unity_host}/jupyter-oauth2/userinfo"
+      )
+      def safe_user_name(resp_json):
+          name = resp_json.get("username_attr")
+          safe_name = name.replace("@", "_at_")
+          return safe_name
+
+      c.CustomGenericOAuthenticator.username_claim = safe_user_name
+      c.CustomGenericOAuthenticator.scope = "single-logout;hpc_infos;x500;authenticator;eduperson_entitlement;username;profile".split(
+          ";"
+      )
+      c.CustomGenericOAuthenticator.tls_verify = False
+      c.CustomGenericOAuthenticator.extra_params_allowed_runtime = {
+          "uy_select_authn": ["jupyterhdfaaiAuthn.hbp", "jupyterldapAuthn.password"]
+      }
+      #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterhdfaaiAuthn.hbp
+      #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterldapAuthn.password
+
+      ## Spawner
+      c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
+      c.CustomJSCSpawner.ssh_during_startup = False
+      c.CustomJSCSpawner.extra_labels = jsc_custom.spawner.extra_labels
+      c.CustomJSCSpawner.ssh_custom_forward = jsc_custom.spawner.ssh_custom_forward
+      c.CustomJSCSpawner.ssh_custom_forward_remove = jsc_custom.spawner.ssh_custom_forward_remove
+      c.CustomJSCSpawner.custom_port = jsc_custom.spawner.custom_port
+
+      c.CustomJSCSpawner.pre_spawn_hook = jsc_custom.spawner.pre_spawn_hook
+      c.CustomJSCSpawner.check_allowed = jsc_custom.spawner.is_system_allowed
+      c.CustomJSCSpawner.request_headers = jsc_custom.spawner.request_headers
+      c.CustomJSCSpawner.request_kwargs = jsc_custom.spawner.request_kwargs
+      c.CustomJSCSpawner.request_url = jsc_custom.spawner.request_url
+      c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}{base_url}hub/api"
+
+      async def custom_env(spawner, user_options, jupyterhub_api_url):
+          env = {}
+          custom_config = jsc_custom.misc.get_custom_config()
+          for module_type, modules in custom_config.get("userModules", {}).items():
+              for module in modules:
+                  env[f"JUPYTER_MODULE_{module.upper()}_ENABLED"] = int(
+                      module in spawner.user_options.get("userModules", [])
+                  )
+          system = user_options.get("system", "")
+          if system in ["JSC-Cloud"]:
+              env[
+                  "JUPYTERHUB_FLAVORS_UPDATE_URL"
+              ] = f"{jupyterhub_api_url.rstrip('/')}/outpostflavors/{system}"
+          return env
+
+      c.CustomJSCSpawner.custom_env = custom_env
+      # c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_misc
+
+      helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
+      c.CustomJSCSpawner.svc_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
+      c.CustomJSCSpawner.svc_create = False
+
+      c.CustomJSCSpawner.custom_poll_interval = jsc_custom.spawner.poll_interval
+      c.CustomJSCSpawner.progress_ready_hook = jsc_custom.spawner.progress_ready_hook
+      c.CustomJSCSpawner.ssl_alt_names = [f"DNS:{jhub_hostname}", "DNS:default-hub"]
+      c.CustomJSCSpawner.http_timeout = 7200
+
+      ### UNICORE specific config
+      system_config = {
+        "JURECA": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JURECA/rest/core",
+        },
+        "JUWELS": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core",
+        },
+        "JUSUF": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUSUF/rest/core",
+        },
+        "HDFML": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/HDFML/rest/core",
+        },
+        "DEEP": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/DEEP/rest/core",
+        }
+      }
+
+      async def unicore_site_url(spawner):
+        system = spawner.user_options.get("system", "None")
+        url = system_config.get(system, {}).get("site_url", False)
+        if not url:
+          raise Exception(f"URL for system {system} not configured. Available systems: {list(site_urls.keys())}")
+        return url
+      
+      async def transport_kwargs(spawner):
+        auth_state = await spawner.user.get_auth_state()
+        transport_kwargs = {
+            "credential": auth_state["access_token"],
+            "oidc": True,
+            # "verify": "/mnt/unicore/cert.crt",
+            "verify": False,
+            "timeout": 30
+        }
+        spawner.log.info(f"{spawner._log_name} - Unicore transport kwargs: {transport_kwargs}")
+        return transport_kwargs
+
+      async def transport_preferences(spawner):
+        account = spawner.user_options.get("account", False)
+        project = spawner.user_options.get("project", False)
+        if account and project:
+          preference = f"uid:{account},group:{project}"
+          spawner.log.info(f"{spawner._log_name} - Set preference: {preference}")
+          return preference
+        else:
+          spawner.log.warning(f"{spawner._log_name} - account ({account}) or project ({project}) not set in user_options ({spawner.user_options}). Do not set preferences in UNICORE transport.")
+          return False
+
+
+      c.CustomJSCSpawner.unicore_site_url = unicore_site_url
+      c.CustomJSCSpawner.unicore_transport_kwargs = transport_kwargs
+      c.CustomJSCSpawner.unicore_transport_preferences = transport_preferences
