@@ -26,8 +26,8 @@ helm:
     - ../../base-values/common.yaml
     - ../../base-values/proxy.yaml
     - ../../base-values/hub/config.yaml
-    - ../../base-values/hub/imageJuniqTmp.yaml
-    - ../../base-values/hub/extraConfigJuniqTmp.yaml
+    - ../../base-values/hub/image.yaml
+    - ../../base-values/hub/extraConfig.yaml
     - ../../base-values/hub/extraContainers.yaml
     - ../../base-values/hub/extraVolumeMounts.yaml
     - ../../base-values/hub/extraVolumes.yaml
