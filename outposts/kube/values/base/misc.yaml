@@ -2,11 +2,15 @@ cryptSecret: outpost-cryptkey
 outpostUsers: outpost-users
 extraEnvVarsSecrets:
   - outpost-db
+  - outpost-generics
 nameOverride: "outpost-kube"
 fullnameOverride: "outpost-kube"
 logging:
   syslog:
     enabled: false
+    level: 10
+  stream:
+    enabled: true
     level: 10
 extraVolumes:
   - name: nfs-userhomes
