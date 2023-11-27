@@ -74,7 +74,11 @@ outpostConfig: |-
       stage = "staging"
       userid = str(spawner.user.id)
       profile = spawner.user_options.get("profile", "")
-      service = profile.split("/")[0].lower()
+      try:
+          service = profile.split("/")[0].lower()
+      except:
+          spawner.log.exception(f"{spawner._log_name} - Use default service: jupyterlab for skeleton dir")
+          service = "jupyterlab"
 
       userhome_dir = os.path.join(userhome_base, hub, stage, userid)
       userhome_skel = f"{userhome_base}/skel/{service}"
