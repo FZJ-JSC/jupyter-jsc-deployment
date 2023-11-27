@@ -109,7 +109,7 @@ outpostConfig: |-
           },
           {
               "name": "nfs-userhome",
-              "mountPath": "/home/jovyan",
+              "mountPath": "/p/home/jusers",
               "readOnly": False 
           }
       ]
