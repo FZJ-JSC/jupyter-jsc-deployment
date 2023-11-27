@@ -105,11 +105,11 @@ outpostConfig: |-
               "mountPath": "/tmp/custom/uftp.py",
               "subPath": "uftp.py"
           },
-          # {
-          #     "name": "nfs-userhome",
-          #     "mountPath": "/home/jovyan",
-          #     "readOnly": False 
-          # }
+          {
+              "name": "nfs-userhome",
+              "mountPath": "/home/jovyan",
+              "readOnly": False 
+          }
       ]
       profile_mounts = [
         {
@@ -126,7 +126,7 @@ outpostConfig: |-
       return common_mounts + profile_mounts
   
 
-  def get_profile_volumes(profile):
+  def get_profile_volumes(profile, jupyterhub_name):
       common_volumes = [
           {
               "name": "nfs-software", 
@@ -142,14 +142,14 @@ outpostConfig: |-
                   "name": "uftp"
               }
           },
-          # {
-          #     "name": "nfs-userhome", 
-          #     "hostPath": {
-          #         # userid gets expanded by KubeSpawner
-          #         "path": "/p/home/jusers/jupyterjsc/{userid}", 
-          #         "type": ""
-          #     }
-          # }
+          {
+              "name": "nfs-userhome", 
+              "hostPath": {
+                  # userid gets expanded by KubeSpawner
+                  "path": f"/p/home/jusers/{jupyterhub_name}/{{userid}}", 
+                  "type": ""
+              }
+          }
       ]
       profile_volumes = [
         {
@@ -169,16 +169,19 @@ outpostConfig: |-
       ]
       return common_volumes + profile_volumes
 
+  async def profile_list(spawner):
+      jupyterhub_name = spawner.jupyterhub_name
+      return [
+        {
+            "display_name": "JupyterLab - 3.6",
+            "slug": "JupyterLab/3.6",
+            "kubespawner_override": {
+                "volume_mounts": get_profile_volume_mounts("3-6"),
+                "volumes": get_profile_volumes("3-6", jupyterhub_name)
+            }
+        }
+    ]
 
-  c.KubeSpawner.profile_list = [
-      {
-          "display_name": "JupyterLab - 3.6",
-          "slug": "JupyterLab/3.6",
-          "kubespawner_override": {
-              "volume_mounts": get_profile_volume_mounts("3-6"),
-              "volumes": get_profile_volumes("3-6")
-          }
-      }
-  ]
+  c.KubeSpawner.profile_list = profile_list
 
 
