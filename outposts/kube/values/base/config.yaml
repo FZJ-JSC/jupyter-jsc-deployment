@@ -127,6 +127,7 @@ outpostConfig: |-
   
 
   def get_profile_volumes(profile, jupyterhub_name):
+      stage = os.environ.get("STAGE", "staging")
       common_volumes = [
           {
               "name": "nfs-software", 
@@ -146,7 +147,7 @@ outpostConfig: |-
               "name": "nfs-userhome", 
               "hostPath": {
                   # userid gets expanded by KubeSpawner
-                  "path": f"/p/home/jusers/{jupyterhub_name}/{{userid}}", 
+                  "path": f"/p/home/jusers/{jupyterhub_name}/{stage}/{{userid}}", 
                   "type": ""
               }
           }
