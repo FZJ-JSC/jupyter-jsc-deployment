@@ -46,10 +46,10 @@ outpostConfig: |-
       userhome_base = "/p/home/jusers"
       hub = spawner.extra_labels.get("app", "jupyter")
       stage = "staging"
-      user_id = str(spawner.user.id)
+      userid = str(spawner.user.id)
       service = spawner.user_options.get("service", "")
 
-      userhome_dir = os.path.join(userhome_base, hub, stage, user_id)
+      userhome_dir = os.path.join(userhome_base, hub, stage, userid)
       userhome_skel = f"{userhome_base}/skel/{service}"
       userhome_uid = 1000
       userhome_gid = 1000
@@ -117,9 +117,10 @@ outpostConfig: |-
               }
           },
           {
-              "name": "nfs-software", 
+              "name": "nfs-userhome", 
               "hostPath": {
-                  "path": "/p/software/jusers/jupyterjsc/", 
+                  # userid gets expanded by KubeSpawner
+                  "path": "/p/home/jusers/jupyterjsc/{userid}", 
                   "type": ""
               }
           }
