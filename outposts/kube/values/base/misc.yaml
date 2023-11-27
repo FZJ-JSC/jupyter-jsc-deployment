@@ -8,3 +8,11 @@ logging:
   syslog:
     enabled: false
     level: 10
+extraVolumes:
+  - name: nfs-userhomes
+    hostPath:
+      path: /p/software/jusers
+      type: ''
+extraVolumeMounts:
+  - name: nfs-userhomes
+    mountPath: /p/software/jusers
