@@ -81,17 +81,26 @@ outpostConfig: |-
       userhome_uid = 1000
       userhome_gid = 1000
 
+      def copy_file(src, dst):
+          shutil.copyfile(src=src, dst=dst)
+          shutil.chown(dst, userhome_uid, userhome_gid)
+
+      def copy_dir(src, dst):
+          shutil.copytree(src=src, dst=dst)
+              for dirpath, dirnames, filenames in os.walk(dst):
+                  shutil.chown(dirpath, userhome_uid, userhome_gid)
+                  for filename in filenames:
+                      shutil.chown(os.path.join(dirpath, filename), userhome_uid, userhome_gid)
+
       if not os.path.exists(userhome_dir):
           spawner.log.info(f"{spawner._log_name} - Create home directory {userhome_dir}")
-          spawner.log.info(f"{spawner._log_name} - Skeleton dir: {userhome_skel}")
-          spawner.log.info(f"{spawner._log_name} - user_options: {spawner.user_options}")
           os.makedirs(userhome_skel, exist_ok=True)
-          shutil.copytree(src=userhome_skel, dst=userhome_dir)
-          for dirpath, dirnames, filenames in os.walk(userhome_dir):
-              shutil.chown(dirpath, userhome_uid, userhome_gid)
-              for filename in filenames:
-                  shutil.chown(os.path.join(dirpath, filename), userhome_uid, userhome_gid)
-
+          copy_dir(userhome_skel, userhome_dir)
+      else:
+          # Update motd
+          copy_file(f"{userhome_skel.rstrip('/')}/.motd", f"{userhome_dir.rstrip('/')}/.motd")
+          shutil.rmtree(f"{userhome_dir.rstrip('/')}/.motd.d", ignore_errors=True)
+          copy_dir(f"{userhome_skel.rstrip('/')}/.motd.d", f"{userhome_dir.rstrip('/')}/.motd.d")
 
   c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
 
