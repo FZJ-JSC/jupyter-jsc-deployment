@@ -73,7 +73,8 @@ outpostConfig: |-
       hub = spawner.extra_labels.get("app", "jupyter")
       stage = "staging"
       userid = str(spawner.user.id)
-      service = spawner.user_options.get("service", "")
+      profile = spawner.user_options.get("profile", "")
+      service = profile.split("/")[0].lower()
 
       userhome_dir = os.path.join(userhome_base, hub, stage, userid)
       userhome_skel = f"{userhome_base}/skel/{service}"
