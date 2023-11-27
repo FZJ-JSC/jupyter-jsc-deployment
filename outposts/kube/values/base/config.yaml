@@ -1,5 +1,6 @@
 outpostConfig: |-
   import os
+  import shutil
 
   from kubespawner import KubeSpawner
 
@@ -41,6 +42,31 @@ outpostConfig: |-
   c.KubeSpawner.mem_limit = "4096M"
 
 
+  def pre_spawn_hook(spawner):
+      userhome_base = "/p/home/jusers"
+      hub = spawner.extra_labels.get("app", "jupyter")
+      stage = "staging"
+      user_id = str(spawner.user.id)
+      service = spawner.user_options.get("service", "")
+
+      userhome_dir = os.path.join(userhome_base, hub, stage, user_id)
+      userhome_skel = f"{userhome_base}/skel/{service}"
+      userhome_uid = 1000
+      userhome_gid = 1000
+
+      if not os.path.exists(userhome_dir):
+          spawner.log.info(f"Create home directory {userhome_dir}")
+          os.makedirs(userhome_skel, exist_ok=True)
+          shutil.copytree(src=userhome_skel, dst=userhome_dir)
+          for dirpath, dirnames, filenames in os.walk(userhome_dir):
+              shutil.chown(dirpath, userhome_uid, userhome_gid)
+              for filename in filenames:
+                  shutil.chown(os.path.join(dirpath, filename), userhome_uid, userhome_gid)
+
+
+  c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
+
+
   def get_profile_volume_mounts(profile):
       common_mounts = [
           {
@@ -52,6 +78,11 @@ outpostConfig: |-
               "name": "uftp", 
               "mountPath": "/tmp/custom/uftp.py",
               "subPath": "uftp.py"
+          },
+          {
+              "name": "nfs-userhome",
+              "mountPath": "/home/jovyan",
+              "readOnly": False 
           }
       ]
       profile_mounts = [
@@ -83,6 +114,13 @@ outpostConfig: |-
               "configMap": {
                   "defaultMode": 292,
                   "name": "uftp"
+              }
+          },
+          {
+              "name": "nfs-software", 
+              "hostPath": {
+                  "path": "/p/software/jusers/jupyterjsc/", 
+                  "type": ""
               }
           }
       ]
