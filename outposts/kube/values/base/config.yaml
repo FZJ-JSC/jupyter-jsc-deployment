@@ -107,11 +107,11 @@ outpostConfig: |-
               "mountPath": "/tmp/custom/uftp.py",
               "subPath": "uftp.py"
           },
-          {
-              "name": "nfs-userhome",
-              "mountPath": "/p/home/jusers",
-              "readOnly": False 
-          }
+          # {
+          #     "name": "nfs-userhome",
+          #     "mountPath": "/home/jovyan",
+          #     "readOnly": False 
+          # }
       ]
       profile_mounts = [
         {
@@ -144,14 +144,14 @@ outpostConfig: |-
                   "name": "uftp"
               }
           },
-          {
-              "name": "nfs-userhome", 
-              "hostPath": {
-                  # userid gets expanded by KubeSpawner
-                  "path": "/p/home/jusers/jupyterjsc/{userid}", 
-                  "type": ""
-              }
-          }
+          # {
+          #     "name": "nfs-userhome", 
+          #     "hostPath": {
+          #         # userid gets expanded by KubeSpawner
+          #         "path": "/p/home/jusers/jupyterjsc/{userid}", 
+          #         "type": ""
+          #     }
+          # }
       ]
       profile_volumes = [
         {
