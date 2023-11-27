@@ -4,7 +4,6 @@ hub:
       import logging
       import os
       import jsc_custom
-      import outpostspawner
 
       ## Generic information
       app_name_dash = get_name("fullname-dash")
