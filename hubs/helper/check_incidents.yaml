@@ -6,7 +6,11 @@ data:
   run.sh: |
     #!/bin/sh
 
-    while [ ! -d /mnt/shared-data/share/jupyterhub/static/images/footer ]; do echo "Waiting for /mnt/shared-data/share/jupyterhub/static/images/footer ..." ; sleep 5; done
+    while [ ! -d /mnt/shared-data/share/jupyterhub/static/images/footer ]
+    do 
+        echo "Waiting for /mnt/shared-data/share/jupyterhub/static/images/footer ..."
+        sleep 5
+    done
 
     SLEEP=$(/usr/local/bin/python3 -c 'import yaml; f=open("/mnt/custom_config/jupyterhub_custom_config.yaml", "r"); config = yaml.full_load(f); f.close(); print(config.get("incidentCheck", {}).get("interval", 60))')
     while true
@@ -216,8 +220,11 @@ data:
         else:
             systems_incidents[system]["incident"] = ""
         
+        # Set initial status image if no health status exists yet
+        if "health" not in systems_incidents.get(system):
+            update_status_image(system, svc["health"])
         # Change status image if service has a new health status
-        if svc["health"] != systems_incidents.get(system).get("health", 0):
+        elif svc["health"] != systems_incidents.get(system).get("health", 0):
             update_status_image(system, svc["health"])
         systems_incidents.get(system)["health"] = svc["health"]
 
