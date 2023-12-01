@@ -22,23 +22,112 @@ outpostConfig: |-
           raise Exception(f"Flavor auth token for {jupyterhub_name} not configured.")
       return token
 
-  async def flavors(jupyterhub_name):
-      if jupyterhub_name == "jupyterjsc":
-          return {"typea": 1, "typeb": 1}
-      elif jupyterhub_name == "juniq":
-          return {"typea": 1, "typeb": 1}
-      else:
-          return {}
+  all_flavors = {
+      "jupyterjsc": {
+          "m1": {
+              "max": -1,
+              "weight": 10,
+              "display_name": "2GB RAM, 1VCPU, 120 hours",
+              "description": "JupyterLab will run for max 120 hours with 2GB RAM and 1VCPU."
+          },
+          "l1": {
+              "max": -1,
+              "weight": 9,
+              "display_name": "4GB RAM, 1VCPUs, 12 hours",
+              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
+          },
+          "l2": {
+              "max": 4,
+              "weight": 2,
+              "display_name": "8GB RAM, 2VCPUs, 6 hours",
+              "description": "JupyterLab will run for max 6 hours with 8GB RAM and 2VCPUs."
+          },
+          "xl2": {
+              "max": 2,
+              "weight": 1,
+              "display_name": "16GB RAM, 2VCPUs, 2 hours",
+              "description": "JupyterLab will run for max 2 hours with 16GB RAM and 2VCPUs."
+          },
+      },
+      "juniq": {
+          "m1": {
+              "max": -1,
+              "weight": 10,
+              "display_name": "2GB RAM, 1VCPU, 120 hours",
+              "description": "JupyterLab will run for max 120 hours with 2GB RAM and 1VCPU."
+          },
+          "l1": {
+              "max": -1,
+              "weight": 9,
+              "display_name": "4GB RAM, 1VCPUs, 12 hours",
+              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
+          },
+          "l2": {
+              "max": 2,
+              "weight": 2,
+              "display_name": "8GB RAM, 2VCPUs, 6 hours",
+              "description": "JupyterLab will run for max 6 hours with 8GB RAM and 2VCPUs."
+          }
+      },
+      "coeraise": {
+          "m1": {
+              "max": -1,
+              "weight": 10,
+              "display_name": "2GB RAM, 1VCPU, 120 hours",
+              "description": "JupyterLab will run for max 120 hours with 2GB RAM and 1VCPU."
+          },
+          "l1": {
+              "max": -1,
+              "weight": 9,
+              "display_name": "4GB RAM, 1VCPUs, 12 hours",
+              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
+          }
+      },
+      "coec": {
+          "m1": {
+              "max": -1,
+              "weight": 10,
+              "display_name": "2GB RAM, 1VCPU, 120 hours",
+              "description": "JupyterLab will run for max 120 hours with 2GB RAM and 1VCPU."
+          },
+          "l1": {
+              "max": -1,
+              "weight": 9,
+              "display_name": "4GB RAM, 1VCPUs, 12 hours",
+              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
+          }
+      },
+      "portalgauss": {
+          "m1": {
+              "max": -1,
+              "weight": 10,
+              "display_name": "2GB RAM, 1VCPU, 120 hours",
+              "description": "JupyterLab will run for max 120 hours with 2GB RAM and 1VCPU."
+          },
+          "l1": {
+              "max": -1,
+              "weight": 9,
+              "display_name": "4GB RAM, 1VCPUs, 12 hours",
+              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
+          }
+      }
+  }
 
+  async def flavors(jupyterhub_name):
+      return all_flavors.get(jupyterhub_name, {})
 
   c.JupyterHubOutpost.flavors_update_token = flavors_update_token
   c.JupyterHubOutpost.flavors = flavors
-         
+
+
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
-  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.2"
+  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.3"
   c.KubeSpawner.image_pull_policy = "Always"
-  c.KubeSpawner.node_selector = {"usernode": "true"}
+  c.KubeSpawner.scheduler_name = "usernode-scheduler"
+  # Use scheduler instead of node_selector, which fills one node before 
+  # spawning pods on the next one
+  # c.KubeSpawner.node_selector = {"usernode": "true"}
   c.KubeSpawner.tolerations = [
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
   ]
@@ -66,7 +155,6 @@ outpostConfig: |-
           }
       }
   }
-
 
   def pre_spawn_hook(spawner):
       userhome_base = "/p/home/jusers"
@@ -108,8 +196,7 @@ outpostConfig: |-
 
   c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
 
-
-  def get_profile_volume_mounts(profile):
+  def get_profile_volume_mounts(profile, flavor):
       common_mounts = [
           {
               "name": "nfs-software", 
@@ -137,13 +224,27 @@ outpostConfig: |-
               "name": f"modules-user-{profile}", 
               "mountPath": "/tmp/custom/load_jupyter_modules.sh",
               "subPath": "load_jupyter_modules.sh"
-          } 
+          }
       ]
-      return common_mounts + profile_mounts
+      flavor_mounts = [
+          {
+              "name": f"flavor-{flavor}",
+              "mountPath": "/tmp/custom/load_flavor_variables.sh",
+              "subPath": "load_flavor_variables.sh"
+          }
+      ]
+      return common_mounts + profile_mounts + flavor_mounts
   
 
-  def get_profile_volumes(profile, jupyterhub_name):
+  def get_profile_volumes(profile, jupyterhub_name, flavor):
       stage = os.environ.get("STAGE", "staging")
+      map_hub_names = {
+          "jupyterjsc": "defaulthub",
+          "coec": "defaulthub",
+          "coeraise": "defaulthub",
+          "portalgauss": "defaulthub"
+      }
+      hub = map_hub_names.get(jupyterhub_name, jupyterhub_name)
       common_volumes = [
           {
               "name": "nfs-software", 
@@ -162,39 +263,101 @@ outpostConfig: |-
           {
               "name": "nfs-userhome", 
               "hostPath": {
-                  # userid gets expanded by KubeSpawner
+                  # userid gets expanded by KubeSpawner, do not use mapped 
+                  # hub name here, each hub uses it's own home dir.
                   "path": f"/p/home/jusers/{jupyterhub_name}/{stage}/{{userid}}", 
                   "type": ""
               }
           }
       ]
       profile_volumes = [
-        {
+          {
               "name": f"modules-{profile}", 
               "configMap": {
                   "defaultMode": 292,
-                  "name": f"modules-{profile}"
+                  "name": f"modules-{hub}-{profile}"
               }
           },
           {
               "name": f"modules-user-{profile}", 
               "configMap": {
                   "defaultMode": 292,
-                  "name": f"modules-user-{profile}"
+                  "name": f"modules-user-{hub}-{profile}"
               }
-          } 
+          }
       ]
-      return common_volumes + profile_volumes
+      flavor_volumes = [
+          {
+              "name": f"flavor-{flavor}",
+              "configMap": {
+                  "defaultMode": 292,
+                  "name": f"flavor-{flavor}"
+              }
+          }
+      ]
+      return common_volumes + profile_volumes + flavor_volumes
+  
+  # Guarantee is a bit less, to allow system pods run on the usernodes
+  # as well
+  all_flavor_resources = {
+      "m1": {
+          "cpu_guarantee": 0.5,
+          "cpu_limit": 1,
+          "mem_guarantee": "1536M"
+          "mem_limit": "2048M",
+      },
+      "l1": {
+          "cpu_guarantee": 0.5,
+          "cpu_limit": 1,
+          "mem_guarantee": "3584M"
+          "mem_limit": "4096M",
+      },
+      "l2": {
+          "cpu_guarantee": 0.5,
+          "cpu_limit": 2,
+          "mem_guarantee": "7680M"
+          "mem_limit": "8192M",
+      },
+      "xl2": {
+          "cpu_guarantee": 0.5,
+          "cpu_limit": 2,
+          "mem_guarantee": "15872M"
+          "mem_limit": "16384M"
+      },
+    },
+  }
+
+  def get_flavor_resources(flavor):
+      if flavor not in all_flavor_resources.keys():
+          raise Exception(f"Flavor {flavor} not configured. Abort start.")
+      return all_flavor_resources["flavor"]
 
   async def profile_list(spawner):
+      # We're loading this config file for each Spawner object
+      # Therefore, it's fine to just create the one selected profile
+      # with it's flavor 
       jupyterhub_name = spawner.jupyterhub_name
+      flavor = spawner.user_options.get("flavor", "default")
+      profile = spawner.user_options.get("profile", "JupyterLab/3.6")
+      if "/" in profile:
+          profile_split = '-'.join(profile.split("/")[1:])
+      else:
+          profile_split = profile
+      mount_name = profile_split.replace(".", "-")
+
+      resources = get_flavor_resources(flavor)
+
       return [
         {
             "display_name": "JupyterLab - 3.6",
             "slug": "JupyterLab/3.6",
             "kubespawner_override": {
-                "volume_mounts": get_profile_volume_mounts("3-6"),
-                "volumes": get_profile_volumes("3-6", jupyterhub_name)
+                "volume_mounts": get_profile_volume_mounts(mount_name, flavor),
+                "volumes": get_profile_volumes(mount_name, jupyterhub_name, flavor),
+                "cpu_guarantee": resources["cpu_guarantee"],
+                "cpu_limit": resources["cpu_limit"],
+                "mem_guarantee": resources["mem_guarantee"],
+                "mem_limit": resources["mem_limit"]
             }
         }
     ]

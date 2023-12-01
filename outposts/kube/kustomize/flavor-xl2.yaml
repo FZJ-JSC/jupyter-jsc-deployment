@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flavor-xl2
+  namespace: outpost
+data:
+  load_flavor_variables.sh: |
+    #!/bin/bash
+    export JUPYTERHUB_TIMEOUT=2h

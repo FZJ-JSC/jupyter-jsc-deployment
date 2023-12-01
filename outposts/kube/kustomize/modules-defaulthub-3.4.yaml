@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: modules-3-6
+  name: modules-defaulthub-3-4
   namespace: outpost
 data:
   load_jupyter_version.sh: |
     #!/bin/bash
 
     module purge
-    module load Stages/2023 GCCcore/.11.3.0 Python JupyterLab/2023.3.6
+    module load Stages/2022 GCCcore/.11.2.0 Python Jupyter/2022.3.4

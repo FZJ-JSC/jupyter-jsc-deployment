@@ -7,7 +7,7 @@ nameOverride: "outpost-kube"
 fullnameOverride: "outpost-kube"
 logging:
   syslog:
-    enabled: false
+    enabled: true
     level: 10
   stream:
     enabled: true
