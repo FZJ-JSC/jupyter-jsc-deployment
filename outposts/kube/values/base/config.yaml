@@ -113,8 +113,19 @@ outpostConfig: |-
       }
   }
 
+  all_hub_groups = {
+    "jupyterjsc": ["default", "HIFIS", "admin"],
+    "juniq": ["default", "HIFIS", "admin"],
+    "coec": ["default", "HIFIS", "admin"],
+    "coeraise": ["default", "HIFIS", "admin"],
+    "portalgauss": ["default", "HIFIS", "admin"]
+  }
+
   async def flavors(jupyterhub_name):
-      return all_flavors.get(jupyterhub_name, {})
+      ret = {}
+      for group in all_hub_groups.get(jupyterhub_name, []):
+          ret[group] = all_flavors.get(jupyterhub_name, {})
+      return ret
 
   c.JupyterHubOutpost.flavors_update_token = flavors_update_token
   c.JupyterHubOutpost.flavors = flavors
