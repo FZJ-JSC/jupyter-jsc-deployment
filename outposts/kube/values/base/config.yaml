@@ -38,13 +38,13 @@ outpostConfig: |-
           },
           "l2": {
               "max": 4,
-              "weight": 2,
+              "weight": 3,
               "display_name": "8GB RAM, 2VCPUs, 6 hours",
               "description": "JupyterLab will run for max 6 hours with 8GB RAM and 2VCPUs."
           },
           "xl2": {
               "max": 2,
-              "weight": 1,
+              "weight": 2,
               "display_name": "16GB RAM, 2VCPUs, 2 hours",
               "description": "JupyterLab will run for max 2 hours with 16GB RAM and 2VCPUs."
           },
@@ -118,7 +118,7 @@ outpostConfig: |-
 
   c.JupyterHubOutpost.flavors_update_token = flavors_update_token
   c.JupyterHubOutpost.flavors = flavors
-
+  c.JupyterHubOutpost.flavors_undefined_max = 0
 
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
