@@ -324,7 +324,6 @@ outpostConfig: |-
           "mem_guarantee": "15872M"
           "mem_limit": "16384M"
       },
-    },
   }
 
   def get_flavor_resources(flavor):
