@@ -4,83 +4,200 @@
 #
 # Best used with pod.spec.resources.requests == pod.spec.resources.limits
 # to avoid overcommiting nodes
-apiVersion: kubescheduler.config.k8s.io/v1
-kind: KubeSchedulerConfiguration
-profiles:
-  - schedulerName: default-scheduler
-  - schedulerName: usernode-scheduler
-    pluginConfig:
-      - name: NodeAffinity
-        args:
-          addedAffinity:
-            preferredDuringSchedulingIgnoredDuringExecution:
-              - weight: 50
-                preference:
-                  matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                    - usernode-1
-              - weight: 49
-                preference:
-                  matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                    - usernode-2
-              - weight: 48
-                preference:
-                  matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                    - usernode-3
-              - weight: 47
-                preference:
-                  matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                    - usernode-4
-              - weight: 46
-                preference:
-                  matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                    - usernode-5
-              - weight: 45
-                preference:
-                  matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                    - usernode-6
-              - weight: 44
-                preference:
-                  matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                    - usernode-7
-              - weight: 43
-                preference:
-                  matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                    - usernode-8
-              - weight: 42
-                preference:
-                  matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                    - usernode-9
-              - weight: 41
-                preference:
-                  matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                    - usernode-10
+#
+# !!!  IMPORTANT  !!!
+# If RBAC is enabled in cluster, add "usernode-scheduler" in clusterrole
+# kube-scheduler:
+#    $ kubectl edit clusterrole system:kube-scheduler
+#    > add "usernode-scheduler" in resourceNames lists
+# 
+# !!!  IMPORTANT  !!!
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: usernode-scheduler
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: usernode-scheduler-as-kube-scheduler
+subjects:
+- kind: ServiceAccount
+  name: usernode-scheduler
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: system:kube-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: usernode-scheduler-as-volume-scheduler
+subjects:
+- kind: ServiceAccount
+  name: usernode-scheduler
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: system:volume-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: usernode-scheduler-extension-apiserver-authentication-reader
+  namespace: kube-system
+roleRef:
+  kind: Role
+  name: extension-apiserver-authentication-reader
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: usernode-scheduler
+  namespace: kube-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: usernode-scheduler-config
+  namespace: kube-system
+data:
+  usernode-scheduler-config.yaml: |
+    apiVersion: kubescheduler.config.k8s.io/v1
+    kind: KubeSchedulerConfiguration
+    profiles:
+      - schedulerName: usernode-scheduler
+        pluginConfig:
+          - name: NodeAffinity
+            args:
+              addedAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                  - weight: 50
+                    preference:
+                      matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                        - usernode-1
+                  - weight: 49
+                    preference:
+                      matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                        - usernode-2
+                  - weight: 48
+                    preference:
+                      matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                        - usernode-3
+                  - weight: 47
+                    preference:
+                      matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                        - usernode-4
+                  - weight: 46
+                    preference:
+                      matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                        - usernode-5
+                  - weight: 45
+                    preference:
+                      matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                        - usernode-6
+                  - weight: 44
+                    preference:
+                      matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                        - usernode-7
+                  - weight: 43
+                    preference:
+                      matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                        - usernode-8
+                  - weight: 42
+                    preference:
+                      matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                        - usernode-9
+                  - weight: 41
+                    preference:
+                      matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                        - usernode-10
+    leaderElection:
+      leaderElect: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: scheduler
+    tier: control-plane
+  name: usernode-scheduler
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      component: scheduler
+      tier: control-plane
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: scheduler
+        tier: control-plane
+        version: second
+    spec:
+      serviceAccountName: usernode-scheduler
+      containers:
+      - command:
+        - /usr/local/bin/kube-scheduler
+        - --config=/etc/kubernetes/usernode-scheduler/usernode-scheduler-config.yaml
+        image: registry.k8s.io/kube-scheduler:v1.26.7
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 10259
+            scheme: HTTPS
+          initialDelaySeconds: 15
+        name: kube-second-scheduler
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 10259
+            scheme: HTTPS
+        resources:
+          requests:
+            cpu: '0.1'
+        securityContext:
+          privileged: false
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/kubernetes/usernode-scheduler
+      hostNetwork: false
+      hostPID: false
+      volumes:
+        - name: config-volume
+          configMap:
+            name: usernode-scheduler-config
