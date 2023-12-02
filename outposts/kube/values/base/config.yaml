@@ -132,11 +132,21 @@ outpostConfig: |-
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
   ]
 
-  c.KubeSpawner.cpu_guarantee = 0.1
-  c.KubeSpawner.cpu_limit = 2
-  c.KubeSpawner.mem_guarantee = "512M"
-  c.KubeSpawner.mem_limit = "4096M"
-
+  node_affinity_preferred = []
+  for i in range(1, 51):
+      node_affinity_preferred.append({
+          "weight": 51-i,
+          "preference": {
+              "matchExpressions": [
+                  {
+                      "key": "kubernetes.io/hostname",
+                      "operator": "In",
+                      "values": [f"usernode-{i}"],
+                  }
+              ],
+          }
+      })
+  c.KubeSpawner.node_affinity_preferred = node_affinity_preferred
   c.KubeSpawner.fs_gid = 100
   c.KubeSpawner.container_security_context = {
       "allowPrivilegeEscalation": True,
@@ -174,8 +184,9 @@ outpostConfig: |-
       userhome_gid = 1000
 
       def copy_file(src, dst):
-          shutil.copyfile(src=src, dst=dst)
-          shutil.chown(dst, userhome_uid, userhome_gid)
+          if os.path.isfile(src):
+              shutil.copyfile(src=src, dst=dst)
+              shutil.chown(dst, userhome_uid, userhome_gid)
 
       def copy_dir(src, dst):
           shutil.copytree(src=src, dst=dst)

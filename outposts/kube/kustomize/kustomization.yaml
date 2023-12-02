@@ -15,5 +15,4 @@ resources:
   - modules-user-juniq-3.2.yaml
   - modules-user-juniq-3.4.yaml
   - modules-user-juniq-3.6.yaml
-  - scheduler.yaml
   - uftp.yaml
