@@ -9,3 +9,5 @@ logging:
   syslog:
     enabled: false
     level: 10
+nodeSelector:
+  worker: "true"

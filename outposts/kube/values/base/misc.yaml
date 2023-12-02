@@ -22,3 +22,4 @@ extraVolumeMounts:
     mountPath: /p/home/jusers
 nodeSelector:
   usernode: "true"
+  kubernetes.io/hostname: "usernode-1"
