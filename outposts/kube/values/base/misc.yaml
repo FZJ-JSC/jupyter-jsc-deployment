@@ -14,9 +14,11 @@ logging:
     level: 10
 extraVolumes:
   - name: nfs-userhomes
-    hostPath:
+    nfs:
+      server: 10.0.2.249
       path: /p/home/jusers
-      type: ''
 extraVolumeMounts:
   - name: nfs-userhomes
     mountPath: /p/home/jusers
+nodeSelector:
+  usernode: "true"
