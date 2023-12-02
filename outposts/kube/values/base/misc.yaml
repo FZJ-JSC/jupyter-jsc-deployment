@@ -20,6 +20,5 @@ extraVolumes:
 extraVolumeMounts:
   - name: nfs-userhomes
     mountPath: /p/home/jusers
-schedulerName: usernode-scheduler
 nodeSelector:
   usernode: "true"

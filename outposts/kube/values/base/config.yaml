@@ -124,10 +124,7 @@ outpostConfig: |-
 
   c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.3"
   c.KubeSpawner.image_pull_policy = "Always"
-  c.KubeSpawner.scheduler_name = "usernode-scheduler"
-  # Use scheduler instead of node_selector, which fills one node before 
-  # spawning pods on the next one
-  # c.KubeSpawner.node_selector = {"usernode": "true"}
+  c.KubeSpawner.node_selector = {"usernode": "true"}
   c.KubeSpawner.tolerations = [
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
   ]
