@@ -329,7 +329,7 @@ outpostConfig: |-
   def get_flavor_resources(flavor):
       if flavor not in all_flavor_resources.keys():
           raise Exception(f"Flavor {flavor} not configured. Abort start.")
-      return all_flavor_resources["flavor"]
+      return all_flavor_resources[flavor]
 
   async def profile_list(spawner):
       # We're loading this config file for each Spawner object
