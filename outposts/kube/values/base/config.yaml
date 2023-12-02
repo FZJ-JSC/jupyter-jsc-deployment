@@ -129,9 +129,9 @@ outpostConfig: |-
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
   ]
 
-  node_affinity_required = []
+  node_affinity_preferred = []
   for i in range(1, 51):
-      node_affinity_required.append({
+      node_affinity_preferred.append({
           "weight": 51-i,
           "preference": {
               "matchExpressions": [
@@ -143,7 +143,7 @@ outpostConfig: |-
               ],
           }
       })
-  c.KubeSpawner.node_affinity_required = node_affinity_required
+  c.KubeSpawner.node_affinity_preferred = node_affinity_preferred
   c.KubeSpawner.fs_gid = 100
   c.KubeSpawner.container_security_context = {
       "allowPrivilegeEscalation": True,
