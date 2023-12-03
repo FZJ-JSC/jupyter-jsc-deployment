@@ -120,6 +120,17 @@ outpostConfig: |-
   c.JupyterHubOutpost.flavors = flavors
   c.JupyterHubOutpost.flavors_undefined_max = 0
 
+  from kubernetes import client
+  from kubernetes import config
+  from kubernetes import utils as k8s_utils
+
+  def test_k8s():
+      config.load_incluster_config()
+      core = client.CoreV1Api()
+      api = client.ApiClient()
+      print(dir(core))
+      print(dir(api))
+
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
   c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.3"
