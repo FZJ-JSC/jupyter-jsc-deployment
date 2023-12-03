@@ -124,26 +124,10 @@ outpostConfig: |-
 
   c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.3"
   c.KubeSpawner.image_pull_policy = "Always"
-  c.KubeSpawner.node_selector = {"usernode": "true"}
   c.KubeSpawner.tolerations = [
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
   ]
 
-  node_affinity_preferred = []
-  for i in range(1, 51):
-      node_affinity_preferred.append({
-          "weight": 51-i,
-          "preference": {
-              "matchExpressions": [
-                  {
-                      "key": "kubernetes.io/hostname",
-                      "operator": "In",
-                      "values": [f"usernode-{i}"],
-                  }
-              ],
-          }
-      })
-  c.KubeSpawner.node_affinity_preferred = node_affinity_preferred
   c.KubeSpawner.fs_gid = 100
   c.KubeSpawner.container_security_context = {
       "allowPrivilegeEscalation": True,
@@ -339,6 +323,11 @@ outpostConfig: |-
           raise Exception(f"Flavor {flavor} not configured. Abort start.")
       return all_flavor_resources[flavor]
 
+  def get_node_selector(jupyterhub_name, flavor):
+      # TODO:
+      # K8s API, check if there's resources left on node 1,2,3,4 ...
+      return {"usernode": "true"}
+
   async def profile_list(spawner):
       # We're loading this config file for each Spawner object
       # Therefore, it's fine to just create the one selected profile
@@ -361,6 +350,7 @@ outpostConfig: |-
             "kubespawner_override": {
                 "volume_mounts": get_profile_volume_mounts(mount_name, flavor),
                 "volumes": get_profile_volumes(mount_name, jupyterhub_name, flavor),
+                "node_selector": get_node_selector(jupyterhub_name, flavor),
                 "cpu_guarantee": resources["cpu_guarantee"],
                 "cpu_limit": resources["cpu_limit"],
                 "mem_guarantee": resources["mem_guarantee"],
