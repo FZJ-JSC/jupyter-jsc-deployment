@@ -37,19 +37,28 @@ outpostConfig: |-
               "max": -1,
               "weight": 10,
               "display_name": "2GB RAM, 1VCPU, 5 days",
-              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
+              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU.",
+              "runtime": {
+                  "days": 5
+              }
           },
           "l1": {
               "max": -1,
               "weight": 9,
               "display_name": "4GB RAM, 1VCPUs, 12 hours",
-              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
+              "description": "JupyterLab will run for max 5 minutes with 4GB RAM and 1VCPUs.",
+              "runtime": {
+                  "minutes": 5
+              }
           },
           "l2": {
               "max": 8,
               "weight": 3,
               "display_name": "8GB RAM, 2VCPUs, 6 hours",
-              "description": "JupyterLab will run for max 6 hours with 8GB RAM and 2VCPUs."
+              "description": "JupyterLab will run for max 6 hours with 8GB RAM and 2VCPUs.",
+              "runtime": {
+                  "hours": 6
+              }
           }
       },
       "juniq": {
@@ -57,19 +66,28 @@ outpostConfig: |-
               "max": -1,
               "weight": 10,
               "display_name": "2GB RAM, 1VCPU, 5 days",
-              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
+              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU.",
+              "runtime": {
+                  "days": 5
+              }
           },
           "l1": {
               "max": -1,
               "weight": 9,
               "display_name": "4GB RAM, 1VCPUs, 12 hours",
-              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
+              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs.",
+              "runtime": {
+                  "hours": 12
+              }
           },
           "l2": {
               "max": 2,
               "weight": 2,
               "display_name": "8GB RAM, 2VCPUs, 6 hours",
-              "description": "JupyterLab will run for max 6 hours with 8GB RAM and 2VCPUs."
+              "description": "JupyterLab will run for max 6 hours with 8GB RAM and 2VCPUs.",
+              "runtime": {
+                  "hours": 6
+              }
           }
       },
       "coeraise": {
@@ -77,13 +95,19 @@ outpostConfig: |-
               "max": -1,
               "weight": 10,
               "display_name": "2GB RAM, 1VCPU, 5 days",
-              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
+              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU.",
+              "runtime": {
+                  "days": 5
+              }
           },
           "l1": {
               "max": -1,
               "weight": 9,
               "display_name": "4GB RAM, 1VCPUs, 12 hours",
-              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
+              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs.",
+              "runtime": {
+                  "hours": 12
+              }
           }
       },
       "coec": {
@@ -91,13 +115,19 @@ outpostConfig: |-
               "max": -1,
               "weight": 10,
               "display_name": "2GB RAM, 1VCPU, 5 days",
-              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
+              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU.",
+              "runtime": {
+                  "days": 5
+              }
           },
           "l1": {
               "max": -1,
               "weight": 9,
               "display_name": "4GB RAM, 1VCPUs, 12 hours",
-              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
+              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs.",
+              "runtime": {
+                  "hours": 12
+              }
           }
       },
       "portalgauss": {
@@ -105,13 +135,19 @@ outpostConfig: |-
               "max": -1,
               "weight": 10,
               "display_name": "2GB RAM, 1VCPU, 5 days",
-              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
+              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU.",
+              "runtime": {
+                  "days": 5
+              }
           },
           "l1": {
               "max": -1,
               "weight": 9,
               "display_name": "4GB RAM, 1VCPUs, 12 hours",
-              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
+              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs.",
+              "runtime": {
+                  "hours": 12
+              }
           }
       }
   }
@@ -154,7 +190,7 @@ outpostConfig: |-
   c.KubeSpawner.extra_pod_config = {
       "restartPolicy": "Always",
   }
-  c.KubeSpawner.delete_grace_period = 70 # each unmount grace 30 seconds, cancel grace 10 seconds
+  c.KubeSpawner.delete_grace_period = 20
   c.KubeSpawner.lifecycle_hooks = {
       "preStop": {
           "exec": {
