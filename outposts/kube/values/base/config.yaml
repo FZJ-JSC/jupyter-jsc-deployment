@@ -240,7 +240,7 @@ outpostConfig: |-
 
   c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
 
-  def get_profile_volume_mounts(profile, flavor):
+  def get_profile_volume_mounts(profile):
       common_mounts = [
           {
               "name": "nfs-software", 
@@ -270,17 +270,10 @@ outpostConfig: |-
               "subPath": "load_jupyter_modules.sh"
           }
       ]
-      flavor_mounts = [
-          {
-              "name": f"flavor-{flavor}",
-              "mountPath": "/tmp/custom/load_flavor_variables.sh",
-              "subPath": "load_flavor_variables.sh"
-          }
-      ]
-      return common_mounts + profile_mounts + flavor_mounts
+      return common_mounts + profile_mounts
   
 
-  def get_profile_volumes(profile, jupyterhub_name, flavor):
+  def get_profile_volumes(profile, jupyterhub_name):
       stage = os.environ.get("STAGE", "staging")
       map_hub_names = {
           "jupyterjsc": "defaulthub",
@@ -330,16 +323,7 @@ outpostConfig: |-
               }
           }
       ]
-      flavor_volumes = [
-          {
-              "name": f"flavor-{flavor}",
-              "configMap": {
-                  "defaultMode": 292,
-                  "name": f"flavor-{flavor}"
-              }
-          }
-      ]
-      return common_volumes + profile_volumes + flavor_volumes
+      return common_volumes + profile_volumes
   
   # Guarantee is a bit less, to allow system pods run on the usernodes
   # as well
@@ -369,14 +353,14 @@ outpostConfig: |-
           raise Exception(f"Flavor {flavor} not configured. Abort start.")
       return all_flavor_resources[flavor]
 
-  def get_node_selector(spawner, jupyterhub_name, flavor):
+  def get_node_selector(spawner, jupyterhub_name, resources, flavor):
       from kubernetes import client
       from kubernetes import config
       import json
 
       config.load_incluster_config()
       core = client.CoreV1Api()
-      flavor_mem_request = all_flavor_resources.get(flavor, {}).get("mem_guarantee", "0M")
+      flavor_mem_request = resources.get("mem_guarantee", "0M")
       spawner.log.info(f"{spawner._log_name} - {flavor_mem_request}M memory for {flavor} ({jupyterhub_name}) requested")
       base_node_name = "usernode-"
       
@@ -427,9 +411,9 @@ outpostConfig: |-
             "display_name": "JupyterLab - 3.6",
             "slug": "JupyterLab/3.6",
             "kubespawner_override": {
-                "volume_mounts": get_profile_volume_mounts(mount_name, flavor),
-                "volumes": get_profile_volumes(mount_name, jupyterhub_name, flavor),
-                "node_selector": get_node_selector(spawner, jupyterhub_name, flavor),
+                "volume_mounts": get_profile_volume_mounts(mount_name),
+                "volumes": get_profile_volumes(mount_name, jupyterhub_name),
+                "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
                 "cpu_guarantee": resources["cpu_guarantee"],
                 "cpu_limit": resources["cpu_limit"],
                 "mem_guarantee": resources["mem_guarantee"],
