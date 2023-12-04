@@ -394,7 +394,7 @@ outpostConfig: |-
             "kubespawner_override": {
                 "volume_mounts": get_profile_volume_mounts(mount_name, flavor),
                 "volumes": get_profile_volumes(mount_name, jupyterhub_name, flavor),
-                "node_selector": get_node_selector(spawner._log_name, jupyterhub_name, flavor),
+                "node_selector": get_node_selector(spawner, jupyterhub_name, flavor),
                 "cpu_guarantee": resources["cpu_guarantee"],
                 "cpu_limit": resources["cpu_limit"],
                 "mem_guarantee": resources["mem_guarantee"],
