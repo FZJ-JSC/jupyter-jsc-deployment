@@ -151,7 +151,7 @@ outpostConfig: |-
       }
   }
 
-  c.KubeSpawner.extra_pod_config = {
+  c.KubeSpawner.extra_container_config = {
       "livenessProbe": {
           "exec": {
               "command": ["cat", "/tmp/custom/logs/stdout"]
