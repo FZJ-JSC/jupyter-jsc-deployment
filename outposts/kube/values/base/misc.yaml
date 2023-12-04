@@ -23,3 +23,5 @@ extraVolumeMounts:
 nodeSelector:
   usernode: "true"
   kubernetes.io/hostname: "usernode-1"
+serviceAccount:
+  nodesClusterRole: true
