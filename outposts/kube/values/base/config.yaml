@@ -36,8 +36,8 @@ outpostConfig: |-
           "m1": {
               "max": -1,
               "weight": 10,
-              "display_name": "2GB RAM, 1VCPU, 120 hours",
-              "description": "JupyterLab will run for max 120 hours with 2GB RAM and 1VCPU."
+              "display_name": "2GB RAM, 1VCPU, 5 days",
+              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
           },
           "l1": {
               "max": -1,
@@ -46,24 +46,18 @@ outpostConfig: |-
               "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs."
           },
           "l2": {
-              "max": 4,
+              "max": 8,
               "weight": 3,
               "display_name": "8GB RAM, 2VCPUs, 6 hours",
               "description": "JupyterLab will run for max 6 hours with 8GB RAM and 2VCPUs."
-          },
-          "xl2": {
-              "max": 2,
-              "weight": 2,
-              "display_name": "16GB RAM, 2VCPUs, 2 hours",
-              "description": "JupyterLab will run for max 2 hours with 16GB RAM and 2VCPUs."
-          },
+          }
       },
       "juniq": {
           "m1": {
               "max": -1,
               "weight": 10,
-              "display_name": "2GB RAM, 1VCPU, 120 hours",
-              "description": "JupyterLab will run for max 120 hours with 2GB RAM and 1VCPU."
+              "display_name": "2GB RAM, 1VCPU, 5 days",
+              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
           },
           "l1": {
               "max": -1,
@@ -82,8 +76,8 @@ outpostConfig: |-
           "m1": {
               "max": -1,
               "weight": 10,
-              "display_name": "2GB RAM, 1VCPU, 120 hours",
-              "description": "JupyterLab will run for max 120 hours with 2GB RAM and 1VCPU."
+              "display_name": "2GB RAM, 1VCPU, 5 days",
+              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
           },
           "l1": {
               "max": -1,
@@ -96,8 +90,8 @@ outpostConfig: |-
           "m1": {
               "max": -1,
               "weight": 10,
-              "display_name": "2GB RAM, 1VCPU, 120 hours",
-              "description": "JupyterLab will run for max 120 hours with 2GB RAM and 1VCPU."
+              "display_name": "2GB RAM, 1VCPU, 5 days",
+              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
           },
           "l1": {
               "max": -1,
@@ -110,8 +104,8 @@ outpostConfig: |-
           "m1": {
               "max": -1,
               "weight": 10,
-              "display_name": "2GB RAM, 1VCPU, 120 hours",
-              "description": "JupyterLab will run for max 120 hours with 2GB RAM and 1VCPU."
+              "display_name": "2GB RAM, 1VCPU, 5 days",
+              "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
           },
           "l1": {
               "max": -1,
@@ -154,6 +148,22 @@ outpostConfig: |-
       "privileged": True,
       "capabilities": {
           "add": ["CAP_SYS_ADMIN"]
+      }
+  }
+
+  c.KubeSpawner.extra_pod_config = {
+      "livenessProbe": {
+          "exec": {
+              "command": ["cat", "/tmp/custom/logs/stdout"]
+          },
+          "initialDelaySeconds": 60,
+          "periodSeconds": 10,
+      },
+      "readinessProbe": {
+          "exec": {
+              "command": ["cat", "/tmp/custom/logs/stdout"]
+          },
+          "periodSeconds": 1
       }
   }
 
@@ -313,28 +323,22 @@ outpostConfig: |-
   # as well
   all_flavor_resources = {
       "m1": {
-          "cpu_guarantee": 0.5,
+          "cpu_guarantee": 0.2,
           "cpu_limit": 1,
           "mem_guarantee": "1536M",
           "mem_limit": "2048M"
       },
       "l1": {
-          "cpu_guarantee": 0.5,
+          "cpu_guarantee": 0.2,
           "cpu_limit": 1,
           "mem_guarantee": "3584M",
           "mem_limit": "4096M"
       },
       "l2": {
-          "cpu_guarantee": 0.5,
+          "cpu_guarantee": 0.2,
           "cpu_limit": 2,
           "mem_guarantee": "7680M",
           "mem_limit": "8192M"
-      },
-      "xl2": {
-          "cpu_guarantee": 0.5,
-          "cpu_limit": 2,
-          "mem_guarantee": "15872M",
-          "mem_limit": "16384M"
       }
   }
 
