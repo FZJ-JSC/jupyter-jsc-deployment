@@ -136,7 +136,7 @@ outpostConfig: |-
 
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
-  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.3"
+  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.4"
   c.KubeSpawner.image_pull_policy = "Always"
   c.KubeSpawner.tolerations = [
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
@@ -151,24 +151,10 @@ outpostConfig: |-
       }
   }
 
-  c.KubeSpawner.extra_container_config = {
-      "livenessProbe": {
-          "exec": {
-              "command": ["cat", "/tmp/custom/logs/stdout"]
-          },
-          "initialDelaySeconds": 60,
-          "periodSeconds": 10,
-      },
-      "readinessProbe": {
-          "exec": {
-              "command": ["cat", "/tmp/custom/logs/stdout"]
-          },
-          "periodSeconds": 1
-      }
+  c.KubeSpawner.extra_pod_config = {
+      "restartPolicy": "Always",
   }
-
-  # Might need longer delete grace periods for unmounting in production
-  # c.KubeSpawner.delete_grace_period = 5
+  c.KubeSpawner.delete_grace_period = 70 # each unmount grace 30 seconds, cancel grace 10 seconds
   c.KubeSpawner.lifecycle_hooks = {
       "preStop": {
           "exec": {
