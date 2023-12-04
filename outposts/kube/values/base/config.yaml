@@ -334,10 +334,43 @@ outpostConfig: |-
           raise Exception(f"Flavor {flavor} not configured. Abort start.")
       return all_flavor_resources[flavor]
 
-  def get_node_selector(jupyterhub_name, flavor):
-      # TODO:
-      # K8s API, check if there's resources left on node 1,2,3,4 ...
+  def get_node_selector(spawner, jupyterhub_name, flavor):
+      from kubernetes import client
+      from kubernetes import config
+      import json
+
+      config.load_incluster_config()
+      core = client.CoreV1Api()
+      flavor_mem_request = all_flavor_resources.get(flavor, {}).get("mem_guarantee", "0M")
+      spawner.log.info(f"{spawner._log_name} - {flavor_mem_request}M memory for {flavor} ({jupyterhub_name}) requested")
+      base_node_name = "usernode-"
+      
+      first_node = True
+      outpost_mem_blocked = 1024
+      for i in range(0, 51):
+          node_name = f"{base_node_name}{i}"
+          try:
+              node = core.read_node_status(node_name)
+          except:
+              spawner.log.info(f"{spawner._log_name} - Could not load node {node_name}")
+              continue
+          requested_mem_mi_s = json.loads(node.metadata.annotations.get("management.cattle.io/pod-requests", '{}')).get("memory", "0Mi")
+          total_mem_ki_s = node.status.allocatable.get("memory", "0Ki") # 8128016
+          free_mem_mi = int(total_mem_ki_s[:-2])/1024 - int(requested_mem_mi_s[:-2])
+          free_mem_m = free_mem_mi*1.04858
+          if first_node:
+              first_node = False
+              spawner.log.info(f"{spawner._log_name} - {node_name} - keep {outpost_mem_blocked} free for JupyterHub Outpost")
+              free_mem_m = free_mem_m - outpost_mem_blocked
+          spawner.log.info(f"{spawner._log_name} - {node_name} has {free_mem_m}M free memory.")
+          if free_mem_m > int(flavor_mem_request[:-1]):
+              spawner.log.info(f"{spawner._log_name} - Use {node_name}")
+              return {"kubernetes.io/hostname": node_name}
+          else:
+              spawner.log.info(f"{spawner._log_name} - Do not use {node_name}")
+      spawner.log.warning("{spawner._log_name} - Use kubernetes scheduler to place node")
       return {"usernode": "true"}
+
 
   async def profile_list(spawner):
       # We're loading this config file for each Spawner object
@@ -361,7 +394,7 @@ outpostConfig: |-
             "kubespawner_override": {
                 "volume_mounts": get_profile_volume_mounts(mount_name, flavor),
                 "volumes": get_profile_volumes(mount_name, jupyterhub_name, flavor),
-                "node_selector": get_node_selector(jupyterhub_name, flavor),
+                "node_selector": get_node_selector(spawner._log_name, jupyterhub_name, flavor),
                 "cpu_guarantee": resources["cpu_guarantee"],
                 "cpu_limit": resources["cpu_limit"],
                 "mem_guarantee": resources["mem_guarantee"],
