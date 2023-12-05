@@ -232,6 +232,7 @@ hub:
 
       c.CustomJSCSpawner.custom_env = custom_env
       # c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_misc
+      c.CustomJSCSpawner.show_first_default_event = False
       c.CustomJSCSpawner.filter_events = jsc_custom.spawner.filter_events
 
       helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
