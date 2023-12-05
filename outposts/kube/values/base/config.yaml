@@ -46,9 +46,9 @@ outpostConfig: |-
               "max": -1,
               "weight": 9,
               "display_name": "4GB RAM, 1VCPUs, 12 hours",
-              "description": "JupyterLab will run for max 5 minutes with 4GB RAM and 1VCPUs.",
+              "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs.",
               "runtime": {
-                  "minutes": 5
+                  "hours": 12
               }
           },
           "l2": {

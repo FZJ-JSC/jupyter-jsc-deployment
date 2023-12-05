@@ -1,8 +1,4 @@
 resources:
-  - flavor-l1.yaml
-  - flavor-l2.yaml
-  - flavor-m1.yaml
-  - flavor-xl2.yaml
   - modules-defaulthub-3.2.yaml
   - modules-defaulthub-3.4.yaml
   - modules-defaulthub-3.6.yaml

@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: flavor-m1
-  namespace: outpost
-data:
-  load_flavor_variables.sh: |
-    #!/bin/bash
-    export JUPYTERHUB_TIMEOUT=120h
