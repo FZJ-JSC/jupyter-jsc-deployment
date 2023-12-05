@@ -6,7 +6,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.2.7
+  version: 0.2.8
   values:
     fullnameOverride: jupyterjsc-custom
     hub:
@@ -17,13 +17,12 @@ helm:
     ingress:
       enabled: true
     jupyter-metrics:
-      enabled: false
-      jobs: []
-        # - name: vanilla
-        #   namespace: jupyter
-        #   gitRepoCm: hub-metrics-git-repo
-        #   gitTokenSecret: metrics-git-token
-        #   dbSecret: hub-generics
+      enabled: true
+      jobs:
+        - name: jupyterjsc
+          namespace: jupyter
+          gitRepoCm: jupyterjsc-metrics
+          gitTokenSecret: jupyterjsc-metrics-token
     logging:
       syslog:
         enabled: false
