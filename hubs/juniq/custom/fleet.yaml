@@ -6,10 +6,10 @@ helm:
   releaseName: juniq-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.2.7
+  version: 0.2.10
   values:
     fullnameOverride: juniq-custom
-    hub:
+    global:
       name: juniq
       namespace: jupyter
       hostname: zam12065.zam.kfa-juelich.de
@@ -18,13 +18,7 @@ helm:
     ingress:
       enabled: true
     jupyter-metrics:
-      enabled: false
-      jobs: []
-        # - name: vanilla
-        #   namespace: jupyter
-        #   gitRepoCm: hub-metrics-git-repo
-        #   gitTokenSecret: metrics-git-token
-        #   dbSecret: hub-generics
+      enabled: true
     logging:
       syslog:
         enabled: false

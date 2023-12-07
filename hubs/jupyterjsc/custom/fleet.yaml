@@ -6,10 +6,10 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.2.8
+  version: 0.2.10
   values:
     fullnameOverride: jupyterjsc-custom
-    hub:
+    global:
       name: jupyterjsc
       namespace: jupyter
       hostname: zam12065.zam.kfa-juelich.de
@@ -18,11 +18,6 @@ helm:
       enabled: true
     jupyter-metrics:
       enabled: true
-      jobs:
-        - name: jupyterjsc
-          namespace: jupyter
-          gitRepoCm: jupyterjsc-metrics
-          gitTokenSecret: jupyterjsc-metrics-token
     logging:
       syslog:
         enabled: false
