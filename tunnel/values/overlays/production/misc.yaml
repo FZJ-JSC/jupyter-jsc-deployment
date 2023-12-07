@@ -1,9 +1,5 @@
 authorized_keys:
-  - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGDyzOleZ0JhOw/99dHGc4yU+g9uH3E1drJEI1L/ngjM deep'
-  - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOOjwe0VXwUfPXeDq35rwjGP/kYTD8hODuBV0BiQpB+v juwels'
-  - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM785RolstrLM01U7ui1Ce7geTu4q4T9Ored7MJl3GnD jureca'
-  - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH/rpVbRCRF1XeqpSuOncpf4UL3KSQyIHYK3M0xoC+7Y hdfml'
-  - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEvXZNie90rG85paBMAgL96L51BKHfBpr79MJ+kwrZ// jusuf'
+  - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKKyh85IgxztaFWY5Mv31fTV7Qh6o47HawpCh0YbBR8b ljupytershared'
 servicessh:
   loadBalancerIP: "134.94.199.16"
 stage: production

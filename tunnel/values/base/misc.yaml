@@ -19,6 +19,8 @@ gunicorn:
   maxRequests: 200
   maxRequestsJitter: 50
 logging:
+  stream:
+    level: 10
   syslog:
-    enabled: false
+    enabled: true
     level: 10

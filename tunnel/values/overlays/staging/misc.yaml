@@ -1,5 +1,5 @@
 authorized_keys:
-  - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIv5yrrqzF3S7U9IP+0GIBRws+Arh7/bSWcWrWo3buel jusuf'
+  - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINH3aF9BVaYln3WtNClKb39zdUs0X+5Uk9/LTALtlhFz ljupytershared'
 servicessh:
   loadBalancerIP: "134.94.198.218"
 stage: staging
