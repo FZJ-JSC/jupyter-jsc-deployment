@@ -37,7 +37,7 @@ outpostConfig: |-
 
   c.JupyterHubOutpost.sanitize_start_response = sanitize_start_response
 
-  c.JupyterHubOutpost.send_event = False
+  c.JupyterHubOutpost.send_events = False
 
   c.JupyterHubOutpost.spawner_class = UnicoreSpawner
 
