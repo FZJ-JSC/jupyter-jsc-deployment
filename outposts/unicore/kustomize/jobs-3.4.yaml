@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: unicore-jobs-3-6
+  name: unicore-jobs-3-4
   namespace: unicore
 data:
   input_start.sh: |
@@ -229,68 +229,46 @@ data:
         source ${HOME}/.jupyter/start_jupyter-jsc.sh
         send_spawn_update_warning 80 "Load customized modules done" "You are using a customized modules script, defined in ${HOME}/.jupyter/start_jupyter-jsc.sh."
       else
-        send_spawn_update 70 "Load default modules ..." "Loading Jupyter/2023.3.6 in Stages/2023."
+        send_spawn_update 70 "Load default modules ..." "Loading Jupyter/2022.3.4 in Stages/2022."
 
         module purge
-        module load Stages/2023 GCCcore/.11.3.0 Python JupyterLab/2023.3.6
+        module load Stages/2022 GCCcore/.11.2.0 Python Jupyter/2022.3.4
 
         if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Bash/.0.9.0-2023.3.6
+          module load JupyterKernel-Bash/.0.7.2-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Cling/.20230205-2023.3.6
+          module load JupyterKernel-Cling/.0.9-2022.3.4
+        fi
+        if [[ $JUPYTER_MODULE_JAVASCRIPT_ENABLED -eq 1 ]]; then
+          module load JupyterKernel-JavaScript/.5.2.1-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Julia/.1.8.5-2023.3.6
-        fi
-        if [[ $JUPYTER_MODULE_LFORTRAN_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-LFortran/.0.19.0-2023.3.6
+          module load JupyterKernel-Julia/.1.7.1-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_OCTAVE_ENABLED  -eq 1 ]]; then
-          module load JupyterKernel-Octave/.8.2.0-2023.3.6
+          module load JupyterKernel-Octave/.6.4.0-2022.3.4
         fi
         if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyDeepLearning/.2023.5-2023.3.6
+          module load JupyterKernel-PyDeepLearning/.1.1-2022.3.4
         fi
         if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyQuantum/.2023.5-2023.3.6
+          module load JupyterKernel-PyQuantum/.3.0-2022.3.4
         fi
         if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyVisualization/.2023.5-2023.3.6
-        fi
-        if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyEarthSystem/.2023.5-2023.3.6
+          module load JupyterKernel-PyVisualization/.1.0-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-R/.4.2.1-2023.3.6
+          module load JupyterKernel-R/.4.1.2-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Ruby/.3.0.5-2023.3.6
+          module load JupyterKernel-Ruby/.3.0.1-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
-          module load JupyterProxy-XpraHTML5/.0.3.5-2023.3.6
-        fi
-        # Load MatLab Proxy module, if user is in matlab group
-        IFS=' ' read -ra groups_array <<< "$(id -Gn)"
-        for group in "${groups_array[@]}"; do
-          if [[ "$group" == "matlab" ]]; then
-            module load JupyterProxy-Matlab/.0.8.0-2023.3.6
-            break
-          fi
-        done
-        if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
-          module load JupyterExtension-nglview/3.0.6-2023.3.6
-        fi
-        if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
-          module load JupyterExtension-jupyterai/1.0.1-2023.3.6
-        fi
-        if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-          module use /p/usersoftware/swmanage/goebbert1/stage2023/nest-desktop/easybuild/${SYSTEMNAME}/modules/all/Compiler/GCCcore/11.3.0/
-          module use /p/usersoftware/swmanage/goebbert1/stage2023/nest-desktop/easybuild/${SYSTEMNAME}/modules/all/MPI/GCC/11.3.0/psmpi/5/
-          module load JupyterProxy-NESTDesktop
+          module load JupyterProxy-XpraHTML5/.0.3.5-2022.3.4
         fi
         if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
-          module load JupyterExtension-slurmprovisioner/0.6.0-2023.3.6
+          module load JupyterExtension-slurmprovisioner/0.6.0-2022.3.4
           export SLURMEL_DOCUMENTATION_HREF="https://docs.jupyter-jsc.fz-juelich.de/github/FZJ-JSC/jupyter-jsc-notebooks/blob/master/05-News&Updates/Announcement-2022-12_Slurm_Wrapped_Kernels.ipynb"
           export JUPYTERJSC_CMD_ARGS="${JUPYTERJSC_CMD_ARGS} --ServerApp.kernel_manager_class=jupyter_slurm_provisioner.SlurmAsyncMappingKernelManager"
           export SLURM_PROVISIONER_NODE_SUFFIX="i"
@@ -299,11 +277,12 @@ data:
         else
           test -d ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel && mkdir -p ${HOME}/.local/share/jupyter/kernels.deactivated && mv ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel ${HOME}/.local/share/jupyter/kernels.deactivated/slurm-provisioner-kernel
         fi
-        lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
+            lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
           module load JupyterExtension-nvdashboard/0.8.0-2023.3.6
         fi
-        send_spawn_update 80 "Load default modules done" "Loaded Jupyter/2023.3.6 in Stages/2023."
+        send_spawn_update 80 "Load default modules done" "Loaded Jupyter/2022.3.4 in Stages/2022."
+
       fi
       echo "$(date) - Load modules done"
     }
@@ -446,7 +425,6 @@ data:
     update_config
     load_project_specific_kernel
     start
-
 
   juniq_input_start.sh: |
     #!/bin/bash
@@ -673,73 +651,46 @@ data:
         source ${HOME}/.jupyter/start_jupyter-jsc.sh
         send_spawn_update_warning 80 "Load customized modules done" "You are using a customized modules script, defined in ${HOME}/.jupyter/start_jupyter-jsc.sh."
       else
-        send_spawn_update 70 "Load default modules ..." "Loading Jupyter/2023.3.6 in Stages/2023."
-
+        send_spawn_update 70 "Load default modules ..." "Loading Jupyter/2022.3.4 in Stages/2022."
         module purge
-        module load Stages/2023 GCC/11.3.0 ParaStationMPI JupyterLab/2023.3.6
-        module load Cartopy/0.21.0 Cirq/1.0.0 DWave/6.3.0 PyQuil/3.3.3 Qiskit/0.41.0 pulser/0.12.0 myqlm/1.7.3 Qiskit-juqcs/0.8.0
+        module load Stages/2022 GCCcore/.11.2.0 ParaStationMPI Jupyter/2022.3.4
+        module load Cartopy/0.20.0 Cirq/0.14.1 DWave/4.2.0 PyQuil/3.0.1 Qiskit/0.36.2 Qiskit-juqcs/0.5.0
 
         if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Bash/.0.9.0-2023.3.6
+          module load JupyterKernel-Bash/.0.7.2-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Cling/.20230205-2023.3.6
+          module load JupyterKernel-Cling/.0.9-2022.3.4
+        fi
+        if [[ $JUPYTER_MODULE_JAVASCRIPT_ENABLED -eq 1 ]]; then
+          module load JupyterKernel-JavaScript/.5.2.1-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Julia/.1.8.5-2023.3.6
-        fi
-        if [[ $JUPYTER_MODULE_LFORTRAN_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-LFortran/.0.19.0-2023.3.6
+          module load JupyterKernel-Julia/.1.7.1-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_OCTAVE_ENABLED  -eq 1 ]]; then
-          module load JupyterKernel-Octave/.8.2.0-2023.3.6
+          module load JupyterKernel-Octave/.6.4.0-2022.3.4
         fi
         if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyDeepLearning/.2023.5-2023.3.6
+          module load JupyterKernel-PyDeepLearning/.1.1-2022.3.4
         fi
         if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyQuantum/.2023.5-2023.3.6
+          module load JupyterKernel-PyQuantum/.3.0-2022.3.4
         fi
         if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyVisualization/.2023.5-2023.3.6
-        fi
-        if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyEarthSystem/.2023.5-2023.3.6
+          module load JupyterKernel-PyVisualization/.1.0-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-R/.4.2.1-2023.3.6
+          module load JupyterKernel-R/.4.1.2-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Ruby/.3.0.5-2023.3.6
+          module load JupyterKernel-Ruby/.3.0.1-2022.3.4 
         fi
         if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
-          module load JupyterProxy-XpraHTML5/.0.3.5-2023.3.6
-        fi
-        # Load MatLab Proxy module, if user is in matlab group
-        IFS=' ' read -ra groups_array <<< "$(id -Gn)"
-        for group in "${groups_array[@]}"; do
-          if [[ "$group" == "matlab" ]]; then
-            if [[ $SYSTEMNAME == "hdfml" ]]; then
-              module load JupyterProxy-Matlab/.0.8.0-2023.3.6
-            else
-              module load JupyterProxy-Matlab/.0.9.0-2023.3.6
-            fi
-            break
-          fi
-        done
-        if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
-          module load JupyterExtension-nglview/3.0.6-2023.3.6
-        fi
-        if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
-          module load JupyterExtension-jupyterai/1.0.1-2023.3.6
-        fi
-        if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-          if [[ $SYSTEMNAME != "hdfml" ]]; then
-            module load JupyterProxy-NESTDesktop
-          fi
+          module load JupyterProxy-XpraHTML5/.0.3.5-2022.3.4
         fi
         if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
-          module load JupyterExtension-slurmprovisioner/0.6.0-2023.3.6
+          module load JupyterExtension-slurmprovisioner/0.6.0-2022.3.4
           export SLURMEL_DOCUMENTATION_HREF="https://docs.jupyter-jsc.fz-juelich.de/github/FZJ-JSC/jupyter-jsc-notebooks/blob/master/05-News&Updates/Announcement-2022-12_Slurm_Wrapped_Kernels.ipynb"
           export JUPYTERJSC_CMD_ARGS="${JUPYTERJSC_CMD_ARGS} --ServerApp.kernel_manager_class=jupyter_slurm_provisioner.SlurmAsyncMappingKernelManager"
           export SLURM_PROVISIONER_NODE_SUFFIX="i"
@@ -748,11 +699,11 @@ data:
         else
           test -d ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel && mkdir -p ${HOME}/.local/share/jupyter/kernels.deactivated && mv ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel ${HOME}/.local/share/jupyter/kernels.deactivated/slurm-provisioner-kernel
         fi
-        lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
+            lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
           module load JupyterExtension-nvdashboard/0.8.0-2023.3.6
         fi
-        send_spawn_update 80 "Load default modules done" "Loaded Jupyter/2023.3.6 in Stages/2023."
+        send_spawn_update 80 "Load default modules done" "Loaded Jupyter/2022.3.4 in Stages/2022."
       fi
       echo "$(date) - Load modules done"
     }
@@ -895,4 +846,3 @@ data:
     update_config
     load_project_specific_kernel
     start
-

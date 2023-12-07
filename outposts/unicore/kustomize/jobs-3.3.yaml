@@ -1,0 +1,384 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unicore-jobs-3-3
+  namespace: unicore
+data:
+  input_start.sh: |
+    #!/bin/bash
+
+    # Catch SIGTERM signal and stop $child process
+    _term() {
+      echo "$(date) - Stop JupyterLab ..."
+      if [[ -z $child ]]; then
+        echo "$(date) - Stop JupyterLab - unknown PID. Start stop.sh to wait for PID"
+        bash ${DIR}/stop.sh &
+      else
+        pkill --parent $child
+        kill $child
+        echo "$(date) - Stop JupyterLab ( $child ) ... done"
+        if [[ -z $token_pid ]]; then
+          echo "$(date) - Validate Token PID not found..."
+        else
+          echo "$(date) - Stop Validate Token Script ( $token_pid ) ..."
+          kill $token_pid
+          echo "$(date) - Stop Validate Token Script ( $token_pid ) ... done"
+        fi
+      fi
+    }
+
+    trap _term SIGTERM
+
+    requirements () {
+      echo "$(date) - Setup system specific requirements ( ${HOSTNAME} ) ..."
+      if [[ ! -d ${HOME}/.cache/black/19.3b0 ]]; then
+        mkdir -p ${HOME}/.cache/black/19.3b0
+      fi
+      # export a memory warn threshold on login nodes
+      hostname | egrep '<hostname_base>' > /dev/null && export JUPYTER_MEMWARNTHRES=0.5
+      # set cpu limit/warning
+      export FPATH_CPUQUOTA="/sys/fs/cgroup/cpu,cpuacct/user.slice/user-$(id -u $USER).slice/cpu.cfs_quota_us"
+      [ -f "${FPATH_CPUQUOTA}" ] && [ $(hostname | egrep '<hostname_cpulimit>') ] && export JUPYTER_CPULIMIT=$(($(cat ${FPATH_CPUQUOTA})/100000))
+
+      echo "$(date) - Setup system specific requirements done"
+    }
+
+    # set env_variables correctly
+    set_env () {
+      env > env_before.txt
+      echo "$(date) - Set environment variables ..."
+      export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+      export PID_PATH=${DIR}/service.pid
+      export VALIDATE_TOKEN_PID_PATH=${DIR}/validate_token.pid
+      export LC_ALL=en_US.UTF-8
+      export JUPYTER_LOG_DIR=${DIR}
+      export JUPYTER_STDOUT=${JUPYTER_LOG_DIR}/stderr
+      export PYTHONPATH=""
+      export PYTHONNOUSERSITE=1
+      export HOSTNAME_S=$(hostname -s)
+      export HOSTNAME_I=$(hostname -s)i
+      export CURL_ARGS="--silent --write-out %{http_code} --output /dev/null"
+      export CURL_HEADERS="-H \"Authorization: token ${JUPYTERHUB_API_TOKEN}\" -H \"Content-Type: application/json\" -H \"Accept: application/json\""
+
+      if [[ $JUPYTERHUB_SERVICE_URL == "https"* ]]; then
+        export HUB_PROTO="https"
+      else
+        export HUB_PROTO="http"
+      fi
+
+      echo "$(date) - JupyterLab is running on ${HOSTNAME_S}"
+      # If this JupyterLab is running on a LoginNode, we'll use the external api url.
+      # Otherwise we have to use a LoginNode as Proxy, because there's no internet
+      # connection for batch nodes
+      if [[ ${HOSTNAME_S} == "<hostname_base>"* ]]; then
+        # LoginNode
+        # This is the internal jupyterhub certificate, only used when connecting through proxy on login node
+        unset JUPYTERHUB_SSL_CLIENT_CA
+        export SSH_NODE=${HOSTNAME_I}
+        echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub. Jump node for tunnel: ${SSH_NODE}"
+      else
+        # batch node, no internet connection to the outside world
+        export PREVIOUS_API_URL=${JUPYTERHUB_API_URL}
+        export REMOTE_PORT="<remote_port>"
+        export JUPYTERHUB_CERTIFICATE="${DIR}/service_ca.crt"
+
+        if [[ $HUB_PROTO == "https" ]]; then
+          export CURL_ARGS="${CURL_ARGS} --cacert ${JUPYTERHUB_CERTIFICATE}"
+          export JUPYTERHUB_SSL_CLIENT_CA="${JUPYTERHUB_CERTIFICATE}"
+        fi
+
+        # Look for random LoginNode to use it as proxy
+        # We start at a random index, then we will run through all nodes and test them
+        export ALL_REMOTE_NODES=(<hostname_all>)
+        size=${#ALL_REMOTE_NODES[@]}
+        index=$(($RANDOM % $size))
+        start_index=$index
+        for _ in ${ALL_REMOTE_NODES[@]}
+        do
+          HTTPCODE=$(curl -X "GET" ${CURL_ARGS} ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api)
+          if [[ ${HTTPCODE} -ge 200 || ${HTTPCODE} -lt 299 ]]; then
+            # Add additional maintenance check
+            STATUSOUT=$(curl -s -w '%{http_code}' http://${ALL_REMOTE_NODES[$index]}:9100/metrics)
+            STATUSOUTCODE=$(echo "${STATUSOUT}" | tail -n 1)
+            STATUSOUTMAINT=$(echo "${STATUSOUT}" | grep -E '^maint_status' | cut -d' ' -f2)
+            if [[ $STATUSOUTCODE -eq 200 ]] && [[ ${STATUSOUTMAINT} -eq 0 ]]; then
+              export JUPYTERHUB_API_URL="${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api"
+              export SSH_NODE=${ALL_REMOTE_NODES[$index]}
+              echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub and ${SSH_NODE} as jump node."
+              break
+            else
+              echo "$(date) - Hub reachable for ${ALL_REMOTE_NODES[$index]}. But node metrics answered with: ${STATUSOUTCODE} , ${STATUSOUTMAINT}. Continue search for node. Full output: ${STATUSOUT}"
+            fi
+          fi
+          index=$(expr $index + 1)
+          if [[ $index == $size ]]; then
+            # if loop reached array end continue at 0
+            index=0
+          fi
+          if [[ $index == $start_index ]]; then
+            # Tried all login nodes
+            echo "$(date) - Could not find any LoginNode to connect to JupyterHub. Please try again in a few minutes."
+            exit 1
+          fi
+        done
+        export JUPYTERHUB_ACTIVITY_URL=${JUPYTERHUB_ACTIVITY_URL/${PREVIOUS_API_URL}/${JUPYTERHUB_API_URL}}
+        export JUPYTERHUB_EVENTS_URL=${JUPYTERHUB_EVENTS_URL/${PREVIOUS_API_URL}/${JUPYTERHUB_API_URL}}
+        export JUPYTERHUB_SETUPTUNNEL_URL=${JUPYTERHUB_SETUPTUNNEL_URL/${PREVIOUS_API_URL}/${JUPYTERHUB_API_URL}}
+      fi
+
+      export JUPYTERHUB_API_TOKEN=$(cat ${DIR}/.jupyter.token)
+      export JUPYTERHUB_OAUTH_SCOPES=$(cat ${DIR}/.oauth.scopes)
+      export JUPYTERHUB_OAUTH_ACCESS_SCOPES=$(cat ${DIR}/.oauth.scopes)
+      export JUPYTERHUB_SINGLEUSER_APP="jupyter_server.serverapp.ServerApp"
+
+      export PORT=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
+      # Replace previously defined port as ip and port passed via
+      #  cmd line arguments are ignored as in the new implementation of jupyterhub-singleuser
+      export JUPYTERHUB_SERVICE_URL=${HUB_PROTO}://0.0.0.0:${PORT}${JUPYTERHUB_SERVICE_PREFIX}
+
+      if [[ $HUB_PROTO == "https" ]]; then
+        export JUPYTERHUB_SSL_KEYFILE="${DIR}/service_cert.key"
+        export JUPYTERHUB_SSL_CERTFILE="${DIR}/service_cert.crt"
+      fi
+
+      export JUPYTERJSC_CMD_ARGS=""
+      echo "$(date) - Set environment variables done"
+      env > env_after.txt
+    }
+
+    grace_runtime_kill() {
+      # If JupyterLab is running on a batch node, we will kill it 10 seconds
+      # before the slrum runtime ends. This way JupyterHub stops the JupyterLab
+      # itself, instead of waiting to be notified that JupyterLab stopped.
+      if [[ -z $SLURM_JOBID ]]; then
+        # On Login Nodes this is not required
+        echo "$(date) - SLURM_JOBID not set. Do not set activate grace_runtime_kill"
+        return
+      fi
+      time=$(squeue -o "%L" -h -j $SLURM_JOBID)
+      # Check if the time is "NOT_SET" or "UNLIMITED"
+      if [[ "$time" == "NOT_SET" || "$time" == "UNLIMITED" || "$time" == "" ]]; then
+        echo "$(date) - Time limit not set or unlimited"
+        return
+      fi
+      # Split the time string into its components
+      IFS="-:" read -r -a time_array <<< "$time"
+      # Set default values for missing components
+      for ((i=${#time_array[@]}; i<4; i++)); do
+        time_array=(0 "${time_array[@]}")
+      done
+      # Fill the variables from back to front
+      secs=${time_array[3]}
+      mins=${time_array[2]}
+      hours=${time_array[1]}
+      days=${time_array[0]}
+      total_seconds=$((days * 86400 + hours * 3600 + mins * 60 + secs - 10))
+      echo "$(date) - Kill JupyterLab in $total_seconds seconds."
+      sleep $total_seconds && send_spawn_update_fail "Stop JupyterLab" "The runtime of the slurm job $SLURM_JOBID will end within the next 10 seconds. Stop JupyterLab gracefully." &
+    }
+
+
+    # Check Quota
+
+    check_quota () {
+      echo "$(date) - Check quota ..."
+      if [[ ! -f ${HOME}/.${JUPYTERHUB_SERVER_NAME} ]]; then
+        touch ${HOME}/.${JUPYTERHUB_SERVER_NAME}
+        EC1=$?
+        echo "Quota Check ${JUPYTERHUB_SERVER_NAME}" >> ${HOME}/.${JUPYTERHUB_SERVER_NAME}
+        EC2=$?
+        if [[ $EC1 -ne 0 || $EC1 -ne 0 ]]; then
+          send_spawn_update_fail "Disk quota exceeded in $HOME. You have to clean up your home directory before you can start a JupyterLab." "Jupyter-JSC tried to create a testfile in ${HOME} and failed. Job directory may contain further information: '"${DIR}"'"
+          rm ${HOME}/.${JUPYTERHUB_SERVER_NAME}
+          exit 0
+        fi
+        rm ${HOME}/.${JUPYTERHUB_SERVER_NAME}
+        send_spawn_update 50 "Disk quota checked." "If Jupyter-JSC could not create files in ${HOME}, JupyterLab would not be able to start."
+      else
+        echo "$(date) - Could not check quota"
+      fi
+      echo "$(date) - Check quota done"
+    }
+
+
+    # Hook to load customized environments before loading modules
+
+    pre_start () {
+      echo "$(date) - Pre start ..."
+      if [[ -f ${HOME}/.jupyter/pre_jupyter-jsc.sh ]]; then
+        echo "$(date) - Pre start if ..."
+        send_spawn_update_warning 60 "Use customized start script." "You are using a customized environment, defined in ${HOME}/.jupyter/pre_jupyter-jsc.sh."
+        echo "------ pre_jupyter-jsc.sh file ------"
+        cat ${HOME}/.jupyter/pre_jupyter-jsc.sh
+        echo "------ pre_jupyter-jsc.sh file ------"
+        source ${HOME}/.jupyter/pre_jupyter-jsc.sh
+      fi
+      echo "$(date) - Pre start done"
+    }
+
+
+    # Load modules
+
+    load_modules () {
+      echo "$(date) - Load modules ..."
+      if [[ -f ${HOME}/.jupyter/start_jupyter-jsc.sh ]]; then
+        send_spawn_update_warning 70 "Load customized modules ..." "You are using a customized modules script, defined in ${HOME}/.jupyter/start_jupyter-jsc.sh."
+        echo "------ start_jupyter-jsc.sh file ------"
+        cat ${HOME}/.jupyter/start_jupyter-jsc.sh
+        echo "------ start_jupyter-jsc.sh file ------"
+        source ${HOME}/.jupyter/start_jupyter-jsc.sh
+        send_spawn_update_warning 80 "Load customized modules done" "You are using a customized modules script, defined in ${HOME}/.jupyter/start_jupyter-jsc.sh."
+      else
+        send_spawn_update 70 "Load default modules ..." "Loading JupyterCollection/2022.3.3 in Stages/2022."
+        module purge
+        module load Stages/2022 GCCcore/.11.2.0 Python JupyterCollection/2022.3.3
+
+        echo "$(date) - checking for GPU"
+        lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
+        if [ $? -eq 0 ]; then
+          send_spawn_update 75 "Load Nvidia module ..." "Loading JupyterExtension-nvdashboard/0.6.0-2022.3.3 in Stages/2022."
+          module load JupyterExtension-nvdashboard/0.6.0-2022.3.3
+        fi
+        send_spawn_update 80 "Load default modules done" "Loading JupyterCollection/2022.3.3 in Stages/2022."
+      fi
+      echo "$(date) - Load modules done"
+    }
+
+    update_config () {
+      sed -i -e "s|_port_|${PORT}|g" -e "s|_home_|${JUPYTERHUB_HOME:-${HOME}}|g" -e "s|_servername_|${JUPYTERHUB_SERVER_NAME}|g" ${DIR}/config.py
+      if [[ -f ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py ]]; then
+        echo "$(date) - Add system specific config ..."
+        send_spawn_update 85 "Add system specific configuration." "Use system specific config file ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py"
+        echo "" >> ${DIR}/config.py
+        cat ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py >> ${DIR}/config.py
+        for path in ${JUPYTER_EXTRA_LABEXTENSIONS_PATH//:/$'\n'}; do
+          echo "c.LabServerApp.extra_labextensions_path.append('$path')" >> ${JUPYTER_LOG_DIR}/config.py
+        done
+        echo "$(date) - Add system specific config done"
+      fi
+      if [[ -f ${EBROOTJUPYTERLAB}/bin/update_favorites_json ]]; then
+        # update favorite-dirs with $HOME,$PROJECT,$SCRATCH,
+        echo "$(date) - Update favorites"
+        ${EBROOTJUPYTERLAB}/bin/update_favorites_json
+      fi
+    }
+
+    load_project_specific_kernel () {
+      echo "$(date) - Activate hook for project specific kernels ..."
+      if [[ -d ${PROJECT}/.local/share/jupyter ]] && [[ -r ${PROJECT}/.local/share/jupyter ]] && [[ -x ${PROJECT}/.local/share/jupyter ]]; then
+          echo "$(date) - Add project kernel for $PROJECT"
+          send_spawn_update_warning 90 "Activate project specific kernel." "Add ${PROJECT}/.local/share/jupyter to JUPYTER_PATH env variable. This may impede the start of JupyterLab."
+          export JUPYTER_PATH=${JUPYTER_PATH}:${PROJECT}/.local/share/jupyter
+      else
+          echo "$(date) - Do not add project kernel for $PROJECT"
+          # send_spawn_update_warning 90 "Could not activate project specific kernel." "Ensure that ${PROJECT}/.local/share/jupyter exists and is readable and accessible for ${USER}"
+      fi
+      echo "$(date) - Activate hook for project specific kernels done"
+    }
+
+    send_event () {
+      BODY=${1//\'/}
+      CURL_CMD="curl ${CURL_ARGS} ${CURL_HEADERS} -d '${BODY}' -X \"POST\" ${JUPYTERHUB_EVENTS_URL}"
+      eval " $CURL_CMD"
+    }
+
+    # show user a message in the UI
+    send_spawn_update () {
+      PROGRESS=$1
+      SUMMARY=$2
+      DETAILS=$3
+      BODY="{\"progress\": ${PROGRESS}, \"failed\": false, \"html_message\": \"<details><summary>${SUMMARY}</summary>${DETAILS}</details>\"}"
+      HTTPCODE=$(send_event "$BODY")
+      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
+        echo "$(date) - Could not send status update (${HTTPCODE} - ${PROGRESS}%: ${SUMMARY} - ${DETAILS}). Cancel start."
+        exit 1
+      else
+        echo "$(date) - Spawn update (${PROGRESS}%) successful: ${HTTPCODE}"
+      fi
+    }
+
+    # show user a darkorange message in the UI
+    send_spawn_update_warning () {
+      PROGRESS=$1
+      SUMMARY=$2
+      DETAILS=$3
+      BODY="{\"progress\": ${PROGRESS}, \"failed\": false, \"html_message\": \"<details><summary><span style=\\\"color:darkorange;\\\">${SUMMARY}</span></summary>${DETAILS}</details>\"}"
+      HTTPCODE=$(send_event "$BODY")
+      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
+        echo "$(date) - Could not send status update (${HTTPCODE} - ${PROGRESS}%: ${SUMMARY} - ${DETAILS}). Cancel start."
+        exit 1
+      else
+        echo "$(date) - Spawn update (${PROGRESS}%) successful: ${HTTPCODE}"
+      fi
+    }
+
+    # show user a fail message in the UI
+    send_spawn_update_fail () {
+      SUMMARY=$1
+      DETAILS=$2
+      BODY="{\"progress\": 100, \"failed\": true, \"html_message\": \"<details><summary>${SUMMARY}</summary>${DETAILS}</details>\"}"
+      HTTPCODE=$(send_event "$BODY")
+      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
+        echo "$(date) - Could not send fail status update (${HTTPCODE} - ${PROGRESS}%: ${SUMMARY} - ${DETAILS}). Cancel start."
+        exit 1
+      else
+        echo "$(date) - Send fail update (${PROGRESS}%) successful: ${HTTPCODE}"
+      fi
+    }
+
+    # setup tunnel to the node JupyterLab is running at
+    setup_tunnel () {
+      echo "$(date) - Setup tunnel ..."
+      BODY="{\"ssh_node\": \"${SSH_NODE}\", \"service\": \"${HOSTNAME_I}:${PORT}\"}"
+      CURL_CMD="curl ${CURL_ARGS} ${CURL_HEADERS} -d '${BODY}' -X \"POST\" ${JUPYTERHUB_SETUPTUNNEL_URL}"
+      echo "$CURL_CMD"
+      HTTPCODE=$(eval " $CURL_CMD")
+      if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
+        echo "Could not setup tunnel. Cancel start."
+        exit 1
+      fi
+      send_spawn_update 40 "Setup ssh port-forwarding." "Create ssh tunnel with system user ljupyter. JupyterHub will then be able to connect to JupyterLab at ${HOSTNAME_I}:${PORT}"
+      echo "$(date) - Setup tunnel done"
+    }
+
+    start () {
+      echo "$(date) - Start jupyterhub-singleuser ..."
+      export JUPYTERHUB_HOME=${JUPYTERHUB_HOME:-${HOME}}
+      cd ${JUPYTERHUB_HOME}
+
+      if [[ -n $JUPYTERJSC_USER_CMD ]]; then
+        send_spawn_update_warning 95 "Start JupyterLab with custom command" "Use custom command \$JUPYTERJSC_USER_CMD . You will be redirected, when your JupyterLab is ready."
+        timeout 30d ${JUPYTERJSC_USER_CMD} ${JUPYTERJSC_CMD_ARGS} &
+        child=$!
+      elif [[ -n $JUPYTERJSC_USER_CMD_ARGS ]]; then
+        send_spawn_update_warning 95 "Start JupyterLab with custom arguments" "Use custom arguments \$JUPYTERJSC_USER_CMD_ARGS . You will be redirected, when your JupyterLab is ready."
+        timeout 30d jupyterhub-singleuser --config ${DIR}/config.py ${JUPYTERJSC_CMD_ARGS} ${JUPYTERJSC_USER_CMD_ARGS} &
+        child=$!
+      else
+        send_spawn_update 95 "Start JupyterLab" "You will be redirected, when your JupyterLab is ready."
+        timeout 30d jupyterhub-singleuser --config ${DIR}/config.py ${JUPYTERJSC_CMD_ARGS} &
+        child=$!
+      fi
+      echo "$child" > ${PID_PATH}
+      echo "$(date) - Start jupyterhub-singleuser done (PID: $child )"
+
+      echo "$(date) - Start validate_token.sh ..."
+      /bin/bash ${DIR}/validate_token.sh ${child} ${JUPYTERHUB_API_URL} &
+      token_pid=$!
+      echo "$token_pid" > ${VALIDATE_TOKEN_PID_PATH}
+      echo "$(date) - Start validate_token.sh done (PID: $token_pid )"
+
+      wait $child
+    }
+
+
+    requirements
+    set_env
+    grace_runtime_kill
+    setup_tunnel
+    check_quota
+    pre_start
+    load_modules
+    update_config
+    load_project_specific_kernel
+    start

@@ -9,11 +9,35 @@ extraVolumes:
       defaultMode: 256
       name: unicore-jobs-3-6
     name: job-descriptions-3-6
+  - configMap:
+      defaultMode: 256
+      name: unicore-jobs-3-4
+    name: job-descriptions-3-4
+  - configMap:
+      defaultMode: 256
+      name: unicore-jobs-3-3
+    name: job-descriptions-3-3
+  - configMap:
+      defaultMode: 256
+      name: unicore-jobs-3-2
+    name: job-descriptions-3-2
+  - configMap:
+      defaultMode: 256
+      name: unicore-jobs-2-6
+    name: job-descriptions-2-6
 extraVolumeMounts:
   - mountPath: /mnt/jobs/common
     name: job-descriptions-common
   - mountPath: /mnt/jobs/JupyterLab_3.6
     name: job-descriptions-3-6
+  - mountPath: /mnt/jobs/JupyterLab_3.4
+    name: job-descriptions-3-4
+  - mountPath: /mnt/jobs/JupyterLab_3.3
+    name: job-descriptions-3-3
+  - mountPath: /mnt/jobs/JupyterLab_3.2
+    name: job-descriptions-3-2
+  - mountPath: /mnt/jobs/JupyterLab_2.6
+    name: job-descriptions-2-6
 outpostConfig: |-
   import json
   import logging
@@ -104,6 +128,8 @@ outpostConfig: |-
     
     prefix = "input_"
     jhub_prefix = f"{jhub}_input_"
+    system_prefix = f"{system}_input_"
+    jhub_system_prefix = f"{jhub}_{system}_input_"
     # First collect common input files
     for subdir, dirs, files in os.walk("/mnt/jobs/common"):
       for file in files:
@@ -140,6 +166,27 @@ outpostConfig: |-
               "Data": f.read()
             })
     
+    # Afterwards collect system specific files. Allows easy override of previous files
+    for subdir, dirs, files in os.walk(f"/mnt/jobs/{profile}"):
+      for file in files:
+        if file.startswith(system_prefix):
+          with open(os.path.join(subdir, file), "r") as f:
+            job_description["Imports"].append({
+              "From": "inline://dummy",
+              "To": file[len(system_prefix):],
+              "Data": f.read()
+            })
+    
+    # Afterwards collect jhub-system specific files. Allows easy override of previous files
+    for subdir, dirs, files in os.walk(f"/mnt/jobs/{profile}"):
+      for file in files:
+        if file.startswith(jhub_system_prefix):
+          with open(os.path.join(subdir, file), "r") as f:
+            job_description["Imports"].append({
+              "From": "inline://dummy",
+              "To": file[len(jhub_system_prefix):],
+              "Data": f.read()
+            })
 
     if partition in system_config[system]["interactive_partitions"]:
       job_description["Job type"] = "on_login_node"
