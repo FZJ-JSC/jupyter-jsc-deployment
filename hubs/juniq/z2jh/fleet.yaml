@@ -5,10 +5,11 @@ labels:
 kustomize:
   dir: ./kustomize
 helm:
-  releaseName: jupyterhub-juniq
-  repo: https://jupyterhub.github.io/helm-chart/
-  chart: jupyterhub
-  version: 3.1.0
+  releaseName: juniq
+  # repo: https://jupyterhub.github.io/helm-chart/
+  # chart: jupyterhub
+  # version: 3.1.0
+  chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.2.1.tgz
   values:
     nameOverride: "juniq"
     fullnameOverride: "juniq"
