@@ -237,7 +237,6 @@ hub:
 
       helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
       c.CustomJSCSpawner.svc_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
-      c.CustomJSCSpawner.dns_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
       c.CustomJSCSpawner.svc_create = False
 
       c.CustomJSCSpawner.custom_poll_interval = jsc_custom.spawner.poll_interval
