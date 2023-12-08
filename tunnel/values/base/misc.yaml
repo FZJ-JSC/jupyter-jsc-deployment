@@ -9,10 +9,10 @@ podAnnotations:
 resources:
   requests:
     cpu: 100m
-    memory: 1024Mi
+    memory: 4096Mi
   limits:
-    cpu: 2000m
-    memory: 2048Mi
+    cpu: 4000m
+    memory: 4096Mi
 gunicorn:
   processes: 4
   threads: 8
