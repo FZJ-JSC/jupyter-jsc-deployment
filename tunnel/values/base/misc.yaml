@@ -1,5 +1,5 @@
 image:
-  tag: "2.0.4"
+  tag: "3.0.2"
 sshtimeout: 3
 nameOverride: "tunnel"
 nodeSelector:
@@ -9,7 +9,7 @@ podAnnotations:
 resources:
   requests:
     cpu: 100m
-    memory: 512Mi
+    memory: 1024Mi
   limits:
     cpu: 2000m
     memory: 2048Mi

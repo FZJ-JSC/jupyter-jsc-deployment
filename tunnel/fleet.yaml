@@ -3,7 +3,7 @@ helm:
   releaseName: tunnel
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-tunnel
-  version: 0.1.11
+  version: 0.1.12
   valuesFiles:
     - values/base/jupyterhubs.yaml
     - values/base/misc.yaml
@@ -16,7 +16,7 @@ targetCustomizations:
       valuesFiles:
         - values/overlays/staging/misc.yaml
       values:
-        replicas: 2
+        replicas: 1
   - name: production
     clusterSelector:
       matchLabels:
