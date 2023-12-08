@@ -12,6 +12,12 @@
 #         hostname: "k8smgr.hlrs.de"
 jupyterhubs:
   default:
+    additional_remote_hosts:
+      - coec
+      - coeraise
+      - eurocc
+      - juniq
+      - portalgauss
     ssh_config_hosts: 
       - name: "deepv"
         user: "ljupyter"

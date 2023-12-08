@@ -5,7 +5,6 @@ helm:
   chart: jupyter-tunnel
   version: 0.1.12
   valuesFiles:
-    - values/base/jupyterhubs.yaml
     - values/base/misc.yaml
 targetCustomizations:
   - name: staging
@@ -14,6 +13,7 @@ targetCustomizations:
         stage: staging
     helm:
       valuesFiles:
+        - values/overlays/staging/jupyterhubs.yaml
         - values/overlays/staging/misc.yaml
       values:
         replicas: 1
@@ -23,6 +23,7 @@ targetCustomizations:
         stage: production
     helm:
       valuesFiles:
+        - values/overlays/production/jupyterhubs.yaml
         - values/overlays/production/misc.yaml
       values:
         replicas: 2
