@@ -252,48 +252,65 @@ outpostConfig: |-
     }
   }
 
-  stage_system_replacements = {
+  stage_hub_replacements = {
     "production": {
-      "JUWELS": {
-        "remote_port": "25182",
+      "coec": {
+        "remote_port": "25480",
       },
-      "JURECA": {
-        "remote_port": "25182",
+      "coeraise": {
+        "remote_port": "25482",
       },
-      "JUSUF": {
-        "remote_port": "25182",
+      "eurocc": {
+        "remote_port": "25486",
       },
-      "HDFML": {
-        "remote_port": "25182",
+      "juniq": {
+        "remote_port": "25488",
       },
-      "DEEP": {
-        "remote_port": "25182",
+      "jupyterjsc": {
+        "remote_port": "25490",
+      },
+      "portalgauss": {
+        "remote_port": "25492",
       }
     },
     "staging": {
-      "JUWELS": {
-        "remote_port": "25182",
+      "coec": {
+        "remote_port": "25481",
       },
-      "JURECA": {
-        "remote_port": "25182",
+      "coeraise": {
+        "remote_port": "25483",
       },
-      "JUSUF": {
-        "remote_port": "25182",
+      "dev1": {
+        "remote_port": "25484",
       },
-      "HDFML": {
-        "remote_port": "25182",
+      "dev2": {
+        "remote_port": "25485",
       },
-      "DEEP": {
-        "remote_port": "25182",
+      "eurocc": {
+        "remote_port": "25487",
+      },
+      "juniq": {
+        "remote_port": "25489",
+      },
+      "jupyterjsc": {
+        "remote_port": "25491",
+      },
+      "portalgauss": {
+        "remote_port": "25493",
       }
     }
   }
 
   async def additional_replacements(spawner):
     stage = os.environ.get("STAGE", "undefined")
+    hub = spawner.jupyterhub_name
     system = spawner.user_options.get("system", "undefined")
     ret = additional_replacements_base.copy()
-    ret["system"][system].update(stage_system_replacements.get(stage, {}).get(system, {}))
+    remote_port_replaces = stage_hub_replacements.get(stage, {}).get(hub, {})
+    if remote_port_replaces:
+      ret["system"][system].update(remote_port_replaces)
+    else:
+      spawner.log.error(f"Remote port for {hub}-{system} (hub-system) not defined.")
     return ret
 
   system_config = {
