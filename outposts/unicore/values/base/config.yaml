@@ -205,6 +205,7 @@ outpostConfig: |-
 
       job_description["Job type"] = "batch"
       job_description["Resources"] = {
+        "Queue": partition,
         "Nodes": nodes,
         "Runtime": f"{runtime}min"
       }
@@ -216,9 +217,15 @@ outpostConfig: |-
         job_description["Resources"]["Reservation"] = reservation
     
     
+    jd_to_log = job_description.copy()
+    if "Imports" in jd_to_log.keys():
+      jd_to_log["Imports"] = "..."
+    if "Environment" in jd_to_log.keys():
+      jd_to_log["Environment"] = "..."
+    spawner.log.info(f"{spawner._log_name} - Use job_description: {jd_to_log}")
+    spawner.log.debug(f"{spawner._log_name} - Start job with these input files: {[x.get('To') for x in job_description.get('Imports', [])]}")
+    spawner.log.debug(f"{spawner._log_name} - Start job with these environment variables: {list(job_descriptionget('Environment').keys())}")
 
-    spawner.log.info(f"{spawner._log_name} - Start job with these input files: {[x.get('To') for x in job_description['Imports']]}")
-    spawner.log.info(f"{spawner._log_name} - Start job with these environment variables: {list(job_description['Environment'])}")
     return job_description
 
 
