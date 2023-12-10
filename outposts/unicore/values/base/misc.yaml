@@ -7,7 +7,7 @@ nameOverride: "outpost-unicore"
 fullnameOverride: "outpost-unicore"
 logging:
   syslog:
-    enabled: false
+    enabled: true
     level: 10
 nodeSelector:
   worker: "true"
