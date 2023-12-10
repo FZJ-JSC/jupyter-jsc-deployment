@@ -395,7 +395,6 @@ data:
       echo "$(date) - Setup tunnel ..."
       BODY="{\"ssh_node\": \"${SSH_NODE}\", \"service\": \"${HOSTNAME_I}:${PORT}\"}"
       CURL_CMD="curl ${CURL_ARGS} ${CURL_HEADERS} -d '${BODY}' -X \"POST\" ${JUPYTERHUB_SETUPTUNNEL_URL}"
-      echo "$CURL_CMD"
       HTTPCODE=$(eval " $CURL_CMD")
       if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
         echo "Could not setup tunnel. Cancel start."
@@ -844,7 +843,6 @@ data:
       echo "$(date) - Setup tunnel ..."
       BODY="{\"ssh_node\": \"${SSH_NODE}\", \"service\": \"${HOSTNAME_I}:${PORT}\"}"
       CURL_CMD="curl ${CURL_ARGS} ${CURL_HEADERS} -d '${BODY}' -X \"POST\" ${JUPYTERHUB_SETUPTUNNEL_URL}"
-      echo "$CURL_CMD"
       HTTPCODE=$(eval " $CURL_CMD")
       if [[ ${HTTPCODE} -lt 200 || ${HTTPCODE} -gt 299 ]]; then
         echo "Could not setup tunnel. Cancel start."
