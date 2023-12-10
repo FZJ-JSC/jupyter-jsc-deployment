@@ -96,7 +96,6 @@ outpostConfig: |-
     
     job_description["Imports"] = []
     job_description["Environment"] = spawner.get_env()
-    job_description["PORT"] = spawner.port
     
     if spawner.internal_ssl:
       # First add Import files for certificates.
