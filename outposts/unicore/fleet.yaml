@@ -17,7 +17,7 @@ targetCustomizations:
     helm:
       values:
         image:
-          tag: 0.9.0dev.1
+          tag: 0.9.0dev.2
         extraEnvVars:
           - name: STAGE
             value: "staging"
