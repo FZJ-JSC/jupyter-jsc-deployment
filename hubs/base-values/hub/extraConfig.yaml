@@ -218,7 +218,7 @@ hub:
       c.CustomJSCSpawner.request_kwargs = jsc_custom.spawner.request_kwargs
       c.CustomJSCSpawner.request_url = jsc_custom.spawner.request_url
       c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}{base_url}hub/api"
-      c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_misc
+      c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_env
       c.CustomJSCSpawner.show_first_default_event = False
       c.CustomJSCSpawner.filter_events = jsc_custom.spawner.filter_events
 
