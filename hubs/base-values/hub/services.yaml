@@ -2,8 +2,8 @@ hub:
   services:
     metrics:
       name: metrics-prometheus-monitor
-    tunnellist:
-      name: tunnel_list_servers
+    listservers:
+      name: list_servers
     tunnelrestart:
       name: tunnel_restart_nodes
     hpcupdate:
@@ -11,13 +11,13 @@ hub:
     outpostflavors:
       name: outpost_flavors
   loadRoles:
-    tunnel_list:
-      name: "tunnel_list_servers-role"
+    list_servers:
+      name: "list_servers-role"
       description: "List running servers"
       scopes:
         - "custom:servers:list"
       services:
-        - "tunnel_list_servers"
+        - "list_servers"
     restart_forward:
       name: "restart_forward-role"
       description: "Restart port forward processes, when a proxy node was restarted."
