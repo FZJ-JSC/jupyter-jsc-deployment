@@ -222,6 +222,20 @@ hub:
       c.CustomJSCSpawner.show_first_default_event = False
       c.CustomJSCSpawner.filter_events = jsc_custom.spawner.filter_events
 
+      async def update_expected_path(spawner, original_ret):
+          system = spawner.user_options.get("system", "unknown")
+          if system == "JSC-Cloud":
+              # Add outpost as namespace
+              ret_split = original_ret.split(":")
+              ret = f"{ret_split[:-1]}.outpost.svc:{ret_split[-1]}
+              spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
+              return ret
+          else:
+              spawner.log.debug(f"{spawner._log_name} - Do not update expected path for system {system}")
+              return original_ret
+      
+      c.CustomJSCSpawner.update_expected_path = update_expected_path
+
       from datetime import datetime
       async def cancel_click_event(spawner):
           now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
