@@ -222,6 +222,18 @@ hub:
       c.CustomJSCSpawner.show_first_default_event = False
       c.CustomJSCSpawner.filter_events = jsc_custom.spawner.filter_events
 
+      from datetime import datetime
+      async def cancel_click_event(spawner):
+          now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
+          return {
+              "failed": False,
+              "ready": False,
+              "progress": 99,
+              "message": "",
+              "html_message": f"<details><summary>{now}: Cancelling start ...</summary>Start process is being stopped.</details>",
+          }
+      c.CustomJSCSpawner.cancelling_event = cancel_click_event
+
       helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
       c.CustomJSCSpawner.svc_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
       c.CustomJSCSpawner.svc_create = False
