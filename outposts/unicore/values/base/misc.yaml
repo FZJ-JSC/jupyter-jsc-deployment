@@ -6,6 +6,8 @@ extraEnvVarsSecrets:
 nameOverride: "outpost-unicore"
 fullnameOverride: "outpost-unicore"
 logging:
+  stream:
+    level: 10
   syslog:
     enabled: true
     level: 10
