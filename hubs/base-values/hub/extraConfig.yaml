@@ -220,7 +220,7 @@ hub:
       c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}{base_url}hub/api"
       c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_env
       c.CustomJSCSpawner.show_first_default_event = False
-      # c.CustomJSCSpawner.filter_events = jsc_custom.spawner.filter_events
+      c.CustomJSCSpawner.filter_events = jsc_custom.spawner.filter_events
 
       helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
       c.CustomJSCSpawner.svc_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
