@@ -227,7 +227,7 @@ hub:
           if system == "JSC-Cloud":
               # Add outpost as namespace
               ret_split = original_ret.split(":")
-              ret = f"{ret_split[:-1]}.outpost.svc:{ret_split[-1]}
+              ret = f"{ret_split[:-1]}.outpost.svc:{ret_split[-1]}"
               spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
               return ret
           else:
