@@ -224,7 +224,7 @@ hub:
 
       from datetime import datetime
       async def cancel_click_event(spawner):
-          now = datetime.now().strftime("%Y_%m_%d %H:%M:%S.%f")[:-3]
+          now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
           return {
               "failed": False,
               "ready": False,
