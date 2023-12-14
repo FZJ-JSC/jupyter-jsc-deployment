@@ -1,5 +1,3 @@
-image:
-  tag: "3.0.3dev.16"
 sshtimeout: 3
 nameOverride: "tunnel"
 nodeSelector:
