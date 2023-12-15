@@ -14,12 +14,12 @@ jupyterhubs:
   default:
     additional_remote_hosts:
       - juniq
-      # - coec
-      # - coeraise
+      - coec
+      - coeraise
+      - euroccgcs
+      - portalgauss
       # - dev1
       # - dev2
-      # - eurocc
-      # - portalgauss
     ssh_config_hosts: 
       - name: "deepv"
         user: "ljupyter"

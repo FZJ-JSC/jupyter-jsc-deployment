@@ -266,7 +266,7 @@ outpostConfig: |-
       "coeraise": {
         "remote_port": "25482",
       },
-      "eurocc": {
+      "euroccgcs": {
         "remote_port": "25486",
       },
       "juniq": {
@@ -292,7 +292,7 @@ outpostConfig: |-
       "dev2": {
         "remote_port": "25485",
       },
-      "eurocc": {
+      "euroccgcs": {
         "remote_port": "25487",
       },
       "juniq": {
