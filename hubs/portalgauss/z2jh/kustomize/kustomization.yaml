@@ -1,0 +1,75 @@
+# Can be removed, once Unity was updated and has it's own two fa setup
+secretGenerator:
+- name: portalgauss-twofa
+  literals:
+  - SEND2FA_CONFIG_PATH=/mnt/shared-data/git_config/send_mail_config.json
+  - TWOFA_SSH_KEY=/mnt/shared-data/twofa/twofa
+  - TWOFA_SSH_USER=unity
+  - TWOFA_SSH_HOST=zam2041.zam.kfa-juelich.de
+  - TWOFA_REMOVE_SSH_KEY=/mnt/shared-data/twofa/twofaremove
+  - TWOFA_REMOVE_SSH_USER=unity
+  - TWOFA_REMOVE_SSH_HOST=zam2041.zam.kfa-juelich.de
+  options:
+    disableNameSuffixHash: true
+    labels:
+      app: portalgauss
+
+# InitContainer list in hub component:
+# 0 - prepare-shared-data
+# Container list in hub component:
+# 0 - check-incidents
+# 1 - check-reservations
+# 2 - check-frontend-files
+# 3 - sidecar-nginx
+# 4 - hub
+patches:
+- target:
+    kind: Deployment
+    labelSelector: app=portalgauss,component=hub
+  patch: |-
+    - op: add
+      path: /spec/template/spec/initContainers/0/envFrom
+      value:
+        - secretRef:
+            name: portalgauss-frontend-git
+    - op: add
+      path: /spec/template/spec/containers/2/envFrom
+      value:
+        - secretRef:
+            name: portalgauss-frontend-git
+    - op: add
+      path: /spec/template/spec/containers/4/envFrom
+      value:
+        - secretRef:
+            name: portalgauss-generics
+        - secretRef:
+            name: portalgauss-twofa
+    - op: add
+      path: /spec/template/spec/volumes/-
+      value:
+        name: internal-ssl
+        secret:
+          defaultMode: 420
+          secretName: portalgauss-internal-ssl
+    - op: add
+      path: /spec/template/spec/volumes/-
+      value:
+        name: persistent
+        persistentVolumeClaim:
+          claimName: portalgauss-pvc
+    - op: add
+      path: /spec/template/spec/volumes/-
+      value:
+        name: custom-config
+        configMap:
+          defaultMode: 400
+          name: portalgauss-custom-config
+- target:
+    kind: Ingress
+    name: portalgauss
+    group: networking.k8s.io
+    version: v1
+  patch: |-
+    - op: replace
+      path: "/spec/rules/0/http/paths/0/backend/service/port/name"
+      value: https
