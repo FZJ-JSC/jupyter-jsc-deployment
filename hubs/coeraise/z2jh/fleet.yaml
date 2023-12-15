@@ -1,0 +1,47 @@
+defaultnamespace: jupyter
+labels:
+  app: coeraise
+  component: z2jh
+kustomize:
+  dir: ./kustomize
+helm:
+  releaseName: coeraise
+  # repo: https://jupyterhub.github.io/helm-chart/
+  # chart: jupyterhub
+  # version: 3.1.0
+  chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.2.1.tgz
+  values:
+    nameOverride: "coeraise"
+    fullnameOverride: "coeraise"
+    ingress:
+      # Set JupyterHub in maintenance:
+      #   Set enabled here to false, update ingress in maintenance/fleet.yaml
+      enabled: true
+    hub:
+      resources: {}
+    proxy:
+      chp:
+        resources: {}
+  valuesFiles:
+    - ../../base-values/common.yaml
+    - ../../base-values/proxy.yaml
+    - ../../base-values/hub/config.yaml
+    - ../../base-values/hub/image.yaml
+    - ../../base-values/hub/extraConfig.yaml
+    - ../../base-values/hub/extraContainers.yaml
+    - ../../base-values/hub/extraVolumeMounts.yaml
+    - ../../base-values/hub/extraVolumes.yaml
+    - ../../base-values/hub/initContainers.yaml
+    - ../../base-values/hub/others.yaml
+    - ../../base-values/hub/services.yaml
+  valuesFrom:
+    - configMapKeyRef:
+        name: coeraise-values
+        namespace: jupyter
+        key: values.yaml
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: coeraise
+        component: custom

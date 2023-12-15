@@ -1,0 +1,33 @@
+defaultNamespace: jupyter
+labels:
+  app: coeraise
+  component: custom
+helm:
+  releaseName: coeraise-custom
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyter-hub-customizations
+  version: 0.9.0
+  values:
+    fullnameOverride: coeraise-custom
+    global:
+      name: coeraise
+      namespace: jupyter
+      hostname: jupyter-staging.coe-raise.eu
+      loggerName: JSCCloudCoeRaiseStaging
+    ingress:
+      enabled: true
+    jupyter-metrics:
+      enabled: true
+    logging:
+      syslog:
+        enabled: true
+        level: 10
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        global:
+          hostname: jupyter-staging.coe-raise.eu
