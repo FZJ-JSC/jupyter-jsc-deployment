@@ -22,3 +22,13 @@ helm:
       syslog:
         enabled: true
         level: 10
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        global:
+          hostname: portal-staging.gauss-centre.eu
+          baseUrl: ""

@@ -23,3 +23,13 @@ helm:
       syslog:
         enabled: true
         level: 10
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        global:
+          hostname: juniq-staging.fz-juelich.de
+          baseUrl: ""
