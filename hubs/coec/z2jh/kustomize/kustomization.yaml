@@ -17,11 +17,9 @@ secretGenerator:
 # InitContainer list in hub component:
 # 0 - prepare-shared-data
 # Container list in hub component:
-# 0 - check-incidents
-# 1 - check-reservations
-# 2 - check-frontend-files
-# 3 - sidecar-nginx
-# 4 - hub
+# 0 - check-frontend-files
+# 1 - sidecar-nginx
+# 2 - hub
 patches:
 - target:
     kind: Deployment
@@ -33,12 +31,12 @@ patches:
         - secretRef:
             name: coec-frontend-git
     - op: add
-      path: /spec/template/spec/containers/2/envFrom
+      path: /spec/template/spec/containers/0/envFrom
       value:
         - secretRef:
             name: coec-frontend-git
     - op: add
-      path: /spec/template/spec/containers/4/envFrom
+      path: /spec/template/spec/containers/2/envFrom
       value:
         - secretRef:
             name: coec-generics
