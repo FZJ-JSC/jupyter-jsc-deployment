@@ -15,7 +15,7 @@ hub:
     pullSecrets:
       - "gitlab-registry"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
-    tag: 4.0.2dev.1
+    tag: 4.0.2
   containerSecurityContext:
     runAsUser: 0
     runAsGroup: 0
