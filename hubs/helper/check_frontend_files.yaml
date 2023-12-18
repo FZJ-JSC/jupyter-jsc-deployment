@@ -104,9 +104,11 @@ data:
               rm -r ${SHARE_COPY_DIR}/static/images/footer/systems/*
           fi
 
-          chown -R 1000:100 ${SHARE_COPY_DIR}
+          chown -R 1000:1000 ${SHARE_COPY_DIR}
           cp -r ${SHARE_COPY_DIR}/* ${SHARE_JHUB_DIR}/.
           cp -r ${SHARE_COPY_DIR}/static/* ${SHARE_NGINX_DIR}/.
+          chown -R 1000:1000 ${SHARE_JHUB_DIR}
+          chown -R 1000:1000 ${SHARE_NGINX_DIR}
           rm -rf ${SHARE_COPY_DIR}
       fi
     }
@@ -115,7 +117,7 @@ data:
 
     if [[ ! ${1} == "once" ]]; then
         while true; do
-            update
             sleep 60
+            update
         done
     fi

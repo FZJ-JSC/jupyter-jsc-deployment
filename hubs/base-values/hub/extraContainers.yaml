@@ -1,49 +1,5 @@
 hub:
   extraContainers:
-    - name: check-incidents
-      image: python:3.12-alpine3.18
-      imagePullPolicy: Always
-      command: ["/bin/sh"]
-      args:
-        - -c
-        - >-
-            pip install jsonformatter python-dateutil pyyaml requests &&
-            mkdir -p /mnt/shared-data/incidents &&
-            source /mnt/incidents/run.sh
-      volumeMounts:
-        - name: shared-data
-          mountPath: /mnt/shared-data
-        - name: custom-config
-          mountPath: /mnt/custom_config
-        - name: check-incidents
-          mountPath: /mnt/incidents
-        - name: tz-config
-          mountPath: /etc/localtime
-    - name: check-reservations
-      image: python:3.12-alpine3.18
-      imagePullPolicy: Always
-      command: ["/bin/sh"]
-      args:
-        - -c
-        - >-
-            apk add bash openssh &&
-            pip install pyyaml &&
-            mkdir -p /mnt/ssh &&
-            cp -rp /mnt/reservation-keypair/..data/* /mnt/ssh/. &&
-            chmod 400 /mnt/ssh/* &&
-            mkdir -p /mnt/shared-data/reservation-check &&
-            source /mnt/reservation/..data/run.sh
-      volumeMounts:
-        - name: shared-data
-          mountPath: /mnt/shared-data
-        - name: reservation-keypair
-          mountPath: /mnt/reservation-keypair
-        - name: custom-config
-          mountPath: /mnt/custom_config
-        - name: check-reservations
-          mountPath: /mnt/reservation
-        - name: tz-config
-          mountPath: /etc/localtime
     - name: check-frontend-files
       image: alpine:3.18
       imagePullPolicy: Always

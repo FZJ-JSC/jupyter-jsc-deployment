@@ -3,6 +3,9 @@ hub:
     - -c
     - >-
       pip install --force-reinstall jupyter-jsc-custom jupyterhub-forwardbasespawner jupyterhub-unicorespawner jupyterhub-outpostspawner &&
+      mkdir -p /mnt/reservation_key &&
+      cp -rp /mnt/reservation-keypair/..data/* /mnt/ssh/. &&
+      chmod 400 /mnt/reservation_key/* &&
       /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
   command:
     - /bin/bash

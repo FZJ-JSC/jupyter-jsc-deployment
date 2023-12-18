@@ -6,14 +6,6 @@ hub:
       configMap:
         defaultMode: 400
         name: init-script
-    - name: check-incidents
-      configMap:
-        defaultMode: 400
-        name: check-incidents
-    - name: check-reservations
-      configMap:
-        defaultMode: 400
-        name: check-reservations
     - name: check-frontend-files
       configMap:
         defaultMode: 400
