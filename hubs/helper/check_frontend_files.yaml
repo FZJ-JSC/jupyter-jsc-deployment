@@ -76,14 +76,14 @@ data:
       fi
 
       # If one was updated, we have to prepare a new directory
-      if [[ ${SHARE_BASE_UPDATED} -eq 1 || ${SHARE_OVERLAYS_UPDATED} -eq 1 || FORCE -eq 1 ]]; then
+      if [[ ${SHARE_BASE_UPDATED} -eq 1 || ${SHARE_OVERLAYS_UPDATED} -eq 1 || ${FORCE} -eq 1 ]]; then
           echo "$(date) - Shared files update (Base: ${SHARE_BASE_UPDATED} , Overlays: ${SHARE_OVERLAYS_UPDATED}, Force ${FORCE})"
           mkdir -p ${SHARE_COPY_DIR}
           cd ${SHARE_BASE_DIR}
           git pull origin ${SHARE_BASE_GIT_BRANCH}
           cp -r ${SHARE_BASE_DIR}/* ${SHARE_COPY_DIR}/.
 
-          if [[ ${SHARE_OVERLAYS_UPDATED} -eq 1 || (FORCE -eq 1 && -d ${SHARE_OVERLAYS_GIT_REPO}) ]]; then
+          if [[ ${SHARE_OVERLAYS_UPDATED} -eq 1 || (${FORCE} -eq 1 && -d ${SHARE_OVERLAYS_DIR}) ]]; then
               cd ${SHARE_OVERLAYS_DIR}
               git pull origin ${SHARE_OVERLAYS_GIT_BRANCH}
 
