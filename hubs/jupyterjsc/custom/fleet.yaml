@@ -31,3 +31,13 @@ targetCustomizations:
       values:
         global:
           hostname: jupyter-staging.jsc.fz-juelich.de
+        customConfig:
+          groups:
+            admin:
+              usernames:
+                - a.grosch_at_fz-juelich.de
+                - t.kreuzer_at_fz-juelich.de
+              services:
+                JupyterLab:
+                  custom:
+                    maxPerUser: 5
