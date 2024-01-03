@@ -8,7 +8,7 @@ outpostConfig: |-
   class HealthCheckFilter(logging.Filter):
       def filter(self, record: logging.LogRecord) -> bool:
           return record.getMessage().find("/ping") == -1
-  
+
   class EventsCheckFilter(logging.Filter):
       def filter(self, record: logging.LogRecord) -> bool:
           if record.funcName in ["_watch_and_update"]:
@@ -268,7 +268,7 @@ outpostConfig: |-
           }
       ]
       profile_mounts = [
-        {
+      {
               "name": f"modules-{profile}", 
               "mountPath": "/tmp/custom/load_jupyter_version.sh", 
               "subPath": "load_jupyter_version.sh"
@@ -280,7 +280,7 @@ outpostConfig: |-
           }
       ]
       return common_mounts + profile_mounts
-  
+
 
   def get_profile_volumes(profile, jupyterhub_name):
       stage = os.environ.get("STAGE", "staging")
@@ -334,7 +334,7 @@ outpostConfig: |-
           }
       ]
       return common_volumes + profile_volumes
-  
+
   # Guarantee is a bit less, to allow system pods run on the usernodes
   # as well
   all_flavor_resources = {
@@ -403,10 +403,8 @@ outpostConfig: |-
 
   async def profile_list(spawner):
       # We're loading this config file for each Spawner object
-      # Therefore, it's fine to just create the one selected profile
-      # with it's flavor 
+      # Therefore, it's fine to just create one profile
       jupyterhub_name = spawner.jupyterhub_name
-      flavor = spawner.user_options.get("flavor", "default")
       profile = spawner.user_options.get("profile", "JupyterLab/3.6")
       if "/" in profile:
           profile_split = '-'.join(profile.split("/")[1:])
@@ -414,24 +412,41 @@ outpostConfig: |-
           profile_split = profile
       mount_name = profile_split.replace(".", "-")
 
+      flavor = spawner.user_options.get("flavor", "default")
       resources = get_flavor_resources(flavor)
 
-      return [
-        {
-            "display_name": "JupyterLab - 3.6",
-            "slug": "JupyterLab/3.6",
-            "kubespawner_override": {
-                "volume_mounts": get_profile_volume_mounts(mount_name),
-                "volumes": get_profile_volumes(mount_name, jupyterhub_name),
-                "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
-                "cpu_guarantee": resources["cpu_guarantee"],
-                "cpu_limit": resources["cpu_limit"],
-                "mem_guarantee": resources["mem_guarantee"],
-                "mem_limit": resources["mem_limit"]
-            }
-        }
-    ]
+      # User defined custom docker images
+      if profile_split == "custom":
+          return [
+              {
+                  "display_name": "JupyterLab - custom",
+                  "slug": "JupyterLab/custom",
+                  "kubespawner_override": {
+                      "image": spawner.user_options.get("image"),
+                      "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
+                      "cpu_guarantee": resources["cpu_guarantee"],
+                      "cpu_limit": resources["cpu_limit"],
+                      "mem_guarantee": resources["mem_guarantee"],
+                      "mem_limit": resources["mem_limit"]
+                  }
+              }
+          ]
+      else:
+          return [
+              {
+                  "display_name": "JupyterLab - 3.6",
+                  "slug": "JupyterLab/3.6",
+                  "kubespawner_override": {
+                      "volume_mounts": get_profile_volume_mounts(mount_name),
+                      "volumes": get_profile_volumes(mount_name, jupyterhub_name),
+                      "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
+                      "cpu_guarantee": resources["cpu_guarantee"],
+                      "cpu_limit": resources["cpu_limit"],
+                      "mem_guarantee": resources["mem_guarantee"],
+                      "mem_limit": resources["mem_limit"]
+                  }
+              }
+          ]
 
   c.KubeSpawner.profile_list = profile_list
-
 
