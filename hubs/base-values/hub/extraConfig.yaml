@@ -167,6 +167,7 @@ hub:
       c.CustomGenericOAuthenticator.manage_groups = True
       c.CustomGenericOAuthenticator.enable_auth_state = True
       c.CustomGenericOAuthenticator.refresh_pre_spawn = True
+      c.CustomGenericOAuthenticator.allow_all = True
       c.CustomGenericOAuthenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
       c.CustomGenericOAuthenticator.client_secret = os.environ.get("OAUTH_CLIENT_SECRET")
       c.CustomGenericOAuthenticator.authorize_url = (
