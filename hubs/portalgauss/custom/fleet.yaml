@@ -6,7 +6,7 @@ helm:
   releaseName: portalgauss-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.9.3
+  version: 0.9.4
   values:
     fullnameOverride: portalgauss-custom
     global:
@@ -31,3 +31,11 @@ targetCustomizations:
       values:
         global:
           hostname: portal-staging.gauss-centre.eu
+        customConfig:
+          systems:
+            - JSC-Cloud
+            - HLRS
+          backendServices:
+            outpostKubeHLRS:
+              urls:
+                services: http://vm-138-246-238-21.cloud.mwn.de:8080/services
