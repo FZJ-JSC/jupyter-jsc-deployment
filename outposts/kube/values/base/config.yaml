@@ -475,7 +475,7 @@ outpostConfig: |-
       return [
           {
               "display_name": "JupyterLab",
-              "slug": "JupyterLab",
+              "slug": "JupyterLab/3.6",
               "kubespawner_override": {
                   "image": spawner.user_options.get("image"),
                   "volume_mounts": get_profile_volume_mounts(spawner),
