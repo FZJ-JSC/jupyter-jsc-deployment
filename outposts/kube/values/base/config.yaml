@@ -256,7 +256,7 @@ outpostConfig: |-
   def pre_spawn_hook(spawner):
       userhome_base = "/p/home/jusers"
       hub = spawner.extra_labels.get("app", "jupyter")
-      stage = "staging"
+      stage = os.environ.get("STAGE", "staging")
       userid = str(spawner.user.id)
       profile = spawner.user_options.get("profile", "")
       try:
@@ -358,7 +358,8 @@ outpostConfig: |-
 
   def get_profile_volumes(spawner, jupyterhub_name):
       profile = get_profile(spawner)
-      
+      stage = os.environ.get("STAGE", "staging")
+
       if profile == "custom":
           if "userdata_path" in spawner.user_options:
               userdata_volume = [
@@ -376,7 +377,6 @@ outpostConfig: |-
           else:
               return []
       else:
-          stage = os.environ.get("STAGE", "staging")
           map_hub_names = {
               "jupyterjsc": "defaulthub",
               "coec": "defaulthub",
