@@ -305,7 +305,7 @@ outpostConfig: |-
       profile = spawner.user_options.get("profile", "JupyterLab/3.6")
       if "/" in profile:
           profile = '-'.join(profile.split("/")[1:])
-      profile.replace(".", "-")
+      profile = profile.replace(".", "-")
       return profile
 
 
