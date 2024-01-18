@@ -219,10 +219,9 @@ outpostConfig: |-
   ##########
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
-
-
-  c.KubeSpawner.start_timeout = 600
+  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.5"p
   c.KubeSpawner.image_pull_policy = "Always"
+  c.KubeSpawner.start_timeout = 600
   c.KubeSpawner.tolerations = [
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
   ]
@@ -310,8 +309,7 @@ outpostConfig: |-
       return profile
 
 
-  def get_profile_volume_mounts(spawner):
-      profile = get_profile(spawner)
+  def get_profile_volume_mounts(spawner, profile):
       if profile == "custom":
           if "userdata_path" in spawner.user_options:
               userdata_mount = [
@@ -356,8 +354,7 @@ outpostConfig: |-
           ]
           return common_mounts + profile_mounts
 
-  def get_profile_volumes(spawner, jupyterhub_name):
-      profile = get_profile(spawner)
+  def get_profile_volumes(spawner, profile, jupyterhub_name):
       stage = os.environ.get("STAGE", "staging")
 
       if profile == "custom":
@@ -470,18 +467,34 @@ outpostConfig: |-
       # We're loading this config file for each Spawner object
       # Therefore, it's fine to just create one profile
       jupyterhub_name = spawner.jupyterhub_name
+      profile = get_profile(spawner)
       flavor = spawner.user_options.get("flavor", "default")
       resources = get_flavor_resources(flavor)
-      default_image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.5"
 
+      if profile == "custom":
+        return [
+          {
+              "display_name": "JupyterLab - custom",
+              "slug": "JupyterLab/custom",
+              "kubespawner_override": {
+                  "image": spawner.user_options.get("image"),
+                  "volume_mounts": get_profile_volume_mounts(spawner, profile),
+                  "volumes": get_profile_volumes(spawner, profile, jupyterhub_name),
+                  "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
+                  "cpu_guarantee": resources["cpu_guarantee"],
+                  "cpu_limit": resources["cpu_limit"],
+                  "mem_guarantee": resources["mem_guarantee"],
+                  "mem_limit": resources["mem_limit"]
+              }
+          }
+      ]
       return [
           {
-              "display_name": "JupyterLab",
+              "display_name": "JupyterLab - 3.6",
               "slug": "JupyterLab/3.6",
               "kubespawner_override": {
-                  "image": spawner.user_options.get("image", default_image),
-                  "volume_mounts": get_profile_volume_mounts(spawner),
-                  "volumes": get_profile_volumes(spawner, jupyterhub_name),
+                  "volume_mounts": get_profile_volume_mounts(spawner, profile),
+                  "volumes": get_profile_volumes(spawner, profile, jupyterhub_name),
                   "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
                   "cpu_guarantee": resources["cpu_guarantee"],
                   "cpu_limit": resources["cpu_limit"],
