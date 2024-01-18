@@ -310,30 +310,6 @@ outpostConfig: |-
 
 
   def get_profile_volume_mounts(spawner, profile):
-      common_mounts = [
-          {
-              "name": "nfs-software", 
-              "mountPath": "/p/software/jsccloud", 
-              "readOnly": True
-          },
-          {
-              "name": "uftp", 
-              "mountPath": "/tmp/custom/uftp.py",
-              "subPath": "uftp.py"
-          },
-      ]
-      profile_mounts = [
-      {
-              "name": f"modules-{profile}", 
-              "mountPath": "/tmp/custom/load_jupyter_version.sh", 
-              "subPath": "load_jupyter_version.sh"
-          },
-          {
-              "name": f"modules-user-{profile}", 
-              "mountPath": "/tmp/custom/load_jupyter_modules.sh",
-              "subPath": "load_jupyter_modules.sh"
-          }
-      ]
       if profile == "custom":
           if "userdata_path" in spawner.user_options:
               userdata_mount = [
@@ -343,71 +319,111 @@ outpostConfig: |-
                       "readOnly": False 
                   }
               ]
+              return userdata_mount
           else:
-              userdata_mount = []
+              return []
       else:
-          userdata_mount = [
+          common_mounts = [
+              {
+                  "name": "nfs-software", 
+                  "mountPath": "/p/software/jsccloud", 
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp", 
+                  "mountPath": "/tmp/custom/uftp.py",
+                  "subPath": "uftp.py"
+              },
               {
                   "name": "nfs-userhome",
                   "mountPath": "/home/jovyan",
                   "readOnly": False 
               }
           ]
-      return common_mounts + profile_mounts + userdata_mount
+          profile_mounts = [
+          {
+                  "name": f"modules-{profile}", 
+                  "mountPath": "/tmp/custom/load_jupyter_version.sh", 
+                  "subPath": "load_jupyter_version.sh"
+              },
+              {
+                  "name": f"modules-user-{profile}", 
+                  "mountPath": "/tmp/custom/load_jupyter_modules.sh",
+                  "subPath": "load_jupyter_modules.sh"
+              }
+          ]
+          return common_mounts + profile_mounts
 
-  def get_profile_volumes(profile, jupyterhub_name):
-      stage = os.environ.get("STAGE", "staging")
-      map_hub_names = {
-          "jupyterjsc": "defaulthub",
-          "coec": "defaulthub",
-          "coeraise": "defaulthub",
-          "portalgauss": "defaulthub",
-          "euroccgcs": "defaulthub"
-      }
-      hub = map_hub_names.get(jupyterhub_name, jupyterhub_name)
+  def get_profile_volumes(spawner, profile, jupyterhub_name):
+      if profile == "custom":
+          if "userdata_path" in spawner.user_options:
+              userdata_volume = [
+              {
+                  "name": "nfs-userhome", 
+                  "hostPath": {
+                      # userid gets expanded by KubeSpawner, do not use mapped 
+                      # hub name here, each hub uses it's own home dir.
+                      "path": f"/p/home/jusers/{jupyterhub_name}/{stage}/{{userid}}", 
+                      "type": ""
+                  }
+              }
+              ]
+              return userdata_volume
+          else:
+              return []
+      else:
+          stage = os.environ.get("STAGE", "staging")
+          map_hub_names = {
+              "jupyterjsc": "defaulthub",
+              "coec": "defaulthub",
+              "coeraise": "defaulthub",
+              "portalgauss": "defaulthub",
+              "euroccgcs": "defaulthub"
+          }
+          hub = map_hub_names.get(jupyterhub_name, jupyterhub_name)
 
-      common_volumes = [
-          {
-              "name": "nfs-software", 
-              "hostPath": {
-                  "path": "/p/software/jsccloud", 
-                  "type": ""
+          common_volumes = [
+              {
+                  "name": "nfs-software", 
+                  "hostPath": {
+                      "path": "/p/software/jsccloud", 
+                      "type": ""
+                  }
+              },
+              {
+                  "name": "uftp", 
+                  "configMap": {
+                      "defaultMode": 292,
+                      "name": "uftp"
+                  }
+              },
+              {
+                  "name": "nfs-userhome", 
+                  "hostPath": {
+                      # userid gets expanded by KubeSpawner, do not use mapped 
+                      # hub name here, each hub uses it's own home dir.
+                      "path": f"/p/home/jusers/{jupyterhub_name}/{stage}/{{userid}}", 
+                      "type": ""
+                  }
               }
-          },
-          {
-              "name": "uftp", 
-              "configMap": {
-                  "defaultMode": 292,
-                  "name": "uftp"
+          ]
+          profile_volumes = [
+              {
+                  "name": f"modules-{profile}", 
+                  "configMap": {
+                      "defaultMode": 292,
+                      "name": f"modules-{hub}-{profile}"
+                  }
+              },
+              {
+                  "name": f"modules-user-{profile}", 
+                  "configMap": {
+                      "defaultMode": 292,
+                      "name": f"modules-user-{hub}-{profile}"
+                  }
               }
-          },
-          {
-              "name": "nfs-userhome", 
-              "hostPath": {
-                  # userid gets expanded by KubeSpawner, do not use mapped 
-                  # hub name here, each hub uses it's own home dir.
-                  "path": f"/p/home/jusers/{jupyterhub_name}/{stage}/{{userid}}", 
-                  "type": ""
-              }
-          }
-      ]
-      profile_volumes = [
-          {
-              "name": f"modules-{profile}", 
-              "configMap": {
-                  "defaultMode": 292,
-                  "name": f"modules-{hub}-{profile}"
-              }
-          },
-          {
-              "name": f"modules-user-{profile}", 
-              "configMap": {
-                  "defaultMode": 292,
-                  "name": f"modules-user-{hub}-{profile}"
-              }
-          }
-      ]
-      return common_volumes + profile_volumes
+          ]
+          return common_volumes + profile_volumes
 
   def get_node_selector(spawner, jupyterhub_name, resources, flavor):
       from kubernetes import client
@@ -464,7 +480,7 @@ outpostConfig: |-
                   "kubespawner_override": {
                       "image": spawner.user_options.get("image"),
                       "volume_mounts": get_profile_volume_mounts(spawner, profile),
-                      "volumes": get_profile_volumes(profile, jupyterhub_name),
+                      "volumes": get_profile_volumes(spawner, profile, jupyterhub_name),
                       "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
                       "cpu_guarantee": resources["cpu_guarantee"],
                       "cpu_limit": resources["cpu_limit"],
@@ -480,7 +496,7 @@ outpostConfig: |-
                   "slug": "JupyterLab/3.6",
                   "kubespawner_override": {
                       "volume_mounts": get_profile_volume_mounts(spawner, profile),
-                      "volumes": get_profile_volumes(profile, jupyterhub_name),
+                      "volumes": get_profile_volumes(spawner, profile, jupyterhub_name),
                       "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
                       "cpu_guarantee": resources["cpu_guarantee"],
                       "cpu_limit": resources["cpu_limit"],
