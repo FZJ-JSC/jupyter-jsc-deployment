@@ -363,7 +363,7 @@ outpostConfig: |-
           if "userdata_path" in spawner.user_options:
               userdata_volume = [
               {
-                  "name": "nfs-userhome", 
+                  "name": "nfs-userdata", 
                   "hostPath": {
                       # userid gets expanded by KubeSpawner, do not use mapped 
                       # hub name here, each hub uses it's own home dir.
