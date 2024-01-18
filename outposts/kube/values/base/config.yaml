@@ -5,6 +5,9 @@ outpostConfig: |-
 
   from kubespawner import KubeSpawner
 
+  ##########
+  # Logging
+  ##########
   class HealthCheckFilter(logging.Filter):
       def filter(self, record: logging.LogRecord) -> bool:
           return record.getMessage().find("/ping") == -1
@@ -25,12 +28,9 @@ outpostConfig: |-
   c.JupyterHubOutpost.log_format = f"%(color)s[%(levelname)1.1s %(asctime)s.%(msecs).03d {logged_logger_name} %(name)s %(module)s:%(lineno)d]%(end_color)s %(message)s"
 
 
-  async def flavors_update_token(jupyterhub_name):
-      token = os.environ.get(f"FLAVOR_{jupyterhub_name.upper()}_AUTH_TOKEN", "")
-      if not token:
-          raise Exception(f"Flavor auth token for {jupyterhub_name} not configured.")
-      return token
-
+  ##########
+  # Flavors
+  ##########
   all_flavors = {
       "jupyterjsc": {
           "m1": {
@@ -172,13 +172,51 @@ outpostConfig: |-
       }
   }
 
+  # Guarantee is a bit less, to allow system pods run on the usernodes
+  # as well
+  all_flavor_resources = {
+      "m1": {
+          "cpu_guarantee": 0.2,
+          "cpu_limit": 1,
+          "mem_guarantee": "1536M",
+          "mem_limit": "2048M"
+      },
+      "l1": {
+          "cpu_guarantee": 0.2,
+          "cpu_limit": 1,
+          "mem_guarantee": "3584M",
+          "mem_limit": "4096M"
+      },
+      "l2": {
+          "cpu_guarantee": 0.2,
+          "cpu_limit": 2,
+          "mem_guarantee": "7680M",
+          "mem_limit": "8192M"
+      }
+  }
+
+  async def flavors_update_token(jupyterhub_name):
+      token = os.environ.get(f"FLAVOR_{jupyterhub_name.upper()}_AUTH_TOKEN", "")
+      if not token:
+          raise Exception(f"Flavor auth token for {jupyterhub_name} not configured.")
+      return token
+
   async def flavors(jupyterhub_name):
       return all_flavors.get(jupyterhub_name, {})
+
+  def get_flavor_resources(flavor):
+      if flavor not in all_flavor_resources.keys():
+          raise Exception(f"Flavor {flavor} not configured. Abort start.")
+      return all_flavor_resources[flavor]
 
   c.JupyterHubOutpost.flavors_update_token = flavors_update_token
   c.JupyterHubOutpost.flavors = flavors
   c.JupyterHubOutpost.flavors_undefined_max = 0
 
+
+  ##########
+  # KubeSpawner
+  ##########
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
   c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.5"
@@ -208,6 +246,11 @@ outpostConfig: |-
           }
       }
   }
+
+
+  ##########
+  # KubeSpawner prespawn hook
+  ##########
 
   def pre_spawn_hook(spawner):
       userhome_base = "/p/home/jusers"
@@ -248,9 +291,25 @@ outpostConfig: |-
           shutil.rmtree(f"{userhome_dir.rstrip('/')}/.motd.d", ignore_errors=True)
           copy_dir(f"{userhome_skel.rstrip('/')}/.motd.d", f"{userhome_dir.rstrip('/')}/.motd.d")
 
+      if "usermount_path" in spawner.user_options:
+          del spawner.user_options["usermount_path"]
+
   c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
 
-  def get_profile_volume_mounts(profile):
+
+  ##########
+  # KubeSpawner profiles
+  ##########
+
+  def get_profile(spawner):
+      profile = spawner.user_options.get("profile", "JupyterLab/3.6")
+      if "/" in profile:
+          profile = '-'.join(profile.split("/")[1:])
+      profile.replace(".", "-")
+      return profile
+
+
+  def get_profile_volume_mounts(spawner, profile):
       common_mounts = [
           {
               "name": "nfs-software", 
@@ -262,11 +321,6 @@ outpostConfig: |-
               "mountPath": "/tmp/custom/uftp.py",
               "subPath": "uftp.py"
           },
-          {
-              "name": "nfs-userhome",
-              "mountPath": "/home/jovyan",
-              "readOnly": False 
-          }
       ]
       profile_mounts = [
       {
@@ -280,8 +334,26 @@ outpostConfig: |-
               "subPath": "load_jupyter_modules.sh"
           }
       ]
-      return common_mounts + profile_mounts
-
+      if profile == "custom":
+          if "userdata_path" in spawner.user_options:
+              userdata_mount = [
+                  {
+                      "name": "nfs-userhome",
+                      "mountPath": spawner.user_options["userdata_path"],
+                      "readOnly": False 
+                  }
+              ]
+          else:
+              userdata_mount = []
+      else:
+          userdata_mount = [
+              {
+                  "name": "nfs-userhome",
+                  "mountPath": "/home/jovyan",
+                  "readOnly": False 
+              }
+          ]
+      return common_mounts + profile_mounts + userdata_mount
 
   def get_profile_volumes(profile, jupyterhub_name):
       stage = os.environ.get("STAGE", "staging")
@@ -293,6 +365,7 @@ outpostConfig: |-
           "euroccgcs": "defaulthub"
       }
       hub = map_hub_names.get(jupyterhub_name, jupyterhub_name)
+
       common_volumes = [
           {
               "name": "nfs-software", 
@@ -336,34 +409,6 @@ outpostConfig: |-
       ]
       return common_volumes + profile_volumes
 
-  # Guarantee is a bit less, to allow system pods run on the usernodes
-  # as well
-  all_flavor_resources = {
-      "m1": {
-          "cpu_guarantee": 0.2,
-          "cpu_limit": 1,
-          "mem_guarantee": "1536M",
-          "mem_limit": "2048M"
-      },
-      "l1": {
-          "cpu_guarantee": 0.2,
-          "cpu_limit": 1,
-          "mem_guarantee": "3584M",
-          "mem_limit": "4096M"
-      },
-      "l2": {
-          "cpu_guarantee": 0.2,
-          "cpu_limit": 2,
-          "mem_guarantee": "7680M",
-          "mem_limit": "8192M"
-      }
-  }
-
-  def get_flavor_resources(flavor):
-      if flavor not in all_flavor_resources.keys():
-          raise Exception(f"Flavor {flavor} not configured. Abort start.")
-      return all_flavor_resources[flavor]
-
   def get_node_selector(spawner, jupyterhub_name, resources, flavor):
       from kubernetes import client
       from kubernetes import config
@@ -401,29 +446,25 @@ outpostConfig: |-
       spawner.log.warning("{spawner._log_name} - Use kubernetes scheduler to place node")
       return {"usernode": "true"}
 
-
   async def profile_list(spawner):
       # We're loading this config file for each Spawner object
       # Therefore, it's fine to just create one profile
       jupyterhub_name = spawner.jupyterhub_name
-      profile = spawner.user_options.get("profile", "JupyterLab/3.6")
-      if "/" in profile:
-          profile_split = '-'.join(profile.split("/")[1:])
-      else:
-          profile_split = profile
-      mount_name = profile_split.replace(".", "-")
+      profile = get_profile(spawner)
 
       flavor = spawner.user_options.get("flavor", "default")
       resources = get_flavor_resources(flavor)
 
       # User defined custom docker images
-      if profile_split == "custom":
+      if profile == "custom":
           return [
               {
                   "display_name": "JupyterLab - custom",
                   "slug": "JupyterLab/custom",
                   "kubespawner_override": {
                       "image": spawner.user_options.get("image"),
+                      "volume_mounts": get_profile_volume_mounts(spawner, profile),
+                      "volumes": get_profile_volumes(profile, jupyterhub_name),
                       "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
                       "cpu_guarantee": resources["cpu_guarantee"],
                       "cpu_limit": resources["cpu_limit"],
@@ -438,8 +479,8 @@ outpostConfig: |-
                   "display_name": "JupyterLab - 3.6",
                   "slug": "JupyterLab/3.6",
                   "kubespawner_override": {
-                      "volume_mounts": get_profile_volume_mounts(mount_name),
-                      "volumes": get_profile_volumes(mount_name, jupyterhub_name),
+                      "volume_mounts": get_profile_volume_mounts(spawner, profile),
+                      "volumes": get_profile_volumes(profile, jupyterhub_name),
                       "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
                       "cpu_guarantee": resources["cpu_guarantee"],
                       "cpu_limit": resources["cpu_limit"],
