@@ -219,13 +219,14 @@ outpostConfig: |-
   ##########
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
-  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.5"
+
+
+  c.KubeSpawner.start_timeout = 600
   c.KubeSpawner.image_pull_policy = "Always"
   c.KubeSpawner.tolerations = [
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
   ]
 
-  c.KubeSpawner.start_timeout = 600
   c.KubeSpawner.fs_gid = 100
   c.KubeSpawner.container_security_context = {
       "allowPrivilegeEscalation": True,
@@ -471,13 +472,14 @@ outpostConfig: |-
       jupyterhub_name = spawner.jupyterhub_name
       flavor = spawner.user_options.get("flavor", "default")
       resources = get_flavor_resources(flavor)
+      default_image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.5"
 
       return [
           {
               "display_name": "JupyterLab",
               "slug": "JupyterLab/3.6",
               "kubespawner_override": {
-                  "image": spawner.user_options.get("image"),
+                  "image": spawner.user_options.get("image", default_image),
                   "volume_mounts": get_profile_volume_mounts(spawner),
                   "volumes": get_profile_volumes(spawner, jupyterhub_name),
                   "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
