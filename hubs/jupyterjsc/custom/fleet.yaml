@@ -6,7 +6,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.9.11
+  version: 0.9.12
   values:
     fullnameOverride: jupyterjsc-custom
     global:
@@ -34,9 +34,6 @@ targetCustomizations:
         customConfig:
           groups:
             admin:
-              usernames:
-                - a.grosch_at_fz-juelich.de
-                - t.kreuzer_at_fz-juelich.de
               services:
                 JupyterLab:
                   custom:
@@ -48,3 +45,19 @@ targetCustomizations:
           - name: "staging-nbviewer"
             oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
             newHost: "docs.jupyter-staging.jsc.fz-juelich.de"
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      values:
+        global:
+          hostname: zam12154.zam.kfa-juelich.de
+          baseUrl: /jupyterjsc/
+        customConfig:
+          groups:
+            admin:
+              services:
+                JupyterLab:
+                  custom:
+                    maxPerUser: 5
