@@ -227,6 +227,7 @@ outpostConfig: |-
   # We set all the labels we want in extra_labels, so overwrite common_labels
   c.KubeSpawner.common_labels = {}
 
+  c.KubeSpawner.secret_name_template = "tls-{userid}-{servername}"
   c.KubeSpawner.start_timeout = 600
   c.KubeSpawner.fs_gid = 100
   c.KubeSpawner.container_security_context = {
