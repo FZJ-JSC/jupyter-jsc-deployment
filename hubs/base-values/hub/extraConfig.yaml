@@ -257,7 +257,6 @@ hub:
 
       c.CustomJSCSpawner.custom_poll_interval = jsc_custom.spawner.poll_interval
       c.CustomJSCSpawner.progress_ready_hook = jsc_custom.spawner.progress_ready_hook
-      # c.CustomJSCSpawner.ssl_alt_names = [f"DNS:{jhub_hostname}", "DNS:default-hub"]
       c.CustomJSCSpawner.http_timeout = 7200
 
       ### UNICORE specific config

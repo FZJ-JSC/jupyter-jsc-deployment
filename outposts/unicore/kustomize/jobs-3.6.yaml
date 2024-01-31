@@ -96,7 +96,13 @@ data:
         for _ in ${ALL_REMOTE_NODES[@]}
         do
           HTTPCODE=$(curl -X "GET" ${CURL_ARGS} ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api)
-          if [[ ${HTTPCODE} -ge 200 || ${HTTPCODE} -lt 299 ]]; then
+          if [[ ${HTTPCODE} -ge 200 ]] && [[ ${HTTPCODE} -le 299 ]]; then
+            if [[ ${ALL_REMOTE_NODES[$index]} == "deepv" ]]; then
+              export JUPYTERHUB_API_URL="${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api"
+              export SSH_NODE=${ALL_REMOTE_NODES[$index]}
+              echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub and ${SSH_NODE} as jump node."
+              break
+            fi
             # Add additional maintenance check
             STATUSOUT=$(curl -s -w '%{http_code}' http://${ALL_REMOTE_NODES[$index]}:9100/metrics)
             STATUSOUTCODE=$(echo "${STATUSOUT}" | tail -n 1)
@@ -539,7 +545,13 @@ data:
         for _ in ${ALL_REMOTE_NODES[@]}
         do
           HTTPCODE=$(curl -X "GET" ${CURL_ARGS} ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api)
-          if [[ ${HTTPCODE} -ge 200 || ${HTTPCODE} -lt 299 ]]; then
+          if [[ ${HTTPCODE} -ge 200 ]] && [[ ${HTTPCODE} -le 299 ]]; then
+            if [[ ${ALL_REMOTE_NODES[$index]} == "deepv" ]]; then
+              export JUPYTERHUB_API_URL="${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api"
+              export SSH_NODE=${ALL_REMOTE_NODES[$index]}
+              echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub and ${SSH_NODE} as jump node."
+              break
+            fi
             # Add additional maintenance check
             STATUSOUT=$(curl -s -w '%{http_code}' http://${ALL_REMOTE_NODES[$index]}:9100/metrics)
             STATUSOUTCODE=$(echo "${STATUSOUT}" | tail -n 1)
