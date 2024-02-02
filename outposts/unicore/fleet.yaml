@@ -19,3 +19,12 @@ targetCustomizations:
         extraEnvVars:
           - name: STAGE
             value: "staging"
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      values:
+        extraEnvVars:
+          - name: STAGE
+            value: "production"

@@ -19,3 +19,15 @@ targetCustomizations:
         extraEnvVars:
           - name: STAGE
             value: "staging"
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      values:
+        nodeSelector:
+          kubernetes.io/hostname: "prod-usernode-1"
+          usernode: "true"
+        extraEnvVars:
+          - name: STAGE
+            value: "production"
