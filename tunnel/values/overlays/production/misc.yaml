@@ -1,6 +1,6 @@
 authorized_keys:
   - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKKyh85IgxztaFWY5Mv31fTV7Qh6o47HawpCh0YbBR8b ljupytershared'
 servicessh:
-  loadBalancerIP: "134.94.199.16"
+  loadBalancerIP: "134.94.198.229"
 stage: production
 loggerName: "TunnelProduction"
