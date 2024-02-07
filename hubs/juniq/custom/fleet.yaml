@@ -6,7 +6,7 @@ helm:
   releaseName: juniq-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.9.14
+  version: 0.9.15
   values:
     fullnameOverride: juniq-custom
     global:
