@@ -6,7 +6,7 @@ helm:
   releaseName: coec-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.9.15
+  version: 0.9.16
   values:
     fullnameOverride: coec-custom
     global:
