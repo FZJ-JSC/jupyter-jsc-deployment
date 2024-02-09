@@ -32,7 +32,8 @@ outpostConfig: |-
       default_flavors = await outpost.get_flavors(jupyterhub_name)
       specific_flavors = copy.deepcopy(default_flavors)
       # HIFIS users can only start, if there are less than 2 Labs running
-      if "hifis" in authentication.get("groups", []):
+      outpost.log.info(f"Return specific flavors for user {authentication.get('name', 'unknown_user')} ({authentication.get('groups', [])})")
+      if "HIFIS" in authentication.get("groups", []):
           for key in specific_flavors:
               specific_flavors[key]["max"] = 2
       return specific_flavors
