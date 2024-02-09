@@ -31,9 +31,10 @@ outpostConfig: |-
       import copy
       default_flavors = await outpost.get_flavors(jupyterhub_name)
       specific_flavors = copy.deepcopy(default_flavors)
-      if authentication.get("name", "unknown").endswith("_at_fz-juelich.de"):
+      # HIFIS users can only start, if there are less than 2 Labs running
+      if "hifis" in authentication.get("groups", []):
           for key in specific_flavors:
-              specific_flavors[key]["max"] = 17
+              specific_flavors[key]["max"] = 2
       return specific_flavors
 
   c.JupyterHubOutpost.user_flavors = user_specific_flavors
@@ -182,7 +183,7 @@ outpostConfig: |-
       },
       "dev1": {
           "m1": {
-              "max": 2,
+              "max": 5,
               "weight": 10,
               "display_name": "2GB RAM, 1VCPU, 5 days",
               "description": "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU.",
@@ -191,7 +192,7 @@ outpostConfig: |-
               }
           },
           "l1": {
-              "max": 3,
+              "max": 5,
               "weight": 9,
               "display_name": "4GB RAM, 1VCPUs, 12 hours",
               "description": "JupyterLab will run for max 12 hours with 4GB RAM and 1VCPUs.",
