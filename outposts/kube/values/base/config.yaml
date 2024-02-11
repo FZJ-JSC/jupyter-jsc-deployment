@@ -436,7 +436,9 @@ outpostConfig: |-
               "coec": "defaulthub",
               "coeraise": "defaulthub",
               "portalgauss": "defaulthub",
-              "euroccgcs": "defaulthub"
+              "euroccgcs": "defaulthub",
+              "dev1": "defaulthub",
+              "dev2": "defaulthub"
           }
           hub = map_hub_names.get(jupyterhub_name, jupyterhub_name)
 
