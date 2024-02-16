@@ -166,6 +166,7 @@ hub:
       }
 
       c.CustomGenericOAuthenticator.manage_groups = True
+      c.CustomGenericOAuthenticator.basic_auth = True
       c.CustomGenericOAuthenticator.enable_auth_state = True
       c.CustomGenericOAuthenticator.refresh_pre_spawn = True
       c.CustomGenericOAuthenticator.allow_all = True
