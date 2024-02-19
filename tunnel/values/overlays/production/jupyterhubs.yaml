@@ -5,7 +5,7 @@
 #       - name: "k8smgr_lrz_staging"
 #         user: "k8smgr"
 #         port: 2222
-#         hostname: "138.246.236.81"
+#         hostname: "138.246.238.81"
 #       - name: "k8smgr_hlrs"
 #         user: "k8smgr"
 #         port: 2222
