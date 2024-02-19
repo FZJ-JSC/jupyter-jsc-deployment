@@ -25,3 +25,5 @@ nodeSelector:
   kubernetes.io/hostname: "usernode-1"
 serviceAccount:
   nodesClusterRole: true
+sshPublicKeys:
+  - from="134.94.198.98,134.94.198.49",restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC8l6oVEaCeGD9UZuQ5h+5bn2ozGXQBhQRTjDcmQQDnk
