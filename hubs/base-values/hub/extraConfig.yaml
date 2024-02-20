@@ -98,6 +98,8 @@ hub:
       #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE 
       ## Static files + Templates
       from forwardbasespawner.api_events import user_cancel_message
+      # Call update incidents once to fill incidents dictionary
+      jsc_custom.misc.update_incidents_now()
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
       c.JupyterHub.template_vars = {
           "spawn_progress_update_url": "users/progress/events",
