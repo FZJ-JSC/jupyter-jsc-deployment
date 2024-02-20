@@ -104,6 +104,7 @@ hub:
           "user_cancel_message": user_cancel_message,
           "hostname": jhub_hostname,
           "custom_config": jsc_custom.misc.filter_custom_config_by_auth_state_keys(),
+          "incidents": juc_custom.misc.get_incidents(),
       }
       c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
 
