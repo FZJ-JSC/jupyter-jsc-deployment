@@ -12,8 +12,8 @@ jupyterhubs:
       - juniq
       - coec
       - coeraise
-      - euroccgcs
-      - portalgauss
+      # - euroccgcs
+      # - portalgauss
       # - dev1
       # - dev2
     ssh_config_hosts: 
