@@ -98,12 +98,15 @@ hub:
       #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE 
       ## Static files + Templates
       from forwardbasespawner.api_events import user_cancel_message
+      # Call update incidents once to fill incidents dictionary
+      jsc_custom.misc.update_incidents_now()
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
       c.JupyterHub.template_vars = {
           "spawn_progress_update_url": "users/progress/events",
           "user_cancel_message": user_cancel_message,
           "hostname": jhub_hostname,
           "custom_config": jsc_custom.misc.filter_custom_config_by_auth_state_keys(),
+          "incidents": jsc_custom.misc.get_incidents(),
       }
       c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
 
@@ -166,6 +169,7 @@ hub:
       }
 
       c.CustomGenericOAuthenticator.manage_groups = True
+      c.CustomGenericOAuthenticator.basic_auth = True
       c.CustomGenericOAuthenticator.enable_auth_state = True
       c.CustomGenericOAuthenticator.refresh_pre_spawn = True
       c.CustomGenericOAuthenticator.allow_all = True
@@ -204,7 +208,13 @@ hub:
 
       ## Spawner
       c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
-      c.CustomJSCSpawner.ssh_during_startup = False
+
+      def ssh_during_startup(spawner):
+          if spawner.user_options.get("system", "") in ["LRZ"]:
+              return True
+          return False
+
+      c.CustomJSCSpawner.ssh_during_startup = ssh_during_startup
       c.CustomJSCSpawner.extra_labels = jsc_custom.spawner.extra_labels
       c.CustomJSCSpawner.ssh_custom_forward = jsc_custom.spawner.ssh_custom_forward
       c.CustomJSCSpawner.ssh_custom_forward_remove = jsc_custom.spawner.ssh_custom_forward_remove

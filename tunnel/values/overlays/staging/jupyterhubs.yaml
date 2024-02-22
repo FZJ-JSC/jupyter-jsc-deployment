@@ -5,22 +5,22 @@
 #       - name: "k8smgr_lrz_staging"
 #         user: "k8smgr"
 #         port: 2222
-#         hostname: "138.246.236.81"
+#         hostname: "138.246.238.81"
 jupyterhubs:
   default:
     additional_remote_hosts:
       - juniq
       - coec
       - coeraise
-      - euroccgcs
-      - portalgauss
+      # - euroccgcs
+      # - portalgauss
       # - dev1
       # - dev2
     ssh_config_hosts: 
       - name: "outpost_lrz"
         user: "jhuboutpost"
-        port: 2222
-        hostname: "138.246.236.81"
+        port: 22
+        hostname: "138.246.238.81"
       - name: "deepv"
         user: "ljupyter"
         port: 22
