@@ -32,6 +32,9 @@ targetCustomizations:
         global:
           hostname: jupyter-staging.jsc.fz-juelich.de
         customConfig:
+          backendServices:
+            outpostKubeJSCCloud:
+              userflavors: true
           groups:
             admin:
               services:
