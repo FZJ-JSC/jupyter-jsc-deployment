@@ -35,12 +35,6 @@ targetCustomizations:
           backendServices:
             outpostKubeJSCCloud:
               userflavors: true
-          groups:
-            admin:
-              services:
-                JupyterLab:
-                  custom:
-                    maxPerUser: 5
         redirects:
           - name: "staging"
             oldHost: "jupyter-jsc-staging.fz-juelich.de"
@@ -57,10 +51,3 @@ targetCustomizations:
         global:
           hostname: zam12154.zam.kfa-juelich.de
           baseUrl: /jupyterjsc/
-        customConfig:
-          groups:
-            admin:
-              services:
-                JupyterLab:
-                  custom:
-                    maxPerUser: 5
