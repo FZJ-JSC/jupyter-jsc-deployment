@@ -53,7 +53,7 @@ outpostConfig: |-
       }
   }
   l1_default = {
-      "max": 4,
+      "max": 10,
       "weight": 9,
       "display_name": "4GB RAM, 1VCPUs, 2 days",
       "description": "JupyterLab will run for max 2 days with 4GB RAM and 1VCPUs.",
@@ -62,7 +62,7 @@ outpostConfig: |-
       }
   }
   l2_default = {
-      "max": 2,
+      "max": 5,
       "weight": 3,
       "display_name": "8GB RAM, 2VCPUs, 10 hours",
       "description": "JupyterLab will run for max 10 hours with 8GB RAM and 2VCPUs.",
