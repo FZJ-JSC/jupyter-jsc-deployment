@@ -6,7 +6,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.9.17
+  version: 0.9.19
   values:
     fullnameOverride: jupyterjsc-custom
     global:
@@ -32,12 +32,9 @@ targetCustomizations:
         global:
           hostname: jupyter-staging.jsc.fz-juelich.de
         customConfig:
-          groups:
-            admin:
-              services:
-                JupyterLab:
-                  custom:
-                    maxPerUser: 5
+          backendServices:
+            outpostKubeJSCCloud:
+              userflavors: true
         redirects:
           - name: "staging"
             oldHost: "jupyter-jsc-staging.fz-juelich.de"
@@ -54,10 +51,3 @@ targetCustomizations:
         global:
           hostname: zam12154.zam.kfa-juelich.de
           baseUrl: /jupyterjsc/
-        customConfig:
-          groups:
-            admin:
-              services:
-                JupyterLab:
-                  custom:
-                    maxPerUser: 5
