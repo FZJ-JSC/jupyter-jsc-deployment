@@ -101,12 +101,21 @@ hub:
       # Call update incidents once to fill incidents dictionary
       jsc_custom.misc.update_incidents_now()
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
+
+      # Load flavors in template_vars at runtime
+      from outpostspawner.api_flavors_update import sync_get_flavors
+      def get_flavors(user):
+          logger = logging.getLogger(logged_logger_name)
+          ret = sync_get_flavors(logger, user)
+          return ret
+
       c.JupyterHub.template_vars = {
           "spawn_progress_update_url": "users/progress/events",
           "user_cancel_message": user_cancel_message,
           "hostname": jhub_hostname,
           "custom_config": jsc_custom.misc.filter_custom_config_by_auth_state_keys,
           "incidents": jsc_custom.misc.get_incidents,
+          "outpostflavors": get_flavors,
       }
       c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
 
