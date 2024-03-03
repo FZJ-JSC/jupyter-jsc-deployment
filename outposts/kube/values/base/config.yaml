@@ -84,7 +84,7 @@ outpostConfig: |-
 
       for flavorName, overrideDict in flavor_config.get("users", {}).get(user_set, {}).get("flavors", {}).items():
           if flavorName not in user_flavors.keys():
-              user_flavors[flavorName] = {}
+              continue
           for overrideKey, overrideValue in overrideDict.items():
               user_flavors[flavorName][overrideKey] = overrideValue
       
