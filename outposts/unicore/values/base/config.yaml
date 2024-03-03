@@ -41,6 +41,7 @@ extraVolumeMounts:
 outpostConfig: |-
   import json
   import logging
+  import pyunicore
   import os
 
   from unicorespawner import UnicoreSpawner
@@ -363,9 +364,9 @@ outpostConfig: |-
 
   async def transport_kwargs(spawner):
     auth_state = await spawner.user.get_auth_state()
+    credential = pyunicore.credentials.OIDCToken(auth_state["access_token"], None)
     transport_kwargs = {
-        "credential": auth_state["access_token"],
-        "oidc": True,
+        "credential": credential,
         # "verify": "/mnt/unicore/cert.crt",
         "verify": False,
         "timeout": 30
