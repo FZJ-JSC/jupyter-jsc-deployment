@@ -2,6 +2,7 @@ outpostConfig: |-
   import logging
   import os
   import shutil
+  import yaml
 
   from kubespawner import KubeSpawner
 
