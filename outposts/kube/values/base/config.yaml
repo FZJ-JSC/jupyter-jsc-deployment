@@ -40,6 +40,7 @@ outpostConfig: |-
       return specific_flavors
 
   async def user_specific_flavors(outpost, jupyterhub_name, authentication):
+      outpost.log.info("--------- A TEST ----------")
       return await test(outpost, jupyterhub_name, authentication)
 
   c.JupyterHubOutpost.user_flavors = user_specific_flavors
