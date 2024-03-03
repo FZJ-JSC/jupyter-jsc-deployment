@@ -56,3 +56,7 @@ targetCustomizations:
         global:
           hostname: zam12154.zam.kfa-juelich.de
           baseUrl: /jupyterjsc/
+        customConfig:
+          backendServices:
+            outpostKubeJSCCloud:
+              userflavors: true
