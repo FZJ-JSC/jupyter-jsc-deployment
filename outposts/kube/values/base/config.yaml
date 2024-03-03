@@ -43,6 +43,9 @@ outpostConfig: |-
   async def flavors_per_user(outpost, jupyterhub_name, authentication):
       import copy
       hub_flavors = await outpost.get_flavors(jupyterhub_name)
+      
+      with open("/mnt/flavors/flavors.yaml", "r") as f:
+          flavor_config = yaml.full_load(f)
 
       user_sets = []
       # check if the given user is part of any user set
@@ -70,11 +73,14 @@ outpostConfig: |-
 
 
       # When "disable" is true, we return an empty dict for this uset_set
+      authentication_log = copy.deepcopy(authentication)
+      if "access_token" in authentication_log.keys():
+          del authentication_log["access_token"]
       if flavor_config.get("users", {}).get(user_set, {}).get("disable", False):
-          outpost.log.debug(f"Specific user not allowed to use any flavors. Userset {user_set}. Used authentication dict: {authentication}")
+          outpost.log.debug(f"Specific user not allowed to use any flavors. Userset {user_set}. Used authentication dict: {authentication_log}")
           return {}
-  
-      outpost.log.debug(f"Use user specific flavor userset {user_set}. Used authentication dict: {authentication}")
+
+      outpost.log.debug(f"Use user specific flavor userset {user_set}. Used authentication dict: {authentication_log}")
 
       for flavorName, overrideDict in flavor_config.get("users", {}).get(user_set, {}).get("flavors", {}).items():
           if flavorName not in user_flavors.keys():
@@ -92,7 +98,7 @@ outpostConfig: |-
       jupyterhub_sets = []
       # check if the given jupyterhub_name is part of any jhub set
       for key, value in flavor_config.get("hubs", {}).items():
-          if jupyterhub_name in value.get("jupyterhub"):
+          if jupyterhub_name in value.get("jupyterhubs", []):
               jupyterhub_sets.append((key, value.get("weight", 0)))
       
       # jupyterhub_name is not allowed to use any flavors 
@@ -429,4 +435,3 @@ outpostConfig: |-
           ]
 
   c.KubeSpawner.profile_list = profile_list
-
