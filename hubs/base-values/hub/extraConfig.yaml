@@ -115,7 +115,7 @@ hub:
           "hostname": jhub_hostname,
           "custom_config": jsc_custom.misc.filter_custom_config_by_auth_state_keys,
           "incidents": jsc_custom.misc.get_incidents,
-          "tmpjinjaflavor": get_flavors,
+          "outpostflavors": get_flavors,
       }
       c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
 
