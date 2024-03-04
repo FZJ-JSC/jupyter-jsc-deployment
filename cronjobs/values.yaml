@@ -378,7 +378,7 @@ jobs:
     stage: production
     image:
       repository: postgres
-      tag: 15.3-alpine
+      tag: 16-alpine
       imagePullPolicy: Always
     schedule: "0 2 * * *"
     podAnnotations:
@@ -392,15 +392,15 @@ jobs:
     args:
       - -c
       - >-
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjupyterjsc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubcoec > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoec.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubportalgauss > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubportalgauss.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
+          pg_dump -h postgresql -U postgres jupyterhubjupyterjsc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubcoec > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoec.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubportalgauss > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubportalgauss.dump ;
+          pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
+          pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
+          pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
     
     resources:
       limits:
@@ -432,7 +432,7 @@ jobs:
     stage: staging
     image:
       repository: postgres
-      tag: 15.3-alpine
+      tag: 16-alpine
       imagePullPolicy: Always
     schedule: "0 2 * * *"
     podAnnotations:
@@ -446,15 +446,15 @@ jobs:
     args:
       - -c
       - >-
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjupyterjsc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubcoec > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoec.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres jupyterhubportalgauss > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubportalgauss.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
-          pg_dump -h postgresql-ha-pgpool -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
+          pg_dump -h postgresql -U postgres jupyterhubjupyterjsc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhub.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubjuniq > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubjuniq.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubeurocc > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubeurocc.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubcoeraise > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoeraise.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubcoec > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubcoec.dump ;
+          pg_dump -h postgresql -U postgres jupyterhubportalgauss > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").jupyterhubportalgauss.dump ;
+          pg_dump -h postgresql -U postgres k8smgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").k8smgr.dump ;
+          pg_dump -h postgresql -U postgres unicoremgr > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").unicoremgr.dump ;
+          pg_dump -h postgresql -U postgres tunnel > /mnt/persistent/$(date +"%Y%m%d_%H%M%S").tunnel.dump
     
     resources:
       limits:
