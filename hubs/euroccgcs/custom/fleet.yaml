@@ -8,17 +8,10 @@ helm:
   chart: jupyter-hub-customizations
   version: 0.9.26
   values:
-    customConfig:
-      backendServices:
-        outpostUnicore:
-          pollInterval: 30
-          pollIntervalRandomizer: 10
     fullnameOverride: euroccgcs-custom
     global:
       name: euroccgcs
       namespace: jupyter
-      hostname: jupyter-staging.eurocc-gcs.de
-      loggerName: JSCCloudEuroCCGCSStaging
     ingress:
       enabled: true
     jupyter-metrics:
@@ -36,6 +29,7 @@ targetCustomizations:
       values:
         global:
           hostname: jupyter-staging.eurocc-gcs.de
+          loggerName: EuroCCGCSStaging
   - name: production
     clusterSelector:
       matchLabels:
@@ -44,3 +38,4 @@ targetCustomizations:
       values:
         global:
           hostname: jupyter.eurocc-gcs.de
+          loggerName: EuroCCGCSProduction

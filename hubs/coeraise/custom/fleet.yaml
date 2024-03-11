@@ -8,17 +8,10 @@ helm:
   chart: jupyter-hub-customizations
   version: 0.9.26
   values:
-    customConfig:
-      backendServices:
-        outpostUnicore:
-          pollInterval: 30
-          pollIntervalRandomizer: 10
     fullnameOverride: coeraise-custom
     global:
       name: coeraise
       namespace: jupyter
-      hostname: jupyter-staging.coe-raise.eu
-      loggerName: JSCCloudCoeRaiseStaging
     ingress:
       enabled: true
     jupyter-metrics:
@@ -36,6 +29,7 @@ targetCustomizations:
       values:
         global:
           hostname: jupyter-staging.coe-raise.eu
+          loggerName: CoeRaiseStaging
   - name: production
     clusterSelector:
       matchLabels:
@@ -44,3 +38,4 @@ targetCustomizations:
       values:
         global:
           hostname: jupyter.coe-raise.eu
+          loggerName: CoeRaiseProduction

@@ -454,14 +454,15 @@ hub:
         system = spawner.user_options.get("system", "None")
         url = system_config.get(system, {}).get("site_url", False)
         if not url:
-          raise Exception(f"URL for system {system} not configured. Available systems: {list(site_urls.keys())}")
+          raise Exception(f"URL for system {system} not configured. Available systems: {list(system_config.keys())}")
         return url
 
       async def transport_kwargs(spawner):
+        from pyunicore.credentials import OIDCToken
         auth_state = await spawner.user.get_auth_state()
+        credential = OIDCToken(auth_state["access_token"], None)
         transport_kwargs = {
-            "credential": auth_state["access_token"],
-            "oidc": True,
+            "credential": credential,
             # "verify": "/mnt/unicore/cert.crt",
             "verify": False,
             "timeout": 30

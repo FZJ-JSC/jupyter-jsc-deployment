@@ -8,17 +8,10 @@ helm:
   chart: jupyter-hub-customizations
   version: 0.9.26
   values:
-    customConfig:
-      backendServices:
-        outpostUnicore:
-          pollInterval: 30
-          pollIntervalRandomizer: 10
     fullnameOverride: portalgauss-custom
     global:
       name: portalgauss
       namespace: jupyter
-      hostname: portal-staging.gauss-centre.eu
-      loggerName: JSCCloudPortalGaussStaging
     ingress:
       enabled: true
     jupyter-metrics:
@@ -36,6 +29,7 @@ targetCustomizations:
       values:
         global:
           hostname: portal-staging.gauss-centre.eu
+          loggerName: PortalGaussStaging
         customConfig:
           systems:
             - JSC-Cloud
@@ -56,6 +50,7 @@ targetCustomizations:
       values:
         global:
           hostname: portal.gauss-centre.eu
+          loggerName: PortalGaussProduction
         customConfig:
           systems:
             - JSC-Cloud
