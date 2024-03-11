@@ -2,6 +2,8 @@ ingress:
   hosts:
     - host: jupyter.jsc.fz-juelich.de
       secretName: jupyterjsc-tls
+    - host: jupyter-jsc.fz-juelich.de
+      secretName: jupyterjsc-tls-old
     - host: jupyter.eurocc-gcs.de
       secretName: eurocc-tls
     - host: juniq.fz-juelich.de
