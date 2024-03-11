@@ -1,0 +1,35 @@
+defaultnamespace: jupyter
+helm:
+  releaseName: maintenance
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyter-maintenance
+  version: 0.1.0
+  valuesFiles:
+    - values/base/misc.yaml
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+        app: jupyter
+    helm:
+      valuesFiles:
+        - values/overlays/staging/hosts.yaml
+      values:
+        # Set JupyterHub in maintenance:
+        #   !! Configure hosts in values/overlays/staging/hosts.yaml !!
+        #   Set enabled here to true, set ingress.enabled in hubs/[juniq|eurocc|...]/values/overlays/staging/ingress.yaml to false
+        enabled: false
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+        app: jupyter
+    helm:
+      valuesFiles:
+        - values/overlays/production/hosts.yaml
+      values:
+        # Set JupyterHub in maintenance:
+        #   !! Configure hosts in values/overlays/production/hosts.yaml !!
+        #   Set enabled here to true, set ingress.enabled in hubs/[juniq|eurocc|...]/values/overlays/production/ingress.yaml to false
+        enabled: false

@@ -1,0 +1,14 @@
+ingress:
+  hosts:
+    - host: jupyter-staging.jsc.fz-juelich.de
+      secretName: jupyterjsc-tls
+    - host: jupyter-staging.eurocc-gcs.de
+      secretName: eurocc-tls
+    - host: juniq-staging.fz-juelich.de
+      secretName: juniq-tls
+    - host: portal-staging.gauss-centre.eu
+      secretName: portalgauss-tls
+    - host: jupyter-staging.coe-raise.eu
+      secretName: coeraise-tls
+    - host: jupyter-coec-staging.jsc.fz-juelich.de
+      secretName: coec-tls
