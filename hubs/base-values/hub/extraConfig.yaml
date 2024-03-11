@@ -219,7 +219,7 @@ hub:
       c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
 
       def ssh_during_startup(spawner):
-          if spawner.user_options.get("system", "") in ["LRZ"]:
+          if spawner.user_options.get("system", "") in ["LRZ", "LRZ-Staging"]:
               return True
           return False
 

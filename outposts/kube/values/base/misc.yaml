@@ -17,9 +17,14 @@ extraVolumes:
     nfs:
       server: 10.0.2.249
       path: /p/home/jusers
+  - name: external-flavors
+    configMap:
+      name: outpost-kube-flavors-external
 extraVolumeMounts:
   - name: nfs-userhomes
     mountPath: /p/home/jusers
+  - name: external-flavors
+    mountPath: /mnt/flavors
 nodeSelector:
   usernode: "true"
   kubernetes.io/hostname: "usernode-1"

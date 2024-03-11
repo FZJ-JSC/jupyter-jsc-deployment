@@ -16,11 +16,15 @@ jupyterhubs:
       # - portalgauss
       # - dev1
       # - dev2
-    ssh_config_hosts: 
-      - name: "outpost_lrz"
+    ssh_config_hosts:
+      - name: "outpost_lrz-staging"
         user: "jhuboutpost"
         port: 22
         hostname: "138.246.238.81"
+      - name: "outpost_lrz"
+        user: "jhuboutpost"
+        port: 22
+        hostname: "138.246.236.238"
       - name: "deepv"
         user: "ljupyter"
         port: 22

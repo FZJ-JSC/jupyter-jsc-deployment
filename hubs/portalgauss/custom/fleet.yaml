@@ -6,7 +6,7 @@ helm:
   releaseName: portalgauss-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.9.19
+  version: 0.9.23
   values:
     fullnameOverride: portalgauss-custom
     global:
@@ -34,11 +34,15 @@ targetCustomizations:
         customConfig:
           systems:
             - JSC-Cloud
+            - LRZ-Staging
             - LRZ
           backendServices:
-            outpostKubeLRZ:
+            outpostKubeLRZStaging:
               urls:
                 services: http://vm-138-246-238-21.cloud.mwn.de:8080/services
+            outpostKubeLRZ:
+              urls:
+                services: http://vm-138-246-237-228.cloud.mwn.de:8080/services
   - name: production
     clusterSelector:
       matchLabels:
@@ -51,8 +55,8 @@ targetCustomizations:
         customConfig:
           systems:
             - JSC-Cloud
-            - LRZ
+            - LRZ-Staging
           backendServices:
-            outpostKubeLRZ:
+            outpostKubeLRZStaging:
               urls:
                 services: http://vm-138-246-238-21.cloud.mwn.de:8080/services

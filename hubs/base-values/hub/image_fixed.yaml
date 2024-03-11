@@ -1,0 +1,22 @@
+hub:
+  args:
+    - -c
+    - >-
+      pip install --force-reinstall jupyter-jsc-custom==0.9.33 jupyterhub-forwardbasespawner==0.0.22 jupyterhub-unicorespawner==0.9.0 jupyterhub-outpostspawner==0.0.29 &&
+      mkdir -p /mnt/reservation_key &&
+      cp -rp /mnt/reservation-keypair/..data/* /mnt/reservation_key/. &&
+      chown 1000:1000 -R /mnt/reservation_key &&
+      chmod 400 /mnt/reservation_key/* &&
+      /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+  command:
+    - /bin/bash
+  image:
+    pullPolicy: "Always"
+    pullSecrets:
+      - "gitlab-registry"
+    name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
+    tag: 4.0.2.2
+  containerSecurityContext:
+    runAsUser: 0
+    runAsGroup: 0
+    allowPrivilegeEscalation: true

@@ -6,7 +6,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.9.19
+  version: 0.9.23
   values:
     fullnameOverride: jupyterjsc-custom
     global:
@@ -36,10 +36,6 @@ targetCustomizations:
       values:
         global:
           hostname: jupyter-staging.jsc.fz-juelich.de
-        customConfig:
-          backendServices:
-            outpostKubeJSCCloud:
-              userflavors: true
         redirects:
           - name: "staging"
             oldHost: "jupyter-jsc-staging.fz-juelich.de"
