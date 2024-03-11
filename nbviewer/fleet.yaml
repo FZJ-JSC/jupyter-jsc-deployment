@@ -42,7 +42,7 @@ targetCustomizations:
       values:
         ingress:
           hosts:
-            - host: docs.jupyter-jsc.fz-juelich.de
+            - host: docs.jupyter.jsc.fz-juelich.de
               paths:
                 - path: /
                   pathType: Prefix
@@ -51,6 +51,6 @@ targetCustomizations:
           tls:
             - secretName: jupyter-jsc-certs
               hosts:
-                - docs.jupyter-jsc.fz-juelich.de
+                - docs.jupyter.jsc.fz-juelich.de
         labels:
-          hostname: jupyter-jsc.fz-juelich.de
+          hostname: jupyter.jsc.fz-juelich.de
