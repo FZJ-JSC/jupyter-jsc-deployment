@@ -38,5 +38,4 @@ targetCustomizations:
     helm:
       values:
         global:
-          hostname: zam12154.zam.kfa-juelich.de
-          baseUrl: /coeraise/
+          hostname: jupyter.coe-raise.eu

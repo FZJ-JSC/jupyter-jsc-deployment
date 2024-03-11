@@ -43,5 +43,4 @@ targetCustomizations:
     helm:
       values:
         global:
-          hostname: zam12154.zam.kfa-juelich.de
-          baseUrl: /juniq/
+          hostname: juniq-staging.fz-juelich.de
