@@ -58,11 +58,12 @@ data:
         weight: 10
         disable: False
       HIFIS:
+        disable: True
         groups: ["HIFIS"]
         weight: 5
         flavors:
           m1:
-            max: 2
+            max: -1
           l1:
             max: 2
           l2:

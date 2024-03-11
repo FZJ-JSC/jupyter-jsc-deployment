@@ -6,7 +6,7 @@ helm:
   releaseName: juniq-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.9.23
+  version: 0.9.24
   values:
     fullnameOverride: juniq-custom
     global:
@@ -21,8 +21,8 @@ helm:
           pollIntervalRandomizer: 10
       announcement:
         show: true
-        title: "Jupyter-JSC maintenance 11.03.2024 09:00 - 14:00 (CET)"
-        body: "We're currently facing some issues on JUWELS and DEEP. JURECA,JUSUF and HDFML should be working already. JSC-Cloud is deactivated, until all userdata was copied from HDF-Cloud to JSC-Cloud."
+        title: "JUNIQ is now running on JSC-Cloud"
+        body: "We've moved JUNIQ to the JSC-Cloud. All data from HDF-Cloud was moved to JSC-Cloud."
     ingress:
       enabled: true
     jupyter-metrics:
