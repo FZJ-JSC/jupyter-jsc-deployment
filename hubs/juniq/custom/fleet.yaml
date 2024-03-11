@@ -46,4 +46,4 @@ targetCustomizations:
     helm:
       values:
         global:
-          hostname: juniq-staging.fz-juelich.de
+          hostname: juniq.fz-juelich.de
