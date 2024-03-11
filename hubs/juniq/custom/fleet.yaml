@@ -15,6 +15,9 @@ helm:
       hostname: juniq-staging.fz-juelich.de
       loggerName: JSCCloudJUNIQStaging
     customConfig:
+      backendServices:
+        outpostUnicore:
+          pollInterval: 30
       announcement:
         show: true
         title: "Jupyter-JSC maintenance 11.03.2024 09:00 - 14:00 (CET)"
