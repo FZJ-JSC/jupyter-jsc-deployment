@@ -395,6 +395,110 @@ data:
     load_project_specific_kernel
     start
 
+  deep_input_start.sh: |
+    #!/bin/bash
+
+    # Catch SIGTERM signal and stop $child process
+    _term() {
+      echo "$(date) - Stop JupyterLab ..."
+      if [[ -z $child ]]; then
+        echo "$(date) - Stop JupyterLab - unknown PID. Start stop.sh to wait for PID"
+        bash ${DIR}/stop.sh &
+      else
+        pkill --parent $child
+        kill $child
+        echo "$(date) - Stop JupyterLab ( $child ) ... done"
+        if [[ -z $token_pid ]]; then
+          echo "$(date) - Validate Token PID not found..."
+        else
+          echo "$(date) - Stop Validate Token Script ( $token_pid ) ..."
+          kill $token_pid
+          echo "$(date) - Stop Validate Token Script ( $token_pid ) ... done"
+        fi
+      fi
+    }
+    trap _term SIGTERM
+
+    # System specific requirements
+    requirements () {
+      echo "$(date) - Setup system specific requirements ( ${HOSTNAME} ) ..."
+      if [[ ! -d ${HOME}/.cache/black/19.3b0 ]]; then
+        mkdir -p ${HOME}/.cache/black/19.3b0
+      fi
+      # export a memory warn threshold on login nodes
+      hostname | egrep '<hostname_base>' > /dev/null && export JUPYTER_MEMWARNTHRES=0.5
+      # set cpu limit/warning
+      export FPATH_CPUQUOTA="/sys/fs/cgroup/cpu,cpuacct/user.slice/user-$(id -u $USER).slice/cpu.cfs_quota_us"
+      [ -f "${FPATH_CPUQUOTA}" ] && [ $(hostname | egrep '<hostname_cpulimit>') ] && export JUPYTER_CPULIMIT=$(($(cat ${FPATH_CPUQUOTA})/100000))
+      
+      echo "$(date) - Setup system specific requirements done"
+    }
+
+    # set env_variables correctly
+    set_env () {
+      echo "$(date) - Set environment variables ..."
+      export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+      export PID_PATH=${DIR}/service.pid
+      export VALIDATE_TOKEN_PID_PATH=${DIR}/validate_token.pid
+      export LC_ALL=en_US.UTF-8
+      export JUPYTER_LOG_DIR=${DIR}
+      export JUPYTER_STDOUT=${JUPYTER_LOG_DIR}/stderr
+      export PYTHONPATH=""
+      export PYTHONNOUSERSITE=1
+      HOSTNAME_S=$(hostname -s)
+      # If this JupyterLab is running on a LoginNode, we'll use the external api url. Otherwise we have to use a LoginNode as Proxy.
+      if [[ ${HOSTNAME_S} == "<hostname_base>"* ]]; then
+        unset JUPYTERHUB_SSL_CLIENT_CA
+        export JUPYTERHUB_API_URL=<jupyterhub_api_url>
+        export JUMP_NODE=${HOSTNAME_S}
+        echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub. Jump node for tunnel: ${JUMP_NODE}"
+        export CURL_ARGS="--silent --write-out %{http_code} --output /dev/null"
+      else
+        export REMOTE_PORT="<remote_port>"
+        export JUPYTERHUB_CERTIFICATE="${DIR}/notebooks-ca_trust.crt"
+        export CURL_ARGS="--silent --write-out %{http_code} --cacert ${JUPYTERHUB_CERTIFICATE} --output /dev/null"
+        # Look for random LoginNode
+        # We start at a random index, then we will run through all nodes and test them
+        export ALL_REMOTE_NODES=(<hostname_all>)
+        size=${#ALL_REMOTE_NODES[@]}
+        index=$(($RANDOM % $size))
+        start_index=$index
+        for _ in ${ALL_REMOTE_NODES[@]}
+        do
+          HTTPCODE=$(curl -X "GET" ${CURL_ARGS} https://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api)
+          if [[ ${HTTPCODE} -ge 200 || ${HTTPCODE} -lt 299 ]] ; then
+            export JUPYTERHUB_API_URL="https://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api"
+            export JUMP_NODE=${ALL_REMOTE_NODES[$index]}
+            echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub and ${JUMP_NODE} as jump node."
+            break
+          fi
+          index=$(expr $index + 1)
+          if [[ $index == $size ]]; then
+            index=0
+          fi
+          if [[ $index == $start_index ]]; then
+            echo "$(date) - Could not find any LoginNode to connect to JupyterHub. Please try again in a few minutes."
+            exit 1
+          fi
+        done
+        export JUPYTERHUB_SSL_CLIENT_CA="${DIR}/service_ca.crt"
+      fi
+      export JUPYTERHUB_ACTIVITY_URL=${JUPYTERHUB_API_URL}/users/${JUPYTERHUB_USER}/activity
+      export JUPYTERHUB_API_TOKEN=$(cat ${DIR}/.jupyter.token)
+      export JUPYTERHUB_OAUTH_SCOPES=$(cat ${DIR}/.oauth.scopes)
+      export JUPYTERHUB_SINGLEUSER_APP="jupyter_server.serverapp.ServerApp"
+      export JUPYTERHUB_SSL_KEYFILE="${DIR}/service_cert.key"
+      export JUPYTERHUB_SSL_CERTFILE="${DIR}/service_cert.crt"
+      export JUPYTERJSC_CMD_ARGS=""
+      export PORT=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
+      echo "$(date) - Set environment variables done"
+    }
+
+    requirements
+    set_env
+    send_spawn_update_fail "JupyterLab 3.2 no longer supported on DEEP. Please update to version 3.6" "Update this JupyterLab configuration or delete this one and create a new one with 3.6."
+    exit 1
+
   juniq_input_start.sh: |
     #!/bin/bash
 
