@@ -40,6 +40,15 @@ helm:
         namespace: jupyter
         key: values.yaml
 
+targetCustomizations:
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      valuesFiles:
+        - ../../base-values/hub/image_fixed.yaml
+
 dependsOn:
   - selector:
       matchLabels:
