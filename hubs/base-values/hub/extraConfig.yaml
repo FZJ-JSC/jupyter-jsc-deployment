@@ -232,7 +232,7 @@ hub:
       c.CustomJSCSpawner.pre_spawn_hook = jsc_custom.spawner.pre_spawn_hook
       c.CustomJSCSpawner.post_spawn_request_hook = jsc_custom.spawner.post_spawn_request_hook
       c.CustomJSCSpawner.post_stop_hook = jsc_custom.spawner.post_stop_hook
-      c.CustomJSCSpawner.start_async = True
+      c.CustomJSCSpawner.start_async = False
       c.CustomJSCSpawner.stop_async = True
       c.CustomJSCSpawner.custom_user_options = jsc_custom.spawner.custom_user_options
       c.CustomJSCSpawner.stop_event = jsc_custom.spawner.stop_event
