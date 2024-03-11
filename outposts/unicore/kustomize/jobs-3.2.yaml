@@ -395,7 +395,7 @@ data:
     load_project_specific_kernel
     start
 
-  deep_input_start.sh: |
+  DEEP_input_start.sh: |
     #!/bin/bash
 
     # Catch SIGTERM signal and stop $child process
