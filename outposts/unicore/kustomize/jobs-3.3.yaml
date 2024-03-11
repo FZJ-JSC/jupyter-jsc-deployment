@@ -56,7 +56,11 @@ data:
       export PYTHONPATH=""
       export PYTHONNOUSERSITE=1
       export HOSTNAME_S=$(hostname -s)
-      export HOSTNAME_I=$(hostname -s)i
+      if [[ ${HOSTNAME_S} == "deepv" ]]; then
+        export HOSTNAME_I=${HOSTNAME_S}
+      else
+        export HOSTNAME_I=$(hostname -s)i
+      fi
       export CURL_ARGS="--silent --write-out %{http_code} --output /dev/null"
       export CURL_HEADERS="-H \"Authorization: token ${JUPYTERHUB_API_TOKEN}\" -H \"Content-Type: application/json\" -H \"Accept: application/json\""
 
