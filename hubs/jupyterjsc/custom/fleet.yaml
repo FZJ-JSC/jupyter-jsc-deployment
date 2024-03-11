@@ -21,8 +21,8 @@ helm:
           pollIntervalRandomizer: 10
       announcement:
         show: true
-        title: "Jupyter-JSC maintenance 11.03.2024 09:00 - 14:00 (CET)"
-        body: "We're currently facing some issues on JUWELS and DEEP. JURECA,JUSUF and HDFML should be working already. JSC-Cloud is deactivated, until all userdata was copied from HDF-Cloud to JSC-Cloud."
+        title: "Jupyter-JSC is now running on JSC-Cloud"
+        body: "We've moved Jupyter-JSC to the JSC-Cloud. All data from HDF-Cloud were moved to JSC-Cloud.<br>Jupyter-JSC also has a new url: https://jupyter.jsc.fz-juelich.de."
     ingress:
       enabled: true
     jupyter-metrics:
