@@ -8,6 +8,10 @@ helm:
   chart: jupyter-hub-customizations
   version: 0.9.23
   values:
+    customConfig:
+      backendServices:
+        outpostUnicore:
+          pollInterval: 30
     fullnameOverride: portalgauss-custom
     global:
       name: portalgauss
