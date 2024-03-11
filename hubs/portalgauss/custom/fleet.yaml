@@ -49,13 +49,15 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        ingress:
+          enabled: false
         global:
-          hostname: zam12154.zam.kfa-juelich.de
-          baseUrl: /portalgauss/
+          hostname: portal.gauss-centre.eu
         customConfig:
           systems:
             - JSC-Cloud
             - LRZ-Staging
+            - LRZ
           backendServices:
             outpostKubeLRZStaging:
               urls:

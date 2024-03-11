@@ -37,6 +37,7 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        ingress:
+          enabled: false
         global:
-          hostname: zam12154.zam.kfa-juelich.de
-          baseUrl: /coec/
+          hostname: jupyter-coec.jsc.fz-juelich.de
