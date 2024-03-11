@@ -37,5 +37,7 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        ingress:
+          enabled: false
         global:
           hostname: jupyter.eurocc-gcs.de
