@@ -12,6 +12,7 @@ helm:
       backendServices:
         outpostUnicore:
           pollInterval: 30
+          pollIntervalRandomizer: 10
     fullnameOverride: coec-custom
     global:
       name: coec
