@@ -12,13 +12,7 @@ helm:
     global:
       name: jupyterjsc
       namespace: jupyter
-      hostname: jupyter-staging.jsc.fz-juelich.de
-      loggerName: JSCCloudJupyterJSCStaging
     customConfig:
-      backendServices:
-        outpostUnicore:
-          pollInterval: 30
-          pollIntervalRandomizer: 10
       announcement:
         show: true
         title: "Jupyter-JSC is now running on JSC-Cloud"
@@ -40,6 +34,7 @@ targetCustomizations:
       values:
         global:
           hostname: jupyter-staging.jsc.fz-juelich.de
+          loggerName: JupyterJSCStaging
         redirects:
           - name: "staging"
             oldHost: "jupyter-jsc-staging.fz-juelich.de"
@@ -55,6 +50,7 @@ targetCustomizations:
       values:
         global:
           hostname: jupyter.jsc.fz-juelich.de
+          loggerName: JupyterJSCProduction
         redirects:
           - name: "production"
             oldHost: "jupyter-jsc.fz-juelich.de"
