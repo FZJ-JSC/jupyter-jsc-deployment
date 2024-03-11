@@ -53,13 +53,6 @@ targetCustomizations:
         stage: production
     helm:
       values:
-        customConfig:
-          systems:
-            - JUWELS
-            - JURECA
-            - JUSUF
-            - DEEP
-            - HDFML
         global:
           hostname: jupyter.jsc.fz-juelich.de
         redirects:
