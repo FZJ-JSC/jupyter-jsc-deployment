@@ -77,7 +77,7 @@ outpostConfig: |-
     
     # Check if system is configured
     if system not in system_config.keys():
-      raise Exception(f"{spwaner._log_name} - system {system} currently not configured")
+      raise Exception(f"{spawner._log_name} - system {system} currently not configured")
     
     jhub_job_description = f"/mnt/jobs/{profile}/{jhub}_job_description.json"
     version_job_description = f"/mnt/jobs/{profile}/job_description.json"
