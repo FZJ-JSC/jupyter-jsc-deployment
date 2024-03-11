@@ -75,7 +75,7 @@ targetCustomizations:
         # Set JupyterHub in maintenance:
           #   Set enabled here to true, update ingress in jhub[-juniq|-eurocc]/helm/fleet.yaml
           #   Update ingress.hosts and ingress.tls in this file, if only specific hubs should go in maintenance
-        enabled: false
+        enabled: true
         ingress:
           annotations:
             acme.cert-manager.io/http01-edit-in-place: "false"
@@ -111,6 +111,12 @@ targetCustomizations:
                   pathType: Prefix
               svcName: jhub-maintenance
               svcPort: 80
+            - host: jupyter-coec.jsc.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: jhub-maintenance
+              svcPort: 80
           tls:
             - hosts:
                 - jupyter-jsc.fz-juelich.de
@@ -127,3 +133,6 @@ targetCustomizations:
             - hosts:
                 - jupyter.coe-raise.eu
               secretName: coeraise-tls
+            - hosts:
+                - jupyter-coec.jsc.fz-juelich.de
+              secretName: coec-tls
