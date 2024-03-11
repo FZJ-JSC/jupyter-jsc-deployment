@@ -37,7 +37,5 @@ targetCustomizations:
         stage: production
     helm:
       values:
-        ingress:
-          enabled: false
         global:
           hostname: jupyter.coe-raise.eu
