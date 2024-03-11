@@ -578,7 +578,6 @@ data:
       # If this JupyterLab is running on a LoginNode, we'll use the external api url. Otherwise we have to use a LoginNode as Proxy.
       if [[ ${HOSTNAME_S} == "<hostname_base>"* ]]; then
         unset JUPYTERHUB_SSL_CLIENT_CA
-        export JUPYTERHUB_API_URL=<jupyterhub_api_url>
         export JUMP_NODE=${HOSTNAME_S}
         echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub. Jump node for tunnel: ${JUMP_NODE}"
         export CURL_ARGS="--silent --write-out %{http_code}"
