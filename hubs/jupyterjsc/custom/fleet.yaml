@@ -22,7 +22,7 @@ helm:
       announcement:
         show: true
         title: "Jupyter-JSC is now running on JSC-Cloud"
-        body: "We've moved Jupyter-JSC to the JSC-Cloud. All data from HDF-Cloud were moved to JSC-Cloud.<br>Jupyter-JSC also has a new url: https://jupyter.jsc.fz-juelich.de."
+        body: "We have moved Jupyter-JSC to the JSC-Cloud. All data from HDF-Cloud were moved to JSC-Cloud. Jupyter-JSC also has a new url: https://jupyter.jsc.fz-juelich.de."
     ingress:
       enabled: true
     jupyter-metrics:
