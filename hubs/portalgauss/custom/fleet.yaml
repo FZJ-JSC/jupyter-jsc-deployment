@@ -49,8 +49,6 @@ targetCustomizations:
         stage: production
     helm:
       values:
-        ingress:
-          enabled: false
         global:
           hostname: portal.gauss-centre.eu
         customConfig:

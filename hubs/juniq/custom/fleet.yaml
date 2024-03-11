@@ -42,7 +42,5 @@ targetCustomizations:
         stage: production
     helm:
       values:
-        ingress:
-          enabled: false
         global:
           hostname: juniq-staging.fz-juelich.de
