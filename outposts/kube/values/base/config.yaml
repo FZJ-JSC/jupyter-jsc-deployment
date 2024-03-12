@@ -364,7 +364,7 @@ outpostConfig: |-
       core = client.CoreV1Api()
       flavor_mem_request = resources.get("mem_guarantee", "0M")
       spawner.log.info(f"{spawner._log_name} - {flavor_mem_request}M memory for {flavor} ({jupyterhub_name}) requested")
-      base_node_name = "usernode-"
+      base_node_name = "prod-usernode-"
       
       first_node = True
       outpost_mem_blocked = 1024
