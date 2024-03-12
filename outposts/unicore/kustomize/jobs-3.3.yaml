@@ -241,6 +241,7 @@ data:
       else
         send_spawn_update 70 "Load default modules ..." "Loading JupyterCollection/2022.3.3 in Stages/2022."
         module purge
+        module use ${OTHERSTAGES}
         module load Stages/2022 GCCcore/.11.2.0 Python JupyterCollection/2022.3.3
 
         echo "$(date) - checking for GPU"
