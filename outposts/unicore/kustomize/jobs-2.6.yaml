@@ -242,7 +242,9 @@ data:
         send_spawn_update 70 "Load default modules ..." "Loading JupyterCollection/2020.2.6 in Stages/Devel-2020."
         
         module purge
-        module use $OTHERSTAGES; module load Stages/Devel-2020 GCCcore/.9.3.0 JupyterCollection/2020.2.6
+        module use ${OTHERSTAGES}
+        module load Stages/Devel-2020 
+        module load GCCcore/.9.3.0 JupyterCollection/2020.2.6
 
         echo "$(date) - checking for GPU"
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
