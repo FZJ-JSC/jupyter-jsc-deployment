@@ -242,7 +242,8 @@ data:
         send_spawn_update 70 "Load default modules ..." "Loading JupyterCollection/2021.3.2 in Stages/2020."
         module purge
         module use ${OTHERSTAGES}
-        module load Stages/2020 GCCcore/.10.3.0 JupyterCollection/2021.3.2
+        module load Stages/2020 
+        module load GCCcore/.10.3.0 JupyterCollection/2021.3.2
 
         echo "$(date) - checking for GPU"
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
@@ -633,14 +634,9 @@ data:
         module purge
         module use ${OTHERSTAGES}
         module load Stages/2020
-        module load GCCcore/.10.3.0
-        module load JupyterCollection/2021.3.2-JUNIQ
-        module load GCC/10.3.0
-        module load ParaStationMPI
-        module load Cirq/0.9.1-Python-3.8.5
-        module load PyQuil/2.27.0-Python-3.8.5
-        module load DWave/4.2.0-Python-3.8.5
-        module load Qiskit/0.32.1-Python-3.8.5
+        module load GCCcore/.10.3.0 JupyterCollection/2021.3.2-JUNIQ
+        module load GCC/10.3.0 ParaStationMPI
+        module load Cirq/0.9.1-Python-3.8.5 PyQuil/2.27.0-Python-3.8.5 DWave/4.2.0-Python-3.8.5 Qiskit/0.32.1-Python-3.8.5
 
         echo "$(date) - checking for GPU"
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
