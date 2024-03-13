@@ -213,7 +213,7 @@ outpostConfig: |-
         job_description["Resources"]["GPUS"] = gpus
       if xserver:
         job_description["Resources"]["StartXServer"] = xserver
-      if reservation: 
+      if reservation and reservation.lower() != "none":
         job_description["Resources"]["Reservation"] = reservation
     
     
