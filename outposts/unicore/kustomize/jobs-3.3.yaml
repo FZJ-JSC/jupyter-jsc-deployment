@@ -242,7 +242,8 @@ data:
         send_spawn_update 70 "Load default modules ..." "Loading JupyterCollection/2022.3.3 in Stages/2022."
         module purge
         module use ${OTHERSTAGES}
-        module load Stages/2022 GCCcore/.11.2.0 Python JupyterCollection/2022.3.3
+        module load Stages/2022 
+        module load GCCcore/.11.2.0 Python JupyterCollection/2022.3.3
 
         echo "$(date) - checking for GPU"
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"

@@ -242,7 +242,8 @@ data:
         send_spawn_update 70 "Load default modules ..." "Loading Jupyter/2023.3.6 in Stages/2023."
 
         module purge
-        module load Stages/2023 GCCcore/.11.3.0 Python JupyterLab/2023.3.6
+        module load Stages/2023
+        module load GCCcore/.11.3.0 Python JupyterLab/2023.3.6
 
         if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Bash/.0.9.0-2023.3.6
@@ -694,7 +695,8 @@ data:
         send_spawn_update 70 "Load default modules ..." "Loading Jupyter/2023.3.6 in Stages/2023."
 
         module purge
-        module load Stages/2023 GCC/11.3.0 ParaStationMPI JupyterLab/2023.3.6
+        module load Stages/2023 
+        module load GCC/11.3.0 ParaStationMPI JupyterLab/2023.3.6
         module load Cartopy/0.21.0 Cirq/1.0.0 DWave/6.3.0 PyQuil/3.3.3 Qiskit/0.41.0 pulser/0.12.0 myqlm/1.7.3 Qiskit-juqcs/0.8.0
 
         if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
