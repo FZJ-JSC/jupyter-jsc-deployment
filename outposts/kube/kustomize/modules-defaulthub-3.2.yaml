@@ -8,5 +8,6 @@ data:
     #!/bin/bash
 
     module purge
-    module use $OTHERSTAGES
-    module load Stages/2020 GCCcore/.10.3.0 JupyterCollection/2021.3.2
+    module use ${OTHERSTAGES}
+    module load Stages/2020 
+    module load GCCcore/.10.3.0 JupyterCollection/2021.3.2
