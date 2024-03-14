@@ -134,6 +134,8 @@ outpostConfig: |-
     for subdir, dirs, files in os.walk("/mnt/jobs/common"):
       for file in files:
         if file.startswith(prefix):
+          # Remove previously stored file
+          job_description["Imports"] = [x for x in job_description["Imports"] if x.get("To") != file[len(prefix):]]
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"].append({
               "From": "inline://dummy",
@@ -147,6 +149,8 @@ outpostConfig: |-
       for file in files:
         spawner.log.info(f"{spawner._log_name} - profile specific file: {file}")
         if file.startswith(prefix):
+          # Remove previously stored file
+          job_description["Imports"] = [x for x in job_description["Imports"] if x.get("To") != file[len(prefix):]]
           spawner.log.info(f"{spawner._log_name} - Add as filename: {file[len(prefix):]}")
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"].append({
@@ -159,6 +163,8 @@ outpostConfig: |-
     for subdir, dirs, files in os.walk(f"/mnt/jobs/{profile}"):
       for file in files:
         if file.startswith(jhub_prefix):
+          # Remove previously stored file
+          job_description["Imports"] = [x for x in job_description["Imports"] if x.get("To") != file[len(jhub_prefix):]]
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"].append({
               "From": "inline://dummy",
@@ -170,6 +176,8 @@ outpostConfig: |-
     for subdir, dirs, files in os.walk(f"/mnt/jobs/{profile}"):
       for file in files:
         if file.startswith(system_prefix):
+          # Remove previously stored file
+          job_description["Imports"] = [x for x in job_description["Imports"] if x.get("To") != file[len(system_prefix):]]
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"].append({
               "From": "inline://dummy",
@@ -181,6 +189,8 @@ outpostConfig: |-
     for subdir, dirs, files in os.walk(f"/mnt/jobs/{profile}"):
       for file in files:
         if file.startswith(jhub_system_prefix):
+          # Remove previously stored file
+          job_description["Imports"] = [x for x in job_description["Imports"] if x.get("To") != file[len(jhub_system_prefix):]]
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"].append({
               "From": "inline://dummy",

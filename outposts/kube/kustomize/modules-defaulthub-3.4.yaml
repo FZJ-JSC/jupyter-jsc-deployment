@@ -8,4 +8,6 @@ data:
     #!/bin/bash
 
     module purge
-    module load Stages/2022 GCCcore/.11.2.0 Python Jupyter/2022.3.4
+    module use ${OTHERSTAGES}
+    module load Stages/2022 
+    module load GCCcore/.11.2.0 Python Jupyter/2022.3.4
