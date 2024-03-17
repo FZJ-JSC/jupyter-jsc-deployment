@@ -10,4 +10,4 @@ data:
     module purge
     module use ${OTHERSTAGES}
     module load Stages/2023 
-    moduel load GCCcore/.11.3.0 Python JupyterLab/2023.3.6
+    module load GCCcore/.11.3.0 Python JupyterLab/2023.3.6
