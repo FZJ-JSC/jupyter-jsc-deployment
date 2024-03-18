@@ -17,6 +17,10 @@ helm:
         show: true
         title: "Jupyter-JSC is now running on JSC-Cloud"
         body: "We have moved Jupyter-JSC to the JSC-Cloud. All data from HDF-Cloud were moved to JSC-Cloud."
+      backendServices:
+        outpostUnicore:
+          pollInterval: 20
+          pollIntervalRandomizer: 10
     ingress:
       enabled: true
     jupyter-metrics:
