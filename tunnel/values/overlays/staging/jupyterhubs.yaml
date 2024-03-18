@@ -54,7 +54,6 @@ jupyterhubs:
         port: 22
         hostname: "juwels06.fz-juelich.de"
       - name: "jwlogin07i"
-        disabled: True
         user: "ljupyter"
         port: 22
         hostname: "juwels07.fz-juelich.de"
@@ -71,7 +70,6 @@ jupyterhubs:
         port: 22
         hostname: "juwels10.fz-juelich.de"
       - name: "jwlogin11i"
-        disabled: True
         user: "ljupyter"
         port: 22
         hostname: "juwels11.fz-juelich.de"
@@ -176,7 +174,6 @@ jupyterhubs:
         port: 22
         hostname: "jusuf3.fz-juelich.de"
       - name: "jsfl04i"
-        disabled: True
         user: "ljupyter"
         port: 22
         hostname: "jusuf4.fz-juelich.de"
