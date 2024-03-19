@@ -15,7 +15,7 @@ jupyterhubs:
     additional_remote_hosts:
       - coec
       - coeraise
-      - eurocc
+      - euroccgcs
       - juniq
       - portalgauss
     ssh_config_hosts: 
