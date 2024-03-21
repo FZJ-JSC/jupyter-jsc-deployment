@@ -6,7 +6,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.9.26
+  version: 0.9.28
   values:
     fullnameOverride: jupyterjsc-custom
     global:
@@ -21,6 +21,9 @@ helm:
       enabled: true
     jupyter-metrics:
       enabled: true
+      secretSuffixes:
+        - metrics
+        - metrics-codebase
     logging:
       syslog:
         enabled: true
