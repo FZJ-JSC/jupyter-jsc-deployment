@@ -2,7 +2,7 @@ hub:
   args:
     - -c
     - >-
-      pip install --force-reinstall jupyter-jsc-custom==0.9.34 jupyterhub-forwardbasespawner==0.0.22 jupyterhub-unicorespawner==0.9.1 jupyterhub-outpostspawner==0.0.29 &&
+      pip install --force-reinstall jupyter-jsc-custom==0.9.35 jupyterhub-forwardbasespawner==0.0.22 jupyterhub-unicorespawner==0.9.1 jupyterhub-outpostspawner==0.0.29 &&
       mkdir -p /mnt/reservation_key &&
       cp -rp /mnt/reservation-keypair/..data/* /mnt/reservation_key/. &&
       chown 1000:1000 -R /mnt/reservation_key &&
