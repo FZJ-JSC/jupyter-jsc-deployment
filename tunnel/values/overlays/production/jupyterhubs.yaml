@@ -63,10 +63,6 @@ jupyterhubs:
         user: "ljupyter"
         port: 22
         hostname: "juwels10.fz-juelich.de"
-      - name: "jwlogin11i"
-        user: "ljupyter"
-        port: 22
-        hostname: "juwels11.fz-juelich.de"
       - name: "jwlogin21i"
         user: "ljupyter"
         port: 22
@@ -167,7 +163,3 @@ jupyterhubs:
         user: "ljupyter"
         port: 22
         hostname: "jusuf3.fz-juelich.de"
-      - name: "jsfl04i"
-        user: "ljupyter"
-        port: 22
-        hostname: "jusuf4.fz-juelich.de"
