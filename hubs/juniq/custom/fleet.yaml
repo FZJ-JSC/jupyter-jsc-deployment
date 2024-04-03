@@ -14,7 +14,7 @@ helm:
       namespace: jupyter
     customConfig:
       announcement:
-        show: true
+        show: false
         title: "JUNIQ is now running on JSC-Cloud"
         body: "We've moved JUNIQ to the JSC-Cloud. All data from HDF-Cloud was moved to JSC-Cloud."
     ingress:

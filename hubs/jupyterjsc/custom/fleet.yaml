@@ -14,7 +14,7 @@ helm:
       namespace: jupyter
     customConfig:
       announcement:
-        show: true
+        show: false
         title: "Jupyter-JSC is now running on JSC-Cloud"
         body: "We have moved Jupyter-JSC to the JSC-Cloud. All data from HDF-Cloud were moved to JSC-Cloud."
     ingress:
