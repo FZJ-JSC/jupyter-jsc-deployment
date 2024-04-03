@@ -45,7 +45,6 @@ data:
 
     # set env_variables correctly
     set_env () {
-      env > env_before.txt
       echo "$(date) - Set environment variables ..."
       export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
       export PID_PATH=${DIR}/service.pid
@@ -158,7 +157,6 @@ data:
 
       export JUPYTERJSC_CMD_ARGS=""
       echo "$(date) - Set environment variables done"
-      env > env_after.txt
     }
 
     grace_runtime_kill() {
