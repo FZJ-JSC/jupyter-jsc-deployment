@@ -69,9 +69,10 @@ data:
         export HUB_PROTO="http"
       fi
 
-      API_URL_WITHOUT_PROTO=${JUPYTERHUB_API_URL##${HUB_PROTO}\:\/\/}
+      API_URL_WITHOUT_PROTO=${JUPYTERHUB_API_URL##https\:\/\/}
       export JUPYTERHUB_DOMAIN=${API_URL_WITHOUT_PROTO%%\/*}
-      export JUPYTERHUB_NOTEBOOK_SERVER_URL="${HUB_PROTO}://${JUPYTERHUB_DOMAIN}${JUPYTERHUB_SERVICE_PREFIX}"
+      export JUPYTER_SERVER_PUBLIC_URL="https://${JUPYTERHUB_DOMAIN}${JUPYTERHUB_SERVICE_PREFIX}"
+      export DWAVE_INSPECTOR_JUPYTER_SERVER_PROXY_EXTERNAL_URL=${JUPYTER_SERVER_PUBLIC_URL}
 
       echo "$(date) - JupyterLab is running on ${HOSTNAME_S}"
       # If this JupyterLab is running on a LoginNode, we'll use the external api url.
@@ -525,9 +526,10 @@ data:
         export HUB_PROTO="http"
       fi
 
-      API_URL_WITHOUT_PROTO=${JUPYTERHUB_API_URL##${HUB_PROTO}\:\/\/}
+      API_URL_WITHOUT_PROTO=${JUPYTERHUB_API_URL##https\:\/\/}
       export JUPYTERHUB_DOMAIN=${API_URL_WITHOUT_PROTO%%\/*}
-      export JUPYTERHUB_NOTEBOOK_SERVER_URL="${HUB_PROTO}://${JUPYTERHUB_DOMAIN}${JUPYTERHUB_SERVICE_PREFIX}"
+      export JUPYTER_SERVER_PUBLIC_URL="https://${JUPYTERHUB_DOMAIN}${JUPYTERHUB_SERVICE_PREFIX}"
+      export DWAVE_INSPECTOR_JUPYTER_SERVER_PROXY_EXTERNAL_URL=${JUPYTER_SERVER_PUBLIC_URL}
 
       echo "$(date) - JupyterLab is running on ${HOSTNAME_S}"
       # If this JupyterLab is running on a LoginNode, we'll use the external api url.
