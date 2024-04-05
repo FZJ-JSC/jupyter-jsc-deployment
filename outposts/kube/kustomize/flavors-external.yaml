@@ -42,15 +42,31 @@ data:
           cpu_limit: 2
           mem_guarantee: "7680M"
           mem_limit: "8192M"
+      workshop:
+        max: 25
+        weight: 11
+        display_name: "Course - 4GB RAM, 1VCPU, 10 hours"
+        description: "Course - JupyterLab will run for max 10 hours with 4GB RAM and 1VCPU."
+        runtime:
+          hours: 10
+        resources:
+          cpu_guarantee: 0.2
+          cpu_limit: 1
+          mem_guarantee: "3584M"
+          mem_limit: "4096M"
     hubs:
       default:
         jupyterhubs: ["coec", "coeraise", "euroccgcs", "portalgauss", "dev1", "dev2"]
         weight: 10
         flavors: ["m1", "l1"]
       defaultPlusL2:
-        jupyterhubs: ["jupyterjsc", "juniq"]
+        jupyterhubs: ["jupyterjsc"]
         weight: 5
         flavors: ["m1", "l1", "l2"]
+      juniq:
+        jupyterhubs: ["juniq"]
+        weight: 6
+        flavors: ["m1", "workshop", "l1", "l2"]
     users:
       example1:
         usernames: ["t.kreuzer_at_fz.juelich.de"]
