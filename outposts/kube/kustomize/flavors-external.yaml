@@ -60,13 +60,13 @@ data:
         weight: 10
         flavors: ["m1", "l1"]
       defaultPlusL2:
-        jupyterhubs: ["jupyterjsc", "juniq"]
+        jupyterhubs: ["jupyterjsc"]
         weight: 5
         flavors: ["m1", "l1", "l2"]
       juniq:
         jupyterhubs: ["juniq"]
         weight: 6
-        flavors: ["m1", "workshop", "l2"]
+        flavors: ["m1", "workshop", "l1", "l2"]
     users:
       example1:
         usernames: ["t.kreuzer_at_fz.juelich.de"]
