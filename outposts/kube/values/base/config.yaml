@@ -140,7 +140,7 @@ outpostConfig: |-
   ##########
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
-  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.9.dev1"
+  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.9"
   c.KubeSpawner.image_pull_policy = "Always"
   c.KubeSpawner.tolerations = [
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
