@@ -4,4 +4,5 @@ resources:
   - jobs-3.3.yaml
   - jobs-3.4.yaml
   - jobs-3.6.yaml
+  - jobs-4.1.5.yaml
   - jobs-common.yaml
