@@ -250,6 +250,7 @@ data:
         module load GCCcore/.12.3.0
         module load Jupyter-bundle/20240300
 
+        # Kernels
         if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Bash/.0.9.3-4.1.5
         fi
@@ -284,6 +285,8 @@ data:
         if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyVisualization/.2024.3-4.1.5
         fi
+
+        # Proxies
         if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
           module load JupyterProxy-XpraHTML5/.0.3.5-4.1.5
         fi
@@ -296,18 +299,20 @@ data:
         #     break
         #   fi
         # done
+        # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
+        # if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
+        #   if [[ $SYSTEMNAME != "hdfml" ]]; then
+        #     module load JupyterProxy-NESTDesktop
+        #   fi
+        # fi
+
+        # Extensions
         if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
           module load nglview/.3.1.2
         fi
         if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
           module load jupyterai/.2.12.0
         fi
-        # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
-        # if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-        #   if [[ $SYSTEMNAME != "hdfml" ]]; then
-        #     module load NESTDesktop
-        #   fi
-        # fi
         # SlurmProvisioner may need an update
         # if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
         #   module load JupyterExtension-slurmprovisioner/0.6.0-2023.3.6
@@ -714,6 +719,7 @@ data:
         module load Jupyter-bundle/20240300
         # module load Cartopy/0.21.0 Cirq/1.0.0 DWave/6.3.0 PyQuil/3.3.3 Qiskit/0.41.0 pulser/0.12.0 myqlm/1.7.3 Qiskit-juqcs/0.8.0
 
+        # Kernels
         if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Bash/.0.9.3-4.1.5
         fi
@@ -748,6 +754,8 @@ data:
         if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyVisualization/.2024.3-4.1.5
         fi
+
+        # Proxies
         if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
           module load JupyterProxy-XpraHTML5/.0.3.5-4.1.5
         fi
@@ -760,18 +768,20 @@ data:
         #     break
         #   fi
         # done
+        # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
+        # if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
+        #   if [[ $SYSTEMNAME != "hdfml" ]]; then
+        #     module load JupyterProxy-NESTDesktop
+        #   fi
+        # fi
+
+        # Extensions
         if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
           module load nglview/.3.1.2
         fi
         if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
           module load jupyterai/.2.12.0
         fi
-        # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
-        # if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-        #   if [[ $SYSTEMNAME != "hdfml" ]]; then
-        #     module load NESTDesktop
-        #   fi
-        # fi
         # SlurmProvisioner may need an update
         # if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
         #   module load JupyterExtension-slurmprovisioner/0.6.0-2023.3.6
