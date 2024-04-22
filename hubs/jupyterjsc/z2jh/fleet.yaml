@@ -9,7 +9,7 @@ helm:
   # repo: https://jupyterhub.github.io/helm-chart/
   # chart: jupyterhub
   # version: 3.1.0
-  chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.2.1.tgz
+  chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.3.6.tgz
   values:
     nameOverride: "jupyterjsc"
     fullnameOverride: "jupyterjsc"
@@ -26,7 +26,7 @@ helm:
     - ../../base-values/common.yaml
     - ../../base-values/proxy.yaml
     - ../../base-values/hub/config.yaml
-    - ../../base-values/hub/image.yaml
+    - ../../base-values/hub/image_tmp.yaml
     - ../../base-values/hub/extraConfig.yaml
     - ../../base-values/hub/extraContainers.yaml
     - ../../base-values/hub/extraVolumeMounts.yaml
