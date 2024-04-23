@@ -66,7 +66,7 @@ data:
       juniq:
         jupyterhubs: ["juniq"]
         weight: 6
-        flavors: ["m1", "workshop", "l1", "l2"]
+        flavors: ["m1", "l1", "l2"]
     users:
       example1:
         usernames: ["t.kreuzer_at_fz.juelich.de_disabled"]
