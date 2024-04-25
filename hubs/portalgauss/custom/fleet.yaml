@@ -37,9 +37,13 @@ targetCustomizations:
             - LRZ
           backendServices:
             outpostKubeLRZStaging:
+              flavorsRequired: false
+              userflavors: false
               urls:
                 services: http://vm-138-246-238-21.cloud.mwn.de:8080/services
             outpostKubeLRZ:
+              flavorsRequired: false
+              userflavors: false
               urls:
                 services: http://vm-138-246-237-228.cloud.mwn.de:8080/services
   - name: production
