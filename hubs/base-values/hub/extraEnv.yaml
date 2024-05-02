@@ -1,3 +1,0 @@
-hub:
-  extraEnv:
-    RESERVATION_KEY_PATH: /mnt/shared-data/reservation_key/ssh-privatekey

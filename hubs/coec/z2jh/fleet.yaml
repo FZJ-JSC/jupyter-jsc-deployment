@@ -9,7 +9,7 @@ helm:
   # repo: https://jupyterhub.github.io/helm-chart/
   # chart: jupyterhub
   # version: 3.1.0
-  chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.2.1.tgz
+  chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.3.7.tgz
   values:
     nameOverride: "coec"
     fullnameOverride: "coec"
@@ -29,7 +29,6 @@ helm:
     - ../../base-values/hub/image.yaml
     - ../../base-values/hub/extraConfig.yaml
     - ../../base-values/hub/extraContainers.yaml
-    - ../../base-values/hub/extraEnv.yaml
     - ../../base-values/hub/extraVolumeMounts.yaml
     - ../../base-values/hub/extraVolumes.yaml
     - ../../base-values/hub/initContainers.yaml
