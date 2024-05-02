@@ -1,4 +1,3 @@
 hub:
   extraEnv:
-    - name: RESERVATION_KEY_PATH
-      value: "/mnt/shared-data/reservation_key/ssh-privatekey"
+    RESERVATION_KEY_PATH: /mnt/shared-data/reservation_key/ssh-privatekey
