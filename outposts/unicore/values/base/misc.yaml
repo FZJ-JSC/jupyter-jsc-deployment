@@ -7,7 +7,7 @@ nameOverride: "outpost-unicore"
 fullnameOverride: "outpost-unicore"
 logging:
   stream:
-    level: 10
+    level: 20
   syslog:
     enabled: true
     level: 10
