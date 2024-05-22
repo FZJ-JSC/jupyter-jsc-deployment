@@ -32,4 +32,4 @@ targetCustomizations:
         # Set JupyterHub in maintenance:
         #   !! Configure hosts in values/overlays/production/hosts.yaml !!
         #   Set enabled here to true, set ingress.enabled in hubs/[juniq|eurocc|...]/values/overlays/production/ingress.yaml to false
-        enabled: false
+        enabled: true
