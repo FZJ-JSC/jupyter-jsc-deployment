@@ -294,7 +294,7 @@ data:
         fi
             lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
-          module load JupyterExtension-nvdashboard/0.8.0-2023.3.6 || true
+          module load JupyterExtension-nvdashboard/0.8.0-2023.3.6
         fi
         send_spawn_update 80 "Load default modules done" "Loaded Jupyter/2022.3.4 in Stages/2022."
 
@@ -730,7 +730,7 @@ data:
         fi
             lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
-          module load JupyterExtension-nvdashboard/0.8.0-2023.3.6 || true
+          module load JupyterExtension-nvdashboard/0.8.0-2023.3.6
         fi
         send_spawn_update 80 "Load default modules done" "Loaded Jupyter/2022.3.4 in Stages/2022."
       fi
