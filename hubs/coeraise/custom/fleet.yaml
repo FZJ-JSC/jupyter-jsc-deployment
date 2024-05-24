@@ -6,7 +6,7 @@ helm:
   releaseName: coeraise-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.11.13
+  version: 0.12.0
   values:
     fullnameOverride: coeraise-custom
     global:

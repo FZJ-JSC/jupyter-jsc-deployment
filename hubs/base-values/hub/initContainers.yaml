@@ -9,7 +9,11 @@ hub:
         - >-
           apk add bash git &&
           /bin/bash /mnt/init_script/..data/run.sh &&
-          /bin/bash /mnt/check_frontend_files/..data/run.sh once
+          /bin/bash /mnt/check_frontend_files/..data/run.sh once &&
+          mkdir -p /mnt/shared-data/reservation_key &&
+          cp -rp /mnt/reservation-keypair/..data/* /mnt/shared-data/reservation_key/. &&
+          chown 1000:1000 -R /mnt/shared-data/reservation_key &&
+          chmod 400 /mnt/shared-data/reservation_key/*
       volumeMounts:
         - name: shared-data
           mountPath: /mnt/shared-data
@@ -18,6 +22,8 @@ hub:
         - name: internal-ssl
           mountPath: /mnt/internal_ssl
           readOnly: true
+        - name: reservation-keypair
+          mountPath: /mnt/reservation-keypair
         - name: init-script
           mountPath: /mnt/init_script
         - name: check-frontend-files

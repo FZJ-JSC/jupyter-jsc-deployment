@@ -9,7 +9,7 @@ helm:
   # repo: https://jupyterhub.github.io/helm-chart/
   # chart: jupyterhub
   # version: 3.1.0
-  chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.2.1.tgz
+  chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.3.7.tgz
   values:
     nameOverride: "euroccgcs"
     fullnameOverride: "euroccgcs"

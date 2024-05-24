@@ -20,11 +20,17 @@ extraVolumes:
   - name: external-flavors
     configMap:
       name: outpost-kube-flavors-external
+  - name: tz-config
+    hostPath:
+      path: /usr/share/zoneinfo/Europe/Berlin
+      type: ""
 extraVolumeMounts:
   - name: nfs-userhomes
     mountPath: /p/home/jusers
   - name: external-flavors
     mountPath: /mnt/flavors
+  - mountPath: /etc/localtime
+    name: tz-config
 nodeSelector:
   usernode: "true"
   kubernetes.io/hostname: "usernode-1"

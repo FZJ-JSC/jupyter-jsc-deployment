@@ -6,7 +6,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.11.13
+  version: 0.12.0
   values:
     fullnameOverride: jupyterjsc-custom
     global:
@@ -46,9 +46,9 @@ targetCustomizations:
           - name: "staging"
             oldHost: "jupyter-jsc-staging.fz-juelich.de"
             newHost: "jupyter-staging.jsc.fz-juelich.de"
-          - name: "staging-nbviewer"
-            oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
-            newHost: "docs.jupyter-staging.jsc.fz-juelich.de"
+          #- name: "staging-nbviewer"
+          #  oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
+          #  newHost: "docs.jupyter-staging.jsc.fz-juelich.de"
   - name: production
     clusterSelector:
       matchLabels:

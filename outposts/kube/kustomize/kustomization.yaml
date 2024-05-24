@@ -2,14 +2,18 @@ resources:
   - modules-defaulthub-3.2.yaml
   - modules-defaulthub-3.4.yaml
   - modules-defaulthub-3.6.yaml
+  - modules-defaulthub-4.2.yaml
   - modules-juniq-3.2.yaml
   - modules-juniq-3.4.yaml
   - modules-juniq-3.6.yaml
+  - modules-juniq-4.2.yaml
   - modules-user-defaulthub-3.2.yaml
   - modules-user-defaulthub-3.4.yaml
   - modules-user-defaulthub-3.6.yaml
+  - modules-user-defaulthub-4.2.yaml
   - modules-user-juniq-3.2.yaml
   - modules-user-juniq-3.4.yaml
   - modules-user-juniq-3.6.yaml
+  - modules-user-juniq-4.2.yaml
   - uftp.yaml
   - flavors-external.yaml
