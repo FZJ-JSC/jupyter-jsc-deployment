@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: unicore-jobs-4-1-5
+  name: unicore-jobs-4-2
   namespace: unicore
 data:
   input_start.sh: |
@@ -242,20 +242,20 @@ data:
         source ${HOME}/.jupyter/start_jupyter-jsc.sh
         send_spawn_update_warning 80 "Load customized modules done" "You are using a customized modules script, defined in ${HOME}/.jupyter/start_jupyter-jsc.sh."
       else
-        send_spawn_update 70 "Load default modules ..." "Loading Jupyter-bundle/20240300 in Stages/2024."
+        send_spawn_update 70 "Load default modules ..." "Loading Jupyter-bundle/20240520 in Stages/2024."
 
         module purge
         module use ${OTHERSTAGES}
         module load Stages/2024
         module load GCCcore/.12.3.0
-        module load Jupyter-bundle/20240300
+        module load Jupyter-bundle/20240520
 
         # Kernels
         if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Bash/.0.9.3-4.1.5
+          module load JupyterKernel-Bash/.0.9.3-4.2.1
         fi
         if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Cling/.20231018-4.1.5
+          module load JupyterKernel-Cling/.20231018-4.2.1
         fi
         if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Julia/.1.9.3
@@ -264,31 +264,31 @@ data:
           module load JupyterKernel-LFortran/.0.30.0
         fi
         if [[ $JUPYTER_MODULE_OCTAVE_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Octave/.8.4.0-4.1.5
+          module load JupyterKernel-Octave/.8.4.0-4.2.1
         fi
         if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-R/.4.3.2-4.1.5
+          module load JupyterKernel-R/.4.3.2-4.2.1
         fi
         if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Ruby/.3.2.2
         fi
         if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyDeepLearning/.2024.3-4.1.5
+          module load JupyterKernel-PyDeepLearning/.2024.3-4.2.1
         fi
         if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyEarthSystem/.2024.3-4.1.5
+          module load JupyterKernel-PyEarthSystem/.2024.3-4.2.1
         fi
         ## TODO not yet installed
         # if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
         #   module load JupyterKernel-PyQuantum/???
         # fi
         if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyVisualization/.2024.3-4.1.5
+          module load JupyterKernel-PyVisualization/.2024.3-4.2.1
         fi
 
         # Proxies
         if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
-          module load JupyterProxy-XpraHTML5/.0.3.5-4.1.5
+          module load JupyterProxy-XpraHTML5/.0.4.0-4.2.1
         fi
         ## TODO waiting for installation of newest MatLab version
         # Load MatLab Proxy module, if user is in matlab group
@@ -311,7 +311,7 @@ data:
           module load nglview/.3.1.2
         fi
         if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
-          module load jupyter-ai/.2.12.0
+          module load jupyter-ai/.2.15.0
         fi
         # SlurmProvisioner may need an update
         # if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
@@ -326,7 +326,7 @@ data:
         # fi
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
-          module load jupyterlab-nvdashboard/.0.11.0a
+          module load jupyterlab-nvdashboard/.0.10.0
         fi
         send_spawn_update 80 "Load default modules done" "Loaded Jupyter-bundle/20240300 in Stages/2024."
       fi
@@ -713,22 +713,22 @@ data:
         source ${HOME}/.jupyter/start_jupyter-jsc.sh
         send_spawn_update_warning 80 "Load customized modules done" "You are using a customized modules script, defined in ${HOME}/.jupyter/start_jupyter-jsc.sh."
       else
-        send_spawn_update 70 "Load default modules ..." "Loading Jupyter-bundle/20240300 in Stages/2024."
-        send_spawn_update_warning 75 "The JUNIQ specific modules are not available yet." "We're loading the default JupyterLab 4.1.5 setup, which is also used at Jupyter-JSC."
+        send_spawn_update 70 "Load default modules ..." "Loading Jupyter-bundle/20240520 in Stages/2024."
+        send_spawn_update_warning 75 "The JUNIQ specific modules are not available yet." "We're loading the default JupyterLab 4.2 setup, which is also used at Jupyter-JSC."
 
         module purge
         module use ${OTHERSTAGES}
         module load Stages/2024
         module load GCCcore/.12.3.0
-        module load Jupyter-bundle/20240300
+        module load Jupyter-bundle/20240520
         # module load Cartopy/0.21.0 Cirq/1.0.0 DWave/6.3.0 PyQuil/3.3.3 Qiskit/0.41.0 pulser/0.12.0 myqlm/1.7.3 Qiskit-juqcs/0.8.0
 
         # Kernels
         if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Bash/.0.9.3-4.1.5
+          module load JupyterKernel-Bash/.0.9.3-4.2.1
         fi
         if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Cling/.20231018-4.1.5
+          module load JupyterKernel-Cling/.20231018-4.2.1
         fi
         if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Julia/.1.9.3
@@ -737,31 +737,31 @@ data:
           module load JupyterKernel-LFortran/.0.30.0
         fi
         if [[ $JUPYTER_MODULE_OCTAVE_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Octave/.8.4.0-4.1.5
+          module load JupyterKernel-Octave/.8.4.0-4.2.1
         fi
         if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-R/.4.3.2-4.1.5
+          module load JupyterKernel-R/.4.3.2-4.2.1
         fi
         if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Ruby/.3.2.2
         fi
         if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyDeepLearning/.2024.3-4.1.5
+          module load JupyterKernel-PyDeepLearning/.2024.3-4.2.1
         fi
         if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyEarthSystem/.2024.3-4.1.5
+          module load JupyterKernel-PyEarthSystem/.2024.3-4.2.1
         fi
         ## TODO not yet installed
         # if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
         #   module load JupyterKernel-PyQuantum/???
         # fi
         if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyVisualization/.2024.3-4.1.5
+          module load JupyterKernel-PyVisualization/.2024.3-4.2.1
         fi
 
         # Proxies
         if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
-          module load JupyterProxy-XpraHTML5/.0.3.5-4.1.5
+          module load JupyterProxy-XpraHTML5/.0.4.0-4.2.1
         fi
         ## TODO waiting for installation of newest MatLab version
         # Load MatLab Proxy module, if user is in matlab group
@@ -784,7 +784,7 @@ data:
           module load nglview/.3.1.2
         fi
         if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
-          module load jupyter-ai/.2.12.0
+          module load jupyter-ai/.2.15.0
         fi
         # SlurmProvisioner may need an update
         # if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
@@ -799,7 +799,7 @@ data:
         # fi
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
-          module load jupyterlab-nvdashboard/.0.11.0a
+          module load jupyterlab-nvdashboard/.0.10.0
         fi
         send_spawn_update 80 "Load default modules done" "Loaded Jupyter-bundle/20240300 in Stages/2024."
       fi

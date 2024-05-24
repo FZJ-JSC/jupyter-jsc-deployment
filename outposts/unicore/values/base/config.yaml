@@ -7,8 +7,8 @@ extraVolumes:
     name: job-descriptions-common
   - configMap:
       defaultMode: 256
-      name: unicore-jobs-4-1-5
-    name: job-descriptions-4-1-5
+      name: unicore-jobs-4-2
+    name: job-descriptions-4-2
   - configMap:
       defaultMode: 256
       name: unicore-jobs-3-6
@@ -32,8 +32,8 @@ extraVolumes:
 extraVolumeMounts:
   - mountPath: /mnt/jobs/common
     name: job-descriptions-common
-  - mountPath: /mnt/jobs/JupyterLab_4.1.5
-    name: job-descriptions-4-1-5
+  - mountPath: /mnt/jobs/JupyterLab_4.2
+    name: job-descriptions-4-2
   - mountPath: /mnt/jobs/JupyterLab_3.6
     name: job-descriptions-3-6
   - mountPath: /mnt/jobs/JupyterLab_3.4

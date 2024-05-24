@@ -6,7 +6,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.11.12
+  version: 0.12.0
   values:
     fullnameOverride: jupyterjsc-custom
     global:
@@ -16,7 +16,7 @@ helm:
       announcement:
         show: false
         title: "Jupyter-JSC is now running on JSC-Cloud"
-        body: "We have moved Jupyter-JSC to the JSC-Cloud. All data from HDF-Cloud were moved to JSC-Cloud."
+        body: "We have moved Jupyter-JSC to the JSC-Cloud. All data from HDF-Cloud was moved to JSC-Cloud."
     ingress:
       enabled: true
     jupyter-metrics:
@@ -46,9 +46,9 @@ targetCustomizations:
           - name: "staging"
             oldHost: "jupyter-jsc-staging.fz-juelich.de"
             newHost: "jupyter-staging.jsc.fz-juelich.de"
-            #- name: "staging-nbviewer"
-            #oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
-            #newHost: "docs.jupyter-staging.jsc.fz-juelich.de"
+          #- name: "staging-nbviewer"
+          #  oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
+          #  newHost: "docs.jupyter-staging.jsc.fz-juelich.de"
   - name: production
     clusterSelector:
       matchLabels:

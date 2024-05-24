@@ -4,6 +4,8 @@ hub:
       mountPath: /mnt/shared-data
     - name: persistent
       mountPath: /mnt/persistent
+    - name: reservation-keypair
+      mountPath: /mnt/reservation-keypair
     - name: tz-config
       mountPath: /etc/localtime
     - name: custom-config
