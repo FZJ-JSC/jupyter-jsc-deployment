@@ -311,7 +311,7 @@ data:
           module load nglview/.3.1.2
         fi
         if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
-          module load jupyterai/.2.12.0
+          module load jupyter-ai/.2.12.0
         fi
         # SlurmProvisioner may need an update
         # if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
@@ -326,7 +326,7 @@ data:
         # fi
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
-          module load nvdashboard/.0.11.0a
+          module load jupyterlab-nvdashboard/.0.11.0a
         fi
         send_spawn_update 80 "Load default modules done" "Loaded Jupyter-bundle/20240300 in Stages/2024."
       fi
@@ -335,20 +335,24 @@ data:
 
     update_config () {
       sed -i -e "s|_port_|${PORT}|g" -e "s|_home_|${JUPYTERHUB_HOME:-${HOME}}|g" -e "s|_servername_|${JUPYTERHUB_SERVER_NAME}|g" ${DIR}/config.py
+      send_spawn_update 85 "Add system specific configuration." "Use system specific jupyter_notebook_config.py files"
       if [[ -f ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py ]]; then
-        echo "$(date) - Add system specific config ..."
-        send_spawn_update 85 "Add system specific configuration." "Use system specific config file ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py"
         echo "" >> ${DIR}/config.py
         cat ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py >> ${DIR}/config.py
-        for path in ${JUPYTER_EXTRA_LABEXTENSIONS_PATH//:/$'\n'}; do
-          echo "c.LabServerApp.extra_labextensions_path.append('$path')" >> ${JUPYTER_LOG_DIR}/config.py
-        done
-        echo "$(date) - Add system specific config done"
+        echo "$(date) - Added system specific config ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py"
       fi
-      if [[ -f ${EBROOTJUPYTERLAB}/bin/update_favorites_json ]]; then
+      if [[ -f ${EBROOTJUPYTERMINRESOURCEMINUSAGE}/etc/jupyter/jupyter_notebook_config.py ]]; then
+        echo "" >> ${DIR}/config.py
+        cat ${EBROOTJUPYTERMINRESOURCEMINUSAGE}/etc/jupyter/jupyter_notebook_config.py >> ${DIR}/config.py
+        echo "$(date) - Added system specific config ${EBROOTJUPYTERMINRESOURCEMINUSAGE}/etc/jupyter/jupyter_notebook_config.py"
+      fi
+      for path in ${JUPYTER_EXTRA_LABEXTENSIONS_PATH//:/$'\n'}; do
+        echo "c.LabServerApp.extra_labextensions_path.append('$path')" >> ${JUPYTER_LOG_DIR}/config.py
+      done
+      if command -v update_favorites_json &> /dev/null; then
         # update favorite-dirs with $HOME,$PROJECT,$SCRATCH,
         echo "$(date) - Update favorites"
-        ${EBROOTJUPYTERLAB}/bin/update_favorites_json
+        update_favorites_json
       fi
     }
 
@@ -780,7 +784,7 @@ data:
           module load nglview/.3.1.2
         fi
         if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
-          module load jupyterai/.2.12.0
+          module load jupyter-ai/.2.12.0
         fi
         # SlurmProvisioner may need an update
         # if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
@@ -795,7 +799,7 @@ data:
         # fi
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
-          module load nvdashboard/.0.11.0a
+          module load jupyterlab-nvdashboard/.0.11.0a
         fi
         send_spawn_update 80 "Load default modules done" "Loaded Jupyter-bundle/20240300 in Stages/2024."
       fi
@@ -804,20 +808,24 @@ data:
 
     update_config () {
       sed -i -e "s|_port_|${PORT}|g" -e "s|_home_|${JUPYTERHUB_HOME:-${HOME}}|g" -e "s|_servername_|${JUPYTERHUB_SERVER_NAME}|g" ${DIR}/config.py
+      send_spawn_update 85 "Add system specific configuration." "Use system specific jupyter_notebook_config.py files"
       if [[ -f ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py ]]; then
-        echo "$(date) - Add system specific config ..."
-        send_spawn_update 85 "Add system specific configuration." "Use system specific config file ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py"
         echo "" >> ${DIR}/config.py
         cat ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py >> ${DIR}/config.py
-        for path in ${JUPYTER_EXTRA_LABEXTENSIONS_PATH//:/$'\n'}; do
-          echo "c.LabServerApp.extra_labextensions_path.append('$path')" >> ${JUPYTER_LOG_DIR}/config.py
-        done
-        echo "$(date) - Add system specific config done"
+        echo "$(date) - Added system specific config ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py"
       fi
-      if [[ -f ${EBROOTJUPYTERLAB}/bin/update_favorites_json ]]; then
+      if [[ -f ${EBROOTJUPYTERMINRESOURCEMINUSAGE}/etc/jupyter/jupyter_notebook_config.py ]]; then
+        echo "" >> ${DIR}/config.py
+        cat ${EBROOTJUPYTERMINRESOURCEMINUSAGE}/etc/jupyter/jupyter_notebook_config.py >> ${DIR}/config.py
+        echo "$(date) - Added system specific config ${EBROOTJUPYTERMINRESOURCEMINUSAGE}/etc/jupyter/jupyter_notebook_config.py"
+      fi
+      for path in ${JUPYTER_EXTRA_LABEXTENSIONS_PATH//:/$'\n'}; do
+        echo "c.LabServerApp.extra_labextensions_path.append('$path')" >> ${JUPYTER_LOG_DIR}/config.py
+      done
+      if command -v update_favorites_json &> /dev/null; then
         # update favorite-dirs with $HOME,$PROJECT,$SCRATCH,
         echo "$(date) - Update favorites"
-        ${EBROOTJUPYTERLAB}/bin/update_favorites_json
+        update_favorites_json
       fi
     }
 

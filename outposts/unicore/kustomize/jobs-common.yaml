@@ -17,6 +17,7 @@ data:
     c.ServerApp.tornado_settings = {"websocket_max_message_size": 1024 * 1024 * 1024}
     c.ServerApp.max_buffer_size = 1024 * 1024 * 1024
     c.ServerApp.max_body_size = 1024 * 1024 * 1024
+    c.ServerApp.quit_button = False
   input_stop.sh: |
     # We'll be waiting for JupyterLab to come up for max 300 seconds
     # and kill it once it's up

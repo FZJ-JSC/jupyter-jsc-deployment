@@ -3,19 +3,11 @@ outpostUsers: outpost-users
 extraEnvVarsSecrets:
   - outpost-db
   - outpost-generics
-extraVolumes:
-  - name: tz-config
-    hostPath:
-      path: /usr/share/zoneinfo/Europe/Berlin
-      type: ""
-extraVolumeMounts:
-  - mountPath: /etc/localtime
-    name: tz-config
 nameOverride: "outpost-unicore"
 fullnameOverride: "outpost-unicore"
 logging:
   stream:
-    level: 10
+    level: 20
   syslog:
     enabled: true
     level: 10
