@@ -11,7 +11,7 @@ logging:
     level: 10
   stream:
     enabled: true
-    level: 10
+    level: 20
 extraVolumes:
   - name: nfs-userhomes
     nfs:

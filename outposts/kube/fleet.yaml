@@ -5,7 +5,7 @@ helm:
   releaseName: kube
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyterhub-outpost
-  version: 0.9.11
+  version: 1.0.0
   valuesFiles:
     - values/base/misc.yaml
     - values/base/config.yaml

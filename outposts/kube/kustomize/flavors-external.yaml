@@ -66,21 +66,10 @@ data:
       juniq:
         jupyterhubs: ["juniq"]
         weight: 6
-        flavors: ["m1", "workshop", "l1", "l2"]
+        flavors: ["m1", "l1", "l2"]
     users:
       example1:
-        usernames: ["t.kreuzer_at_fz.juelich.de"]
+        usernames: ["t.kreuzer_at_fz.juelich.de_disabled"]
         groups: []
         weight: 10
         disable: False
-      HIFIS:
-        disable: True
-        groups: ["HIFIS"]
-        weight: 5
-        flavors:
-          m1:
-            max: -1
-          l1:
-            max: 2
-          l2:
-            max: 2
