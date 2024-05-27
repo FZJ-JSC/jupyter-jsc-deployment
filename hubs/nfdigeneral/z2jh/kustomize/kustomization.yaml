@@ -1,3 +1,19 @@
+# Can be removed, once Unity was updated and has it's own two fa setup
+secretGenerator:
+- name: jupyterjsc-twofa
+  literals:
+  - SEND2FA_CONFIG_PATH=/mnt/shared-data/git_config/send_mail_config.json
+  - TWOFA_SSH_KEY=/mnt/shared-data/twofa/twofa
+  - TWOFA_SSH_USER=none
+  - TWOFA_SSH_HOST=none
+  - TWOFA_REMOVE_SSH_KEY=/mnt/shared-data/twofa/twofaremove
+  - TWOFA_REMOVE_SSH_USER=none
+  - TWOFA_REMOVE_SSH_HOST=none
+  options:
+    disableNameSuffixHash: true
+    labels:
+      app: jupyterjsc
+
 # InitContainer list in hub component:
 # 0 - prepare-shared-data
 # Container list in hub component:
@@ -19,13 +35,13 @@ patches:
       value:
         - secretRef:
             name: nfdigeneral-frontend-git
-    # - op: add
-    #   path: /spec/template/spec/containers/2/envFrom
-    #   value:
-    #     - secretRef:
-    #         name: nfdigeneral-generics
-    #     - secretRef:
-    #         name: nfdigeneral-twofa
+    - op: add
+      path: /spec/template/spec/containers/2/envFrom
+      value:
+        - secretRef:
+            name: nfdigeneral-generics
+        - secretRef:
+            name: nfdigeneral-twofa
     - op: add
       path: /spec/template/spec/volumes/-
       value:
