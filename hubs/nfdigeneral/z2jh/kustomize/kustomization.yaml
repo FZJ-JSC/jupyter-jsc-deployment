@@ -19,13 +19,13 @@ patches:
       value:
         - secretRef:
             name: nfdigeneral-frontend-git
-    - op: add
-      path: /spec/template/spec/containers/2/envFrom
-      value:
-        - secretRef:
-            name: nfdigeneral-generics
-        - secretRef:
-            name: nfdigeneral-twofa
+    # - op: add
+    #   path: /spec/template/spec/containers/2/envFrom
+    #   value:
+    #     - secretRef:
+    #         name: nfdigeneral-generics
+    #     - secretRef:
+    #         name: nfdigeneral-twofa
     - op: add
       path: /spec/template/spec/volumes/-
       value:
