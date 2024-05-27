@@ -1,0 +1,48 @@
+defaultNamespace: jupyter
+labels:
+  app: nfdigeneral
+  component: custom
+helm:
+  releaseName: nfdigeneral-custom
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyter-hub-customizations
+  version: 0.12.0
+  values:
+    fullnameOverride: nfdigeneral-custom
+    global:
+      name: nfdigeneral
+      namespace: jupyter
+    customConfig:
+      announcement:
+        show: true
+        title: "Jupyter4NFDI - Work in Progress"
+        body: "This is only a first demo for Jupyter4NFDI"
+      systems:
+        - JSC-Cloud
+    ingress:
+      enabled: true
+    jupyter-metrics:
+      enabled: true
+    logging:
+      syslog:
+        enabled: true
+        level: 10
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        global:
+          hostname: docs.jupyter-jsc-staging.fz-juelich.de
+          loggerName: NFDIGeneralStaging
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      values:
+        global:
+          hostname: jupyter.nfdi.de
+          loggerName: NFDIGeneralProduction

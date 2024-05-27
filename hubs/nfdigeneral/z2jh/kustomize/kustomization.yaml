@@ -1,0 +1,57 @@
+# InitContainer list in hub component:
+# 0 - prepare-shared-data
+# Container list in hub component:
+# 0 - check-frontend-files
+# 1 - sidecar-nginx
+# 2 - hub
+patches:
+- target:
+    kind: Deployment
+    labelSelector: app=nfdigeneral,component=hub
+  patch: |-
+    - op: add
+      path: /spec/template/spec/initContainers/0/envFrom
+      value:
+        - secretRef:
+            name: nfdigeneral-frontend-git
+    - op: add
+      path: /spec/template/spec/containers/0/envFrom
+      value:
+        - secretRef:
+            name: nfdigeneral-frontend-git
+    - op: add
+      path: /spec/template/spec/containers/2/envFrom
+      value:
+        - secretRef:
+            name: nfdigeneral-generics
+        - secretRef:
+            name: nfdigeneral-twofa
+    - op: add
+      path: /spec/template/spec/volumes/-
+      value:
+        name: internal-ssl
+        secret:
+          defaultMode: 420
+          secretName: nfdigeneral-internal-ssl
+    - op: add
+      path: /spec/template/spec/volumes/-
+      value:
+        name: persistent
+        persistentVolumeClaim:
+          claimName: nfdigeneral-pvc
+    - op: add
+      path: /spec/template/spec/volumes/-
+      value:
+        name: custom-config
+        configMap:
+          defaultMode: 400
+          name: nfdigeneral-custom-config
+- target:
+    kind: Ingress
+    name: nfdigeneral
+    group: networking.k8s.io
+    version: v1
+  patch: |-
+    - op: replace
+      path: "/spec/rules/0/http/paths/0/backend/service/port/name"
+      value: https
