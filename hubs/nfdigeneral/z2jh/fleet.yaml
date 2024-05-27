@@ -27,7 +27,7 @@ helm:
     - ../../base-values/proxy.yaml
     - ../../base-values/hub/config.yaml
     - ../../base-values/hub/image.yaml
-    - ../../base-values/hub/extraConfigNFDI.yaml
+    - ../../base-values/hub/extraConfig.yaml
     - ../../base-values/hub/extraContainers.yaml
     - ../../base-values/hub/extraVolumeMounts.yaml
     - ../../base-values/hub/extraVolumes.yaml
