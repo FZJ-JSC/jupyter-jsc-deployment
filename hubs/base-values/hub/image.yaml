@@ -7,7 +7,7 @@ hub:
     - -c
     - >-
       pip install --force-reinstall jupyter-jsc-custom jupyterhub-forwardbasespawner jupyterhub-unicorespawner jupyterhub-outpostspawner &&
-      /src/entrypoint.sh -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+      jupyterhub -f /usr/local/etc/jupyterhub/jupyterhub_config.py
   command:
     - /bin/bash
   image:
