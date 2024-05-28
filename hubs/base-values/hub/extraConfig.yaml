@@ -29,7 +29,15 @@ hub:
       else:
           oauth_host = "unity-jsc.fz-juelich.de"
           oauth_path = "jupyter-oauth2"
-          oauth_scopes = "single-logout;hpc_infos;x500;authenticator;eduperson_entitlement;username;profile".split(";")
+          oauth_scopes = [
+              "single-logout",
+              "hpc_infos",
+              "x500",
+              "authenticator",
+              "eduperson_entitlement",
+              "username",
+              "profile",
+          ]
 
       ## Misc Hub configs
       base_url = c.JupyterHub.get("base_url", "/")
@@ -223,14 +231,32 @@ hub:
       c.CustomGenericOAuthenticator.userdata_url = (
           f"https://{oauth_host}/{oauth_path}/userinfo"
       )
+
       def safe_user_name(resp_json):
-          name = resp_json.get("username_attr")
-          safe_name = name.replace("@", "_at_")
-          return safe_name
+          name = resp_json.get("voperson_id", "unknown_user")
+          # safe_name = name.replace("@", "_at_")
+          return name
 
       c.CustomGenericOAuthenticator.username_claim = safe_user_name
       c.CustomGenericOAuthenticator.scope = oauth_scopes
       c.CustomGenericOAuthenticator.tls_verify = False
+
+      if fullname in ["nfdigeneral"]:
+          def group_management(user_info):
+              """
+              Return all groups a user is part of
+              """
+              groups = ["default"]
+              for attribute in ["org_domain", "voperson_external_affiliation"]:
+                  value = user_info.get(attribute, None)
+                  if value and type(value) == list:
+                      groups.extend(value)
+                  elif value and type(value) == str:
+                      groups.append(value)
+              return groups
+        
+          c.CustomGenericOAuthenticator.claim_groups_key = group_management
+
       #   c.CustomGenericOAuthenticator.extra_params_allowed_runtime = {
       #       "uy_select_authn": ["jupyterhdfaaiAuthn.hbp", "jupyterldapAuthn.password"]
       #   }

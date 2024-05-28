@@ -56,7 +56,7 @@ data:
           mem_limit: "4096M"
     hubs:
       default:
-        jupyterhubs: ["coec", "coeraise", "euroccgcs", "portalgauss", "dev1", "dev2"]
+        jupyterhubs: ["coec", "coeraise", "euroccgcs", "nfdigeneral", "portalgauss", "dev1", "dev2"]
         weight: 10
         flavors: ["m1", "l1"]
       defaultPlusL2:
@@ -72,4 +72,7 @@ data:
         usernames: ["t.kreuzer_at_fz.juelich.de_disabled"]
         groups: []
         weight: 10
+        flavors:
+          l2:
+            max: 10
         disable: False
