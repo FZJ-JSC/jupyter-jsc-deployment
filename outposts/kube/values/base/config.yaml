@@ -52,13 +52,14 @@ outpostConfig: |-
       user_sets = []
       # check if the given user is part of any user set
       for key, value in flavor_config.get("users", {}).items():
-          if authentication.get('name', 'unknown_user') in value.get("usernames", []):
-              user_sets.append((key, value.get("weight", 0)))
-          else:
-              for user_group in authentication.get('groups', []):
-                  if user_group in value.get("groups", []):
-                      user_sets.append((key, value.get("weight", 0)))
-                      break
+          if jupyterhub_name in value.get("hubs", []):
+              if authentication.get('name', 'unknown_user') in value.get("usernames", []):
+                  user_sets.append((key, value.get("weight", 0)))
+              else:
+                  for user_group in authentication.get('groups', []):
+                      if user_group in value.get("groups", []):
+                          user_sets.append((key, value.get("weight", 0)))
+                          break
       
       if len(user_sets) == 0:
           return hub_flavors

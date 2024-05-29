@@ -56,11 +56,11 @@ data:
           mem_limit: "4096M"
     hubs:
       default:
-        jupyterhubs: ["coec", "coeraise", "euroccgcs", "nfdigeneral", "portalgauss", "dev1", "dev2"]
+        jupyterhubs: ["coec", "coeraise", "euroccgcs", "portalgauss", "dev1", "dev2"]
         weight: 10
         flavors: ["m1", "l1"]
       defaultPlusL2:
-        jupyterhubs: ["jupyterjsc"]
+        jupyterhubs: ["nfdigeneral", "jupyterjsc"]
         weight: 11
         flavors: ["m1", "l1", "l2"]
       juniq:
@@ -68,7 +68,8 @@ data:
         weight: 6
         flavors: ["m1", "l1", "l2"]
     users:
-      fzjstaff:
+      nfdifzjstaff:
+        hubs: ["nfdigeneral"]
         usernames_unused: []
         groups: ["staff@fz-juelich.de"]
         weight: 10
@@ -76,4 +77,11 @@ data:
         flavorsOverride:
           l2:
             max: 10
+        disable: False
+      nfdidefault:
+        hubs: ["nfdigeneral"]
+        usernames_unused: []
+        groups: ["default"]
+        weight: 1
+        flavors: ["m1"]
         disable: False
