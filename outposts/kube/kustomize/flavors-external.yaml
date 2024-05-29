@@ -56,11 +56,11 @@ data:
           mem_limit: "4096M"
     hubs:
       default:
-        jupyterhubs: ["coec", "coeraise", "euroccgcs", "portalgauss", "dev1", "dev2"]
+        jupyterhubs: ["nfdigeneral", "coec", "coeraise", "euroccgcs", "portalgauss", "dev1", "dev2"]
         weight: 10
         flavors: ["m1", "l1"]
       defaultPlusL2:
-        jupyterhubs: ["nfdigeneral", "jupyterjsc"]
+        jupyterhubs: ["jupyterjsc"]
         weight: 11
         flavors: ["m1", "l1", "l2"]
       juniq:

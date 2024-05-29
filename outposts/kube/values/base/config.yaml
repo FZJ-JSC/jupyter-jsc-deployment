@@ -46,7 +46,7 @@ outpostConfig: |-
       import copy
       hub_flavors = await outpost.get_flavors(jupyterhub_name)
       
-      with open("/home/jhuboutpost/app/flavors.yaml", "r") as f:
+      with open("/mnt/flavors/flavors.yaml", "r") as f:
           flavor_config = yaml.full_load(f)
 
       user_sets = []
