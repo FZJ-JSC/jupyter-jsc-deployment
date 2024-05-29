@@ -61,18 +61,19 @@ data:
         flavors: ["m1", "l1"]
       defaultPlusL2:
         jupyterhubs: ["jupyterjsc"]
-        weight: 5
+        weight: 11
         flavors: ["m1", "l1", "l2"]
       juniq:
         jupyterhubs: ["juniq"]
         weight: 6
         flavors: ["m1", "l1", "l2"]
     users:
-      example1:
-        usernames: ["t.kreuzer_at_fz.juelich.de_disabled"]
-        groups: []
+      fzjstaff:
+        usernames_unused: []
+        groups: ["staff@fz-juelich.de"]
         weight: 10
-        flavors:
+        flavors: ["m1", "l1", "l2"]
+        flavorsOverride:
           l2:
             max: 10
         disable: False
