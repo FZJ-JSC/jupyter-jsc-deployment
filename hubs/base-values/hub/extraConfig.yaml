@@ -232,12 +232,17 @@ hub:
           f"https://{oauth_host}/{oauth_path}/userinfo"
       )
 
-      def safe_user_name(resp_json):
-          name = resp_json.get("voperson_id", "unknown_user")
-          # safe_name = name.replace("@", "_at_")
-          return name
+      if fullname in ["nfdigeneral"]:
+          def claim_name(resp_json):
+              name = resp_json["voperson_id"]
+              return name
+      else:
+          def claim_name(resp_json):
+              name = resp_json["username_attr"]
+              safe_name = name.replace("@", "_at_")
+              return safe_name
 
-      c.CustomGenericOAuthenticator.username_claim = safe_user_name
+      c.CustomGenericOAuthenticator.username_claim = claim_name
       c.CustomGenericOAuthenticator.scope = oauth_scopes
       c.CustomGenericOAuthenticator.tls_verify = False
 
