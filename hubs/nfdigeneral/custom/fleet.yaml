@@ -6,7 +6,7 @@ helm:
   releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.12.2
+  version: 0.12.3
   values:
     fullnameOverride: nfdigeneral-custom
     global:
