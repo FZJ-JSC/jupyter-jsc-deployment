@@ -475,6 +475,17 @@ outpostConfig: |-
       flavor = spawner.user_options.get("flavor", "default")
       resources = get_flavor_resources(flavor)
 
+      display_name = {
+          "custom": "JupyterLab - custom",
+          "3-6": "JupyterLab - 3.6",
+          "4-2": "JupyterLab - 4.2"
+      }
+      slug = {
+          "custom": "JupyterLab/custom",
+          "3-6": "JupyterLab/3.6",
+          "4-2": "JupyterLab/4.2"
+      }
+
       if profile == "custom":
           return [
               {
@@ -495,8 +506,8 @@ outpostConfig: |-
       else:
           return [
               {
-                  "display_name": "JupyterLab - 3.6",
-                  "slug": "JupyterLab/3.6",
+                  "display_name": display_name.get(profile, "JupyterLab - 3.6"),
+                  "slug": slug.get(profile, "JupyterLab/3.6"),
                   "kubespawner_override": {
                       "volume_mounts": get_profile_volume_mounts(spawner),
                       "volumes": get_profile_volumes(spawner, jupyterhub_name),
