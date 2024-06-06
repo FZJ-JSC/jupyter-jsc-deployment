@@ -52,18 +52,17 @@ outpostConfig: |-
       user_sets = []
       # check if the given user is part of any user set
       for key, value in flavor_config.get("users", {}).items():
-          if authentication.get('name', 'unknown_user') in value.get("usernames", []):
-              user_sets.append((key, value.get("weight", 0)))
-          else:
-              for user_group in authentication.get('groups', []):
-                  if user_group in value.get("groups", []):
-                      user_sets.append((key, value.get("weight", 0)))
-                      break
+          if jupyterhub_name in value.get("hubs", []):
+              if authentication.get('name', 'unknown_user') in value.get("usernames", []):
+                  user_sets.append((key, value.get("weight", 0)))
+              else:
+                  for user_group in authentication.get('groups', []):
+                      if user_group in value.get("groups", []):
+                          user_sets.append((key, value.get("weight", 0)))
+                          break
       
       if len(user_sets) == 0:
           return hub_flavors
-
-      user_flavors = copy.deepcopy(hub_flavors)
 
       user_sets = sorted(
           user_sets,
@@ -72,8 +71,7 @@ outpostConfig: |-
       # sorted sorts ascending, we're using weight, so we use the last element
       # with the biggest weight
       user_set = user_sets[-1][0]
-
-
+      
       # When "disable" is true, we return an empty dict for this uset_set
       authentication_log = copy.deepcopy(authentication)
       if "access_token" in authentication_log.keys():
@@ -84,8 +82,19 @@ outpostConfig: |-
 
       outpost.log.debug(f"Use user specific flavor userset {user_set}. Used authentication dict: {authentication_log}")
 
-      for flavorName, overrideDict in flavor_config.get("users", {}).get(user_set, {}).get("flavors", {}).items():
+      # Copy default flavors for this hub
+      all_flavors = await outpost.get_flavors(None)
+      user_flavors = {}
+      
+      for flavor in flavor_config.get("users", {}).get(user_set, {}).get("flavors", []):
+          if flavor in all_flavors.keys():
+              user_flavors[flavor] = all_flavors[flavor]
+          else:
+              outpost.log.warning(f"Unknown flavor for user set {user_set}: {flavor}")
+      
+      for flavorName, overrideDict in flavor_config.get("users", {}).get(user_set, {}).get("flavorsOverride", {}).items():
           if flavorName not in user_flavors.keys():
+              outpost.log.warning(f"Do not override {flavorName} for user set {user_set}. Flavor not part of flavors list.")
               continue
           for overrideKey, overrideValue in overrideDict.items():
               user_flavors[flavorName][overrideKey] = overrideValue
@@ -96,6 +105,10 @@ outpostConfig: |-
   async def flavors_per_hub(jupyterhub_name):
       with open("/mnt/flavors/flavors.yaml", "r") as f:
           flavor_config = yaml.full_load(f)
+      
+      # If no hub is defined, return all available flavors
+      if not jupyterhub_name:
+          return flavor_config.get("flavors", {})
       
       jupyterhub_sets = []
       # check if the given jupyterhub_name is part of any jhub set

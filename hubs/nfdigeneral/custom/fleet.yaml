@@ -1,22 +1,25 @@
 defaultNamespace: jupyter
 labels:
-  app: juniq
+  app: nfdigeneral
   component: custom
 helm:
-  releaseName: juniq-custom
+  releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
   version: 0.12.3
   values:
-    fullnameOverride: juniq-custom
+    fullnameOverride: nfdigeneral-custom
     global:
-      name: juniq
+      name: nfdigeneral
       namespace: jupyter
+    oauthSecret: hdfaai-credentials
     customConfig:
       announcement:
-        show: false
-        title: "JUNIQ is now running on JSC-Cloud"
-        body: "We've moved JUNIQ to the JSC-Cloud. All data from HDF-Cloud was moved to JSC-Cloud."
+        show: true
+        title: "Jupyter4NFDI - Work in Progress"
+        body: "This is only a first demo for Jupyter4NFDI"
+      systems:
+        - JSC-Cloud
     ingress:
       enabled: true
     jupyter-metrics:
@@ -33,8 +36,8 @@ targetCustomizations:
     helm:
       values:
         global:
-          hostname: juniq-staging.fz-juelich.de
-          loggerName: JUNIQStaging
+          hostname: docs.jupyter-jsc-staging.fz-juelich.de
+          loggerName: NFDIGeneralStaging
   - name: production
     clusterSelector:
       matchLabels:
@@ -42,5 +45,5 @@ targetCustomizations:
     helm:
       values:
         global:
-          hostname: juniq.fz-juelich.de
-          loggerName: JUNIQProduction
+          hostname: jupyter.nfdi.de
+          loggerName: NFDIGeneralProduction

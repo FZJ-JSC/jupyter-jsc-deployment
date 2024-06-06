@@ -28,7 +28,7 @@ data:
         resources:
           cpu_guarantee: 0.2
           cpu_limit: 1
-          mem_guarantee: "3584M"
+          mem_guarantee: "1024M"
           mem_limit: "4096M"
       l2:
         max: 5
@@ -56,20 +56,36 @@ data:
           mem_limit: "4096M"
     hubs:
       default:
-        jupyterhubs: ["coec", "coeraise", "euroccgcs", "portalgauss", "dev1", "dev2"]
+        jupyterhubs: ["nfdigeneral", "coec", "coeraise", "euroccgcs", "portalgauss", "dev1", "dev2"]
         weight: 10
         flavors: ["m1", "l1"]
       defaultPlusL2:
         jupyterhubs: ["jupyterjsc"]
-        weight: 5
+        weight: 11
         flavors: ["m1", "l1", "l2"]
+        flavorsOverride:
+          l1:
+            weight: 12
+            max: 50
       juniq:
         jupyterhubs: ["juniq"]
         weight: 6
         flavors: ["m1", "l1", "l2"]
     users:
-      example1:
-        usernames: ["t.kreuzer_at_fz.juelich.de_disabled"]
-        groups: []
+      nfdifzjstaff:
+        hubs: ["nfdigeneral"]
+        usernames_unused: []
+        groups: ["staff@fz-juelich.de"]
         weight: 10
+        flavors: ["m1", "l1", "l2"]
+        flavorsOverride:
+          l2:
+            max: 10
+        disable: False
+      nfdidefault:
+        hubs: ["nfdigeneral"]
+        usernames_unused: []
+        groups: ["default"]
+        weight: 1
+        flavors: ["m1"]
         disable: False

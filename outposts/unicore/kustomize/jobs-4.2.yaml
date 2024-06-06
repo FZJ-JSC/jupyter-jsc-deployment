@@ -278,10 +278,9 @@ data:
         if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyEarthSystem/.2024.3-4.2.1
         fi
-        ## TODO not yet installed
-        # if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
-        #   module load JupyterKernel-PyQuantum/???
-        # fi
+        if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
+          module load JupyterKernel-PyQuantum/.2024.5-4.2.1
+        fi
         if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyVisualization/.2024.3-4.2.1
         fi
@@ -300,13 +299,19 @@ data:
         #   fi
         # done
         # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
-        # if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-        #   if [[ $SYSTEMNAME != "hdfml" ]]; then
-        #     module load JupyterProxy-NESTDesktop
-        #   fi
-        # fi
+        if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
+          if [[ $SYSTEMNAME != "hdfml" ]]; then
+            module load JupyterProxy-NESTDesktop/.0.4.0-4.2.1
+          fi
+        fi
 
         # Extensions
+        if [[ $JUPYTER_MODULE_NBDEV_ENABLED -eq 1 ]]; then
+          module load nbdev/2.3.25
+        fi
+        if [[ $JUPYTER_MODULE_VOILA_ENABLED -eq 1 ]]; then
+          module load voila/0.5.7
+        fi
         if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
           module load nglview/.3.1.2
         fi
@@ -751,10 +756,9 @@ data:
         if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyEarthSystem/.2024.3-4.2.1
         fi
-        ## TODO not yet installed
-        # if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
-        #   module load JupyterKernel-PyQuantum/???
-        # fi
+        if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
+          module load JupyterKernel-PyQuantum/.2024.5-4.2.1
+        fi
         if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyVisualization/.2024.3-4.2.1
         fi
@@ -773,13 +777,19 @@ data:
         #   fi
         # done
         # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
-        # if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-        #   if [[ $SYSTEMNAME != "hdfml" ]]; then
-        #     module load JupyterProxy-NESTDesktop
-        #   fi
-        # fi
+        if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
+          if [[ $SYSTEMNAME != "hdfml" ]]; then
+            module load JupyterProxy-NESTDesktop/.0.4.0-4.2.1
+          fi
+        fi
 
         # Extensions
+        if [[ $JUPYTER_MODULE_NBDEV_ENABLED -eq 1 ]]; then
+          module load nbdev/2.3.25
+        fi
+        if [[ $JUPYTER_MODULE_VOILA_ENABLED -eq 1 ]]; then
+          module load voila/0.5.7
+        fi
         if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
           module load nglview/.3.1.2
         fi

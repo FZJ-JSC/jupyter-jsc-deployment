@@ -6,11 +6,38 @@ hub:
       import os
 
       ## Generic information
+      fullname = get_name("fullname")
       app_name_dash = get_name("fullname-dash")
       app_name_dash_hub = get_name("hub")
       namespace = os.environ.get("POD_NAMESPACE", "default")
       jupyterhub_host = get_name("hub")
-      unity_host = "unity-jsc.fz-juelich.de"
+      if fullname in ["nfdigeneral"]:
+          oauth_host = "login.helmholtz.de"
+          oauth_path = "oauth2"
+          oauth_scopes = [
+              "display_name",
+              "sn",
+              "single-logout",
+              "offline_access",
+              "voperson_id",
+              "voperson_external_affiliation",
+              "entitlements",
+              "org_domain",
+              "email",
+              "profile",
+          ]
+      else:
+          oauth_host = "unity-jsc.fz-juelich.de"
+          oauth_path = "jupyter-oauth2"
+          oauth_scopes = [
+              "single-logout",
+              "hpc_infos",
+              "x500",
+              "authenticator",
+              "eduperson_entitlement",
+              "username",
+              "profile",
+          ]
 
       ## Misc Hub configs
       base_url = c.JupyterHub.get("base_url", "/")
@@ -190,33 +217,54 @@ hub:
       c.CustomGenericOAuthenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
       c.CustomGenericOAuthenticator.client_secret = os.environ.get("OAUTH_CLIENT_SECRET")
       c.CustomGenericOAuthenticator.authorize_url = (
-          f"https://{unity_host}/jupyter-oauth2-as/oauth2-authz"
+          f"https://{oauth_host}/{oauth_path}-as/oauth2-authz"
       )
       c.CustomGenericOAuthenticator.oauth_callback_url = (
           f"https://{jhub_hostname}{base_url}hub/oauth_callback"
       )
       c.CustomGenericOAuthenticator.token_url = (
-          f"https://{unity_host}/jupyter-oauth2/token"
+          f"https://{oauth_host}/{oauth_path}/token"
       )
       c.CustomGenericOAuthenticator.tokeninfo_url = (
-          f"https://{unity_host}/jupyter-oauth2/tokeninfo"
+          f"https://{oauth_host}/{oauth_path}/tokeninfo"
       )
       c.CustomGenericOAuthenticator.userdata_url = (
-          f"https://{unity_host}/jupyter-oauth2/userinfo"
+          f"https://{oauth_host}/{oauth_path}/userinfo"
       )
-      def safe_user_name(resp_json):
-          name = resp_json.get("username_attr")
-          safe_name = name.replace("@", "_at_")
-          return safe_name
 
-      c.CustomGenericOAuthenticator.username_claim = safe_user_name
-      c.CustomGenericOAuthenticator.scope = "single-logout;hpc_infos;x500;authenticator;eduperson_entitlement;username;profile".split(
-          ";"
-      )
+      if fullname in ["nfdigeneral"]:
+          def claim_name(resp_json):
+              name = resp_json["voperson_id"]
+              return name
+      else:
+          def claim_name(resp_json):
+              name = resp_json["username_attr"]
+              safe_name = name.replace("@", "_at_")
+              return safe_name
+
+      c.CustomGenericOAuthenticator.username_claim = claim_name
+      c.CustomGenericOAuthenticator.scope = oauth_scopes
       c.CustomGenericOAuthenticator.tls_verify = False
-      c.CustomGenericOAuthenticator.extra_params_allowed_runtime = {
-          "uy_select_authn": ["jupyterhdfaaiAuthn.hbp", "jupyterldapAuthn.password"]
-      }
+
+      if fullname in ["nfdigeneral"]:
+          def group_management(user_info):
+              """
+              Return all groups a user is part of
+              """
+              groups = ["default"]
+              for attribute in ["org_domain", "voperson_external_affiliation"]:
+                  value = user_info.get(attribute, None)
+                  if value and type(value) == list:
+                      groups.extend(value)
+                  elif value and type(value) == str:
+                      groups.append(value)
+              return groups
+        
+          c.CustomGenericOAuthenticator.claim_groups_key = group_management
+
+      #   c.CustomGenericOAuthenticator.extra_params_allowed_runtime = {
+      #       "uy_select_authn": ["jupyterhdfaaiAuthn.hbp", "jupyterldapAuthn.password"]
+      #   }
       #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterhdfaaiAuthn.hbp
       #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterldapAuthn.password
 
