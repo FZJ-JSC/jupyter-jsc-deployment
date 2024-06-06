@@ -65,6 +65,7 @@ data:
         flavors: ["m1", "l1", "l2"]
         flavorsOverride:
           l1:
+            weight: 12
             max: 50
       juniq:
         jupyterhubs: ["juniq"]
