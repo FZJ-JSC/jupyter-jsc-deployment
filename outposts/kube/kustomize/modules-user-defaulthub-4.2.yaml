@@ -9,10 +9,10 @@ data:
 
     ## Kernels
     if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
-      module load JupyterKernel-Bash/.0.9.3-4.1.5
+      module load JupyterKernel-Bash/.0.9.3-4.2.1
     fi
     if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
-      module load JupyterKernel-Cling/.20231018-4.1.5
+      module load JupyterKernel-Cling/.20231018-4.2.1
     fi
     if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
       module load JupyterKernel-Julia/.1.9.3
@@ -21,29 +21,29 @@ data:
       module load JupyterKernel-LFortran/.0.30.0
     fi
     if [[ $JUPYTER_MODULE_OCTAVE_ENABLED  -eq 1 ]]; then
-      module load JupyterKernel-Octave/.8.4.0-4.1.5
+      module load JupyterKernel-Octave/.8.4.0-4.2.1
+    fi
+    if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-R/.4.3.2-4.2.1
+    fi
+    if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Ruby/.3.2.2
     fi
     if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
-      module load JupyterKernel-PyDeepLearning/.2024.3-4.1.5
+      module load JupyterKernel-PyDeepLearning/.2024.3-4.2.1
+    fi
+    if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyEarthSystem/.2024.3-4.2.1
     fi
     if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
       module load JupyterKernel-PyQuantum/.2024.5-4.2.1
     fi
     if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
-      module load JupyterKernel-PyVisualization/.2024.3-4.1.5
-    fi
-    if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
-      module load JupyterKernel-PyEarthSystem/.2024.3-4.1.5
-    fi
-    if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
-      module load JupyterKernel-R/.4.3.2-4.1.5
-    fi
-    if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
-      module load JupyterKernel-Ruby/.3.2.2
+      module load JupyterKernel-PyVisualization/.2024.3-4.2.1
     fi
     ## Proxies
     if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
-      module load JupyterProxy-XpraHTML5/.0.3.5-4.1.5
+      module load JupyterProxy-XpraHTML5/.0.4.0-4.2.1
     fi
     if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
       if [[ $SYSTEMNAME != "hdfml" ]]; then

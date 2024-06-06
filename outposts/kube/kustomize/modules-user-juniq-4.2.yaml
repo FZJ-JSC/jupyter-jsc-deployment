@@ -9,19 +9,18 @@ data:
 
     ## Kernels
     if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
-      module load JupyterKernel-Bash/.0.9.3-4.1.5
+      module load JupyterKernel-Bash/.0.9.3-4.2.1
     fi
     if [[ $JUPYTER_MODULE_OCTAVE_ENABLED  -eq 1 ]]; then
-      module load JupyterKernel-Octave/.8.4.0-4.1.5
+      module load JupyterKernel-Octave/.8.4.0-4.2.1
     fi
-    ## TODO not yet installed
-    #if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
-    #  module load JupyterKernel-PyQuantum/.2023.5-2023.3.6
-    #fi
+    if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyQuantum/.2024.5-4.2.1
+    fi
     if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
-      module load JupyterKernel-R/.4.3.2-4.1.5
+      module load JupyterKernel-R/.4.3.2-4.2.1
     fi
     ## Proxies
     if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
-      module load JupyterProxy-XpraHTML5/.0.3.5-4.1.5
+      module load JupyterProxy-XpraHTML5/.0.4.0-4.2.1
     fi
