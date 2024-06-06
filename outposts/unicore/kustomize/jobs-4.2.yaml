@@ -299,11 +299,11 @@ data:
         #   fi
         # done
         # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
-        # if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-        #   if [[ $SYSTEMNAME != "hdfml" ]]; then
-        #     module load JupyterProxy-NESTDesktop
-        #   fi
-        # fi
+        if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
+          if [[ $SYSTEMNAME != "hdfml" ]]; then
+            module load JupyterProxy-NESTDesktop
+          fi
+        fi
 
         # Extensions
         if [[ $JUPYTER_MODULE_NBDEV_ENABLED -eq 1 ]]; then
