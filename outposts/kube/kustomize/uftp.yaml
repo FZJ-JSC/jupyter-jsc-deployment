@@ -36,10 +36,23 @@ data:
             return None
 
 
+
     def get_mount_command(access_token):
         _auth = "https://uftp.fz-juelich.de:9112/UFTP_Auth/rest/auth/"
-        _tr = unicore_client.Transport(access_token)
-        _info = _tr.get(url=_auth)
+        try:
+            _tr = unicore_client.Transport(access_token)
+            _info = _tr.get(url=_auth)
+        except AttributeError:
+            # pyunicore 1.0.0 has a different API
+            import pyunicore.credentials as unicore_credentials
+            credential = unicore_credentials.OIDCToken(access_token, None)
+            transport_kwargs = {
+                "credential": credential,
+                "verify": False,
+                "timeout": 30
+            }
+            _tr = unicore_client.Transport(**transport_kwargs)
+            _info = _tr.get(url=_auth)
         _uid = _info["JUDAC"]["uid"]
 
         remote_base_dir = "/p/home/jusers/%s" % _uid
@@ -61,3 +74,4 @@ data:
             exit(1)
         mount_cmd = get_mount_command(access_token)
         print(mount_cmd)
+
