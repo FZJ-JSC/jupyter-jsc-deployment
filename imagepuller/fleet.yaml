@@ -1,4 +1,4 @@
-defaultNamespace: jupyter
+defaultNamespace: outpost
 helm:
   releaseName: imagepuller
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
