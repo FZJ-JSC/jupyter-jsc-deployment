@@ -378,6 +378,7 @@ outpostConfig: |-
       else:   
           map_hub_names = {
               "jupyterjsc": "defaulthub",
+              "nfdigeneral": "defaulthub",
               "coec": "defaulthub",
               "coeraise": "defaulthub",
               "portalgauss": "defaulthub",
