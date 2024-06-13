@@ -190,7 +190,7 @@ outpostConfig: |-
   # KubeSpawner prespawn hook
   ##########
 
-  async def pre_spawn_hook(spawner):
+  def pre_spawn_hook(spawner):
       hub = spawner.extra_labels.get("app", "jupyter")
       stage = os.environ.get("STAGE", "staging")
       userid = str(spawner.user.id)
@@ -243,7 +243,24 @@ outpostConfig: |-
                   "html_message": msg,
                   "failed": False
               }
-              await spawner._outpostspawner_send_event(event)
+              def sync_send_event(spawner, event):
+                  import asyncio
+                  from threading import Thread
+                  loop = asyncio.new_event_loop()
+
+                  async def wait_for_future(future):
+                      return await future
+
+                  def t_send_event(loop, spawner, event):
+                      asyncio.set_event_loop(loop)
+                      loop.run_until_complete(wait_for_future(spawner._outpostspawner_send_event(event)))
+                      
+                  t = Thread(target=t_send_event, args=(loop, spawner, event))
+                  t.start()
+                  t.join()
+                  return ret
+
+              sync_send_event(spawner, event)
           except:
               spawner.log.exception(f"{spawner._log_name} - Could not get storage information")
       else:
