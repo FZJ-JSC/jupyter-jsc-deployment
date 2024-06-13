@@ -260,7 +260,6 @@ outpostConfig: |-
                   t = Thread(target=t_send_event, args=(loop, spawner, event))
                   t.start()
                   t.join()
-                  return ret
 
               sync_send_event(spawner, event)
           except:
