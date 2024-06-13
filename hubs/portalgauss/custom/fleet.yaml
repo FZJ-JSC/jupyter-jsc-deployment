@@ -41,11 +41,15 @@ targetCustomizations:
               # userflavors: false
               urls:
                 services: http://vm-138-246-238-21.cloud.mwn.de:8080/services
+              requestKwargs:
+                request_timeout: 180
             outpostKubeLRZ:
               flavorsRequired: false
               userflavors: false
               urls:
                 services: http://vm-138-246-237-228.cloud.mwn.de:8080/services
+              requestKwargs:
+                request_timeout: 180
   - name: production
     clusterSelector:
       matchLabels:
@@ -63,3 +67,5 @@ targetCustomizations:
             outpostKubeLRZ:
               urls:
                 services: http://vm-138-246-237-228.cloud.mwn.de:8080/services
+              requestKwargs:
+                request_timeout: 180
