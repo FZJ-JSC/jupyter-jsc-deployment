@@ -1,14 +1,13 @@
 customConfig:
   groups:
-    default:
+    defaultOverride:
       authenticators: []
       usernames: []
       admin: false
-      weight: 2
-      description: "Default group."
+      weight: 1
       services:
         JupyterLab:
-          "4.2":
+          4.2:
             maxPerUser: 5
           custom:
             maxPerUser: 5
