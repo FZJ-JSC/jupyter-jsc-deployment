@@ -35,6 +35,11 @@ targetCustomizations:
         stage: staging
     helm:
       values:
+        customConfig:
+          announcement:
+            show: true
+            title: "Jupyter4NFDI - Staging Instance"
+            body: "This instance is only used for testing."
         global:
           hostname: hub-staging.nfdi-jupyter.de
           loggerName: NFDIGeneralStaging
