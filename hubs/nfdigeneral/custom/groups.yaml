@@ -10,7 +10,7 @@ customConfig:
         JupyterLab:
           "4.2":
             maxPerUser: 5
-          "custom":
+          custom:
             maxPerUser: 5
   services:
     defaultOption: "4.2"
