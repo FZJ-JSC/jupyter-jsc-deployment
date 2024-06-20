@@ -16,7 +16,7 @@ helm:
       announcement:
         show: true
         title: "JSC-Cloud via Jupyter-JSC will not be available on thursday, 27.6.2024, between 9am and noon."
-        body: "All running JupyterLabs will be stopped for this short maintenance."
+        body: "All JupyterLabs on JSC-Cloud will be stopped for this short maintenance. Other systems are not affected."
     ingress:
       enabled: true
     jupyter-metrics:
