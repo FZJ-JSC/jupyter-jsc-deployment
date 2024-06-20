@@ -9,6 +9,11 @@ helm:
   version: 0.12.7
   values:
     fullnameOverride: portalgauss-custom
+    customConfig:
+      announcement:
+        show: true
+        title: "JSC-Cloud via Jupyter-JSC will not be available on thursday, 27.6.2024, between 9am and noon."
+        body: "All running JupyterLabs will be stopped for this short maintenance."
     global:
       name: portalgauss
       namespace: jupyter
