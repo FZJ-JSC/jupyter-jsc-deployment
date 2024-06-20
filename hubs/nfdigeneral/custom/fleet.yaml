@@ -7,25 +7,14 @@ helm:
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
   version: 0.12.7
+  valuesFiles:
+    - groups.yaml
   values:
     fullnameOverride: nfdigeneral-custom
     global:
       name: nfdigeneral
       namespace: jupyter
     oauthSecret: hdfaai-credentials
-    customConfig:
-      groups:
-        default:
-          services:
-            JupyterLab:
-              "4.2":
-                maxPerUser: 5
-              "custom":
-                maxPerUser: 5
-      services:
-        defaultOption: "4.2"
-      systems:
-        - JSC-Cloud
     ingress:
       enabled: true
     jupyter-metrics:
