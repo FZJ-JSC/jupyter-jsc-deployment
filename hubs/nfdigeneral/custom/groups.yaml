@@ -4,8 +4,8 @@ customConfig:
       authenticators: []
       usernames: []
       admin: false
-      weight: 1
-      description: "Default group"
+      weight: 2
+      description: "Default group."
       services:
         JupyterLab:
           "4.2":
