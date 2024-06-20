@@ -14,10 +14,16 @@ helm:
       namespace: jupyter
     oauthSecret: hdfaai-credentials
     customConfig:
-      announcement:
-        show: true
-        title: "Jupyter4NFDI - Work in Progress"
-        body: "This is only a first demo for Jupyter4NFDI"
+      groups:
+        default:
+          services:
+            JupyterLab:
+              "4.2":
+                maxPerUser: 5
+              "custom":
+                maxPerUser: 5
+      services:
+        defaultOption: "4.2"
       systems:
         - JSC-Cloud
     ingress:
@@ -40,16 +46,6 @@ targetCustomizations:
             show: true
             title: "Jupyter4NFDI - Staging Instance"
             body: "This instance is only used for testing."
-          groups:
-            default:
-              services:
-                JupyterLab:
-                  "4.2":
-                    maxPerUser: 5
-                  "custom":
-                    maxPerUser: 5
-          services:
-            defaultOption: "4.2"
         global:
           hostname: hub-staging.nfdi-jupyter.de
           loggerName: NFDIGeneralStaging
