@@ -1,4 +1,4 @@
-defaultNamespace: jupyter
+defaultNamespace: juniq
 labels:
   app: juniq
   component: custom
@@ -6,12 +6,12 @@ helm:
   releaseName: juniq-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.12.7
+  version: 0.13.0
   values:
     fullnameOverride: juniq-custom
     global:
       name: juniq
-      namespace: jupyter
+      namespace: juniq
     customConfig:
       announcement:
         show: false
