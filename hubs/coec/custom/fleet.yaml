@@ -1,4 +1,4 @@
-defaultNamespace: jupyter
+defaultNamespace: coec
 labels:
   app: coec
   component: custom
@@ -6,12 +6,12 @@ helm:
   releaseName: coec-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.12.7
+  version: 0.13.0
   values:
     fullnameOverride: coec-custom
     global:
       name: coec
-      namespace: jupyter
+      namespace: coec
     ingress:
       enabled: true
     jupyter-metrics:
