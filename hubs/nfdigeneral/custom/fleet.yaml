@@ -1,4 +1,4 @@
-defaultNamespace: jupyter
+defaultNamespace: nfdigeneral
 labels:
   app: nfdigeneral
   component: custom
@@ -6,14 +6,14 @@ helm:
   releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.12.8
+  version: 0.13.0
   valuesFiles:
     - groups.yaml
   values:
     fullnameOverride: nfdigeneral-custom
     global:
       name: nfdigeneral
-      namespace: jupyter
+      namespace: nfdigeneral
     oauthSecret: hdfaai-credentials
     ingress:
       enabled: true
