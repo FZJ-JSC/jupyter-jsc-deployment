@@ -1,4 +1,4 @@
-defaultNamespace: jupyter
+defaultNamespace: jupyterjsc
 labels:
   app: jupyterjsc
   component: custom
@@ -6,12 +6,12 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.12.7
+  version: 0.13.0
   values:
     fullnameOverride: jupyterjsc-custom
     global:
       name: jupyterjsc
-      namespace: jupyter
+      namespace: jupyterjsc
     customConfig:
       announcement:
         show: false
