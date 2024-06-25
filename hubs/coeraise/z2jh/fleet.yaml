@@ -1,4 +1,4 @@
-defaultnamespace: jupyter
+defaultnamespace: coeraise
 labels:
   app: coeraise
   component: z2jh
@@ -28,16 +28,13 @@ helm:
     - ../../base-values/hub/config.yaml
     - ../../base-values/hub/image.yaml
     - ../../base-values/hub/extraConfig.yaml
-    - ../../base-values/hub/extraContainers.yaml
     - ../../base-values/hub/extraVolumeMounts.yaml
-    - ../../base-values/hub/extraVolumes.yaml
-    - ../../base-values/hub/initContainers.yaml
     - ../../base-values/hub/others.yaml
     - ../../base-values/hub/services.yaml
   valuesFrom:
     - configMapKeyRef:
         name: coeraise-values
-        namespace: jupyter
+        namespace: coeraise
         key: values.yaml
 
 targetCustomizations:
