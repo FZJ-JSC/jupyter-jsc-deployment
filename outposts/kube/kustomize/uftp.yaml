@@ -4,6 +4,478 @@ metadata:
   name: uftp
   namespace: outpost
 data:
+  mount_data_ro.sh: |
+    #!/bin/bash
+    fusermount -u /p/data1
+    CMD=$(python3 /tmp/custom/mount_data_ro.py)
+    ${CMD} /p/data1
+    echo "To unmount run \"fusermount -u /p/data1\""
+  mount_project_ro.sh: |
+    #!/bin/bash
+    fusermount -u /p/project1
+    CMD=$(python3 /tmp/custom/mount_project_ro.py)
+    ${CMD} /p/project1
+    echo "To unmount run \"fusermount -u /p/project1\""
+  mount_home_ro.sh: |
+    #!/bin/bash
+    fusermount -u /p/home/jusers/*
+    CMD=$(python3 /tmp/custom/mount_home_ro.py)
+    files=(*)
+    ACCOUNT=${files[0]}
+    if [[ $ACCOUNT == "*" ]]; then
+        echo "Could not mount home directory"
+    else
+        ${CMD} /p/home/jusers/${ACCOUNT}
+        echo "To unmount run \"fusermount -u /p/home/jusers/*\""
+    fi
+  mount_data.sh: |
+    #!/bin/bash
+    fusermount -u /p/data1
+    CMD=$(python3 /tmp/custom/mount_data.py)
+    ${CMD} /p/data1
+    echo "To unmount run \"fusermount -u /p/data1\""
+  mount_project.sh: |
+    #!/bin/bash
+    fusermount -u /p/project1
+    CMD=$(python3 /tmp/custom/mount_project.py)
+    ${CMD} /p/project1
+    echo "To unmount run \"fusermount -u /p/project1\""
+  mount_home.sh: |
+    #!/bin/bash
+    fusermount -u /p/home/jusers/*
+    CMD=$(python3 /tmp/custom/mount_home.py)
+    files=(*)
+    ACCOUNT=${files[0]}
+    if [[ $ACCOUNT == "*" ]]; then
+        echo "Could not mount home directory"
+    else
+        ${CMD} /p/home/jusers/${ACCOUNT}
+        echo "To unmount run \"fusermount -u /p/home/jusers/${ACCOUNT}\""
+    fi
+  mount_data_ro.py: |
+    import json
+    import os
+    from contextlib import closing
+
+    import pyunicore.client as unicore_client
+    import requests
+
+
+    def get_access_token():
+        api_url = os.getenv("JUPYTERHUB_API_URL")
+        user_api_url = f"{api_url}/user_oauth"
+        headers = {"Authorization": "token {}".format(os.getenv("JUPYTERHUB_API_TOKEN"))}
+        with closing(requests.get(user_api_url, headers=headers)) as r:
+            if r.status_code == 200:
+                resp = json.loads(r.content.decode("utf-8"))
+            else:
+                raise Exception(
+                    "Could not receive access token: {} {}".format(
+                        r.status_code, r.content.decode("utf-8")
+                    )
+                )
+        # No HPC accounts -> no access token in this script
+        if (
+            "auth_state" in resp.keys()
+            and "access_token" in resp["auth_state"].keys()
+        ):
+            return resp["auth_state"]["access_token"]
+        else:
+            return None
+
+
+
+    def get_mount_command(access_token):
+        _auth = "https://uftp.fz-juelich.de:9112/UFTP_Auth/rest/auth/"
+        try:
+            _tr = unicore_client.Transport(access_token)
+            _info = _tr.get(url=_auth)
+        except AttributeError:
+            # pyunicore 1.0.0 has a different API
+            import pyunicore.credentials as unicore_credentials
+            credential = unicore_credentials.OIDCToken(access_token, None)
+            transport_kwargs = {
+                "credential": credential,
+                "verify": False,
+                "timeout": 30
+            }
+            _tr = unicore_client.Transport(**transport_kwargs)
+            _info = _tr.get(url=_auth)
+        _uid = _info["JUDAC"]["uid"]
+
+        remote_base_dir = "/p/data1"
+        # authenticate
+        _req = {
+            "persistent": "true",
+            "serverPath": "%s/___UFTP___MULTI___FILE___SESSION___MODE___" % remote_base_dir,
+        }
+        _reply = _tr.post(url=_auth + "JUDAC", json=_req).json()
+        uftp_pwd = _reply["secret"]
+        uftp_host = _reply["serverHost"]
+        uftp_port = _reply["serverPort"]
+        return f"curlftpfs -s -o ro,uid=1000,gid=100,ftp_method=singlecwd,enable_epsv,user=anonymous:{uftp_pwd} {uftp_host}:{uftp_port}"
+
+
+    if __name__ == "__main__":
+        access_token = get_access_token()
+        if not access_token:
+            exit(1)
+        mount_cmd = get_mount_command(access_token)
+        print(mount_cmd)
+  mount_project_ro.py: |
+    import json
+    import os
+    from contextlib import closing
+
+    import pyunicore.client as unicore_client
+    import requests
+
+
+    def get_access_token():
+        api_url = os.getenv("JUPYTERHUB_API_URL")
+        user_api_url = f"{api_url}/user_oauth"
+        headers = {"Authorization": "token {}".format(os.getenv("JUPYTERHUB_API_TOKEN"))}
+        with closing(requests.get(user_api_url, headers=headers)) as r:
+            if r.status_code == 200:
+                resp = json.loads(r.content.decode("utf-8"))
+            else:
+                raise Exception(
+                    "Could not receive access token: {} {}".format(
+                        r.status_code, r.content.decode("utf-8")
+                    )
+                )
+        # No HPC accounts -> no access token in this script
+        if (
+            "auth_state" in resp.keys()
+            and "access_token" in resp["auth_state"].keys()
+        ):
+            return resp["auth_state"]["access_token"]
+        else:
+            return None
+
+
+
+    def get_mount_command(access_token):
+        _auth = "https://uftp.fz-juelich.de:9112/UFTP_Auth/rest/auth/"
+        try:
+            _tr = unicore_client.Transport(access_token)
+            _info = _tr.get(url=_auth)
+        except AttributeError:
+            # pyunicore 1.0.0 has a different API
+            import pyunicore.credentials as unicore_credentials
+            credential = unicore_credentials.OIDCToken(access_token, None)
+            transport_kwargs = {
+                "credential": credential,
+                "verify": False,
+                "timeout": 30
+            }
+            _tr = unicore_client.Transport(**transport_kwargs)
+            _info = _tr.get(url=_auth)
+        _uid = _info["JUDAC"]["uid"]
+
+        remote_base_dir = "/p/project1"
+        # authenticate
+        _req = {
+            "persistent": "true",
+            "serverPath": "%s/___UFTP___MULTI___FILE___SESSION___MODE___" % remote_base_dir,
+        }
+        _reply = _tr.post(url=_auth + "JUDAC", json=_req).json()
+        uftp_pwd = _reply["secret"]
+        uftp_host = _reply["serverHost"]
+        uftp_port = _reply["serverPort"]
+        return f"curlftpfs -s -o ro,uid=1000,gid=100,ftp_method=singlecwd,enable_epsv,user=anonymous:{uftp_pwd} {uftp_host}:{uftp_port}"
+
+
+    if __name__ == "__main__":
+        access_token = get_access_token()
+        if not access_token:
+            exit(1)
+        mount_cmd = get_mount_command(access_token)
+        print(mount_cmd)
+  mount_home_ro.py: |
+    import json
+    import os
+    from contextlib import closing
+
+    import pyunicore.client as unicore_client
+    import requests
+
+
+    def get_access_token():
+        api_url = os.getenv("JUPYTERHUB_API_URL")
+        user_api_url = f"{api_url}/user_oauth"
+        headers = {"Authorization": "token {}".format(os.getenv("JUPYTERHUB_API_TOKEN"))}
+        with closing(requests.get(user_api_url, headers=headers)) as r:
+            if r.status_code == 200:
+                resp = json.loads(r.content.decode("utf-8"))
+            else:
+                raise Exception(
+                    "Could not receive access token: {} {}".format(
+                        r.status_code, r.content.decode("utf-8")
+                    )
+                )
+        # No HPC accounts -> no access token in this script
+        if (
+            "auth_state" in resp.keys()
+            and "access_token" in resp["auth_state"].keys()
+        ):
+            return resp["auth_state"]["access_token"]
+        else:
+            return None
+
+
+
+    def get_mount_command(access_token):
+        _auth = "https://uftp.fz-juelich.de:9112/UFTP_Auth/rest/auth/"
+        try:
+            _tr = unicore_client.Transport(access_token)
+            _info = _tr.get(url=_auth)
+        except AttributeError:
+            # pyunicore 1.0.0 has a different API
+            import pyunicore.credentials as unicore_credentials
+            credential = unicore_credentials.OIDCToken(access_token, None)
+            transport_kwargs = {
+                "credential": credential,
+                "verify": False,
+                "timeout": 30
+            }
+            _tr = unicore_client.Transport(**transport_kwargs)
+            _info = _tr.get(url=_auth)
+        _uid = _info["JUDAC"]["uid"]
+
+        remote_base_dir = "/p/home/jusers/%s" % _uid
+        import pathlib
+        pathlib.Path(remote_base_dir).mkdir(parents=True, exist_ok=True)
+        # authenticate
+        _req = {
+            "persistent": "true",
+            "serverPath": "%s/___UFTP___MULTI___FILE___SESSION___MODE___" % remote_base_dir,
+        }
+        _reply = _tr.post(url=_auth + "JUDAC", json=_req).json()
+        uftp_pwd = _reply["secret"]
+        uftp_host = _reply["serverHost"]
+        uftp_port = _reply["serverPort"]
+        return f"curlftpfs -s -o ro,uid=1000,gid=100,ftp_method=singlecwd,enable_epsv,user=anonymous:{uftp_pwd} {uftp_host}:{uftp_port}"
+
+
+    if __name__ == "__main__":
+        access_token = get_access_token()
+        if not access_token:
+            exit(1)
+        mount_cmd = get_mount_command(access_token)
+        print(mount_cmd)
+  mount_data.py: |
+    import json
+    import os
+    from contextlib import closing
+
+    import pyunicore.client as unicore_client
+    import requests
+
+
+    def get_access_token():
+        api_url = os.getenv("JUPYTERHUB_API_URL")
+        user_api_url = f"{api_url}/user_oauth"
+        headers = {"Authorization": "token {}".format(os.getenv("JUPYTERHUB_API_TOKEN"))}
+        with closing(requests.get(user_api_url, headers=headers)) as r:
+            if r.status_code == 200:
+                resp = json.loads(r.content.decode("utf-8"))
+            else:
+                raise Exception(
+                    "Could not receive access token: {} {}".format(
+                        r.status_code, r.content.decode("utf-8")
+                    )
+                )
+        # No HPC accounts -> no access token in this script
+        if (
+            "auth_state" in resp.keys()
+            and "access_token" in resp["auth_state"].keys()
+        ):
+            return resp["auth_state"]["access_token"]
+        else:
+            return None
+
+
+
+    def get_mount_command(access_token):
+        _auth = "https://uftp.fz-juelich.de:9112/UFTP_Auth/rest/auth/"
+        try:
+            _tr = unicore_client.Transport(access_token)
+            _info = _tr.get(url=_auth)
+        except AttributeError:
+            # pyunicore 1.0.0 has a different API
+            import pyunicore.credentials as unicore_credentials
+            credential = unicore_credentials.OIDCToken(access_token, None)
+            transport_kwargs = {
+                "credential": credential,
+                "verify": False,
+                "timeout": 30
+            }
+            _tr = unicore_client.Transport(**transport_kwargs)
+            _info = _tr.get(url=_auth)
+        _uid = _info["JUDAC"]["uid"]
+
+        remote_base_dir = "/p/data1"
+        # authenticate
+        _req = {
+            "persistent": "true",
+            "serverPath": "%s/___UFTP___MULTI___FILE___SESSION___MODE___" % remote_base_dir,
+        }
+        _reply = _tr.post(url=_auth + "JUDAC", json=_req).json()
+        uftp_pwd = _reply["secret"]
+        uftp_host = _reply["serverHost"]
+        uftp_port = _reply["serverPort"]
+        return f"curlftpfs -s -o rw,uid=1000,gid=100,ftp_method=singlecwd,enable_epsv,user=anonymous:{uftp_pwd} {uftp_host}:{uftp_port}"
+
+
+    if __name__ == "__main__":
+        access_token = get_access_token()
+        if not access_token:
+            exit(1)
+        mount_cmd = get_mount_command(access_token)
+        print(mount_cmd)
+  mount_project.py: |
+    import json
+    import os
+    from contextlib import closing
+
+    import pyunicore.client as unicore_client
+    import requests
+
+
+    def get_access_token():
+        api_url = os.getenv("JUPYTERHUB_API_URL")
+        user_api_url = f"{api_url}/user_oauth"
+        headers = {"Authorization": "token {}".format(os.getenv("JUPYTERHUB_API_TOKEN"))}
+        with closing(requests.get(user_api_url, headers=headers)) as r:
+            if r.status_code == 200:
+                resp = json.loads(r.content.decode("utf-8"))
+            else:
+                raise Exception(
+                    "Could not receive access token: {} {}".format(
+                        r.status_code, r.content.decode("utf-8")
+                    )
+                )
+        # No HPC accounts -> no access token in this script
+        if (
+            "auth_state" in resp.keys()
+            and "access_token" in resp["auth_state"].keys()
+        ):
+            return resp["auth_state"]["access_token"]
+        else:
+            return None
+
+
+
+    def get_mount_command(access_token):
+        _auth = "https://uftp.fz-juelich.de:9112/UFTP_Auth/rest/auth/"
+        try:
+            _tr = unicore_client.Transport(access_token)
+            _info = _tr.get(url=_auth)
+        except AttributeError:
+            # pyunicore 1.0.0 has a different API
+            import pyunicore.credentials as unicore_credentials
+            credential = unicore_credentials.OIDCToken(access_token, None)
+            transport_kwargs = {
+                "credential": credential,
+                "verify": False,
+                "timeout": 30
+            }
+            _tr = unicore_client.Transport(**transport_kwargs)
+            _info = _tr.get(url=_auth)
+        _uid = _info["JUDAC"]["uid"]
+
+        remote_base_dir = "/p/project1"
+        # authenticate
+        _req = {
+            "persistent": "true",
+            "serverPath": "%s/___UFTP___MULTI___FILE___SESSION___MODE___" % remote_base_dir,
+        }
+        _reply = _tr.post(url=_auth + "JUDAC", json=_req).json()
+        uftp_pwd = _reply["secret"]
+        uftp_host = _reply["serverHost"]
+        uftp_port = _reply["serverPort"]
+        return f"curlftpfs -s -o rw,uid=1000,gid=100,ftp_method=singlecwd,enable_epsv,user=anonymous:{uftp_pwd} {uftp_host}:{uftp_port}"
+
+
+    if __name__ == "__main__":
+        access_token = get_access_token()
+        if not access_token:
+            exit(1)
+        mount_cmd = get_mount_command(access_token)
+        print(mount_cmd)
+  mount_home.py: |
+    import json
+    import os
+    from contextlib import closing
+
+    import pyunicore.client as unicore_client
+    import requests
+
+
+    def get_access_token():
+        api_url = os.getenv("JUPYTERHUB_API_URL")
+        user_api_url = f"{api_url}/user_oauth"
+        headers = {"Authorization": "token {}".format(os.getenv("JUPYTERHUB_API_TOKEN"))}
+        with closing(requests.get(user_api_url, headers=headers)) as r:
+            if r.status_code == 200:
+                resp = json.loads(r.content.decode("utf-8"))
+            else:
+                raise Exception(
+                    "Could not receive access token: {} {}".format(
+                        r.status_code, r.content.decode("utf-8")
+                    )
+                )
+        # No HPC accounts -> no access token in this script
+        if (
+            "auth_state" in resp.keys()
+            and "access_token" in resp["auth_state"].keys()
+        ):
+            return resp["auth_state"]["access_token"]
+        else:
+            return None
+
+
+
+    def get_mount_command(access_token):
+        _auth = "https://uftp.fz-juelich.de:9112/UFTP_Auth/rest/auth/"
+        try:
+            _tr = unicore_client.Transport(access_token)
+            _info = _tr.get(url=_auth)
+        except AttributeError:
+            # pyunicore 1.0.0 has a different API
+            import pyunicore.credentials as unicore_credentials
+            credential = unicore_credentials.OIDCToken(access_token, None)
+            transport_kwargs = {
+                "credential": credential,
+                "verify": False,
+                "timeout": 30
+            }
+            _tr = unicore_client.Transport(**transport_kwargs)
+            _info = _tr.get(url=_auth)
+        _uid = _info["JUDAC"]["uid"]
+
+        remote_base_dir = "/p/home/jusers/%s" % _uid
+        import pathlib
+        pathlib.Path(remote_base_dir).mkdir(parents=True, exist_ok=True)
+        # authenticate
+        _req = {
+            "persistent": "true",
+            "serverPath": "%s/___UFTP___MULTI___FILE___SESSION___MODE___" % remote_base_dir,
+        }
+        _reply = _tr.post(url=_auth + "JUDAC", json=_req).json()
+        uftp_pwd = _reply["secret"]
+        uftp_host = _reply["serverHost"]
+        uftp_port = _reply["serverPort"]
+        return f"curlftpfs -s -o rw,uid=1000,gid=100,ftp_method=singlecwd,enable_epsv,user=anonymous:{uftp_pwd} {uftp_host}:{uftp_port}"
+
+
+    if __name__ == "__main__":
+        access_token = get_access_token()
+        if not access_token:
+            exit(1)
+        mount_cmd = get_mount_command(access_token)
+        print(mount_cmd)
   uftp.py: |
     import json
     import os

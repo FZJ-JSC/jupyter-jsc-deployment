@@ -158,7 +158,7 @@ outpostConfig: |-
   ##########
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
-  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.9"
+  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.12"
   c.KubeSpawner.image_pull_policy = "Always"
   c.KubeSpawner.tolerations = [
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
@@ -184,7 +184,7 @@ outpostConfig: |-
   c.KubeSpawner.lifecycle_hooks = {
       "preStop": {
           "exec": {
-              "command": ["/bin/sh", "-c", "kill $(ps x | grep '[j]upyterhub-singleuser' | awk '{print $1}')"]
+              "command": ["/bin/sh", "-c", "fusermount -u /p/project1; fusermount -u /p/home/jusers/*; fusermount -u /p/data1;  kill $(ps x | grep '[j]upyterhub-singleuser' | awk '{print $1}')"]
           }
       }
   }
@@ -362,19 +362,92 @@ outpostConfig: |-
       else:
           common_mounts = [
               {
-                  "name": "nfs-software", 
-                  "mountPath": "/p/software/jsccloud", 
+                  "name": "nfs-software",
+                  "mountPath": "/p/software/jsccloud",
                   "readOnly": True
               },
               {
-                  "name": "uftp", 
+                  "name": "uftp",
                   "mountPath": "/tmp/custom/uftp.py",
-                  "subPath": "uftp.py"
+                  "subPath": "uftp.py",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_home_ro.sh",
+                  "subPath": "mount_home_ro.sh",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_data_ro.sh",
+                  "subPath": "mount_data_ro.sh",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_project_ro.sh",
+                  "subPath": "mount_project_ro.sh",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_home.sh",
+                  "subPath": "mount_home.sh",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_data.sh",
+                  "subPath": "mount_data.sh",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_project.sh",
+                  "subPath": "mount_project.sh",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_data_ro.py",
+                  "subPath": "mount_data_ro.py",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_project_ro.py",
+                  "subPath": "mount_project_ro.py",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_home_ro.py",
+                  "subPath": "mount_home_ro.py",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_data.py",
+                  "subPath": "mount_data.py",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_project.py",
+                  "subPath": "mount_project.py",
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp",
+                  "mountPath": "/tmp/custom/mount_home.py",
+                  "subPath": "mount_home.py",
+                  "readOnly": True
               },
               {
                   "name": "nfs-userhome",
                   "mountPath": "/home/jovyan",
-                  "readOnly": False 
+                  "readOnly": False
               }
           ]
           profile_mounts = [
