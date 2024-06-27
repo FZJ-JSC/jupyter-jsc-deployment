@@ -6,12 +6,12 @@ helm:
   releaseName: portalgauss-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.12.7
+  version: 0.12.9
   values:
     fullnameOverride: portalgauss-custom
     customConfig:
       announcement:
-        show: true
+        show: false
         title: "JSC-Cloud via Jupyter-JSC will not be available on thursday, 27.6.2024, between 9am and noon."
         body: "All JupyterLabs on JSC-Cloud will be stopped for this short maintenance. Other systems are not affected."
     global:
