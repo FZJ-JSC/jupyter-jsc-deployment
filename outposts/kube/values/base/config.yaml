@@ -214,7 +214,7 @@ outpostConfig: |-
             "hardlimit": hard
           }
           try:
-              r = requests.post(f"{storage_url}?token={token}", headers=request_header, json=body)
+              r = requests.post(f"{storage_url}?token={token}", headers=request_header, json=body, timeout=2)
               r.raise_for_status()
               storage_info = r.json()
               used = storage_info.get("human", {}).get("used", "0G")
