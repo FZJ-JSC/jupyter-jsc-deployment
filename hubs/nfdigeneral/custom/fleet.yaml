@@ -15,7 +15,7 @@ helm:
     oauthSecret: hdfaai-credentials
     customConfig:
       announcement:
-        show: true
+        show: false
         title: "Jupyter4NFDI - Work in Progress"
         body: "We're currently setting everything up and testing it. The service might restart a few times today."
       systems:
