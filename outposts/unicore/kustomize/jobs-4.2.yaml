@@ -318,17 +318,16 @@ data:
         if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
           module load jupyter-ai/.2.15.0
         fi
-        # SlurmProvisioner may need an update
-        # if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
-        #   module load JupyterExtension-slurmprovisioner/0.6.0-2023.3.6
-        #   export SLURMEL_DOCUMENTATION_HREF="https://docs.jupyter.jsc.fz-juelich.de/github/FZJ-JSC/jupyter-jsc-notebooks/blob/master/05-News&Updates/Announcement-2022-12_Slurm_Wrapped_Kernels.ipynb"
-        #   export JUPYTERJSC_CMD_ARGS="${JUPYTERJSC_CMD_ARGS} --ServerApp.kernel_manager_class=jupyter_slurm_provisioner.SlurmAsyncMappingKernelManager"
-        #   export SLURM_PROVISIONER_NODE_SUFFIX="i"
-        #   export SLURM_PROVISIONER_JHUB_METRICS="${JUPYTERHUB_API_URL}/slurmwrapper/${JUPYTERHUB_USER}/${JUPYTERHUB_SERVER_NAME}"
-        #   test -d ${HOME}/.local/share/jupyter/kernels.deactivated/slurm-provisioner-kernel && ! test -d ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel && mv ${HOME}/.local/share/jupyter/kernels.deactivated/slurm-provisioner-kernel ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel
-        # else
-        #   test -d ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel && mkdir -p ${HOME}/.local/share/jupyter/kernels.deactivated && mv ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel ${HOME}/.local/share/jupyter/kernels.deactivated/slurm-provisioner-kernel
-        # fi
+        if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
+          module load jupyter-slurm-provisioner/.0.6.0-4.2.1
+          export SLURMEL_DOCUMENTATION_HREF="https://docs.jupyter.jsc.fz-juelich.de/github/FZJ-JSC/jupyter-jsc-notebooks/blob/master/05-News&Updates/Announcement-2022-12_Slurm_Wrapped_Kernels.ipynb"
+          export JUPYTERJSC_CMD_ARGS="${JUPYTERJSC_CMD_ARGS} --ServerApp.kernel_manager_class=jupyter_slurm_provisioner.SlurmAsyncMappingKernelManager"
+          export SLURM_PROVISIONER_NODE_SUFFIX="i"
+          export SLURM_PROVISIONER_JHUB_METRICS="${JUPYTERHUB_API_URL}/slurmwrapper/${JUPYTERHUB_USER}/${JUPYTERHUB_SERVER_NAME}"
+          test -d ${HOME}/.local/share/jupyter/kernels.deactivated/slurm-provisioner-kernel && ! test -d ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel && mv ${HOME}/.local/share/jupyter/kernels.deactivated/slurm-provisioner-kernel ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel
+        else
+          test -d ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel && mkdir -p ${HOME}/.local/share/jupyter/kernels.deactivated && mv ${HOME}/.local/share/jupyter/kernels/slurm-provisioner-kernel ${HOME}/.local/share/jupyter/kernels.deactivated/slurm-provisioner-kernel
+        fi
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
           module load jupyterlab-nvdashboard/.0.10.0
