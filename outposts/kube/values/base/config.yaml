@@ -192,44 +192,77 @@ outpostConfig: |-
   ##########
 
   def pre_spawn_hook(spawner):
-      userhome_base = "/p/home/jusers"
       hub = spawner.extra_labels.get("app", "jupyter")
       stage = os.environ.get("STAGE", "staging")
       userid = str(spawner.user.id)
-      profile = spawner.user_options.get("profile", "")
-      try:
-          service = profile.split("/")[0].lower()
-      except:
-          spawner.log.exception(f"{spawner._log_name} - Use default service: jupyterlab for skeleton dir")
-          service = "jupyterlab"
+      soft = "25g"
+      hard = "30g"
 
-      userhome_dir = os.path.join(userhome_base, hub, stage, userid)
-      userhome_skel = f"{userhome_base}/skel/{service}"
-      userhome_uid = 1000
-      userhome_gid = 1000
+      token = os.environ.get("STORAGE_MANAGER_TOKEN", None)
+      storage_url = os.environ.get("STORAGE_MANAGER_URL", None)
+      if storage_url and token:
+          request_header = {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+          }
+          body = {
+            "stage": stage,
+            "service": hub,
+            "user_id": userid,
+            "softlimit": soft,
+            "hardlimit": hard
+          }
+          try:
+              r = requests.post(f"{storage_url}?token={token}", headers=request_header, json=body)
+              r.raise_for_status()
+              storage_info = r.json()
+              used = storage_info.get("human", {}).get("used", "0G")
+              summary = ""
+              details = ""
+              red = False
+              orange = False
+              if int(storage_info.get("bytes", {}).get("used", "0")) >= int(storage_info.get("bytes", {}).get("hard")):
+                  red = True
+                  summary = f"Hard limit of disk quota exceeded ({used} / {soft}). Your container might not start for this reason. Please contact support (see button in footer) to solve this."
+                  details = f"You're allowed to use up to {soft} disk space. Please keep your disk usage below this threshold."
+              elif int(storage_info.get("bytes", {}).get("used", "0")) > int(storage_info.get("bytes", {}).get("soft")):
+                  summary = f"Soft limit of disk quota exceeded ({used} / {soft}). Please remove some files to stay below {soft}. Your container might not start for this reason. Please contact support (see button in footer) to solve this."
+                  details = f"It's possible to use up to {hard} for maximum 7 days. Afterwards, file creation in your directory is impossible, which may prevent a service start."
+                  orange = True
+              else:
+                  summary = f"Disk quota status: {used} / {soft}"
+                  details = f"It's possible to use up to {hard} for maximum 7 days. Afterwards, file creation in your directory is impossible, which may prevent a service start."
 
-      def copy_file(src, dst):
-          if os.path.isfile(src):
-              shutil.copyfile(src=src, dst=dst)
-              shutil.chown(dst, userhome_uid, userhome_gid)
+              if red:
+                  msg = f"<details><summary><span style=\"color:red;\">{summary}</span></summary>{details}</details>"
+              elif orange:
+                  msg = f"<details><summary><span style=\"color:darkorange;\">{summary}</span></summary>{details}</details>"
+              else:
+                  msg = f"<details><summary>{summary}</summary>{details}</details>"
+              event = {
+                  "progress": "10",
+                  "html_message": msg,
+                  "failed": False
+              }
+              def sync_send_event(spawner, event):
+                  loop = asyncio.new_event_loop()
 
-      def copy_dir(src, dst):
-          if os.path.isdir(src):
-              shutil.copytree(src=src, dst=dst)
-              for dirpath, dirnames, filenames in os.walk(dst):
-                  shutil.chown(dirpath, userhome_uid, userhome_gid)
-                  for filename in filenames:
-                      shutil.chown(os.path.join(dirpath, filename), userhome_uid, userhome_gid)
+                  async def wait_for_future(future):
+                      return await future
 
-      if not os.path.exists(userhome_dir):
-          spawner.log.info(f"{spawner._log_name} - Create home directory {userhome_dir}")
-          os.makedirs(userhome_skel, exist_ok=True)
-          copy_dir(userhome_skel, userhome_dir)
+                  def t_send_event(loop, spawner, event):
+                      asyncio.set_event_loop(loop)
+                      loop.run_until_complete(wait_for_future(spawner._outpostspawner_send_event(event)))
+                      
+                  t = Thread(target=t_send_event, args=(loop, spawner, event))
+                  t.start()
+                  t.join()
+
+              sync_send_event(spawner, event)
+          except:
+              spawner.log.exception(f"{spawner._log_name} - Could not get storage information")
       else:
-          # Update motd
-          copy_file(f"{userhome_skel.rstrip('/')}/.motd", f"{userhome_dir.rstrip('/')}/.motd")
-          shutil.rmtree(f"{userhome_dir.rstrip('/')}/.motd.d", ignore_errors=True)
-          copy_dir(f"{userhome_skel.rstrip('/')}/.motd.d", f"{userhome_dir.rstrip('/')}/.motd.d")
+          spawner.log.warning(f"{spawner._log_name} - Storage Manager env variables not set")
 
       if "usermount_path" in spawner.user_options:
           del spawner.user_options["usermount_path"]
