@@ -1,13 +1,16 @@
 outpostConfig: |-
+  import asyncio
+  import copy
+  import json
   import logging
   import os
   import requests
-  import shutil
   import yaml
 
   from kubernetes import client
   from kubernetes import config
   from kubespawner import KubeSpawner
+  from threading import Thread
 
   ##########
   # Logging
@@ -44,7 +47,6 @@ outpostConfig: |-
 
   # Specific flavors for users, or disable it completely for specific users
   async def flavors_per_user(outpost, jupyterhub_name, authentication):
-      import copy
       hub_flavors = await outpost.get_flavors(jupyterhub_name)
       
       with open("/mnt/flavors/flavors.yaml", "r") as f:
@@ -465,10 +467,6 @@ outpostConfig: |-
           return common_volumes + profile_volumes
 
   def get_node_selector(spawner, jupyterhub_name, resources, flavor):
-      from kubernetes import client
-      from kubernetes import config
-      import json
-
       config.load_incluster_config()
       core = client.CoreV1Api()
       flavor_mem_request = resources.get("mem_guarantee", "0M")
