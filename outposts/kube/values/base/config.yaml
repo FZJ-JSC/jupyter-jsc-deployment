@@ -184,7 +184,7 @@ outpostConfig: |-
   c.KubeSpawner.lifecycle_hooks = {
       "preStop": {
           "exec": {
-              "command": ["/bin/sh", "-c", "fusermount -u /p/project1; fusermount -u /p/home/jusers/*; fusermount -u /p/data1;  kill $(ps x | grep '[j]upyterhub-singleuser' | awk '{print $1}')"]
+              "command": ["/bin/sh", "-c", "fusermount -u /mnt/JUST_HOME; fusermount -u /p/project1; fusermount -u /p/home/jusers/*; fusermount -u /p/data1;  kill $(ps x | grep '[j]upyterhub-singleuser' | awk '{print $1}')"]
           }
       }
   }
@@ -491,6 +491,7 @@ outpostConfig: |-
               "coeraise": "defaulthub",
               "portalgauss": "defaulthub",
               "euroccgcs": "defaulthub",
+              "nfdigeneral": "defaulthub",
               "dev1": "defaulthub",
               "dev2": "defaulthub"
           }

@@ -19,8 +19,8 @@ data:
           mem_guarantee: "512M"
           mem_limit: "2048M"
       l1:
-        max: 50
-        weight: 12
+        max: 20
+        weight: 9
         display_name: "4GB RAM, 1VCPUs, 2 days"
         description: "JupyterLab will run for max 2 days with 4GB RAM and 1VCPUs."
         runtime:
@@ -77,11 +77,11 @@ data:
         flavorsOverride:
           l2:
             max: 10
-        disable: False
+        disable: True
       nfdidefault:
         hubs: ["nfdigeneral"]
         usernames_unused: []
         groups: ["default"]
         weight: 1
         flavors: ["m1"]
-        disable: False
+        disable: True
