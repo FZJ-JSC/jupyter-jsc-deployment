@@ -14,9 +14,9 @@ data:
         runtime:
           days: 5
         resources:
-          cpu_guarantee: 0.2
+          cpu_guarantee: 0.1
           cpu_limit: 1
-          mem_guarantee: "1536M"
+          mem_guarantee: "512M"
           mem_limit: "2048M"
       l1:
         max: 50
@@ -26,9 +26,9 @@ data:
         runtime:
           days: 2
         resources:
-          cpu_guarantee: 0.2
+          cpu_guarantee: 0.1
           cpu_limit: 1
-          mem_guarantee: "1024M"
+          mem_guarantee: "512M"
           mem_limit: "4096M"
       l2:
         max: 5
@@ -38,9 +38,9 @@ data:
         runtime:
           hours: 10
         resources:
-          cpu_guarantee: 0.2
+          cpu_guarantee: 0.1
           cpu_limit: 2
-          mem_guarantee: "7680M"
+          mem_guarantee: "512M"
           mem_limit: "8192M"
       workshop:
         max: 25
@@ -50,9 +50,9 @@ data:
         runtime:
           hours: 10
         resources:
-          cpu_guarantee: 0.2
+          cpu_guarantee: 0.1
           cpu_limit: 1
-          mem_guarantee: "3584M"
+          mem_guarantee: "512M"
           mem_limit: "4096M"
     hubs:
       default:
