@@ -400,7 +400,7 @@ outpostConfig: |-
                   "hostPath": {
                       # userid gets expanded by KubeSpawner, do not use mapped 
                       # hub name here, each hub uses it's own home dir.
-                      "path": f"/p/home/jusers/{jupyterhub_name}/{stage}/{{userid}}", 
+                      "path": f"/p/home/jusers/{stage}/{jupyterhub_name}/{{userid}}", 
                       "type": ""
                   }
               }
@@ -440,7 +440,7 @@ outpostConfig: |-
                   "hostPath": {
                       # userid gets expanded by KubeSpawner, do not use mapped 
                       # hub name here, each hub uses it's own home dir.
-                      "path": f"/p/home/jusers/{jupyterhub_name}/{stage}/{{userid}}", 
+                      "path": f"/p/home/jusers/{stage}/{jupyterhub_name}/{{userid}}", 
                       "type": ""
                   }
               }
