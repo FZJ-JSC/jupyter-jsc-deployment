@@ -67,21 +67,21 @@ data:
         jupyterhubs: ["juniq"]
         weight: 6
         flavors: ["m1", "l1", "l2"]
-    users:
-      nfdifzjstaff:
-        hubs: ["nfdigeneral"]
-        usernames_unused: []
-        groups: ["staff@fz-juelich.de"]
-        weight: 10
-        flavors: ["m1", "l1", "l2"]
-        flavorsOverride:
-          l2:
-            max: 10
-        disable: True
-      nfdidefault:
-        hubs: ["nfdigeneral"]
-        usernames_unused: []
-        groups: ["default"]
-        weight: 1
-        flavors: ["m1"]
-        disable: True
+    # users:
+    #   nfdifzjstaff:
+    #     hubs: ["nfdigeneral"]
+    #     usernames_unused: []
+    #     groups: ["staff@fz-juelich.de"]
+    #     weight: 10
+    #     flavors: ["m1", "l1", "l2"]
+    #     flavorsOverride:
+    #       l2:
+    #         max: 10
+    #     disable: True
+    #   nfdidefault:
+    #     hubs: ["nfdigeneral"]
+    #     usernames_unused: []
+    #     groups: ["default"]
+    #     weight: 1
+    #     flavors: ["m1"]
+    #     disable: True
