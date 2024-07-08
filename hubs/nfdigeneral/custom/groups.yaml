@@ -7,6 +7,8 @@ customConfig:
       weight: 1
       services:
         JupyterLab:
+          MPCDF:
+            maxPerUser: 5
           4.2:
             maxPerUser: 5
           custom:
@@ -15,3 +17,4 @@ customConfig:
     defaultOption: "4.2"
   systems:
     - JSC-Cloud
+    - MPCDF
