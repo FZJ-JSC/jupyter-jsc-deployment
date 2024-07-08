@@ -25,6 +25,10 @@ jupyterhubs:
         user: "jhuboutpost"
         port: 22
         hostname: "138.246.236.238"
+      - name: "outpost_mpcdf"
+        user: "jhuboutpost"
+        port: 3121
+        hostname: "130.183.217.170"
       - name: "deepv"
         user: "ljupyter"
         port: 22
