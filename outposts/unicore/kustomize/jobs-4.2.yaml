@@ -305,6 +305,11 @@ data:
           fi
         fi
 
+        if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then
+          if [[ $SYSTEMNAME != "deep" ]]; then
+            module load JupyterProxy-RStudio/.2023.09.1-4.2.1
+          fi
+        fi
         # Extensions
         if [[ $JUPYTER_MODULE_NBDEV_ENABLED -eq 1 ]]; then
           module load nbdev/2.3.25
