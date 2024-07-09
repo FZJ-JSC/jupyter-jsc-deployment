@@ -6,7 +6,7 @@ helm:
   releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.13.1
+  version: 0.13.4
   valuesFiles:
     - groups.yaml
   values:
@@ -29,6 +29,8 @@ targetCustomizations:
       matchLabels:
         stage: staging
     helm:
+      valuesFiles:
+        - groups_staging.yaml
       values:
         customConfig:
           announcement:

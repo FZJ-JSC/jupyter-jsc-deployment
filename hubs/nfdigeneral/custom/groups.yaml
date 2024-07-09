@@ -17,4 +17,3 @@ customConfig:
     defaultOption: "4.2"
   systems:
     - JSC-Cloud
-    - MPCDF
