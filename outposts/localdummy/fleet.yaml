@@ -2,7 +2,6 @@ defaultNamespace: localdummy
 kustomize:
   dir: ./kustomize
 helm:
-  releaseName: localdummy
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyterhub-outpost
   version: 1.0.3
