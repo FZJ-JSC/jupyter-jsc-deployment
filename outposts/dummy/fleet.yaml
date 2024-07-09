@@ -1,0 +1,30 @@
+defaultNamespace: dummy
+kustomize:
+  dir: ./kustomize
+helm:
+  releaseName: dummy
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyterhub-outpost
+  version: 1.0.3
+  values:
+    cryptSecret: outpost-cryptkey
+    outpostUser: outpost-users
+  valuesFiles:
+    - values/config.yaml
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        sshPublicKeys:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC8l6oVEaCeGD9UZuQ5h+5bn2ozGXQBhQRTjDcmQQDnk
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+    helm:
+      values:
+        sshPublicKeys:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMre+Ld6Deqx+CStJ60UeOQx0nsMEbkKgEwVr16UqWFx
