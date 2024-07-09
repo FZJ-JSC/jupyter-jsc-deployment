@@ -29,6 +29,10 @@ jupyterhubs:
         user: "jhuboutpost"
         port: 3121
         hostname: "130.183.217.170"
+      - name: "outpost_dummy"
+        user: "jhuboutpost"
+        port: 22
+        hostname: "jupyterhub-outpost-ssh.dummy.svc"
       - name: "deepv"
         user: "ljupyter"
         port: 22
