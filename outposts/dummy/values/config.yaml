@@ -33,6 +33,7 @@ outpostConfig: |-
       ret_list = [
           {
               "display_name": "JupyterLab/custom",
+              "slug": "JupyterLab/custom",
               "kubespawner_override": {
                   "image": spawner.user_options.get("image", "NoImageAvailable")
               }
@@ -53,6 +54,7 @@ outpostConfig: |-
       if not slug_in_profile_list:
           ret_list.append({
               "display_name": slug,
+              "slug": slug,
               "kubespawner_override": {
                   "image": default_image
               }
