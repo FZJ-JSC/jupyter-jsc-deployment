@@ -67,5 +67,5 @@ outpostConfig: |-
   # Response is a list of type [<pod/svc_name>, <port>]
   async def sanitize_start(spawner, response):
       spawner.log.info(f"{spawner._log_name} - Update spawner response ( {response} )")
-      return [f"{response[0]}.localdummy.svc, response[1]]
+      return [f"{response[0]}.localdummy.svc", response[1]]
   c.JupyterHubOutpost.sanitize_start_response = sanitize_start
