@@ -314,8 +314,11 @@ hub:
               spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
               return ret
           else:
-              spawner.log.debug(f"{spawner._log_name} - Do not update expected path for system {system}")
-              return original_ret
+              # Since JupyterHub is now running in another namespace, we have to add the tunnel namespace for all other systems
+              ret_split = original_ret.split(":")
+              ret = f"{':'.join(ret_split[:-1])}.jupyter.svc:{ret_split[-1]}"
+              spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
+              return ret
 
       c.CustomJSCSpawner.update_expected_path = update_expected_path
 
