@@ -32,7 +32,7 @@ outpostConfig: |-
           {
               "display_name": "JupyterLab/custom",
               "kubespawner_override": {
-                  "image": spawner.user_options["image"]
+                  "image": spawner.user_options.get("image", "NoImageAvailable")
               }
           },
           {
