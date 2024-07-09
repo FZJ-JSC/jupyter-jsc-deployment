@@ -5,12 +5,10 @@ helm:
   releaseName: jupyterhub-outpost
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyterhub-outpost
-  version: 1.0.3
+  version: 1.0.4
   values:
     cryptSecret: outpost-cryptkey
     outpostUsers: outpost-users
-  valuesFiles:
-    - values/config.yaml
 targetCustomizations:
   - name: staging
     clusterSelector:
