@@ -28,11 +28,11 @@ outpostConfig: |-
   async def profile_list(spawner):
       jupyterhub_name = spawner.jupyterhub_name
       spawner.log.info(f"{spawner._log_name} - Received these user_options from {jupyterhub_name}-JupyterHub: {spawner.user_options}")
-      slug = spawner.user_options.get("profile", "default")
+      slug = spawner.user_options.get("profile", "default").replace(".", "-").replace("/", "-").lowercase()
       default_image = "jupyter/minimal-notebook:notebook-7.0.3"
       ret_list = [
           {
-              "display_name": "JupyterLab/custom",
+              "display_name": "jupyterlab-custom",
               "kubespawner_override": {
                   "image": spawner.user_options.get("image", "NoImageAvailable")
               }
