@@ -289,15 +289,14 @@ data:
         if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
           module load JupyterProxy-XpraHTML5/.0.4.0-4.2.1
         fi
-        ## TODO waiting for installation of newest MatLab version
         # Load MatLab Proxy module, if user is in matlab group
-        # IFS=' ' read -ra groups_array <<< "$(id -Gn)"
-        # for group in "${groups_array[@]}"; do
-        #   if [[ "$group" == "matlab" ]]; then
-        #     module load JupyterProxy-Matlab/.0.8.0-2023.3.6
-        #     break
-        #   fi
-        # done
+        IFS=' ' read -ra groups_array <<< "$(id -Gn)"
+        for group in "${groups_array[@]}"; do
+          if [[ "$group" == "matlab" ]]; then
+            module load JupyterProxy-Matlab/.0.12.2-4.2.1
+            break
+          fi
+        done
         # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
         if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
           if [[ $SYSTEMNAME != "hdfml" ]]; then
@@ -769,15 +768,14 @@ data:
         if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
           module load JupyterProxy-XpraHTML5/.0.4.0-4.2.1
         fi
-        ## TODO waiting for installation of newest MatLab version
-        # Load MatLab Proxy module, if user is in matlab group
-        # IFS=' ' read -ra groups_array <<< "$(id -Gn)"
-        # for group in "${groups_array[@]}"; do
-        #   if [[ "$group" == "matlab" ]]; then
-        #     module load JupyterProxy-Matlab/.0.8.0-2023.3.6
-        #     break
-        #   fi
-        # done
+         # Load MatLab Proxy module, if user is in matlab group
+        IFS=' ' read -ra groups_array <<< "$(id -Gn)"
+        for group in "${groups_array[@]}"; do
+          if [[ "$group" == "matlab" ]]; then
+            module load JupyterProxy-Matlab/.0.12.2-4.2.1
+            break
+          fi
+        done
         # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
         if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
           if [[ $SYSTEMNAME != "hdfml" ]]; then
