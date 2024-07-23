@@ -6,8 +6,8 @@ hub:
   args:
     - -c
     - >-
-      pip install --force-reinstall "jupyterhub>=4.0.0,<5.0.0" jupyter-jsc-custom jupyterhub-forwardbasespawner jupyterhub-unicorespawner jupyterhub-outpostspawner &&
-      pip install -i https://test.pypi.org/simple/ jupyter-jsc-custom==0.10.14.dev3 &&
+      pip install --upgrade --upgrade-strategy only-if-needed jupyter-jsc-custom jupyterhub-forwardbasespawner jupyterhub-unicorespawner jupyterhub-outpostspawner &&
+      pip install -i https://test.pypi.org/simple/ -U --no-deps jupyter-jsc-custom==0.10.14.dev4 &&
       jupyterhub -f /usr/local/etc/jupyterhub/jupyterhub_config.py
   command:
     - /bin/bash
