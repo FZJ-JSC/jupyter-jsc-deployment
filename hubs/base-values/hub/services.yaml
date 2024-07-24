@@ -10,6 +10,8 @@ hub:
       name: hpcinfos_update
     outpostflavors:
       name: outpost_flavors
+    reauthenticate:
+      name: reauthenticate
   loadRoles:
     list_servers:
       name: "list_servers-role"
@@ -39,6 +41,13 @@ hub:
         - "custom:outpostflavors:set"
       services:
         - "outpost_flavors"
+    reauthenticate:
+      name: "reauthenticate-role"
+      description: "Triggers a notification to the user"
+      scopes:
+        - "custom:reauthenticate:set"
+      services:
+        - "reauthenticate"
     read_metrics:
       name: read-metrics
       description: Access to metrics information
