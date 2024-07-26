@@ -67,3 +67,10 @@ data:
     if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
       module load jupyterai/.2.12.0
     fi
+    if [[ $JUPYTER_MODULE_VARIABLEINSPECTOR_ENABLED -eq 1 ]]; then
+      module load jupyterlab-variableinspector/.3.2.1
+    fi
+    if [[ $JUPYTER_MODULE_SPELLCHECKER_ENABLED -eq 1 ]]; then
+      module load jupyterlab-spellchecker/.0.8.4
+    fi
+

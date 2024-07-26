@@ -27,3 +27,11 @@ data:
     if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then
       module load JupyterProxy-RStudio/.2023.09.1-4.2.1
     fi
+    # Extensions
+    if [[ $JUPYTER_MODULE_VARIABLEINSPECTOR_ENABLED -eq 1 ]]; then
+      module load jupyterlab-variableinspector/.3.2.1
+    fi
+    if [[ $JUPYTER_MODULE_SPELLCHECKER_ENABLED -eq 1 ]]; then
+      module load jupyterlab-spellchecker/.0.8.4
+    fi
+
