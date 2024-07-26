@@ -796,14 +796,10 @@ data:
           module load jupyter-ai/.2.15.0
         fi
         if [[ $JUPYTER_MODULE_VARIABLEINSPECTOR_ENABLED -eq 1 ]]; then
-          if [[ $SYSTEMNAME != "deep" ]]; then
-            module load jupyterlab-variableinspector/.3.2.1
-          fi
+          module load jupyterlab-variableinspector/.3.2.1
         fi
         if [[ $JUPYTER_MODULE_SPELLCHECKER_ENABLED -eq 1 ]]; then
-          if [[ $SYSTEMNAME != "deep" ]]; then
-            module load jupyterlab-spellchecker/.0.8.4
-          fi
+          module load jupyterlab-spellchecker/.0.8.4
         fi
         if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
           module load jupyter-slurm-provisioner/.0.6.0-4.2.1
