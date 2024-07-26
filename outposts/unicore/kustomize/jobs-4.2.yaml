@@ -801,6 +801,11 @@ data:
         if [[ $JUPYTER_MODULE_SPELLCHECKER_ENABLED -eq 1 ]]; then
           module load jupyterlab-spellchecker/.0.8.4
         fi
+        if [[ $JUPYTER_MODULE_TRAMEMANAGER_ENABLED -eq 1 ]]; then
+          if [[ $SYSTEMNAME != "deep" ]]; then
+            module load jupyterlab-trame-manager/.0.6.1
+          fi
+        fi
         if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
           module load jupyter-slurm-provisioner/.0.6.0-4.2.1
           export SLURMEL_DOCUMENTATION_HREF="https://docs.jupyter.jsc.fz-juelich.de/github/FZJ-JSC/jupyter-jsc-notebooks/blob/documentation/05-News&Updates/Announcement-2022-12_Slurm_Wrapped_Kernels.ipynb"
