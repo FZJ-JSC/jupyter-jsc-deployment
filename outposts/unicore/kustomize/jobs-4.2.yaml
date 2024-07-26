@@ -322,9 +322,20 @@ data:
         if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
           module load jupyter-ai/.2.15.0
         fi
+        if [[ $JUPYTER_MODULE_VARIABLEINSPECTOR_ENABLED -eq 1 ]]; then
+          module load jupyterlab-variableinspector/.3.2.1
+        fi
+        if [[ $JUPYTER_MODULE_SPELLCHECKER_ENABLED -eq 1 ]]; then
+          module load jupyterlab-spellchecker/.0.8.4
+        fi
+        if [[ $JUPYTER_MODULE_TRAMEMANAGER_ENABLED -eq 1 ]]; then
+          if [[ $SYSTEMNAME != "deep" ]]; then
+            module load jupyterlab-trame-manager/.0.6.1-4.2.1
+          fi
+        fi
         if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
           module load jupyter-slurm-provisioner/.0.6.0-4.2.1
-          export SLURMEL_DOCUMENTATION_HREF="https://docs.jupyter.jsc.fz-juelich.de/github/FZJ-JSC/jupyter-jsc-notebooks/blob/master/05-News&Updates/Announcement-2022-12_Slurm_Wrapped_Kernels.ipynb"
+          export SLURMEL_DOCUMENTATION_HREF="https://docs.jupyter.jsc.fz-juelich.de/github/FZJ-JSC/jupyter-jsc-notebooks/blob/documentation/05-News&Updates/Announcement-2022-12_Slurm_Wrapped_Kernels.ipynb"
           export JUPYTERJSC_CMD_ARGS="${JUPYTERJSC_CMD_ARGS} --ServerApp.kernel_manager_class=jupyter_slurm_provisioner.SlurmAsyncMappingKernelManager"
           export SLURM_PROVISIONER_NODE_SUFFIX="i"
           export SLURM_PROVISIONER_JHUB_METRICS="${JUPYTERHUB_API_URL}/slurmwrapper/${JUPYTERHUB_USER}/${JUPYTERHUB_SERVER_NAME}"
@@ -796,13 +807,14 @@ data:
           module load jupyter-ai/.2.15.0
         fi
         if [[ $JUPYTER_MODULE_VARIABLEINSPECTOR_ENABLED -eq 1 ]]; then
-          if [[ $SYSTEMNAME != "deep" ]]; then
-            module load jupyterlab-variableinspector/.3.2.1
-          fi
+          module load jupyterlab-variableinspector/.3.2.1
         fi
         if [[ $JUPYTER_MODULE_SPELLCHECKER_ENABLED -eq 1 ]]; then
+          module load jupyterlab-spellchecker/.0.8.4
+        fi
+        if [[ $JUPYTER_MODULE_TRAMEMANAGER_ENABLED -eq 1 ]]; then
           if [[ $SYSTEMNAME != "deep" ]]; then
-            module load jupyterlab-spellchecker/.0.8.4
+            module load jupyterlab-trame-manager/.0.6.1-4.2.1
           fi
         fi
         if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
