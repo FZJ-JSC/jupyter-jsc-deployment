@@ -15,4 +15,4 @@ data:
     module load Jupyter-bundle/20240520
     # module load Cartopy/0.21.0 Cirq/1.0.0 DWave/6.3.0 PyQuil/3.3.3 Qiskit/0.41.0 pulser/0.12.0 myqlm/1.7.3 Qiskit-juqcs/0.8.0
 
-    echo "c.ServerApp.terminado_settings={'shell_command': [(r'/p/software/jsccloud/stages/2024/software/JupyterLab/4.2.1-GCCcore-12.3.0/bin/terminadorc' && r'module load DWave')]}" >> ${DIR}/config.py
+    echo "terminado_settings={'shell_command': [(r'/p/software/jsccloud/stages/2024/software/JupyterLab/4.2.1-GCCcore-12.3.0/bin/terminadorc' && r'module load DWave')]}" >> ${DIR}/config.py
