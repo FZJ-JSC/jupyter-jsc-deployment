@@ -11,8 +11,8 @@ helm:
   # version: 3.1.0
   chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.3.7.tgz
   values:
-    nameOverride: "jupyterjsc"
-    fullnameOverride: "jupyterjsc"
+    # nameOverride: "jupyterjsc"
+    # fullnameOverride: "jupyterjsc"
     ingress:
       # Set JupyterHub in maintenance:
       #   Set enabled here to false, update ingress in maintenance/fleet.yaml
