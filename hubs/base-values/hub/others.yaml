@@ -17,7 +17,7 @@ hub:
   resources:
     requests:
       cpu: 100m
-      memory: 256Mi
+      memory: 1048Mi 
     limits:
       cpu: 2000m
       memory: 2048Mi 
