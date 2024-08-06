@@ -1,18 +1,4 @@
 customConfig:
-  groups:
-    defaultOverride:
-      authenticators: []
-      usernames: []
-      admin: false
-      weight: 1
-      services:
-        JupyterLab:
-          MPCDF:
-            maxPerUser: 5
-          4.2:
-            maxPerUser: 5
-          custom:
-            maxPerUser: 5
   services:
     defaultOption: "4.2"
   systems:
