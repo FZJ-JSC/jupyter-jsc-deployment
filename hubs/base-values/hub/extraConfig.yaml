@@ -26,18 +26,31 @@ hub:
               "email",
               "profile",
           ]
+      # elif fullname in ["jupyterjsc"]:
       else:
-          oauth_host = "unity-jsc.fz-juelich.de"
-          oauth_path = "jupyter-oauth2"
+          oauth_host = "login.jsc.fz-juelich.de"
+          oauth_path = "oauth2"
           oauth_scopes = [
-              "single-logout",
-              "hpc_infos",
-              "x500",
-              "authenticator",
-              "eduperson_entitlement",
-              "username",
+              "openid",
+              "email",
               "profile",
+              "eduperson_assurance",
+              "single-logout",
+              "voperson_id",
+              "entitlements"
           ]
+      # else:
+      #     oauth_host = "unity-jsc.fz-juelich.de"
+      #     oauth_path = "jupyter-oauth2"
+      #     oauth_scopes = [
+      #         "single-logout",
+      #         "hpc_infos",
+      #         "x500",
+      #         "authenticator",
+      #         "eduperson_entitlement",
+      #         "username",
+      #         "profile",
+      #     ]
 
       ## Misc Hub configs
       base_url = c.JupyterHub.get("base_url", "/")
@@ -239,11 +252,22 @@ hub:
           def claim_name(resp_json):
               name = resp_json["voperson_id"]
               return name
+      # elif fullname in ["jupyterjsc"]:
       else:
           def claim_name(resp_json):
-              name = resp_json["username_attr"]
-              safe_name = name.replace("@", "_at_")
-              return safe_name
+              secondary_account = False
+              for entitlement in resp_json.get("entitlements", []):
+                  if entitlement.endswith(":secondary"):
+                      secondary_account = True
+                      break
+              if resp_json.get("preferred_username", None) and secondary_account:
+                  return resp_json["preferred_username"] + "." + resp_json["email"].replace("@", "_at_")
+              return resp_json["email"].replace("@", "_at_")
+      # else:
+      #     def claim_name(resp_json):
+      #         name = resp_json["username_attr"]
+      #         safe_name = name.replace("@", "_at_")
+      #         return safe_name
 
       c.CustomGenericOAuthenticator.username_claim = claim_name
       c.CustomGenericOAuthenticator.scope = oauth_scopes
