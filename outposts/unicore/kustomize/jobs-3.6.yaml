@@ -286,13 +286,15 @@ data:
           module load JupyterProxy-XpraHTML5/.0.3.5-2023.3.6
         fi
         # Load MatLab Proxy module, if user is in matlab group
-        IFS=' ' read -ra groups_array <<< "$(id -Gn)"
-        for group in "${groups_array[@]}"; do
-          if [[ "$group" == "matlab" ]]; then
-            module load JupyterProxy-Matlab/.0.8.0-2023.3.6
-            break
-          fi
-        done
+        if [[ ${SYSTEMNAME} != "deep" ]]; then
+          IFS=' ' read -ra groups_array <<< "$(id -Gn)"
+          for group in "${groups_array[@]}"; do
+            if [[ "$group" == "matlab" ]]; then
+              module load JupyterProxy-Matlab/.0.8.0-2023.3.6
+              break
+            fi
+          done
+        fi
         if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
           module load JupyterExtension-nglview/3.0.6-2023.3.6
         fi
@@ -328,6 +330,8 @@ data:
       if [[ -f ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py ]]; then
         echo "$(date) - Add system specific config ..."
         send_spawn_update 85 "Add system specific configuration." "Use system specific config file ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py"
+        echo "" >> ${DIR}/config.py
+        echo "cgroup_path=\"None\"" >> ${DIR}/config.py
         echo "" >> ${DIR}/config.py
         cat ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py >> ${DIR}/config.py
         for path in ${JUPYTER_EXTRA_LABEXTENSIONS_PATH//:/$'\n'}; do
@@ -744,17 +748,19 @@ data:
           module load JupyterProxy-XpraHTML5/.0.3.5-2023.3.6
         fi
         # Load MatLab Proxy module, if user is in matlab group
-        IFS=' ' read -ra groups_array <<< "$(id -Gn)"
-        for group in "${groups_array[@]}"; do
-          if [[ "$group" == "matlab" ]]; then
-            if [[ $SYSTEMNAME == "hdfml" ]]; then
-              module load JupyterProxy-Matlab/.0.8.0-2023.3.6
-            else
-              module load JupyterProxy-Matlab/.0.9.0-2023.3.6
+        if [[ ${SYSTEMNAME} != "deep" ]]; then
+          IFS=' ' read -ra groups_array <<< "$(id -Gn)"
+          for group in "${groups_array[@]}"; do
+            if [[ "$group" == "matlab" ]]; then
+              if [[ $SYSTEMNAME == "hdfml" ]]; then
+                module load JupyterProxy-Matlab/.0.8.0-2023.3.6
+              else
+                module load JupyterProxy-Matlab/.0.9.0-2023.3.6
+              fi
+              break
             fi
-            break
-          fi
-        done
+          done
+        fi
         if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
           module load JupyterExtension-nglview/3.0.6-2023.3.6
         fi
@@ -790,6 +796,8 @@ data:
       if [[ -f ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py ]]; then
         echo "$(date) - Add system specific config ..."
         send_spawn_update 85 "Add system specific configuration." "Use system specific config file ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py"
+        echo "" >> ${DIR}/config.py
+        echo "cgroup_path=\"None\"" >> ${DIR}/config.py
         echo "" >> ${DIR}/config.py
         cat ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py >> ${DIR}/config.py
         for path in ${JUPYTER_EXTRA_LABEXTENSIONS_PATH//:/$'\n'}; do
