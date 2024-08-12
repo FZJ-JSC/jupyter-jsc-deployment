@@ -20,4 +20,4 @@ data:
     echo "module load DWave" >> ${DIR}/terminal.sh
     echo "exec \"\$SHELL\"" >> ${DIR}/terminal.sh
     chmod +x ${DIR}/terminal.sh
-    echo "terminado_settings={'shell_command': ['${DIR}/terminal.sh']}" >> ${DIR}/config.py
+    echo "terminado_settings={'shell_command': ['source ${DIR}/terminal.sh']}" >> ${DIR}/config.py
