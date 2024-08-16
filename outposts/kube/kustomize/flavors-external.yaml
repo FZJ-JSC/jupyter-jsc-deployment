@@ -31,7 +31,7 @@ data:
           mem_guarantee: "512M"
           mem_limit: "4096M"
       l2:
-        max: 40
+        max: 5
         weight: 4
         display_name: "8GB RAM, 2VCPUs, 10 hours"
         description: "JupyterLab will run for max 10 hours with 8GB RAM and 2VCPUs."
@@ -43,17 +43,17 @@ data:
           mem_guarantee: "512M"
           mem_limit: "8192M"
       workshop:
-        max: 25
+        max: 30
         weight: 11
-        display_name: "Course - 4GB RAM, 1VCPU, 10 hours"
-        description: "Course - JupyterLab will run for max 10 hours with 4GB RAM and 1VCPU."
+        display_name: "Summer School - 8GB RAM, 2VCPU, 10 hours"
+        description: "Summer School - JupyterLab will run for max 10 hours with 8GB RAM and 2VCPU."
         runtime:
           hours: 10
         resources:
           cpu_guarantee: 0.1
-          cpu_limit: 1
+          cpu_limit: 2
           mem_guarantee: "512M"
-          mem_limit: "4096M"
+          mem_limit: "8192M"
     hubs:
       default:
         jupyterhubs: ["coec", "coeraise", "euroccgcs", "portalgauss", "dev1", "dev2"]
@@ -66,7 +66,7 @@ data:
       juniq:
         jupyterhubs: ["juniq"]
         weight: 6
-        flavors: ["m1", "l1", "l2"]
+        flavors: ["m1", "l1", "workshop"]
     # users:
     #   nfdifzjstaff:
     #     hubs: ["nfdigeneral"]
