@@ -547,8 +547,9 @@ outpostConfig: |-
       spawner.log.info(f"{spawner._log_name} - {flavor_mem_request}M memory for {flavor} ({jupyterhub_name}) requested")
       base_node_name = "prod-usernode-"
       
-      first_node = True
-      outpost_mem_blocked = 1024
+      ## In this function we try to fill the first node before using the second one.
+      ## This will allow us, to reduce usernodes easier, when less users are using
+      ## the system.
       for i in range(0, 51):
           node_name = f"{base_node_name}{i}"
           try:
@@ -560,17 +561,13 @@ outpostConfig: |-
           total_mem_ki_s = node.status.allocatable.get("memory", "0Ki") # 8128016
           free_mem_mi = int(total_mem_ki_s[:-2])/1024 - int(requested_mem_mi_s[:-2])
           free_mem_m = free_mem_mi*1.04858
-          if first_node:
-              first_node = False
-              spawner.log.info(f"{spawner._log_name} - {node_name} - keep {outpost_mem_blocked} free for JupyterHub Outpost")
-              free_mem_m = free_mem_m - outpost_mem_blocked
           spawner.log.info(f"{spawner._log_name} - {node_name} has {free_mem_m}M free memory.")
           if free_mem_m > int(flavor_mem_request[:-1]):
               spawner.log.info(f"{spawner._log_name} - Use {node_name}")
               return {"kubernetes.io/hostname": node_name}
           else:
               spawner.log.info(f"{spawner._log_name} - Do not use {node_name}")
-      spawner.log.warning("{spawner._log_name} - Use kubernetes scheduler to place node")
+      spawner.log.warning("{spawner._log_name} - Use kubernetes scheduler to place pod")
       return {"usernode": "true"}
 
   async def profile_list(spawner):

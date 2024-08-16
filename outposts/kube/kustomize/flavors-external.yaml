@@ -31,7 +31,7 @@ data:
           mem_guarantee: "512M"
           mem_limit: "4096M"
       l2:
-        max: 5
+        max: 40
         weight: 4
         display_name: "8GB RAM, 2VCPUs, 10 hours"
         description: "JupyterLab will run for max 10 hours with 8GB RAM and 2VCPUs."
