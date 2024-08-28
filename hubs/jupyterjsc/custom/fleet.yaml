@@ -33,6 +33,16 @@ helm:
         enabled: true
         level: 10
 targetCustomizations:
+  - name: rke2-staging
+    clusterSelector:
+      matchLabels:
+        name: jupyter-staging
+    helm:
+      values:
+        global:
+          hostname: zam12185.zam.kfa-juelich.de
+          baseUrl: /jupyterjsc/
+          loggerName: JupyterJSCStaging
   - name: staging
     clusterSelector:
       matchLabels:
