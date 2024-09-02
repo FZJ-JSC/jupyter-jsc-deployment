@@ -1,16 +1,18 @@
-defaultnamespace: juniq
+defaultnamespace: dev1
 labels:
-  app: juniq
+  app: dev1
   component: z2jh
+kustomize:
+  dir: ./kustomize
 helm:
-  releaseName: juniq
+  releaseName: dev1
   # repo: https://jupyterhub.github.io/helm-chart/
   # chart: jupyterhub
   # version: 3.1.0
   chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.3.7.tgz
   values:
-    nameOverride: "juniq"
-    fullnameOverride: "juniq"
+    nameOverride: "dev1"
+    fullnameOverride: "dev1"
     ingress:
       # Set JupyterHub in maintenance:
       #   Set enabled here to false, update ingress in maintenance/fleet.yaml
@@ -31,25 +33,17 @@ helm:
     - ../../base-values/hub/services.yaml
   valuesFrom:
     - configMapKeyRef:
-        name: juniq-values
-        namespace: juniq
+        name: dev1-values
+        namespace: dev1
         key: values.yaml
-
-kustomize:
-  dir: ./kustomize_staging
 targetCustomizations:
   - name: production
     clusterSelector:
       matchLabels:
         stage: production
-    kustomize:
-      dir: ./kustomize_production
-    helm:
-      valuesFiles:
-        - ../../base-values/hub/image_fixed.yaml
-
+    doNotDeploy: true
 dependsOn:
   - selector:
       matchLabels:
-        app: juniq
+        app: dev1
         component: custom

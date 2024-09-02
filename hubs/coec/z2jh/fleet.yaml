@@ -2,8 +2,6 @@ defaultnamespace: coec
 labels:
   app: coec
   component: z2jh
-kustomize:
-  dir: ./kustomize
 helm:
   releaseName: coec
   # repo: https://jupyterhub.github.io/helm-chart/
@@ -36,12 +34,16 @@ helm:
         name: coec-values
         namespace: coec
         key: values.yaml
+kustomize:
+  dir: ./kustomize_staging
 
 targetCustomizations:
   - name: production
     clusterSelector:
       matchLabels:
         stage: production
+    kustomize:
+      dir: ./kustomize_production
     helm:
       valuesFiles:
         - ../../base-values/hub/image_fixed.yaml

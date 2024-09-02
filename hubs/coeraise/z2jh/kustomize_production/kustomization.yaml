@@ -1,6 +1,6 @@
 # Can be removed, once Unity was updated and has it's own two fa setup
 secretGenerator:
-- name: coec-twofa
+- name: coeraise-twofa
   literals:
   - SEND2FA_CONFIG_PATH=/mnt/shared-data/git_config/send_mail_config.json
   - TWOFA_SSH_KEY=/mnt/shared-data/twofa/twofa
@@ -12,7 +12,7 @@ secretGenerator:
   options:
     disableNameSuffixHash: true
     labels:
-      app: coec
+      app: coeraise
 
 # InitContainer list in hub component:
 # 0 - prepare-shared-data
@@ -23,48 +23,49 @@ secretGenerator:
 patches:
 - target:
     kind: Deployment
-    labelSelector: app=coec,component=hub
+    labelSelector: app=coeraise,component=hub
   patch: |-
     - op: add
       path: /spec/template/spec/initContainers/0/envFrom
       value:
         - secretRef:
-            name: coec-frontend-git
+            name: coeraise-frontend-git
     - op: add
       path: /spec/template/spec/containers/0/envFrom
       value:
         - secretRef:
-            name: coec-frontend-git
+            name: coeraise-frontend-git
     - op: add
       path: /spec/template/spec/containers/2/envFrom
       value:
         - secretRef:
-            name: coec-generics
+            name: coeraise-generics
         - secretRef:
-            name: coec-twofa
+            name: coeraise-twofa
     - op: add
       path: /spec/template/spec/volumes/-
       value:
         name: internal-ssl
         secret:
           defaultMode: 420
-          secretName: coec-internal-ssl
+          secretName: coeraise-internal-ssl
     - op: add
       path: /spec/template/spec/volumes/-
       value:
         name: persistent
-        persistentVolumeClaim:
-          claimName: coec-pvc
+        nfs:
+          path: /nfs/hubs/production/coeraise
+          server: 10.0.2.191
     - op: add
       path: /spec/template/spec/volumes/-
       value:
         name: custom-config
         configMap:
           defaultMode: 400
-          name: coec-custom-config
+          name: coeraise-custom-config
 - target:
     kind: Ingress
-    name: coec
+    name: coeraise
     group: networking.k8s.io
     version: v1
   patch: |-

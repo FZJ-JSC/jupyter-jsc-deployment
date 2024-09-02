@@ -53,8 +53,9 @@ patches:
       path: /spec/template/spec/volumes/-
       value:
         name: persistent
-        persistentVolumeClaim:
-          claimName: juniq-pvc
+        nfs:
+          path: /nfs/hubs/staging/juniq
+          server: 10.0.2.191
     - op: add
       path: /spec/template/spec/volumes/-
       value:

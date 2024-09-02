@@ -14,10 +14,3 @@ data:
     module load Python
     module load Jupyter-bundle/20240520
     # module load Cartopy/0.21.0 Cirq/1.0.0 DWave/6.3.0 PyQuil/3.3.3 Qiskit/0.41.0 pulser/0.12.0 myqlm/1.7.3 Qiskit-juqcs/0.8.0
-
-    echo "#!/bin/bash" >> ${DIR}/terminal.sh
-    echo "source /p/software/jsccloud/stages/2024/software/JupyterLab/4.2.1-GCCcore-12.3.0/bin/terminadorc" >> ${DIR}/terminal.sh
-    echo "module load DWave" >> ${DIR}/terminal.sh
-    echo "exec \"\$SHELL\"" >> ${DIR}/terminal.sh
-    chmod +x ${DIR}/terminal.sh
-    echo "terminado_settings={'shell_command': ['source ${DIR}/terminal.sh']}" >> ${DIR}/config.py

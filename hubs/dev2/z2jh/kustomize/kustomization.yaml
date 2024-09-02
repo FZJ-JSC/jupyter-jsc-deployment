@@ -1,6 +1,6 @@
 # Can be removed, once Unity was updated and has it's own two fa setup
 secretGenerator:
-- name: portalgauss-twofa
+- name: dev2-twofa
   literals:
   - SEND2FA_CONFIG_PATH=/mnt/shared-data/git_config/send_mail_config.json
   - TWOFA_SSH_KEY=/mnt/shared-data/twofa/twofa
@@ -12,7 +12,7 @@ secretGenerator:
   options:
     disableNameSuffixHash: true
     labels:
-      app: portalgauss
+      app: dev2
 
 # InitContainer list in hub component:
 # 0 - prepare-shared-data
@@ -23,48 +23,49 @@ secretGenerator:
 patches:
 - target:
     kind: Deployment
-    labelSelector: app=portalgauss,component=hub
+    labelSelector: app=dev2,component=hub
   patch: |-
     - op: add
       path: /spec/template/spec/initContainers/0/envFrom
       value:
         - secretRef:
-            name: portalgauss-frontend-git
+            name: dev2-frontend-git
     - op: add
       path: /spec/template/spec/containers/0/envFrom
       value:
         - secretRef:
-            name: portalgauss-frontend-git
+            name: dev2-frontend-git
     - op: add
       path: /spec/template/spec/containers/2/envFrom
       value:
         - secretRef:
-            name: portalgauss-generics
+            name: dev2-generics
         - secretRef:
-            name: portalgauss-twofa
+            name: dev2-twofa
     - op: add
       path: /spec/template/spec/volumes/-
       value:
         name: internal-ssl
         secret:
           defaultMode: 420
-          secretName: portalgauss-internal-ssl
+          secretName: dev2-internal-ssl
     - op: add
       path: /spec/template/spec/volumes/-
       value:
         name: persistent
-        persistentVolumeClaim:
-          claimName: portalgauss-pvc
+        nfs:
+          path: /nfs/hubs/staging/dev2
+          server: 10.0.2.191
     - op: add
       path: /spec/template/spec/volumes/-
       value:
         name: custom-config
         configMap:
           defaultMode: 400
-          name: portalgauss-custom-config
+          name: dev2-custom-config
 - target:
     kind: Ingress
-    name: portalgauss
+    name: dev2
     group: networking.k8s.io
     version: v1
   patch: |-

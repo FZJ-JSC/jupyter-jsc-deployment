@@ -1,6 +1,6 @@
 # Can be removed, once Unity was updated and has it's own two fa setup
 secretGenerator:
-- name: jupyterjsc-twofa
+- name: coec-twofa
   literals:
   - SEND2FA_CONFIG_PATH=/mnt/shared-data/git_config/send_mail_config.json
   - TWOFA_SSH_KEY=/mnt/shared-data/twofa/twofa
@@ -12,7 +12,7 @@ secretGenerator:
   options:
     disableNameSuffixHash: true
     labels:
-      app: jupyterjsc
+      app: coec
 
 # InitContainer list in hub component:
 # 0 - prepare-shared-data
@@ -23,48 +23,49 @@ secretGenerator:
 patches:
 - target:
     kind: Deployment
-    labelSelector: app=jupyterjsc,component=hub
+    labelSelector: app=coec,component=hub
   patch: |-
     - op: add
       path: /spec/template/spec/initContainers/0/envFrom
       value:
         - secretRef:
-            name: jupyterjsc-frontend-git
+            name: coec-frontend-git
     - op: add
       path: /spec/template/spec/containers/0/envFrom
       value:
         - secretRef:
-            name: jupyterjsc-frontend-git
+            name: coec-frontend-git
     - op: add
       path: /spec/template/spec/containers/2/envFrom
       value:
         - secretRef:
-            name: jupyterjsc-generics
+            name: coec-generics
         - secretRef:
-            name: jupyterjsc-twofa
+            name: coec-twofa
     - op: add
       path: /spec/template/spec/volumes/-
       value:
         name: internal-ssl
         secret:
           defaultMode: 420
-          secretName: jupyterjsc-internal-ssl
+          secretName: coec-internal-ssl
     - op: add
       path: /spec/template/spec/volumes/-
       value:
         name: persistent
-        persistentVolumeClaim:
-          claimName: jupyterjsc-pvc
+        nfs:
+          path: /nfs/hubs/production/coec
+          server: 10.0.2.191
     - op: add
       path: /spec/template/spec/volumes/-
       value:
         name: custom-config
         configMap:
           defaultMode: 400
-          name: jupyterjsc-custom-config
+          name: coec-custom-config
 - target:
     kind: Ingress
-    name: jupyterjsc
+    name: coec
     group: networking.k8s.io
     version: v1
   patch: |-
