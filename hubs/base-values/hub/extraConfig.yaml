@@ -319,6 +319,16 @@ hub:
       c.CustomJSCSpawner.check_allowed = jsc_custom.spawner.is_system_allowed
       c.CustomJSCSpawner.request_headers = jsc_custom.spawner.request_headers
       c.CustomJSCSpawner.request_kwargs = jsc_custom.spawner.request_kwargs
+
+      ## Override request_timeout for start request
+      def request_kwargs_start(spawner, user_options):
+          request_kwargs_start = jsc_custom.spawner.request_kwargs(spawner, user_options)
+          if user_options.get("system", "None") in ["LRZ", "LRZ-Staging"]:
+              request_kwargs_start["request_timeout"] = 1200
+          return request_kwargs_start
+
+      c.CustomJSCSpawner.request_kwargs_start = request_kwargs_start
+
       c.CustomJSCSpawner.request_url = jsc_custom.spawner.request_url
       c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}{base_url}hub/api"
       c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_env

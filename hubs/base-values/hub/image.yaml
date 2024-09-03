@@ -6,7 +6,7 @@ hub:
   args:
     - -c
     - >-
-      pip install --upgrade --upgrade-strategy only-if-needed jupyter-jsc-custom jupyterhub-forwardbasespawner jupyterhub-unicorespawner jupyterhub-outpostspawner &&
+      pip install --upgrade --upgrade-strategy only-if-needed jupyter-jsc-custom jupyterhub-forwardbasespawner jupyterhub-unicorespawner jupyterhub-outpostspawner==1.0.1 &&
       pip install -i https://test.pypi.org/simple/ -U --no-deps jupyter-jsc-custom==0.11.0.dev4 &&
       jupyterhub -f /usr/local/etc/jupyterhub/jupyterhub_config.py
   command:
