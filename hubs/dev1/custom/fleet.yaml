@@ -6,7 +6,7 @@ helm:
   releaseName: dev1-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.14.2
+  version: 0.14.3
   values:
     customConfig:
       reservationCheck:

@@ -83,7 +83,7 @@ data:
           git pull origin ${SHARE_BASE_GIT_BRANCH}
           cp -r ${SHARE_BASE_DIR}/* ${SHARE_COPY_DIR}/.
 
-          if [[ ${SHARE_OVERLAYS_UPDATED} -eq 1 || (${FORCE} -eq 1 && -d ${SHARE_OVERLAYS_DIR}) ]]; then
+          if [[ -n ${SHARE_OVERLAYS_GIT_REPO} ]]; then
               cd ${SHARE_OVERLAYS_DIR}
               git pull origin ${SHARE_OVERLAYS_GIT_BRANCH}
 
