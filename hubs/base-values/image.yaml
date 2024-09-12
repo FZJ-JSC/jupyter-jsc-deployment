@@ -13,7 +13,5 @@ hub:
     - /bin/bash
   image:
     pullPolicy: "Always"
-    pullSecrets:
-      - "gitlab-registry"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
     tag: 3.3.7.post6
