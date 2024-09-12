@@ -1,5 +1,0 @@
-customConfig:
-  services:
-    defaultOption: "4.2"
-  systems:
-    - JSC-Cloud

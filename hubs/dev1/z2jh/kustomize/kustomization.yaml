@@ -54,7 +54,7 @@ patches:
       value:
         name: persistent
         nfs:
-          path: /nfs/hubs/staging/dev1
+          path: /nfs/hubs/rke2/staging/dev1
           server: 10.0.2.191
     - op: add
       path: /spec/template/spec/volumes/-
