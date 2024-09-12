@@ -3,7 +3,7 @@ labels:
   app: dev1
   component: z2jh
 kustomize:
-  dir: ../../base-values/kustomize
+  dir: ./kustomize
 helm:
   releaseName: dev1
   # repo: https://jupyterhub.github.io/helm-chart/
