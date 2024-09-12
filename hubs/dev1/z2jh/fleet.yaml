@@ -33,9 +33,9 @@ helm:
             cpu: 300m
             memory: 1024Mi
   valuesFiles:
-    - ../../base-values/hub/extraConfig.yaml
-    - ../../base-values/hub/image.yaml
-    # - ../../base-values/hub/resources_default.yaml
+    - ../../base-values/extraConfig.yaml
+    - ../../base-values/image.yaml
+    # - ../../base-values/resources_default.yaml
   valuesFrom:
     - configMapKeyRef:
         name: values
