@@ -7,7 +7,7 @@
 patches:
 - target:
     kind: Deployment
-    labelSelector: app=dev1,component=hub
+    labelSelector: component=hub
   patch: |-
     - op: add
       path: /spec/template/spec/containers/2/envFrom
