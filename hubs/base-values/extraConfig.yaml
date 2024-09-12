@@ -7,8 +7,6 @@ hub:
 
       ## Generic information
       fullname = get_name("fullname")
-      app_name_dash = get_name("fullname-dash")
-      app_name_dash_hub = get_name("hub")
       namespace = os.environ.get("POD_NAMESPACE", "default")
       jupyterhub_host = get_name("hub")
       if fullname in ["nfdigeneral"]:
@@ -169,9 +167,9 @@ hub:
 
       ## SSL
       c.JupyterHub.trusted_alt_names = [
-          f"DNS:{app_name_dash_hub}",
-          f"DNS:{app_name_dash}proxy-public",
-          f"DNS:{app_name_dash}proxy-public.{namespace}.svc",
+          f"DNS:hub",
+          f"DNS:proxy-public",
+          f"DNS:proxy-public.{namespace}.svc",
           f"DNS:{jhub_hostname}",
           "DNS:jrlogin01i",
           "DNS:jrlogin02i",
