@@ -11,7 +11,3 @@ hub:
       /src/entrypoint.sh
   command:
     - /bin/bash
-  containerSecurityContext:
-    runAsUser: 0
-    runAsGroup: 0
-    allowPrivilegeEscalation: true

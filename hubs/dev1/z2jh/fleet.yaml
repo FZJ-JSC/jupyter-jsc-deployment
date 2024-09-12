@@ -11,29 +11,34 @@ helm:
   # version: 3.1.0
   chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.3.7.tgz
   values:
-    nameOverride: "dev1"
-    fullnameOverride: "dev1"
     ingress:
       # Set JupyterHub in maintenance:
       #   Set enabled here to false, update ingress in maintenance/fleet.yaml
       enabled: true
     hub:
-      resources: {}
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: 300m
+          memory: 1024Mi
     proxy:
       chp:
-        resources: {}
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 300m
+            memory: 1024Mi
   valuesFiles:
-    - ../../base-values/common.yaml
-    - ../../base-values/proxy.yaml
-    - ../../base-values/hub/config.yaml
-    - ../../base-values/hub/image.yaml
     - ../../base-values/hub/extraConfig.yaml
-    - ../../base-values/hub/extraVolumeMounts.yaml
-    - ../../base-values/hub/others.yaml
-    - ../../base-values/hub/services.yaml
+    - ../../base-values/hub/image.yaml
+    # - ../../base-values/hub/resources_default.yaml
   valuesFrom:
     - configMapKeyRef:
-        name: dev1-values
+        name: values
         namespace: dev1
         key: values.yaml
 targetCustomizations:

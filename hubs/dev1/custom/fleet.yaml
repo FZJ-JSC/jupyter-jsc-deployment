@@ -3,27 +3,14 @@ labels:
   app: dev1
   component: custom
 helm:
-  releaseName: dev1-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.14.3
+  version: 0.15.0-alpha.2
   values:
     customConfig:
       reservationCheck:
         addUsers: ["petrova1", "kreuzer1"]
         setAllActive: true
-      backendServices:
-        outpostKubeJSCCloud:
-          flavorsRequired: true
-          userflavors: true
-      authStateKeys:
-        - services
-        - userModules
-        - announcement
-        - groups
-        - systems
-        - incidentCheck
-        - backendServices
     fullnameOverride: dev1-custom
     global:
       name: dev1

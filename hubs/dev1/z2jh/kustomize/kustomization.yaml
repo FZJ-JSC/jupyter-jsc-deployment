@@ -10,27 +10,10 @@ patches:
     labelSelector: app=dev1,component=hub
   patch: |-
     - op: add
-      path: /spec/template/spec/initContainers/0/envFrom
-      value:
-        - secretRef:
-            name: dev1-frontend-git
-    - op: add
-      path: /spec/template/spec/containers/0/envFrom
-      value:
-        - secretRef:
-            name: dev1-frontend-git
-    - op: add
       path: /spec/template/spec/containers/2/envFrom
       value:
         - secretRef:
-            name: dev1-generics
-    - op: add
-      path: /spec/template/spec/volumes/-
-      value:
-        name: internal-ssl
-        secret:
-          defaultMode: 420
-          secretName: dev1-internal-ssl
+            name: generics
     - op: add
       path: /spec/template/spec/volumes/-
       value:
@@ -38,13 +21,6 @@ patches:
         nfs:
           path: /nfs/hubs/rke2/staging/dev1
           server: 10.0.2.191
-    - op: add
-      path: /spec/template/spec/volumes/-
-      value:
-        name: custom-config
-        configMap:
-          defaultMode: 400
-          name: dev1-custom-config
 - target:
     kind: Ingress
     name: dev1
