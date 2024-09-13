@@ -1,1 +1,3 @@
 defaultNamespace: jupyter
+labels:
+  jupyter-namespace-creator: true
