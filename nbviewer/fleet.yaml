@@ -74,3 +74,8 @@ targetCustomizations:
                 - docs.jupyter.jsc.fz-juelich.de
         labels:
           hostname: jupyter.jsc.fz-juelich.de
+
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: true
