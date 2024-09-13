@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: modules-user-defaulthub-3-4
+  namespace: outpost
+data:
+  load_jupyter_modules.sh: |
+    #!/bin/bash
+
+    if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Bash/.0.7.2-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Cling/.0.9-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_JAVASCRIPT_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-JavaScript/.5.2.1-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Julia/.1.7.1-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_OCTAVE_ENABLED  -eq 1 ]]; then
+      module load JupyterKernel-Octave/.6.4.0-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyDeepLearning/.1.1-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyQuantum/.3.0-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyVisualization/.1.0-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-R/.4.1.2-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Ruby/.3.0.1-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
+      module load JupyterProxy-XpraHTML5/.0.3.5-2022.3.4
+    fi
+    if [[ $JUPYTER_MODULE_NVDASHBOARD_ENABLED -eq 1 ]]; then
+      module load JupyterExtension-nvdashboard/0.7.0-2022.3.4
+    fi

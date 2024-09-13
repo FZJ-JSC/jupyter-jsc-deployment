@@ -1,22 +1,18 @@
-defaultNamespace: dev1
+defaultNamespace: dev2
 labels:
-  app: dev1
+  app: dev2
   component: custom
 helm:
+  releaseName: dev2-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
   version: 0.15.0-alpha.10
   values:
-    customConfig:
-      reservationCheck:
-        addUsers: ["petrova1", "kreuzer1"]
-        setAllActive: true
-    fullnameOverride: dev1-custom
+    fullnameOverride: dev2-custom
     global:
-      name: dev1
-      namespace: dev1
-      hostname: jupyter-jsc-dev1.fz-juelich.de
-      loggerName: JSCCloudDev1Staging
+      name: dev2
+      namespace: dev2
+      loggerName: JupyterDev2
     ingress:
       enabled: true
     jupyter-metrics:
@@ -34,7 +30,8 @@ targetCustomizations:
       values:
         global:
           hostname: zam12246.zam.kfa-juelich.de
-          baseUrl: /dev1/
-          loggerName: JupyterDev1
+          # hostname: jupyter-jsc-dev2.fz-juelich.de
+          baseUrl: /dev2/
+          loggerName: JupyterDev2
         nfs:
-          path: /nfs/hubs/rke2/staging/dev1
+          path: /nfs/hubs/rke2/staging/coec

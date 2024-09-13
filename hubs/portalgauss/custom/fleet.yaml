@@ -1,0 +1,60 @@
+defaultNamespace: portalgauss
+labels:
+  app: portalgauss
+  component: custom
+helm:
+  releaseName: portalgauss-custom
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyter-hub-customizations
+  version: 0.15.0-alpha.10
+  values:
+    fullnameOverride: portalgauss-custom
+    global:
+      name: portalgauss
+      namespace: portalgauss
+    ingress:
+      enabled: true
+    jupyter-metrics:
+      enabled: true
+    logging:
+      syslog:
+        enabled: true
+        level: 10
+    customConfig:
+      systems:
+        - JSC-Cloud
+        - LRZ
+      backendServices:
+        outpostKubeLRZStaging:
+          # flavorsRequired: false
+          # userflavors: false
+          urls:
+            services: http://vm-138-246-238-21.cloud.mwn.de:8080/services
+          requestKwargs:
+            request_timeout: 180
+        outpostKubeLRZ:
+          flavorsRequired: false
+          userflavors: false
+          urls:
+            services: http://vm-138-246-237-228.cloud.mwn.de:8080/services
+          requestKwargs:
+            request_timeout: 180
+targetCustomizations:
+  - name: jupyter-stag
+    clusterSelector:
+      matchLabels:
+        name: jupyter-stag
+    helm:
+      values:
+        customConfig:
+          systems:
+            - JSC-Cloud
+            - LRZ-Staging
+            - LRZ
+        global:
+          hostname: zam12246.zam.kfa-juelich.de
+          # hostname: portal-staging.gauss-centre.eu
+          baseUrl: /portalgauss/
+          loggerName: PortalGaussStaging
+        nfs:
+          path: /nfs/hubs/rke2/staging/portalgauss

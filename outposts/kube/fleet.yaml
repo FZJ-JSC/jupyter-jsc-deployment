@@ -1,0 +1,21 @@
+defaultNamespace: outpost
+kustomize:
+  dir: ./kustomize
+helm:
+  releaseName: kube
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyterhub-outpost
+  version: 1.0.4
+  valuesFiles:
+    - values/base/misc.yaml
+    - values/base/config.yaml
+targetCustomizations:
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        name: jupyter-stag
+    helm:
+      values:
+        extraEnvVars:
+          - name: STAGE
+            value: "staging"

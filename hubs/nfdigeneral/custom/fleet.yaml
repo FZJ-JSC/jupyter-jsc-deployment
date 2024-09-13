@@ -1,0 +1,48 @@
+defaultNamespace: nfdigeneral
+labels:
+  app: nfdigeneral
+  component: custom
+helm:
+  releaseName: nfdigeneral-custom
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyter-hub-customizations
+  version: 0.15.0-alpha.10
+  values:
+    fullnameOverride: nfdigeneral-custom
+    global:
+      name: nfdigeneral
+      namespace: nfdigeneral
+    oauthSecret: hdfaai-credentials
+    ingress:
+      enabled: true
+    jupyter-metrics:
+      enabled: true
+    logging:
+      syslog:
+        enabled: true
+        level: 10
+    customConfig:
+      services:
+        defaultOption: "4.2"
+      systems:
+        - JSC-Cloud
+        - MPCDF
+targetCustomizations:
+  - name: jupyter-stag
+    clusterSelector:
+      matchLabels:
+        name: jupyter-stag
+    helm:
+      valuesFiles:
+        - groups_staging.yaml
+      values:
+        customConfig:
+          announcement:
+            show: true
+            title: "Jupyter4NFDI - Staging Instance"
+            body: "This instance is only used for testing."
+        global:
+          hostname: hub-staging.nfdi-jupyter.de
+          loggerName: NFDIGeneralStaging
+        nfs:
+          path: /nfs/hubs/rke2/staging/nfdigeneral

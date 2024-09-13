@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: modules-user-juniq-3-6
+  namespace: outpost
+data:
+  load_jupyter_modules.sh: |
+    #!/bin/bash
+
+    if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Bash/.0.9.0-2023.3.6
+    fi
+    if [[ $JUPYTER_MODULE_OCTAVE_ENABLED  -eq 1 ]]; then
+      module load JupyterKernel-Octave/.8.2.0-2023.3.6
+    fi
+    if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyQuantum/.2023.5-2023.3.6
+    fi
+    if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-R/.4.2.1-2023.3.6
+    fi
+    if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
+      module load JupyterProxy-XpraHTML5/.0.3.5-2023.3.6
+    fi
