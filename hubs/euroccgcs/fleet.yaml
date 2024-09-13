@@ -1,1 +1,6 @@
 defaultnamespace: euroccgcs
+
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: "true"

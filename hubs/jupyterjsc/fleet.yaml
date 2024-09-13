@@ -1,1 +1,6 @@
 defaultnamespace: jupyterjsc
+
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: "true"

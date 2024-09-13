@@ -1,1 +1,6 @@
 defaultnamespace: juniq
+
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: "true"

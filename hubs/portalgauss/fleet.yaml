@@ -1,1 +1,6 @@
 defaultnamespace: portalgauss
+
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: "true"

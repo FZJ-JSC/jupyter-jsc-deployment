@@ -1,1 +1,6 @@
 defaultnamespace: coeraise
+
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: "true"

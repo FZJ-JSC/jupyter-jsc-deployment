@@ -1,1 +1,6 @@
 defaultnamespace: nfdigeneral
+
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: "true"
