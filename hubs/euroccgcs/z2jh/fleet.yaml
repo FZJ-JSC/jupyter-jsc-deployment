@@ -33,7 +33,7 @@ targetCustomizations:
       dir: ./kustomize_production
     helm:
       valuesFiles:
-        - ../../base-values/hub/image_fixed.yaml
+        - ../../base-values/image_fixed.yaml
 
 dependsOn:
   - selector:
