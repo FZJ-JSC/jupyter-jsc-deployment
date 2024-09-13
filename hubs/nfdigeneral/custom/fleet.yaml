@@ -46,3 +46,7 @@ targetCustomizations:
           loggerName: NFDIGeneralStaging
         nfs:
           path: /nfs/hubs/rke2/staging/nfdigeneral
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: true

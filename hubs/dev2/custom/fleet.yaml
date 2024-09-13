@@ -34,4 +34,8 @@ targetCustomizations:
           baseUrl: /dev2/
           loggerName: JupyterDev2
         nfs:
-          path: /nfs/hubs/rke2/staging/coec
+          path: /nfs/hubs/rke2/staging/dev2
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: true

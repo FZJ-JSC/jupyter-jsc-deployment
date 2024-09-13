@@ -34,3 +34,7 @@ targetCustomizations:
           loggerName: JuniqStaging
         nfs:
           path: /nfs/hubs/rke2/staging/juniq
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: true

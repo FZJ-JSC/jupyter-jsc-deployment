@@ -1,3 +1,5 @@
 defaultNamespace: jupyter
-labels:
-  jupyter-namespace-creator: true
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: true

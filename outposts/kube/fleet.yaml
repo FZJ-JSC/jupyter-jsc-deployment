@@ -19,3 +19,8 @@ targetCustomizations:
         extraEnvVars:
           - name: STAGE
             value: "staging"
+
+dependsOn:
+  - selector:
+      matchLabels:
+        create-database: true
