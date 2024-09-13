@@ -33,8 +33,6 @@ targetCustomizations:
       matchLabels:
         name: jupyter-stag
     helm:
-      valuesFiles:
-        - groups_staging.yaml
       values:
         customConfig:
           announcement:
