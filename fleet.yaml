@@ -1,4 +1,6 @@
 defaultNamespace: jupyter
+labels:
+  jupyter-ready: "true"
 dependsOn:
   - selector:
       matchLabels:

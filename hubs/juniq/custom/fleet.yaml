@@ -37,4 +37,4 @@ targetCustomizations:
 dependsOn:
   - selector:
       matchLabels:
-        create-database: "true"
+        jupyter-ready: "true"

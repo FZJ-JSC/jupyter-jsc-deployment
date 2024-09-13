@@ -3,4 +3,4 @@ defaultnamespace: dev2
 dependsOn:
   - selector:
       matchLabels:
-        create-database: "true"
+        jupyter-ready: "true"
