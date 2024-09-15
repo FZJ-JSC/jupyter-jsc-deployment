@@ -5,7 +5,7 @@ labels:
 helm:
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.0-alpha.10
+  version: 0.15.0-alpha.11
   values:
     customConfig:
       reservationCheck:
