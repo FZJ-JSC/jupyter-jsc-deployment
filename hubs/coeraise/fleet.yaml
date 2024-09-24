@@ -3,4 +3,4 @@ defaultnamespace: coeraise
 dependsOn:
   - selector:
       matchLabels:
-        create-database: "true"
+        create-namespaces: "true"
