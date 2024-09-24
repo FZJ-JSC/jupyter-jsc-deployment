@@ -1,3 +1,4 @@
 /hubs/**/orig_secrets
 /outposts/**/orig_secrets
 /tunnel/orig_secrets
+/nbviewer/orig_secrets
