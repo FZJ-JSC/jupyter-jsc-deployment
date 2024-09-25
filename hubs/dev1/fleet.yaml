@@ -1,6 +1,14 @@
 defaultnamespace: dev1
-
+doNotDeploy: true
 dependsOn:
   - selector:
       matchLabels:
         create-namespaces: "true"
+
+doNotDeploy: true
+targetCustomization:
+  - name: jupyter-stag
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    doNotDeploy: false

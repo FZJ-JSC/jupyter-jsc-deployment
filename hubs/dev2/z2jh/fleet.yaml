@@ -24,16 +24,13 @@ helm:
         namespace: dev2
         key: values.yaml
 
+doNotDeploy: true
 targetCustomizations:
-  - name: production
+  - name: staging
     clusterSelector:
       matchLabels:
-        stage: production
-    kustomize:
-      dir: ./kustomize_production
-    helm:
-      valuesFiles:
-        - ../../base-values/image_fixed.yaml
+        stage: staging
+    doNotDeploy: false
 
 dependsOn:
   - selector:

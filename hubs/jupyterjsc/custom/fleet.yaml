@@ -6,7 +6,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.0-alpha.11
+  version: 0.15.0
   values:
     fullnameOverride: jupyterjsc-custom
     global:
@@ -36,32 +36,24 @@ targetCustomizations:
   - name: jupyter-stag
     clusterSelector:
       matchLabels:
-        name: jupyter-stag
-    helm:
-      values:
-        global:
-          hostname: zam12246.zam.kfa-juelich.de
-          baseUrl: /jupyterjsc/
-          loggerName: JupyterJSCStaging
-        nfs:
-          path: /nfs/hubs/rke2/staging/jupyterjsc
-        # redirects:
-        #   - name: "staging"
-        #     oldHost: "jupyter-jsc-staging.fz-juelich.de"
-        #     newHost: "jupyter-staging.jsc.fz-juelich.de"
-          #- name: "staging-nbviewer"
-          #  oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
-          #  newHost: "docs.jupyter-staging.jsc.fz-juelich.de"
-  - name: staging
-    clusterSelector:
-      matchLabels:
         stage: staging
     helm:
       values:
         global:
+          # hostname: zam12246.zam.kfa-juelich.de
           hostname: jupyter-staging.jsc.fz-juelich.de
+          baseUrl: /
           loggerName: JupyterJSCStaging
-  - name: production
+        nfs:
+          path: /nfs/hubs/rke2/staging/jupyterjsc
+        redirects:
+          - name: "staging"
+            oldHost: "jupyter-jsc-staging.fz-juelich.de"
+            newHost: "jupyter-staging.jsc.fz-juelich.de"
+          - name: "staging-nbviewer"
+           oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
+           newHost: "docs.jupyter-staging.jsc.fz-juelich.de"
+  - name: jupyter-prod
     clusterSelector:
       matchLabels:
         stage: production
@@ -69,7 +61,9 @@ targetCustomizations:
       values:
         global:
           hostname: jupyter.jsc.fz-juelich.de
-          loggerName: JupyterJSCProduction
+          loggerName: JupyterJSC
+        nfs:
+          path: /nfs/hubs/rke2/production/jupyterjsc
         redirects:
           - name: "production"
             oldHost: "jupyter-jsc.fz-juelich.de"

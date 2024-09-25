@@ -24,7 +24,6 @@ hub:
               "email",
               "profile",
           ]
-      # elif fullname in ["jupyterjsc"]:
       else:
           oauth_host = "login.jsc.fz-juelich.de"
           oauth_path = "oauth2"
@@ -37,18 +36,6 @@ hub:
               "voperson_id",
               "entitlements"
           ]
-      # else:
-      #     oauth_host = "unity-jsc.fz-juelich.de"
-      #     oauth_path = "jupyter-oauth2"
-      #     oauth_scopes = [
-      #         "single-logout",
-      #         "hpc_infos",
-      #         "x500",
-      #         "authenticator",
-      #         "eduperson_entitlement",
-      #         "username",
-      #         "profile",
-      #     ]
 
       ## Misc Hub configs
       base_url = c.JupyterHub.get("base_url", "/")

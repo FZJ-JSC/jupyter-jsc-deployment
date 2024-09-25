@@ -29,8 +29,6 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-    kustomize:
-      dir: ./kustomize_production
     helm:
       valuesFiles:
         - ../../base-values/image_fixed.yaml
