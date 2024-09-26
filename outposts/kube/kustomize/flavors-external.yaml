@@ -9,10 +9,10 @@ data:
       m1:
         max: -1
         weight: 10
-        display_name: "2GB RAM, 1VCPU, 5 days"
-        description: "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
+        display_name: "2GB RAM, 1VCPU, 7 days"
+        description: "JupyterLab will run for max 7 days with 2GB RAM and 1VCPU."
         runtime:
-          days: 5
+          days: 7
         resources:
           cpu_guarantee: 0.1
           cpu_limit: 1
@@ -43,8 +43,8 @@ data:
           mem_guarantee: "512M"
           mem_limit: "8192M"
       workshop:
-        max: 30
-        weight: 11
+        max: 10
+        weight: 1
         display_name: "Summer School - 8GB RAM, 2VCPU, 10 hours"
         description: "Summer School - JupyterLab will run for max 10 hours with 8GB RAM and 2VCPU."
         runtime:
@@ -66,7 +66,7 @@ data:
       juniq:
         jupyterhubs: ["juniq"]
         weight: 6
-        flavors: ["m1", "l1", "workshop"]
+        flavors: ["m1", "l1", "l2"]
     # users:
     #   nfdifzjstaff:
     #     hubs: ["nfdigeneral"]
