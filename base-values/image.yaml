@@ -3,11 +3,11 @@ hub:
   #    cp -rp /mnt/reservation-keypair/..data/* /mnt/reservation_key/. &&
   #    chown 1000:1000 -R /mnt/reservation_key &&
   #    chmod 400 /mnt/reservation_key/* &&
+  # pip install -i https://test.pypi.org/simple/ -U --no-deps  &&
   args:
     - -c
     - >-
-      pip install --upgrade --upgrade-strategy only-if-needed jupyter-jsc-custom jupyterhub-forwardbasespawner jupyterhub-unicorespawner jupyterhub-outpostspawner==1.0.1 &&
-      pip install -i https://test.pypi.org/simple/ -U --no-deps jupyter-jsc-custom==0.11.0.dev4 &&
+      pip install --upgrade --upgrade-strategy only-if-needed jupyterhub-forwardbasespawner jupyterhub-unicorespawner jupyterhub-outpostspawner==1.0.1 jupyter-jsc-custom==0.11.0 &&
       jupyterhub -f /usr/local/etc/jupyterhub/jupyterhub_config.py
   command:
     - /bin/bash
