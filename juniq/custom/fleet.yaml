@@ -37,7 +37,7 @@ targetCustomizations:
       values:
         global:
           # hostname: zam12246.zam.kfa-juelich.de
-          hostname: juniq-staging.jsc.fz-juelich.de
+          hostname: juniq-staging.fz-juelich.de
           baseUrl: /
           loggerName: JuniqStaging
         nfs:
@@ -50,7 +50,7 @@ targetCustomizations:
       values:
         global:
           # hostname: zam12246.zam.kfa-juelich.de
-          hostname: juniq.jsc.fz-juelich.de
+          hostname: juniq.fz-juelich.de
           baseUrl: /
           loggerName: Juniq
         nfs:
