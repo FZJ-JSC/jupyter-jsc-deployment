@@ -1,7 +1,23 @@
 defaultnamespace: dev2
+
 labels:
   app: dev2
   component: z2jh
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: dev2
+        component: custom
+  - selector:
+      matchLabels:
+        app: dev2
+        component: secrets
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+
 kustomize:
   dir: ./kustomize
 helm:
@@ -24,16 +40,9 @@ helm:
         namespace: dev2
         key: values.yaml
 
-doNotDeploy: true
 targetCustomizations:
-  - name: staging
+  - name: jupyter-prod
     clusterSelector:
       matchLabels:
-        stage: staging
-    doNotDeploy: false
-
-dependsOn:
-  - selector:
-      matchLabels:
-        app: dev2
-        component: custom
+        stage: production
+    doNotDeploy: true

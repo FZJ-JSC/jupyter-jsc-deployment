@@ -1,0 +1,4 @@
+resources:
+- generics.yaml
+- keypairs.yaml
+- passwds.yaml

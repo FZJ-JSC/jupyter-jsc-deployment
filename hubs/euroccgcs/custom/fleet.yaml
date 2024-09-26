@@ -1,7 +1,15 @@
 defaultNamespace: euroccgcs
+
 labels:
   app: euroccgcs
   component: custom
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+
 helm:
   releaseName: euroccgcs-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
@@ -47,7 +55,3 @@ targetCustomizations:
           loggerName: EuroCCGCS
         nfs:
           path: /nfs/hubs/rke2/production/euroccgcs
-dependsOn:
-  - selector:
-      matchLabels:
-        create-namespaces: "true"

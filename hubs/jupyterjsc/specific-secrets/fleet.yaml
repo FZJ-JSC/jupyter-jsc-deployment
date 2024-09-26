@@ -1,0 +1,11 @@
+defaultnamespace: jupyterjsc
+
+labels:
+  app: jupyterjsc
+  component: custom
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces

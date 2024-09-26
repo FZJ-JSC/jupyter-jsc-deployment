@@ -1,8 +1,15 @@
 defaultNamespace: dev2
-doNotDeploy: true
+
 labels:
   app: dev2
   component: custom
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+
 helm:
   releaseName: dev2-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
@@ -23,6 +30,11 @@ helm:
         enabled: true
         level: 10
 targetCustomizations:
+  - name: jupyter-prod
+    clusterSelector:
+      matchLabels:
+        stage: production
+    doNotDeploy: true
   - name: jupyter-stag
     clusterSelector:
       matchLabels:
@@ -36,8 +48,3 @@ targetCustomizations:
           loggerName: JupyterDev2
         nfs:
           path: /nfs/hubs/rke2/staging/dev2
-    doNotDeploy: false
-dependsOn:
-  - selector:
-      matchLabels:
-        create-namespaces: "true"

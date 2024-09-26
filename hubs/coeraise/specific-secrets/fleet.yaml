@@ -1,0 +1,24 @@
+defaultnamespace: coeraise
+labels:
+  app: coeraise
+  component: secrets
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+
+targetCustomizations:
+- name: jupyter-stag
+  clusterSelector:
+    matchLabels:
+      stage: staging
+  kustomize:
+    dir: overlays/staging
+- name: jupyter-prod
+  clusterSelector:
+    matchLabels:
+      stage: production
+  kustomize:
+    dir: overlays/production

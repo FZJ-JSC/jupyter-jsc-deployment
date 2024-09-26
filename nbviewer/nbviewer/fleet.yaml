@@ -1,4 +1,19 @@
 defaultnamespace: jupyter
+
+labels:
+  app: nbviewer
+  component: main
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+  - selector:
+      matchLabels:
+        app: nbviewer
+        component: secrets
+
 helm:
   values:
     image:
@@ -11,32 +26,12 @@ helm:
       annotations:
         acme.cert-manager.io/http01-edit-in-place: "false"
         cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
+
 targetCustomizations:
-  - name: jupyter-stag-rke2
-    clusterSelector:
-      matchLabels:
-        name: jupyter-stag
-    helm:
-      values:
-        ingress:
-          hosts:
-            - host: zam12246.zam.kfa-juelich.de
-              paths:
-                - path: /nbviewer
-                  pathType: Prefix
-              svcName: nbviewer
-              svcPort: 8080
-          tls:
-            - secretName: jupyter-jsc-certs
-              hosts:
-                - zam12246.zam.kfa-juelich.de
-        labels:
-          hostname: zam12246.zam.kfa-juelich.de
-  - name: staging
+  - name: jupyter-stag
     clusterSelector:
       matchLabels:
         stage: staging
-        app: jupyter
     helm:
       values:
         ingress:
@@ -57,7 +52,6 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        provider.cattle.io: rke
     helm:
       values:
         ingress:
@@ -74,8 +68,3 @@ targetCustomizations:
                 - docs.jupyter.jsc.fz-juelich.de
         labels:
           hostname: jupyter.jsc.fz-juelich.de
-
-dependsOn:
-  - selector:
-      matchLabels:
-        create-namespaces: "true"

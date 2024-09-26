@@ -1,7 +1,23 @@
 defaultnamespace: jupyterjsc
+
 labels:
   app: jupyterjsc
   component: z2jh
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: jupyterjsc
+        component: custom
+  - selector:
+      matchLabels:
+        app: jupyterjsc
+        component: secrets
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+
 kustomize:
   dir: ./kustomize
 helm:
@@ -32,9 +48,3 @@ targetCustomizations:
     helm:
       valuesFiles:
         - ../../base-values/image_fixed.yaml
-
-dependsOn:
-  - selector:
-      matchLabels:
-        app: jupyterjsc
-        component: custom

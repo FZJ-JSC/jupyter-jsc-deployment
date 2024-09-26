@@ -1,4 +1,19 @@
 defaultNamespace: outpost
+
+labels:
+  app: kubeoutpost
+  component: main
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+  - selector:
+      matchLabels:
+        app: kubeoutpost
+        component: secrets
+
 kustomize:
   dir: ./kustomize
 helm:
@@ -48,8 +63,3 @@ targetCustomizations:
               secretKeyRef:
                 name: outpost.kubeoutpost.postgresql.credentials.postgresql.acid.zalan.do
                 key: password
-
-dependsOn:
-  - selector:
-      matchLabels:
-        create-namespaces: "true"

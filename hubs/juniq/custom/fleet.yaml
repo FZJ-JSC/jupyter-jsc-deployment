@@ -1,7 +1,15 @@
 defaultNamespace: juniq
+
 labels:
   app: juniq
   component: custom
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+
 helm:
   releaseName: juniq-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
@@ -47,7 +55,3 @@ targetCustomizations:
           loggerName: Juniq
         nfs:
           path: /nfs/hubs/rke2/production/juniq
-dependsOn:
-  - selector:
-      matchLabels:
-        create-namespaces: "true"

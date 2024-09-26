@@ -1,0 +1,24 @@
+defaultnamespace: dev1
+
+labels:
+  app: dev1
+  component: secrets
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+
+targetCustomizations:
+- name: jupyter-stag
+  clusterSelector:
+    matchLabels:
+      stage: staging
+  kustomize:
+    dir: overlays/staging
+- name: jupyter-prod
+  clusterSelector:
+    matchLabels:
+      stage: production
+  doNotDeploy: true

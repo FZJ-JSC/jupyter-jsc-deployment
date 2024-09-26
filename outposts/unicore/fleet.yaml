@@ -1,4 +1,20 @@
 defaultNamespace: unicore
+
+labels:
+  app: unicoreoutpost
+  component: main
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+  - selector:
+      matchLabels:
+        app: unicoreoutpost
+        component: secrets
+
+
 kustomize:
   dir: ./kustomize
 helm:
@@ -48,8 +64,3 @@ targetCustomizations:
               secretKeyRef:
                 name: unicore.unicoreoutpost.postgresql.credentials.postgresql.acid.zalan.do
                 key: password
-
-dependsOn:
-  - selector:
-      matchLabels:
-        create-namespaces: "true"

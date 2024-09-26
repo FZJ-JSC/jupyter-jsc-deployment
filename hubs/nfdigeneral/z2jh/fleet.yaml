@@ -1,7 +1,23 @@
 defaultnamespace: nfdigeneral
+
 labels:
   app: nfdigeneral
   component: z2jh
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: nfdigeneral
+        component: custom
+  - selector:
+      matchLabels:
+        app: nfdigeneral
+        component: secrets
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+
 kustomize:
   dir: ./kustomize
 helm:
@@ -32,9 +48,3 @@ targetCustomizations:
     helm:
       valuesFiles:
         - ../../base-values/image_fixed.yaml
-
-dependsOn:
-  - selector:
-      matchLabels:
-        app: nfdigeneral
-        component: custom

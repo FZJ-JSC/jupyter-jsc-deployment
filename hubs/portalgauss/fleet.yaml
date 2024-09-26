@@ -1,6 +1,0 @@
-defaultnamespace: portalgauss
-
-dependsOn:
-  - selector:
-      matchLabels:
-        create-namespaces: "true"

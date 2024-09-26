@@ -1,7 +1,15 @@
 defaultNamespace: jupyterjsc
+
 labels:
   app: jupyterjsc
   component: custom
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+
 helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
@@ -71,8 +79,3 @@ targetCustomizations:
           - name: "production-nbviewer"
             oldHost: "docs.jupyter-jsc.fz-juelich.de"
             newHost: "docs.jupyter.jsc.fz-juelich.de"
-
-dependsOn:
-  - selector:
-      matchLabels:
-        create-namespaces: "true"

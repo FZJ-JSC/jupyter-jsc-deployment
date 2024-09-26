@@ -1,5 +1,0 @@
-defaultNamespace: jupyter
-dependsOn:
-  - selector:
-      matchLabels:
-        create-namespaces: "true"

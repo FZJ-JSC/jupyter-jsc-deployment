@@ -1,4 +1,19 @@
 defaultNamespace: jupyter
+
+labels:
+  app: tunnel
+  component: main
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+  - selector:
+      matchLabels:
+        app: tunnel
+        component: secrets
+
 helm:
   releaseName: tunnel
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
@@ -35,8 +50,3 @@ diff:
       helm.sh/chart-name: jupyter-tunnel
     operations:
     - {"op":"remove", "path":"/spec/replicas"}
-
-dependsOn:
-  - selector:
-      matchLabels:
-        create-namespaces: "true"
