@@ -12,3 +12,17 @@ dependsOn:
   - selector:
       matchLabels:
         app: sealed-secrets
+
+targetCustomizations:
+- name: jupyter-stag
+  clusterSelector:
+    matchLabels:
+      stage: staging
+  kustomize:
+    dir: overlays/staging
+- name: jupyter-prod
+  clusterSelector:
+    matchLabels:
+      stage: production
+  kustomize:
+    dir: overlays/production
