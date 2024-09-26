@@ -2,7 +2,7 @@ defaultnamespace: jupyterjsc
 
 labels:
   app: jupyterjsc
-  component: custom
+  component: secrets
 
 dependsOn:
   - selector:
