@@ -8,10 +8,6 @@ dependsOn:
   - selector:
       matchLabels:
         app: coec
-        component: custom
-  - selector:
-      matchLabels:
-        app: coec
         component: secrets
   - selector:
       matchLabels:

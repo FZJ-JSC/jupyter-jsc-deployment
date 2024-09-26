@@ -8,10 +8,6 @@ dependsOn:
   - selector:
       matchLabels:
         app: dev2
-        component: custom
-  - selector:
-      matchLabels:
-        app: dev2
         component: secrets
   - selector:
       matchLabels:

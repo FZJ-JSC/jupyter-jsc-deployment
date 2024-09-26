@@ -8,10 +8,6 @@ dependsOn:
   - selector:
       matchLabels:
         app: jupyterjsc
-        component: custom
-  - selector:
-      matchLabels:
-        app: jupyterjsc
         component: secrets
   - selector:
       matchLabels:

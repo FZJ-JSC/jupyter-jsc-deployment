@@ -8,10 +8,6 @@ dependsOn:
   - selector:
       matchLabels:
         app: coeraise
-        component: custom
-  - selector:
-      matchLabels:
-        app: coeraise
         component: secrets
   - selector:
       matchLabels:

@@ -8,10 +8,6 @@ dependsOn:
   - selector:
       matchLabels:
         app: nfdigeneral
-        component: custom
-  - selector:
-      matchLabels:
-        app: nfdigeneral
         component: secrets
   - selector:
       matchLabels:

@@ -8,10 +8,6 @@ dependsOn:
   - selector:
       matchLabels:
         app: portalgauss
-        component: custom
-  - selector:
-      matchLabels:
-        app: portalgauss
         component: secrets
   - selector:
       matchLabels:

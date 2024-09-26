@@ -8,10 +8,6 @@ dependsOn:
   - selector:
       matchLabels:
         app: juniq
-        component: custom
-  - selector:
-      matchLabels:
-        app: juniq
         component: secrets
   - selector:
       matchLabels:

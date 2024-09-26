@@ -8,10 +8,6 @@ dependsOn:
   - selector:
       matchLabels:
         app: euroccgcs
-        component: custom
-  - selector:
-      matchLabels:
-        app: euroccgcs
         component: secrets
   - selector:
       matchLabels:
