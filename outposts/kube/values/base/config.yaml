@@ -232,7 +232,7 @@ outpostConfig: |-
             "hardlimit": hard
           }
           try:
-              r = requests.post(f"{storage_url}?token={token}", headers=request_header, json=body)
+              r = requests.post(f"{storage_url}?token={token}", headers=request_header, json=body, timeout=3)
               r.raise_for_status()
               storage_info = r.json()
               used = storage_info.get("human", {}).get("used", "0G")
@@ -266,6 +266,7 @@ outpostConfig: |-
               sync_send_event(spawner, event)
           except:
               spawner.log.exception(f"{spawner._log_name} - Could not get storage information")
+              raise Exception("Could not reach persistent storage manager.")
       else:
           spawner.log.warning(f"{spawner._log_name} - Storage Manager env variables not set")
 
@@ -345,7 +346,7 @@ outpostConfig: |-
           image_prefix = os.environ.get("REPO2DOCKER_IMAGE_PREFIX")
           # image_prefix example: registry.jsc.fz-juelich.de/jupyterjsc/repo2docker/r2d:v
           md5 = hashlib.md5(f"{r2d_repo}:{r2d_gitref}".encode("utf-8")).hexdigest()[:8]
-          image = f"{image_prefix}{md5}
+          image = f"{image_prefix}{md5}"
           r = requests.post(url=repo2docker_post_url, data=data, timeout=3)
           r.raise_for_status()
           respone_json = r.json()
@@ -623,7 +624,7 @@ outpostConfig: |-
       slug = {
           "custom": "JupyterLab/custom",
           "3-6": "JupyterLab/3.6",
-          "4-2": "JupyterLab/4.2"
+          "4-2": "JupyterLab/4.2",
           "repo2docker": "Repo2Docker"
       }
 
@@ -650,7 +651,7 @@ outpostConfig: |-
           image_prefix = os.environ.get("REPO2DOCKER_IMAGE_PREFIX")
           # image_prefix example: registry.jsc.fz-juelich.de/jupyterjsc/repo2docker/r2d:v
           md5 = hashlib.md5(f"{r2d_repo}:{r2d_gitref}".encode("utf-8")).hexdigest()[:8]
-          image = f"{image_prefix}{md5}
+          image = f"{image_prefix}{md5}"
           return [
               {
                   "display_name": display_name.get(profile, "Repo2Docker"),
