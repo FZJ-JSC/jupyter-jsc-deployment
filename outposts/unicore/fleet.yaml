@@ -32,6 +32,8 @@ targetCustomizations:
         name: jupyter-stag
     helm:
       values:
+        image:
+          tag: "devel"
         extraEnvVars:
           - name: STAGE
             value: "staging"
