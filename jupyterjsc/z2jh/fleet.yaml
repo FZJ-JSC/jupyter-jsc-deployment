@@ -44,10 +44,10 @@ targetCustomizations:
     helm:
       valuesFiles:
         - ../../base-values/image_fixed.yaml
-  - name: staging
-    clusterSelector:
-      matchLabels:
-        stage: staging
-    helm:
-      valuesFiles:
-        - ../../base-values/image_devel.yaml
+  # - name: staging
+  #   clusterSelector:
+  #     matchLabels:
+  #       stage: staging
+  #   helm:
+  #     valuesFiles:
+  #       - ../../base-values/image_devel.yaml
