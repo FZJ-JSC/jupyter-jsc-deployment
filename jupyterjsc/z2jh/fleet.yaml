@@ -49,7 +49,5 @@ targetCustomizations:
       matchLabels:
         stage: staging
     helm:
-      values:
-        hub:
-          image:
-            tag: "devel"
+      valuesFiles:
+        - ../../base-values/image_devel.yaml
