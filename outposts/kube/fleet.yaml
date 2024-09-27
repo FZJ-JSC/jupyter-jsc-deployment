@@ -31,8 +31,6 @@ targetCustomizations:
         stage: staging
     helm:
       values:
-        image:
-          tag: "devel"
         extraEnvVars:
           - name: STAGE
             value: "staging"
