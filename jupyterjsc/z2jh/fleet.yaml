@@ -27,8 +27,6 @@ helm:
       # Set JupyterHub in maintenance:
       #   Set enabled here to false, update ingress in maintenance/fleet.yaml
       enabled: true
-    image:
-      tag: "devel"
   valuesFiles:
     - ../../base-values/extraConfig.yaml
     - ../../base-values/image.yaml
@@ -46,3 +44,12 @@ targetCustomizations:
     helm:
       valuesFiles:
         - ../../base-values/image_fixed.yaml
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        hub:
+          image:
+            tag: "devel"
