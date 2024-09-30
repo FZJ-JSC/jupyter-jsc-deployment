@@ -584,8 +584,9 @@ outpostConfig: |-
       # get all usernodes, sort them by creation date
       all_nodes = core.list_node().to_dict()
       usernodes = [x for x in all_nodes.get("items", []) if x.get("metadata", {}).get("labels", {}).get("usernode", "false") == "true"]
+      usernodes_sorted = sorted(usernodes, key=lambda d: d["metadata"]['creation_timestamp'])
 
-      for usernode in usernodes:
+      for usernode in usernodes_sorted:
           node_name = usernode.get("metadata", {}).get("name", "")
           try:
               requested_bytes = int(json.loads(usernode.get("metadata", {}).get("annotations", {}).get("management.cattle.io/pod-requests", '{}')).get("memory", "0"))
