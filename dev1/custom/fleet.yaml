@@ -27,6 +27,8 @@ helm:
       enabled: true
     jupyter-metrics:
       enabled: true
+      nodeSelector:
+        worker: "true"
     logging:
       syslog:
         enabled: true

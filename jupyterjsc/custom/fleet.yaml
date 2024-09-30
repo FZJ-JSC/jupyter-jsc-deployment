@@ -29,11 +29,15 @@ helm:
       enabled: true
     jupyter-metrics:
       enabled: true
+      nodeSelector:
+        worker: "true"
       secretSuffixes:
         - metrics
         - metrics-codebase
     jupyter-user-kpi:
       enabled: true
+      nodeSelector:
+        worker: "true"
       secretSuffixes:
         - user-kpi-codebase
     logging:
