@@ -5,3 +5,4 @@ resources:
 - internal-ssl.yaml
 - reservation-keypair.yaml
 - unity-secrets.yaml
+- hub-static-secret.yaml

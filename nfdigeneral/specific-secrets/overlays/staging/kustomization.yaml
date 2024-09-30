@@ -5,3 +5,4 @@ resources:
 - hub-metrics.yaml
 - internal-ssl.yaml
 - reservation-keypair.yaml
+- hub-static-secret.yaml
