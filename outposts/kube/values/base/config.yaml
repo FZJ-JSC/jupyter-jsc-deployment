@@ -580,30 +580,25 @@ outpostConfig: |-
       core = client.CoreV1Api()
       flavor_mem_request = resources.get("mem_guarantee", "0M")
       spawner.log.info(f"{spawner._log_name} - {flavor_mem_request}M memory for {flavor} ({jupyterhub_name}) requested")
-      stage = os.environ.get("STAGE", "staging")
-      if stage == "staging":
-          base_node_name = "usernode-"
-      else:
-          base_node_name = "prod-usernode-"
       
-      outpost_mem_blocked = 1024
-      for i in range(0, 51):
-          node_name = f"{base_node_name}{i}"
+      # get all usernodes, sort them by creation date
+      all_nodes = core.list_node().to_dict()
+      usernodes = [x for x in all_nodes.get("items", []) if x.get("metadata", {}).get("labels", {}).get("usernode", "false") == "true"]
+
+      for usernode in usernodes:
+          node_name = usernode.get("metadata", {}).get("name", "")
           try:
-              node = core.read_node_status(node_name)
+              requested_bytes = int(json.loads(usernode.get("metadata", {}).get("annotations", {}).get("management.cattle.io/pod-requests", '{}')).get("memory", "0"))
+              to_add_bytes = int(flavor_mem_request.replace("M", "")) * 1024 * 1024
+              total_bytes = int(usernode.get("status", {}).get("allocatable", {}).get("memory", "0Ki").replace("Ki", ""))*1024 # 8128016
+              if node_name and requested_bytes + to_add_bytes < total_bytes
+                  spawner.log.info(f"{spawner._log_name} - Use {node_name}")
+                  return {"kubernetes.io/hostname": node_name}
+              else:
+                  spawner.log.info(f"{spawner._log_name} - Do not use {node_name}")
           except:
               spawner.log.info(f"{spawner._log_name} - Could not load node {node_name}")
               continue
-          requested_mem_mi_s = json.loads(node.metadata.annotations.get("management.cattle.io/pod-requests", '{}')).get("memory", "0Mi")
-          total_mem_ki_s = node.status.allocatable.get("memory", "0Ki") # 8128016
-          free_mem_mi = int(total_mem_ki_s[:-2])/1024 - int(requested_mem_mi_s[:-2])
-          free_mem_m = free_mem_mi*1.04858
-          spawner.log.info(f"{spawner._log_name} - {node_name} has {free_mem_m}M free memory.")
-          if free_mem_m > int(flavor_mem_request[:-1]):
-              spawner.log.info(f"{spawner._log_name} - Use {node_name}")
-              return {"kubernetes.io/hostname": node_name}
-          else:
-              spawner.log.info(f"{spawner._log_name} - Do not use {node_name}")
       spawner.log.warning("{spawner._log_name} - Use kubernetes scheduler to place node")
       return {"usernode": "true"}
 
