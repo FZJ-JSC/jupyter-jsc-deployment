@@ -592,7 +592,7 @@ outpostConfig: |-
               requested_bytes = int(json.loads(usernode.get("metadata", {}).get("annotations", {}).get("management.cattle.io/pod-requests", '{}')).get("memory", "0"))
               to_add_bytes = int(flavor_mem_request.replace("M", "")) * 1024 * 1024
               total_bytes = int(usernode.get("status", {}).get("allocatable", {}).get("memory", "0Ki").replace("Ki", ""))*1024 # 8128016
-              if node_name and requested_bytes + to_add_bytes < total_bytes
+              if node_name and requested_bytes + to_add_bytes < total_bytes:
                   spawner.log.info(f"{spawner._log_name} - Use {node_name}")
                   return {"kubernetes.io/hostname": node_name}
               else:
