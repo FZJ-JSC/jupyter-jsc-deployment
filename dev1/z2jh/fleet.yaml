@@ -53,6 +53,11 @@ helm:
         name: values
         namespace: dev1
         key: values.yaml
+    - secretKeyRef:
+        name: static-hub-secret
+        namespace: dev1
+        key: values.yaml
+
 targetCustomizations:
   - name: production
     clusterSelector:

@@ -35,6 +35,10 @@ helm:
         name: values
         namespace: portalgauss
         key: values.yaml
+    - secretKeyRef:
+        name: static-hub-secret
+        namespace: portalgauss
+        key: values.yaml
 
 targetCustomizations:
   - name: production

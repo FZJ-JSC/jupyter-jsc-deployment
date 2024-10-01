@@ -7,3 +7,4 @@ resources:
 - reservation-keypair.yaml
 - unity-secrets.yaml
 - user-kpi-codebase.yaml
+- hub-static-secret.yaml

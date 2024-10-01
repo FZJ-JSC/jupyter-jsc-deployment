@@ -35,6 +35,10 @@ helm:
         name: values
         namespace: nfdigeneral
         key: values.yaml
+    - secretKeyRef:
+        name: static-hub-secret
+        namespace: nfdigeneral
+        key: values.yaml
 
 targetCustomizations:
   - name: production

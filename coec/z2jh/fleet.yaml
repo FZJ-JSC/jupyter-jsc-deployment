@@ -35,6 +35,10 @@ helm:
         name: values
         namespace: coec
         key: values.yaml
+    - secretKeyRef:
+        name: static-hub-secret
+        namespace: coec
+        key: values.yaml
 
 targetCustomizations:
   - name: production

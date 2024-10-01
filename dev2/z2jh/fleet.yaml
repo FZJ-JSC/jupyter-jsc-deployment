@@ -36,6 +36,10 @@ helm:
         name: values
         namespace: dev2
         key: values.yaml
+    - secretKeyRef:
+        name: static-hub-secret
+        namespace: dev2
+        key: values.yaml
 
 targetCustomizations:
   - name: jupyter-prod

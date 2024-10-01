@@ -35,6 +35,10 @@ helm:
         name: values
         namespace: euroccgcs
         key: values.yaml
+    - secretKeyRef:
+        name: static-hub-secret
+        namespace: euroccgcs
+        key: values.yaml
 
 targetCustomizations:
   - name: production

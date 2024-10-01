@@ -35,6 +35,10 @@ helm:
         name: values
         namespace: juniq
         key: values.yaml
+    - secretKeyRef:
+        name: static-hub-secret
+        namespace: juniq
+        key: values.yaml
 
 targetCustomizations:
   - name: production

@@ -35,6 +35,10 @@ helm:
         name: values
         namespace: coeraise
         key: values.yaml
+    - secretKeyRef:
+        name: static-hub-secret
+        namespace: coeraise
+        key: values.yaml
 
 targetCustomizations:
   - name: production
