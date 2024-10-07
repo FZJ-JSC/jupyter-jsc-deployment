@@ -6,10 +6,9 @@ hub:
       import os
 
       ## Generic information
-      fullname = get_name("fullname")
       namespace = os.environ.get("POD_NAMESPACE", "default")
       jupyterhub_host = get_name("hub")
-      if fullname in ["nfdigeneral"]:
+      if namespace in ["nfdigeneral"]:
           oauth_host = "login.helmholtz.de"
           oauth_path = "oauth2"
           oauth_scopes = [
@@ -233,11 +232,10 @@ hub:
           f"https://{oauth_host}/{oauth_path}/userinfo"
       )
 
-      if fullname in ["nfdigeneral"]:
+      if namespace in ["nfdigeneral"]:
           def claim_name(resp_json):
               name = resp_json["voperson_id"]
               return name
-      # elif fullname in ["jupyterjsc"]:
       else:
           res_pattern = re.compile(
               r"^urn:"
@@ -274,7 +272,7 @@ hub:
       c.CustomGenericOAuthenticator.scope = oauth_scopes
       c.CustomGenericOAuthenticator.tls_verify = False
 
-      if fullname in ["nfdigeneral"]:
+      if namespace in ["nfdigeneral"]:
           def group_management(user_info):
               """
               Return all groups a user is part of
