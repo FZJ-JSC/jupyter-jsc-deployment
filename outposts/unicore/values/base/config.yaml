@@ -257,6 +257,11 @@ outpostConfig: |-
         "hostname_cpulimit": "login|vis",
         "hostname_all": "'jrlogin01i' 'jrlogin02i' 'jrlogin03i' 'jrlogin04i' 'jrlogin05i' 'jrlogin06i' 'jrlogin07i' 'jrlogin08i' 'jrlogin09i' 'jrlogin10i' 'jrlogin11i' 'jrlogin12i'"
       },
+      "JEDI": {
+        "hostname_base": "jpblt",
+        "hostname_cpulimit": "jpblt",
+        "hostname_all": "'jpblt-s01-01-interconnect-1'"
+      },
       "JUSUF": {
         "hostname_base": "jsfl",
         "hostname_cpulimit": "login|vis",
@@ -349,6 +354,12 @@ outpostConfig: |-
         "LoginNode": "juwels0?.fz-juelich.de",
         "LoginNodeVis": "juwelsvis??.fz-juelich.de",
         "LoginNodeBooster": "juwels2?.fz-juelich.de"
+      }
+    },
+    "JEDI": {
+      "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JEDI/rest/core",
+      "interactive_partitions": {
+        "LoginNode": "login01.jedi.fz-juelich.de"
       }
     },
     "JUSUF": {

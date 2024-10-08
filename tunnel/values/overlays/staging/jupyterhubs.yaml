@@ -177,7 +177,7 @@ jupyterhubs:
         user: "ljupyter"
         port: 22
         hostname: "jusuf3.fz-juelich.de"
-      - name: "jedi01i"
+      - name: "jpblt-s01-01-interconnect-1"
         user: "ljupyter"
         port: 22
-        hostname: "login.jedi.fz-juelich.de"
+        hostname: "login01.jedi.fz-juelich.de"

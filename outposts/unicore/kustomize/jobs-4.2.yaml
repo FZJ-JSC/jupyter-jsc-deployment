@@ -57,6 +57,8 @@ data:
       export HOSTNAME_S=$(hostname -s)
       if [[ ${SYSTEMNAME} == "deep" ]]; then
         export HOSTNAME_I=${HOSTNAME_S}
+      elif [[ ${SYSTEMNAME} == "jedi" ]]; then
+        export HOSTNAME_I=$(hostname -s)-interconnect-1
       else
         export HOSTNAME_I=$(hostname -s)i
       fi
@@ -105,7 +107,7 @@ data:
         do
           HTTPCODE=$(curl -X "GET" ${CURL_ARGS} ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api)
           if [[ ${HTTPCODE} -ge 200 ]] && [[ ${HTTPCODE} -le 299 ]]; then
-            if [[ ${SYSTEMNAME} == "deep" ]]; then
+            if [[ ${SYSTEMNAME} == "deep" || ${SYSTEMNAME} == "jedi" ]]; then
               export JUPYTERHUB_API_URL="${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api"
               export SSH_NODE=${ALL_REMOTE_NODES[$index]}
               echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub and ${SSH_NODE} as jump node."
@@ -547,6 +549,8 @@ data:
       export HOSTNAME_S=$(hostname -s)
       if [[ ${SYSTEMNAME} == "deep" ]]; then
         export HOSTNAME_I=${HOSTNAME_S}
+      elif [[ ${SYSTEMNAME} == "jedi" ]]; then
+        export HOSTNAME_I=$(hostname -s)-interconnect-1
       else
         export HOSTNAME_I=$(hostname -s)i
       fi
@@ -595,7 +599,7 @@ data:
         do
           HTTPCODE=$(curl -X "GET" ${CURL_ARGS} ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api)
           if [[ ${HTTPCODE} -ge 200 ]] && [[ ${HTTPCODE} -le 299 ]]; then
-            if [[ ${SYSTEMNAME} == "deep" ]]; then
+            if [[ ${SYSTEMNAME} == "deep" || ${SYSTEMNAME} == "jedi" ]]; then
               export JUPYTERHUB_API_URL="${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api"
               export SSH_NODE=${ALL_REMOTE_NODES[$index]}
               echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub and ${SSH_NODE} as jump node."
