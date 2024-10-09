@@ -13,6 +13,10 @@ dependsOn:
       matchLabels:
         app: postgres-operator
         component: namespaces
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: databases
 
 kustomize:
   dir: ./kustomize
