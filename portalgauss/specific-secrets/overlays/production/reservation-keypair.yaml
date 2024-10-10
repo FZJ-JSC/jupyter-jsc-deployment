@@ -1,23 +1,17 @@
-{
-  "kind": "SealedSecret",
-  "apiVersion": "bitnami.com/v1alpha1",
-  "metadata": {
-    "name": "reservation-keypair",
-    "namespace": "portalgauss",
-    "creationTimestamp": null
-  },
-  "spec": {
-    "template": {
-      "metadata": {
-        "name": "reservation-keypair",
-        "namespace": "portalgauss",
-        "creationTimestamp": null
-      },
-      "type": "Opaque"
-    },
-    "encryptedData": {
-      "ssh-privatekey": "AgCQtYLrnTKCqidSZ07dg9rbShEGBqzLgBpWeAp/ehdspPXeRD6XeNqlvZNtMCq+IdadedhZCoqXfCBKguzMz0PnIUzxepvNyQNYAwSiYWq0jgVTDmht1WaPnDyFYWzKVcb9jT1o4zrvJvrHbATLGyPsxy6+oEo/DuHZFxEvB9N/UZQQrLQC3FgYCME1lIajID4A7ZiqTCXW1ThgWTzb4DbHKXvkWDIJ5T6mC9cN8ceGlcWA0SysjWqexQsFOkYwGO7zijVFptdPfP7JHZK23WmuHB093m65+x2rWX2GIxeA1dL8Gf/gamP0b9XO/whiUT1lrCk8x35sm2dx58pT8qCFpVZ6LfG/Q7T4G+dt6Y26TbzC8RLHDcOKADiUP+i9/XKc/PwDBy+Vz+VNe7aCDi53rXF2/yp09QBYTa/l/BO4WLO2tHgdyDPQJpfKOEnyzQpCDe6w/voQKnSKI3KgCDPT5IvN7Z1GiNGhb4JvaV7uFzys7A51jW7DwisPokkHXvRPuT9iv0o55JZo9ZUqAS0hHtk1fLGaQLXppWNqEvFCdsqq5F0KKe6cGKVv2RuK/tIpn1GRITE2YpsDVJkA5+l8ua71O/msFBZZy/M3fxPmNJ2XqM2MJY0l8OE0MVmBeKRyeB0vST2n0sq3mmomNObeaJbDkqoMbQdeZGkWXHtiwUM+7K3LvKpRVasQtl8p/fqXyWykUL2hqwuuPAu2K9PrnHh7gVWUQ5DcjLQGNQDtopCENl1rO26M2QbRPRXJK/9b6VUmqfjSAoiLfUv4Nq45kExKyEUVi8KuRCHoued76K1666UStSadhCzWOEuIPxfkDweP4CNYokQFjJVJ2SHGD/OmXF2W7FAMBhLMIFRBE0U7/5P5wQ6793a3QsmvwdYpTgxIxxt2H+/m2+3l96nYlYHFB50jSVb6XjU45/g3kYvmvTWfGdurvxPz0gCPxLUGLZF12rl5HgUIim+Ezq2EW1fBwsEs8kq52kGNfDmL3KHhhLVkt4RWwkeSE/5PCdzSg9PTjDei9ULkDXGwbDmN6e23dt2cpqTk9D0q8T3tjSziABi3akNZAxkJPVL72VBVe9xEmV1p9RnQnHOueWg41VVTTr9oHJyepFmIi6rZjmNnGtTxclaycxqiHvqvhdXVv0cAia/LZgqhlUViRaL+5VWaX1+AbagJpauhLja//Y7E20h9wAYbOQyHvIi/NbkHZDE7tUdyqV66pvyhJsc=",
-      "ssh-publickey": "AgB2XZrVfv/PM4vDe87TZmmueqZwPffrFhZnfEOX/sWJsYIXlNcanQNSAFfW0Mr3dxPZ08m+xa2FMa9/TgW8PDnObQKwIN8sv8GhhA8ZfPwVBSxlP3+SM0PEFO+gxkxwOsdEDxIxXwRqgeX53l1I38DhqYwkS1ZjTRWYYtHKxYEQvHawn2ygA7JY7ALsPfI1rLj7B3mYfs6Ll7qfoldbXyeLN11ddtgaKE/VQoORd6vf9qrL44ZlBImaF1c9L8Ozw+JDlyd0SQ83nEpo+62ZHTt2eoae9op09Q4PcvjN31x9IlgTRr8WhsJThEMZDHivjR2pM6BzL4COX6rwfLmWVwSxGv2dBJsiNdv3w6fQg3dC4eO/howSRPzQDxQVs+c/DabpRjhc3M1UXLlDO3Bb5hAKbwIg7eiSrsH0gSxmCS9UQbkYJj0fvYpdX0Bv/v1nqsk/UzEAXWBaRXAlqkjYUheGrnvLNrSmsA/944TsetgpoUVolJrDOkMfckRg4SYAqSFIKaw9h/y6PGiMS9sPeeEeELvC/zKacEvC0l6tbE4uk9kE8DTfnhtoEh5gr4/1JI2zaGe6FIWF93oB+onyC/xsjnZRwAuT5g3jdtUvi/TPMmLt/w+7FyDknn4z0wF/g9qPRKLmaigt2vLt34zpp7+HrVMrmFxcReaO0hhmGaxkErGvzZcuFtaqBuMEe69T1fAHs4HKUeDyI6DKB2JI6Sh+gGyhiQWX2Vv4Zmb2WSHvTTjPdQDV4kZETsFnIr2ROltZJG4LWz7osnF5KiuuC+ag1rGFLD3S7c9YUfZR4A4dKw=="
-    }
-  }
-}
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: reservation-keypair
+  namespace: portalgauss
+spec:
+  encryptedData:
+    ssh-privatekey: AgCkMku4XTSdtfwKyJOkE6bOd0rBuAFLXU8KS2opvhtxG6LcZxYMwir2sRKLivJQ6kObqlhvT+WU92Ec7WhSXdjy9EnKfabl8R7K/buewBxZZggcpwLTZ8X35CKs5Dv1YyIpM1LKpsHnbd8OxpoUPBMpenGiQD3PZ1UZaqAYbmZURK8IABb1tGn6p5D0nhZgSuZw7xAnTIITma6MZVe3CkrmJ2Tu1lOAbevZBh8LbFAYJSG6hCcp4TIbWYyZlscnzgAf5UdfjUHppVRDmvVXSqLG6CH+GmCGwzYcZYBHnVJsycltaP8SFHSOJoGIG/KgoHMPgpnlMqtRfvglh80XrI1UG3ZqDi9sQZLZpgtjiMSyh1unNF4r+inI2U/lNcJ35n4MhQAeQqOYvwrKzMjwzr5m/PVmKR0hUZqQLfsAEkyrOhnRODqaDN6a5ME6aIuY1+2/vjCO+DEgZNvq7ReclbC/LiCpyls4fivAokpBV2xZ9Ta1U7iAQldVgM+vZi/qmySR/1EI8VjtEREMZ85k5TTKAPrazf3XUWt0GaYxJY5HV+wj9Z/p0bt+FnSw87ySm3wbsj2vruikF0UxblnrMuYnIjzqTxovJEMHOHVduxUkNVRnNIpY/bva/ylfbzTjBUM6rx7nhgXHjR39zE14OOFQ6Ej++B47ZWkT9XeMy34jWgOBhmumHl+Zm6zjYww5moK5Dy5ZZGgZrI5bq9yZjkJL+nCHdbknyH0aYCe2RF4c939rq6ogcs+zm3Pe8XqnX8rMUItuiBzIiJqZ+wvKVKdcdQeEWNc9WLN1z5dUMX3VAZ/Q0gtra1pgKPByKB9T5kafFKUUjnRmsf4a6pEAkWtoXPr65K9ViXXsTDg6aEsXJDAJHMdSGFVBqg1ViYvl/OZXunobPDtO14LNbJAQrf//qlBQQEDRbYyjKogEsEPR5ZerVhIXBdDLbCGpwleig/jJoqOcKKjVEWg+IDKym9LQ0LohKfHtU8gdzoHFaYH+OBIKNoCHMwfHHMfg3SCFqSabGw5jUxBHNfX2lXcMDYGAKR7nJhnSjPbqZqACMwg+HufCDejwMgui5tNbwtCWbyLgGzZQ5GXDkhrI4J9pvHRB0Ud5890l/9EyD3l6qiG7qRwSXj30heCyvICrORswPeQT6pbZMs3p/YfvgVYqbrERHU+PjUjWs2jauC5JNmLeAVRw7uuC6mTCizaB1REVlh44zzYzRXQZlvlZossEZxM=
+    ssh-publickey: AgBCD30gmU6PIXPaUQFmCr2DUiOZ/Dq6dOiOZ/fRDv3CQDGeavnZYRlbTl0PKYVjQSQ4GNF1NKi+gTkiCCvqUW72URCwNZLQ9AT+ITgd20rwKCwLAx05neOh8B71fzpuJPFty26FSP8R5YhRjF5CrrPT/SUoc1vArUeBE81DJXebm4Gak7TnRJbdcu1Qnp2TtgNN879r354Wi0PCr9CkPDAGRTQf3R/39XpDFAvygZfrEMCDtjuiSXc9b9mxl0I1DqEHpzQd6tm0E8pHzOHNpLCdfvdH7FDhfKYNjvvn7efYTRDlrmN8GCkmUMTGuxlp1DDxUuS6N/YBlVoAFLFfTn5nAZZhmjTdmQ9zgLYDE1OBeirUih3RZCI2OtBbL0zaV4zX8PYtzVgj0I81heJCH0Cz1urRIN3hSHTUumKSvo1hCbUeDDzHCePyQtb7CSnJWeciUQaxTWdoPR6QAi39U77WFE/2DMKesoG7Av7k/x1j4Xe+VC6RpXD0g3VCkR6q/2lRhNXQOHtHE7zy57u750jv8JBQ71a/La70jRwOPUEEQaamPICNHCxBn3fgwA3VlVyapXF4tconixAb03EB7pt/P1BI+PukiL+4Nk4tqneRjbC7rfXd868qTb+6RHgArghUV8ObsaGshCxocYQ183ysYsU7WAUoHM1+Zd3ZL/z11OtoScCSBBilf99nESDgHc6ocjmW3zfuDnymtqDBhjWesw+cP2QWyYiggADjHAsNi0VhiK52bWju5OQVssw8POOtvh2bDnj4iCyD7jMCKTiZFpfUhkVdotR9WVtm5b52WjIbx3a/E7+e8kzQjlCRvQ==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: reservation-keypair
+      namespace: portalgauss
+    type: Opaque
