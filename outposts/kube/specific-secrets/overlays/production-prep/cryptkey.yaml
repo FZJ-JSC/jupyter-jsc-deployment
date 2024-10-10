@@ -1,0 +1,16 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: outpost-cryptkey
+  namespace: outpost
+spec:
+  encryptedData:
+    secret_key: AgAFlzfqx+pgdM56v081CCdMBpfqOcpHdosWtwrTTGv5Rg8Ulxvqzwwyjpkz26vEim4IP2iF2/wQEZPCmN6Dvpd6HmxH4S89NoUS16ddsAWyD4g9AMx/Np+nE5/WTSOidDRxEvcX5Lxnem7HT2FB4ABhvbcELc0/LoFpg0b/rIRb/Xw9BAAwbfOwd4FW+AOHR5m+QgbMCBaMyWPAfObH/6LCYLwtyT7APlh42U8ihFmRSsCvExAGpS5UM75AD50OEqXITM1cmyBGcY0TDFYROj64Tuc8aFMoyqoTsu/16HZcodyXwxca82E3WWmW00S7Wm+iiUtI5nZS9CB0M2U34k6ihh5G8TlJlFlYgizuv/VZM+HMUeX4H2vmU9GnNDlPAGgdp+DHkERKINn9UmSNhFumBqO5KUf9zmHlJTk6inh09japSz5eN2X6TvoY7YLAGPDDhdRpIfECf4EFLTA0d8QbSn6okAStq/NIJaO4GJcYieDoZ/p5QMaY2HKts2znl8e4YiWXY19lvY/CHj4l89jsPvjYv/0UW8XGJbil+DixVC/dwAfnJIcqiV4O64lCAyw22jfi6zxmXJ+5vE/JCwnCx4qkYfGVJeGXuiwgacnEG0DbZxoMLe5ujFC286yKbP8TSnQAU0wBf35hyzo6b6KQUWHl5l/CQ8cl0wcGBb5LX5IQ6Memzr0Xqu927UdwgMFXsnitG9nZqAIl/9ZsbHyxFOVOYFxRsuzo9CrGfl2foD9PW+Dt0Tosh56q0g==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: outpost-cryptkey
+      namespace: outpost
+    type: Opaque
