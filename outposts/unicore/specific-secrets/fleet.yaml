@@ -21,5 +21,13 @@ targetCustomizations:
   clusterSelector:
     matchLabels:
       stage: production
+      prep: "false"
   kustomize:
     dir: overlays/production
+- name: jupyter-prod
+  clusterSelector:
+    matchLabels:
+      stage: production
+      prep: "true"
+  kustomize:
+    dir: overlays/production-prep

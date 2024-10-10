@@ -1,0 +1,4 @@
+resources:
+- cryptkey.yaml
+- generics.yaml
+- users.yaml
