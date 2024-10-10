@@ -49,9 +49,10 @@ data:
       module load JupyterProxy-XpraHTML5/.0.4.0-4.2.1
     fi
     if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-      if [[ $SYSTEMNAME != "hdfml" ]]; then
-        module load JupyterProxy-NESTDesktop
-      fi
+      module load JupyterProxy-NESTDesktop
+    fi
+    if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then
+      module load JupyterProxy-RStudio/.2023.09.1-4.2.1
     fi
     ## Extensions
     if [[ $JUPYTER_MODULE_NBDEV_ENABLED -eq 1 ]]; then
@@ -65,4 +66,10 @@ data:
     fi
     if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
       module load jupyterai/.2.12.0
+    fi
+    if [[ $JUPYTER_MODULE_VARIABLEINSPECTOR_ENABLED -eq 1 ]]; then
+      module load jupyterlab-variableinspector/.3.2.1
+    fi
+    if [[ $JUPYTER_MODULE_SPELLCHECKER_ENABLED -eq 1 ]]; then
+      module load jupyterlab-spellchecker/.0.8.4
     fi
