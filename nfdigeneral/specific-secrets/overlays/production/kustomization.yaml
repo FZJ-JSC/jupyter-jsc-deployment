@@ -3,5 +3,6 @@ resources:
 - generics.yaml
 - hdfaai-credentials.yaml
 - hub-metrics.yaml
+- hub-static-secret.yaml
 - internal-ssl.yaml
 - reservation-keypair.yaml

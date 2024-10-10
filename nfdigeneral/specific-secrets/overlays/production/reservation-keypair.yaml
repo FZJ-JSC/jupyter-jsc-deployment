@@ -1,23 +1,17 @@
-{
-  "kind": "SealedSecret",
-  "apiVersion": "bitnami.com/v1alpha1",
-  "metadata": {
-    "name": "reservation-keypair",
-    "namespace": "nfdigeneral",
-    "creationTimestamp": null
-  },
-  "spec": {
-    "template": {
-      "metadata": {
-        "name": "reservation-keypair",
-        "namespace": "nfdigeneral",
-        "creationTimestamp": null
-      },
-      "type": "Opaque"
-    },
-    "encryptedData": {
-      "ssh-privatekey": "AgBT0OHBPopAtkNYyyfLxrmanyFniP8xAlt0r8+gjSefh5aMb340NHMxNZ3RKBKwtFs64KU4gL5rU+G8yX8VkBiVTiDM2tljXy6s8l2JAED0deA7NBkAZMCBwiG5czVSx0Mt0WoyrORjfdh9vyQ5FivNKD0q2jBFgOZs9aZGOTAct1sZqMEnbK15I62ATUipZahyHQFw69WOOHqd43EKxDp8B8+c2wIq2rPP0X1jPmR5D3HF5SIJ870J9azsqyPlDhRlLnvKJRu/wSRwe2/nKZ6AVLjHb9GhyCQAO0BZ38FOihioG3hmgxbPjWln8M7X7poHeBb40EdgZACNCyzIr+HKMgaDH+qHS8ECtWFSOIT/2iLmcyPt3ZA94DCbJyr7hhhgAV1KuRxzaeyxVVZdsufKUDF0tiLuDIqC0eZsLby8G2R67apjSPCcTiQtFgixEeZTGnPVzy9Q6AwwODEhDzF54bTsgK2BfKJXLsbbuLk5UUfOvNRJrgRth3g7BlYheDW0r4zzzG1HWs8rOj37bw+6g2bNQpaKx/xFfQ7UPsufdfzUDXL/KtwNAzDvQmHh9rhsbVz7X282EEO0+AIT5OILi5HFjAdSKj54YGuZOdlixo7P7kkeXWtiuGctGFuYyUlvk3icKX4OuEvhwj8llwa4oQ3oznO7TYPT5DSd/cjqY5z7leUP6KW7InSA45+JpkJ0KJxwDmwGgJ9wVs/ytDnZM1hsNL725nKDW+RULcCW8VJC9hGeyX5FRQErwSvXcyX6YwfacWrDRfFfOeCz7il8LmNBx6lfXOmGPFlQbBg17yVW40yolp188n6xzPFh+r7D+MgaC2T3OfDtV8GVRqTJY2VxusWcryOy+lLnFDABqrnhLw7+Zcnx1p00Y510ac+Jw4Ox2llzX2TQOtZOzXViLhlmYeNg9EO07LdvIBaZKmMm4AK0q+6UMkVptk8vRQeNYOXSSEfObp9PB4u6RLPzIxWLgi5cGD4WiQ/Dv58a1D8mSadQErdfFX9mBBRO+BdNsB5tl6xgUM7+cdI3famvRHMO8WtfgwMOFcRtC6OSo6/eOGh/r3XkU6UZYL2RSyAqxcj10cLtuffug8MeNghY5g9OJuEGADH5CoGHsGcDX/NYxDBCSKP2AgFZF0eikbBLF0R8NAbr5UIuUmlYX5bIdJMhspSKnMbHHt46bcJiUuUV7bXSLSFmRKvNJWK+pCeAlHulQQFolPRgPhhmoRQ=",
-      "ssh-publickey": "AgCy6QKMHjl4j2tqi1UMWVvyh/TJGgOBNwe82W5AJfSmedKaq1MwCB/W6Eddh5PUYs/lF9gnS27JnB5rVdWbFrYx0AlM1ypfT6pUhHtTAuG5JgimbaYOz9ZfOisDyuGVWaEAeCroXNfS78cJORQrjt8LrtcNio0TJCJOl8fC0bsjM1wt/tnTkYdwhDfpSKFqHdZbnOyXBNOIB78Lhne06zlzB7aZM2A99/pVfptWgQJRl5rEMIZQD7P9O8NdquSzR5ewfrvaSlQGFPy0eMmDXDOHApZ4BKUuFx+m568gh5sIUaW7Pw/uNJfPF54J8ShC618bZv2MBENQ33v41ZF8AXoVh/FNkQOLz8CO8Y7m6JZj/TLsWek9o+NIY8VJaxp0eVEMBy1qHz8cETrYkEctpkW7hCVqj7BZdwZ2Wjm3/zv8S92xOUlP21F87zrbSj0pcKpT9gK2f7EM7nHTyrI4XAeZ2+bHvA3j8h/PtnlK3OwJg9XgQYuTAerZYkB7VEpz8bWDoJ/maVvguYZqIFJr2eaZqt73oSTcqdh5r5Fey0kKTcWsynBw+MRoUYDgJwEp2DU2LXZ3BJ1ygn0awtr5cWCrxEww5dqAEew9OQiXMaPULlylYsm95RUdUPI3TibR+zArNe5b3rxHEkCY9tfQ+um6L3kX/TJa4FIlI1P2+GHWk/KT64E//JepJPeLChcluooErzouNAwku7eefcxOftMYNByn9W6WYJwum1l8Kt3BfL7KhFp6VG0o/IPlZpkSrJIeiE07MPLeJP5sfUxIMprfx1QQcrRtG9nYBuqTpiuJlw=="
-    }
-  }
-}
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: reservation-keypair
+  namespace: nfdigeneral
+spec:
+  encryptedData:
+    ssh-privatekey: AgB4YSUkxxZiPQ2MO4+ECFf8Fh3fUE9hY9BIdjlrYBR5EtPmVqtIEJDTRW3qdkyLzBhrM9kX1oCk3gGcMR6qWM0llbMlN+r6vEvvNTVzptSPQf0AW1Q9JddAeXVdB4bXtA3nQWG4VKlqGYYEseYcorb0w7N7/cstVeiRx0beDf77wDjAdQEw1FmFGeD2aFXQgOFcztNh8/GeedHIjogW7KdKTE0SQAjGjnGxT0vHzvUHPL5ZVRntqADLIlG6Una+c/wNYTBjCzdB4A25xkcmalPlbJFJsLP33iyf5HBy+abv9dhV+K/JTCFCdCa2jPAk7f/WAWvRD4fhrUCjAXx75ddczRwCG2h49BZZcyqmNemBtKhHfumxQNgPGGFsr/Oc+g5W0GA4sE3r496j3Ixua7ellec9ug3hjleNAN8s5qdt/ZwpIg6wHr3Z+YYBqQqiNqZK1L+AgR28FHQJzTRsxxlYfcxRhRi+lj5aSX0RhnuiT5ZkRUytmHR1g6TP+PiYxUvxoLnc3mhbvgldn3HFjs2NwQlIRZtsD65P3NZKQ014FvkIlQDHNSbxqfShfAhWt9irEzrt4zt8cal64jNUAcSW0+skjpGuJNfW9I3TG+eq2ZuRqPiLvyW+NibVw5VNCS0BEao25CsGo/aSxXogfW2jfxoun11841uWZ48AJssGZ3IkGNVyT3y3t2qCZo++X0K4QRuzLLKcSxdwYzY549LX6MEB0mjQdIm6He6yICPxZrn+W2eb/PSIeFTiSPlMpGn+wDtQn0hQCql7MHqjaZrBCFD6UU3v9Huv3pI+jJ7fHQNhLlraVI+MG4OCBVp8YDwAp+/TrU4e07t7QqhV6OmGGkcpVc2HeI9EWMwbspVnkPigbxkFfXr+lTRLF+/CX8OrWN/JtkWcEm5sVBHKcWqGyVNVlfF8l73OW01aWkqywegsVlNppwWJgLxdZHm8xzq/q13qrkiywJp9pS2UI+cjfC8AVmT4uVZioAaZ0uTbqxSZlz6IRn5Wv3vittLsHyTXoRAiuOGOW6iq0Jh8plPfiMlStx7YregqwUyueXUNRqtIDBMh98qYlzQYlERYM906FaerKIaqM6h1yYS+xzD260CYcCPr4bp24KYjFZkV5Idt+r8r9FTKFkuohHWy+e7Z/CenBoRvjSxRnD9vxuU1dz3GJx+Ev3fdPonlpiImKfsTzj/P63+8J0528qB6pQPBTSvU+U32Pfoqh3INv2M=
+    ssh-publickey: AgCFaSzzD0qQQ27iFzcIpZuiopG4WNr6ahPh0joWXMOBkCvkmGQ+3iTh3hxhQJSlkp1i3b3+/eQWQkKkwlQ/lR+qh48jRgob42qN/x8ag3xL9MWjGFZYtm05T2hLJ8qQbfuVh5PsQ3RW+wCXmiuzFSLoJzpO6GUOki2PUKTrnYsBgfIOuSO3fmjtjdDbNt+SEKSfe0LGKHswl21o/WFiSgNxEZt2dJSn942s6FU2a4+mlICY0k+M8aqZUYuet3Ng4h/fZ/s3zQZBsCSBQORGcmmSnRxRgHsWyUMXpCrt6gYCvpDavZA2TA9rsoh/mECRz/mLqLXLBLKBYjQ/4v6K/i1A1R/bCnjaYIcAkMZxQQZCTOi+ltICMQkPAO62YAlwiIT59nwNH+WnxBA6geX9Tzk9sHCn5HVfgZXL/YJis/NwdEqzJtOBSJz1m+6I/8YsvzsykBwcmufyxN64hNf+XT5cdONp2Q2KUXMPrOkX5pjleFiES5Ol9iy1ouhMpXc9L39i0PTtcD7n3URZphywi3k+FTUNvjDgsXFLDbphlUW3OSWtwoa6DxVdINdJT6LOnxklMGsUlKHq1fQNDdSbZOqO9/Z8DJN1ViozL/zmMp46mKtCPsZpmmWM88vmZWP9DmYW495LjT11tQEyQK1wSnOsWpkums0Qur959pqsvkyLCtiphOd6k6Quc4I8Hy2VKz0O9d3HIpe5E0v2EKjr9B9y/8I4RMVTvX5szCknqzAT21VGYP0sqx02CtjkotIEoJjCA4yvLH6Q2iVdTJMDwurPAtjOjIQew9zQxQSSKSvX1ZfSWWM6sNU5fZoa9u6SQQ==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: reservation-keypair
+      namespace: nfdigeneral
+    type: Opaque
