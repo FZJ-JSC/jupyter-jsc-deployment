@@ -1,23 +1,17 @@
-{
-  "kind": "SealedSecret",
-  "apiVersion": "bitnami.com/v1alpha1",
-  "metadata": {
-    "name": "reservation-keypair",
-    "namespace": "euroccgcs",
-    "creationTimestamp": null
-  },
-  "spec": {
-    "template": {
-      "metadata": {
-        "name": "reservation-keypair",
-        "namespace": "euroccgcs",
-        "creationTimestamp": null
-      },
-      "type": "Opaque"
-    },
-    "encryptedData": {
-      "ssh-privatekey": "AgAZfkjYuhQZ5QO8lKeTt5v2uocITwNCG1G/LPRjFIrbwG/K0/eZCjM/25wZRDNDCEgUryk41xTTMUfz5pZ5wWjcYuWXuvqp7VnOm5TMsScblV+RJMYZQdsjtHRF1gdlvFErcYiqx2g+I8pml7G9LZ+LyuTpGBa3wBaFdvpiw2X0sFnBYMue+MclSLJRZeCGZ4mqWURS1cjULTcNdNaV6YSYM564Vde281HoBS4YCyXUWGBYJvrs5Ory/vi++vSX2ZcOQx6t6c1OwMIf2E3CUzJxbsjYR91r+7DOqiJNx81+28Vs7DLfdyvnk/nu1mNgrtTB2TkcSpT8VvqivMI0Tl/71Y9Sds9TkS/008UdYEqK2wGcEYR2hAMSkxvZ6vEnRKP20CVbntIBEhNokdP2nOxcaRqeBJwrqBMvA6ukqPFzJfyvJyX7M+Xde77uXdu/83MBVa7NkJgir63OE6Aa3Q0MflQRT1tY9EqVH0euIxAW1Vn9OxiwdspB4QfOlCij/bus+/9VHy7gp2ZVkRb7Gu62CKemgghdKsRPTTqmMocugqgQd+ESjCvH87MeEsdEIhGWEK+v+F/gN5jL1Ehs3iCab3S5hE60CoHRLxrVIupbYkPfwIE+dsLZKjvFD9DYMBclyu1beQAZLGX7nGE+hOIj6G+2h4a5hTPF2O2JpSUeMgprj4h4REWypWXDJu009r0bZ1ngpWaVxLwFtdvAso42gy0uJjCTBEPtWON0Cgwf41/SJqbNRd85jo68crcjnL3Zw/5HDcl6Wn1XchE7D1i5qwU1gzwp+wv+2WKqbR2kLJIAO88Yt+eAGl2jhSttNQ99bcQaiGNVzwS8Y0pHGmG4YUXPYSVbFBSSK5gu/IB2Eeg2oAnvI6FoBNVEsb32WZ5Nsn+0d2gl7z/icajaV/Vmo2iu7HTv4YmNXj/vD4ZrnidqTXsqVKuz03zG3nljHZU1bdJtkpENXdvG5Vs0CXgwGlIy7KEf14fRdhVL3mKYHS6F4Ca7bNnMqOWn06biR7j2ai88Z8YRfEyo77GLZauazyc6KDqM/Jkr8Rh8XkqkBwRp4tD5nTpdzRF8qr0BRlqoQB8ONw+YTc7OHQ0Ngiw/GM1kjVAoQA2Yfj2QvNrgWo5byz+71vxbiuaUeNIMLJAbrtntoJl4C1BDzuAnTKnQYXm1XEkWiFGNCwrXucYkfU56yI33kPwlTkJcKMFurcQnzv72SbIMC/z5XPOKMeQ=",
-      "ssh-publickey": "AgBu/wGgFcvHVKn9VGhH3+SxoIcL2hTBdFG07ALS1n0JQP0U1/+4FoDEI8Sh3FzOgayP6+oUZL9ayCNbex2BqVFgG+tUulgo6I4SlBlhzTiEf3Ezy+UhjpYj1rAT8fclhfzKB8nUhjDw9Ofo9OiBU6UK8jGgsbWt8nCkdZO9t4HmRdfbGaM1PryNM2hFDLARkbGU7Zu5rVWy6j1Xia9HXUcRrGQMVFHn8gafqEKDWeHosrU2vETzGf0AnN+SsgfNfMwiN3V0cYVnAQoQpUjvSjSfpNbDVt5kChMIzD/wLacAdfSbukrYtTNtKGFtoZogqF5Xpm5lP0KUrxekFupcGlWptVlQHWjK2rQtfMpCB18M+kTD0NsBzxIr96ihg00j4gzCwuMmwxzmYsBQr4qY5A0SQH0MAQnsXaUZtkFo74Ifl42h5qjAlnQjg8NSc5h9EPDUSSY+VHeTKUmnZ5e9zZkQgfzEow8kZd3C8Wu2WgKB9DD+dh/IpE4A+69u6zi/19ad4KG5Xqoudn2Qfc9yb0a+Hc9dT1PFKk6eOzAPoBruQMeRIb5z1726fcp8Icoq+iEChUNihIBo7fPYOLUfYOYQuXwTZ7+raIejXBUWvo17TaHAwbweukR0+hjbef5hWENUpciFk/pYX3ZLTufgxEAM/tE9wYWlBiWXCn5NuGr6iC05P7aFYiuu0U3jVP4vTPKuyb0CFXHl6kEoge0y6pWMThip8N0v+mewDjEuQZhn7Jth4FNXBQ57QDXHQd8UAhMq9/lTwll3DouXLGyARnhqIHRcIQnTnaudQc2f/B2EXg=="
-    }
-  }
-}
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: reservation-keypair
+  namespace: euroccgcs
+spec:
+  encryptedData:
+    ssh-privatekey: AgBs6ipMGqj3eGc9ZOEUtvKxFOU6ivsFthx9VEq8eUV4ChiEbTiYmFyG/ZAj603Na1g4IS8a8gjgK6jrnhCo/bGo3IZePORYA6wj+xd1SbRg2VVgUQc7++vyelbErwPivN/HJNMiWVQ+/5HB4fikyj5xssp7qHJpp8X13MRVGhjW3tBWWgtB73i6pXHx5z1q9LGvJ1Bun2/FKCTMw9ZJH0FKAP5DIgNobjSB2LQJF8VxIp0KrDWaxfggWVmAtvAHUBJ71DOnn2rXmV25hLoCA9K6ggHmmRcLJbwkAqIhgkDMHSqX7ouUtxt161uHd2UY37WQXyE/5ibWXzG+tzVXuVIiKT+7vQ10iy8Q15vBt3vfq8gCGODYKPL92iio1rUlUvAKDfcMOnsf+mOavkOjQikNl10glGZ2sfSye4HxzkrIWx81E1QUI3OBhIFMGQhYLxVsblurF3Vh7M9XKtg4wYOZojK4pHGlexg5pj6o4SaVWuoyHr8kzOPz5uDJop18TtQD73TRrgWWIySsb0PJNWuPfbG1mkzNsjt8nWTeVO3FKabcJ5Q4SP7ntsCQxDFk/ABYK69KprYCutQSsC/Fl03MDOsTaVadJWbky022XCxNoo2NJcV2Xwa424ESAx62MfyZCzv1sHAr11rCy+A1aOkpyfeccraAfDJLsj6x58mems7jB8lzKH92VKx+alY34NZ/AcsmVt3uDW91tni5h34bhAgCSmhUeDHL6GFbMbMZ6whpJ1JLIkA5bkT/skHTFdPELa5myS/Y1TPqCfCZ8j6JGwg1u7QqW6LjDp/qtl0A94//2dMGGmGq5e+5AFSHylX5D2m41b4mPM302HQciT/IhkLXlXMmWVxH8FEGA0Zkn3k3dG94wbYQ40FGSObR87xjtJT9zlQqntWGXiMMZt3tZq6+Qgmex8kBFkWaWdF1GPZ4xhrACGcRX322W1eBMLOgyYYULOcwz4vnhVOEX5ICmK/vTatrS+krAnCu6KFAKPzTr2/c4atcb1Rn6bXdiRn9+c0whcbWq2Ytkjirkxuf8KKZRBJEEybNvIkFV3gUMPJ/6vCXrI5WS8/47bcC+pQtq4QiHUuZWwTO1LPj3a5ioq/Y5+wMacvme2tzpiUfQuDhtV12ArRg10xfLD+7Wh+5xt/mroU2V0bJHKjUY7vGr8AnqlibtRTF2rCE8e9pow8V3vqyyjOMrKOaJskoiOqdVmeaG+et687GTNnpk6g=
+    ssh-publickey: AgAKjYIjKWcyElNYEWUAViCd8Nd2YWAy0gM845DopVy/BqTI1eGELM5SJVnPSeSY3LjExTvDu5YDDn4TbT2Sfqhr8ANFEhZtbVMOTr0eLFNLlTt2mMx8c1VcvOQ+eFxDPL53IFFv/bk7uV6jowllzecJzhh9KoDEo+zb8nMgsvrU5wKyR23dhXQRAyiJ7JRznzbx18nPzpKxu7n8siAx1MhTibqkgkWQZtJeFx8AbYcsSJM2QwXcrFuTpWAXGR9HlG9l5MbssZLNCat6tdRMuBiDCX3g/kBjn+Dux6dAklNTtt5omCxM35OmnJujN3XV5L2BonUYNyRGLP/U4I18AwNmL0fi3ZXG20/DrlT65wNMmAxmAVgyhZaM3ENHMzh6X/oimRrC5Q4OHgWqdJH13rr1MJUy/IyQ7BZE6AMHqNwL0yzfTxT/qyU8dBX4MZKlsIQC1FUOwdVgJvKwpwHUqedIMxVDRu8L30lqzBg8ufKeumZjpl4a6egg4bCgDwVOWD4zS2TpF5A8Nz1793Sed7ama9vbtnrqqS3ZlUp9Ev2YAF6dMYoIHauVAEiENmXEuzLJKYVBLXmhmpiH7aqwgLyVZHl/UTOLwgsxcNDmgW37vltYg/ZRK/wRYlZw+BFrMYaDOnor5bM47cq/Mlwpbc1BV+przM7tOhlNGW+WrjyrZVfWdAdsbrIqP9gQMNOtLY6iTLcmqs1TFsikS0wq+rtVfe3M4A72HZjOaF7nAA3KTvGuRt47eegTIjkzLiLySO57ltNThc97VTKwp4iIIxrYaEx+3t5DQqJBGEmlZOolaHae3wy6Pd2h2U5lLWUYdA==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: reservation-keypair
+      namespace: euroccgcs
+    type: Opaque
