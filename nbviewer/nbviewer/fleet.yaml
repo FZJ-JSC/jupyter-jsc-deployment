@@ -52,6 +52,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
+        prep: "false"
     helm:
       values:
         ingress:
@@ -68,3 +69,24 @@ targetCustomizations:
                 - docs.jupyter.jsc.fz-juelich.de
         labels:
           hostname: jupyter.jsc.fz-juelich.de
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+        prep: "true"
+    helm:
+      values:
+        ingress:
+          hosts:
+            - host: zam12185.zam.kfa-juelich.de
+              paths:
+                - path: /nbviewer/
+                  pathType: Prefix
+              svcName: nbviewer
+              svcPort: 8080
+          tls:
+            - secretName: jupyter-jsc-certs-prep
+              hosts:
+                - zam12185.zam.kfa-juelich.de
+        labels:
+          hostname: zam12185.zam.kfa-juelich.de
