@@ -68,6 +68,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
+        prep: "false"
     helm:
       values:
         customConfig:
@@ -78,6 +79,24 @@ targetCustomizations:
           # hostname: zam12246.zam.kfa-juelich.de
           hostname: portal.gauss-centre.eu
           baseUrl: /
+          loggerName: PortalGauss
+        nfs:
+          path: /nfs/hubs/rke2/production/portalgauss
+  - name: jupyter-prod
+    clusterSelector:
+      matchLabels:
+        stage: production
+        prep: "true"
+    helm:
+      values:
+        customConfig:
+          systems:
+            - JSC-Cloud
+            - LRZ
+        global:
+          hostname: zam12185.zam.kfa-juelich.de
+          # hostname: portal.gauss-centre.eu
+          baseUrl: /portalgauss/
           loggerName: PortalGauss
         nfs:
           path: /nfs/hubs/rke2/production/portalgauss
