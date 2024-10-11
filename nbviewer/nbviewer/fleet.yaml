@@ -63,10 +63,55 @@ targetCustomizations:
                   pathType: Prefix
               svcName: nbviewer
               svcPort: 8080
+            - host: docs.jupyter-coec.jsc.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: nbviewer
+              svcPort: 8080
+            - host: docs.jupyter.coe-raise.eu
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: nbviewer
+              svcPort: 8080
+            - host: docs.juniq.fz-juelich.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: nbviewer
+              svcPort: 8080
+            - host: docs.hub.nfdi-jupyter.de
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: nbviewer
+              svcPort: 8080
+            - host: docs.portal.gauss-centre.eu
+              paths:
+                - path: /
+                  pathType: Prefix
+              svcName: nbviewer
+              svcPort: 8080
           tls:
-            - secretName: jupyter-jsc-certs
+            - secretName: jupyterjscdocs-tls
               hosts:
                 - docs.jupyter.jsc.fz-juelich.de
+            - secretName: coecdocs-tls
+              hosts:
+                - docs.jupyter-coec.jsc.fz-juelich.de
+            - secretName: coeraisedocs-tls
+              hosts:
+                - docs.jupyter.coe-raise.eu
+            - secretName: juniqdocs-tls
+              hosts:
+                - docs.juniq.fz-juelich.de
+            - secretName: nfdigeneraldocs-tls
+              hosts:
+                - docs.hub.nfdi-jupyter.de
+            - secretName: portalgaussdocs-tls
+              hosts:
+                - docs.portal.gauss-centre.eu
         labels:
           hostname: jupyter.jsc.fz-juelich.de
   - name: production
