@@ -85,7 +85,7 @@ targetCustomizations:
               svcName: nbviewer
               svcPort: 8080
           tls:
-            - secretName: jupyter-jsc-certs-prep
+            - secretName: zam12185
               hosts:
                 - zam12185.zam.kfa-juelich.de
         labels:
