@@ -14,7 +14,7 @@ helm:
   releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.2
+  version: 0.15.5
   values:
     fullnameOverride: nfdigeneral-custom
     global:
@@ -82,5 +82,6 @@ targetCustomizations:
           # hostname: hub.nfdi-jupyter.de
           baseUrl: /nfdigeneral/
           loggerName: NFDIGeneral
+          tlssecretname: zam12185
         nfs:
           path: /nfs/hubs/rke2/production/nfdigeneral

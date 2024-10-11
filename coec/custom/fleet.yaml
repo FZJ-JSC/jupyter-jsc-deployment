@@ -14,7 +14,7 @@ helm:
   releaseName: coec-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.2
+  version: 0.15.5
   values:
     fullnameOverride: coec-custom
     global:
@@ -70,5 +70,6 @@ targetCustomizations:
           # hostname: jupyter-coec.jsc.fz-juelich.de
           baseUrl: /coec/
           loggerName: CoeC
+          tlssecretname: zam12185
         nfs:
           path: /nfs/hubs/rke2/production/coec
