@@ -14,7 +14,7 @@ helm:
   releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.5
+  version: 0.15.7
   values:
     fullnameOverride: nfdigeneral-custom
     global:
@@ -77,6 +77,8 @@ targetCustomizations:
         prep: "true"
     helm:
       values:
+        ingress:
+          certmanager: false
         global:
           hostname: zam12185.zam.kfa-juelich.de
           # hostname: hub.nfdi-jupyter.de
