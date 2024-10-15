@@ -205,7 +205,7 @@ hub:
       ## Authenticator
       c.JupyterHub.authenticator_class = jsc_custom.authenticator.CustomGenericOAuthenticator
       c.Authenticator.admin_users = {
-          'a.grosch_at_fz-juelich.de', 
+          'i.ouled.elhaj_at_fz-juelich.de', 
           't.kreuzer_at_fz-juelich.de',
       }
 
