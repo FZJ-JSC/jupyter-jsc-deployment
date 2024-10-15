@@ -122,6 +122,7 @@ targetCustomizations:
     helm:
       values:
         ingress:
+          annotations: null
           hosts:
             - host: zam12185.zam.kfa-juelich.de
               paths:
