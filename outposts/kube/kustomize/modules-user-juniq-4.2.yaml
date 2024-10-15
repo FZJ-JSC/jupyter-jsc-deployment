@@ -11,6 +11,9 @@ data:
     if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
       module load JupyterKernel-Bash/.0.9.3-4.2.1
     fi
+    if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Java/.1.3.0
+    fi
     if [[ $JUPYTER_MODULE_OCTAVE_ENABLED  -eq 1 ]]; then
       module load JupyterKernel-Octave/.8.4.0-4.2.1
     fi
