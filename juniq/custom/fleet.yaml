@@ -14,7 +14,7 @@ helm:
   releaseName: juniq-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.10
+  version: 0.15.11
   values:
     fullnameOverride: juniq-custom
     customConfig:
@@ -23,6 +23,10 @@ helm:
           "4.2":
             enabled: false
           "4.2-juniq":
+            enabled: true
+          "3.6":
+            enabled: false
+          "3.6-juniq":
             enabled: true
     global:
       name: juniq
