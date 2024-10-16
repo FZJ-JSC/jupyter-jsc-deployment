@@ -248,6 +248,7 @@ hub:
               r"(?P<accounttype>[^:]+)$"
           )
           def claim_name(resp_json):
+              print(resp_json)
               if "preferred_username" in resp_json.keys():
                   preferred_username_is_secondary = False
                   for entitlement in resp_json.get("entitlements", []):
