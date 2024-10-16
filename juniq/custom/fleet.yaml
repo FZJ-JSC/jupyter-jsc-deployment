@@ -17,6 +17,13 @@ helm:
   version: 0.15.10
   values:
     fullnameOverride: juniq-custom
+    customConfig:
+      services:
+        JupyterLab:
+          "4.2":
+            enabled: false
+          "4.2-juniq":
+            enabled: true
     global:
       name: juniq
       namespace: juniq
