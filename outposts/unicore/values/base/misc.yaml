@@ -32,6 +32,7 @@ logging:
 nodeSelector:
   worker: "true"
 securityContext:
+  privileged: true
   capabilities:
     add:
     - SYS_PTRACE
