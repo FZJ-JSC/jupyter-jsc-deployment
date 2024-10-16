@@ -519,19 +519,7 @@ outpostConfig: |-
               return userdata_volume
           else:
               return []
-      else:   
-          map_hub_names = {
-              "jupyterjsc": "defaulthub",
-              "nfdigeneral": "defaulthub",
-              "coec": "defaulthub",
-              "coeraise": "defaulthub",
-              "portalgauss": "defaulthub",
-              "euroccgcs": "defaulthub",
-              "dev1": "defaulthub",
-              "dev2": "defaulthub"
-          }
-          hub = map_hub_names.get(jupyterhub_name, jupyterhub_name)
-
+      else:
           common_volumes = [
               {
                   "name": "nfs-software", 
@@ -562,14 +550,14 @@ outpostConfig: |-
                   "name": f"modules-{profile}", 
                   "configMap": {
                       "defaultMode": 292,
-                      "name": f"modules-{hub}-{profile}"
+                      "name": f"modules-{profile}"
                   }
               },
               {
                   "name": f"modules-user-{profile}", 
                   "configMap": {
                       "defaultMode": 292,
-                      "name": f"modules-user-{hub}-{profile}"
+                      "name": f"modules-user-{profile}"
                   }
               }
           ]
