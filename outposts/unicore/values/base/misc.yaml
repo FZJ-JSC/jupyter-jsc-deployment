@@ -31,3 +31,7 @@ logging:
     level: 10
 nodeSelector:
   worker: "true"
+securityContext:
+  capabilities:
+    add:
+    - SYS_PTRACE
