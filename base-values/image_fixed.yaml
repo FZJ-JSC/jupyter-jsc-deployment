@@ -1,12 +1,5 @@
 hub:
-  args:
-    - -c
-    - >-
-      pip install --upgrade --upgrade-strategy only-if-needed jupyterhub-forwardbasespawner jupyterhub-unicorespawner jupyterhub-outpostspawner==1.0.1 jupyter-jsc-custom==0.11.1 &&
-      jupyterhub -f /usr/local/etc/jupyterhub/jupyterhub_config.py
-  command:
-    - /bin/bash
   image:
     pullPolicy: "Always"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
-    tag: 3.3.7.post6
+    tag: 3.3.8
