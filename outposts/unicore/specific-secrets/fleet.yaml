@@ -4,12 +4,6 @@ labels:
   app: unicoreoutpost
   component: secrets
 
-dependsOn:
-  - selector:
-      matchLabels:
-        app: postgres-operator
-        component: namespaces
-
 targetCustomizations:
 - name: jupyter-stag
   clusterSelector:
