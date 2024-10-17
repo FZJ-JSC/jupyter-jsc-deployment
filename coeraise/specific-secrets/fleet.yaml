@@ -6,10 +6,6 @@ labels:
 dependsOn:
   - selector:
       matchLabels:
-        app: postgres-operator
-        component: namespaces
-  - selector:
-      matchLabels:
         app: sealed-secrets
 
 targetCustomizations:
