@@ -29,3 +29,5 @@ nodeSelector:
   worker: "true"
 serviceAccount:
   nodesClusterRole: true
+extraPythonPackages:
+  - "jupyterhub==4.1.6"
