@@ -14,12 +14,12 @@ helm:
       namespace: jupyter
     oauthSecret: hdfaai-credentials
     customConfig:
-      announcement:
-        show: false
-        title: "Jupyter4NFDI - Work in Progress"
-        body: "We're currently setting everything up and testing it. The service might restart a few times today."
       systems:
         - JSC-Cloud
+      announcement:
+        show: true
+        title: "Scheduled maintenance on November, 4th"
+        body: "Please be advised that our webservice will be undergoing scheduled maintenance on November 4, 2024, from 9:00 AM to 12:00 PM. During this time, the webservice will be unavailable."
     ingress:
       enabled: true
     jupyter-metrics:

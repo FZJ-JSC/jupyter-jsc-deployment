@@ -14,9 +14,9 @@ helm:
       namespace: jupyter
     customConfig:
       announcement:
-        show: false
-        title: "JSC-Cloud via Jupyter-JSC will not be available on thursday, 27.6.2024, between 9am and noon."
-        body: "All JupyterLabs on JSC-Cloud will be stopped for this short maintenance. Other systems are not affected."
+        show: true
+        title: "Scheduled maintenance on November, 4th"
+        body: "Please be advised that our webservice will be undergoing scheduled maintenance on November 4, 2024, from 9:00 AM to 12:00 PM. During this time, the webservice will be unavailable."
     ingress:
       enabled: true
     jupyter-metrics:
