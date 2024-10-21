@@ -387,6 +387,9 @@ hub:
         "JUWELS": {
           "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core",
         },
+        "JEDI": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JEDI/rest/core",
+        },
         "JUSUF": {
           "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUSUF/rest/core",
         },
