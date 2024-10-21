@@ -4,6 +4,11 @@ labels:
   app: dev1
   component: custom
 
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
 
 helm:
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts

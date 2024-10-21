@@ -4,6 +4,11 @@ labels:
   app: coec
   component: custom
 
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
 
 helm:
   releaseName: coec-custom
