@@ -54,5 +54,5 @@ targetCustomizations:
         stage: staging
     helm:
       valuesFiles:
-        - ../../base-values/image.yaml
-        # - ../../base-values/image_devel.yaml
+        - ../../base-values/image_devel.yaml
+        # - ../../base-values/image.yaml
