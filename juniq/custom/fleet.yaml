@@ -13,6 +13,10 @@ helm:
   values:
     fullnameOverride: juniq-custom
     customConfig:
+      announcement:
+        show: true
+        title: "Scheduled maintenance on November, 4th"
+        body: "Please be advised that our webservice will be undergoing scheduled maintenance on November 4, 2024, from 9:00 AM to 12:00 PM. During this time, the webservice will be unavailable."
       services:
         JupyterLab:
           "4.2":
