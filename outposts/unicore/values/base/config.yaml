@@ -3,6 +3,10 @@ extraPythonPackages:
 extraVolumes:
   - configMap:
       defaultMode: 256
+      name: gunicorn-config
+    name: gunicorn-config
+  - configMap:
+      defaultMode: 256
       name: unicore-jobs-common
     name: job-descriptions-common
   - configMap:
@@ -37,7 +41,13 @@ extraVolumes:
       defaultMode: 256
       name: unicore-jobs-2-6
     name: job-descriptions-2-6
+  - name: tz-config
+    hostPath:
+      path: /usr/share/zoneinfo/Europe/Berlin
+      type: ""
 extraVolumeMounts:
+  - mountPath: /mnt/config
+    name: gunicorn-config
   - mountPath: /mnt/jobs/common
     name: job-descriptions-common
   - mountPath: /mnt/jobs/JupyterLab_4.2
@@ -56,6 +66,8 @@ extraVolumeMounts:
     name: job-descriptions-3-2
   - mountPath: /mnt/jobs/JupyterLab_2.6
     name: job-descriptions-2-6
+  - mountPath: /etc/localtime
+    name: tz-config
 outpostConfig: |-
   import json
   import logging

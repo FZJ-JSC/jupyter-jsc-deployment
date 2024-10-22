@@ -13,14 +13,8 @@ extraEnvVars:
       secretKeyRef:
         name: unicore.unicoreoutpost.postgresql.credentials.postgresql.acid.zalan.do
         key: password
-extraVolumes:
-  - name: tz-config
-    hostPath:
-      path: /usr/share/zoneinfo/Europe/Berlin
-      type: ""
-extraVolumeMounts:
-  - mountPath: /etc/localtime
-    name: tz-config
+  - name: GUNICORN_CONFIG_FILE
+    value: "/mnt/config/gunicorn_http.py"
 nameOverride: "outpost-unicore"
 fullnameOverride: "outpost-unicore"
 logging:
