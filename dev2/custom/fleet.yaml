@@ -31,6 +31,10 @@ helm:
       syslog:
         enabled: true
         level: 10
+    customConfig:
+      binderRepos:
+        repos:
+          - GitHub
 targetCustomizations:
   - name: jupyter-prod
     clusterSelector:
