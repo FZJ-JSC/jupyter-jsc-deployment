@@ -17,6 +17,16 @@ helm:
   version: 0.15.9
   values:
     fullnameOverride: dev2-custom
+    customConfig:
+      authStateKeys:
+        - services
+        - userModules
+        - backendServices
+        - announcement
+        - groups
+        - systems
+        - incidentCheck
+        - binderRepos
     global:
       name: dev2
       namespace: dev2
