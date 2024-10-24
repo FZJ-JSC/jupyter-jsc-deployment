@@ -299,7 +299,7 @@ hub:
       c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
 
       def ssh_during_startup(spawner):
-          if spawner.user_options.get("system", "") in ["LRZ", "LRZ-Staging", "MPCDF", "Dummy"]:
+          if spawner.user_options.get("system", "") in ["LRZ", "LRZ-Staging", "HLRS", "HLRS-Staging", "MPCDF", "Dummy"]:
               return True
           return False
 
@@ -330,7 +330,7 @@ hub:
       ## Override request_timeout for start request
       def request_kwargs_start(spawner, user_options):
           request_kwargs_start = jsc_custom.spawner.request_kwargs(spawner, user_options)
-          if user_options.get("system", "None") in ["LRZ", "LRZ-Staging"]:
+          if user_options.get("system", "None") in ["LRZ", "LRZ-Staging", "HLRS", "HLRS-Staging"]:
               request_kwargs_start["request_timeout"] = 1200
           return request_kwargs_start
 
