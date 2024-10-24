@@ -17,10 +17,14 @@ jupyterhubs:
       - dev1
       - dev2
     ssh_config_hosts:
-      - name: "outpost_hlrs-staging"
-        user: "jsc-hlrs-jupyter"
-        port: 22
-        hostname: "gw.hydra1.hlrs.de"
+      - name: outpost_hlrs-staging
+        user: jhuboutpost
+        port: 32022
+        hostname: 192.168.12.3
+        proxy:
+          user: "jsc-hlrs-jupyter"
+          port: 22
+          hostname: "gw.hydra1.hlrs.de"
       - name: "outpost_lrz-staging"
         user: "jhuboutpost"
         port: 22
