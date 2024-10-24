@@ -17,16 +17,6 @@ helm:
   version: 0.15.15
   values:
     fullnameOverride: dev2-custom
-    customConfig:
-      authStateKeys:
-        - services
-        - userModules
-        - backendServices
-        - announcement
-        - groups
-        - systems
-        - incidentCheck
-        - binderRepos
     global:
       name: dev2
       namespace: dev2
@@ -42,6 +32,15 @@ helm:
         enabled: true
         level: 10
     customConfig:
+      authStateKeys:
+        - services
+        - userModules
+        - backendServices
+        - announcement
+        - groups
+        - systems
+        - incidentCheck
+        - binderRepos
       binderRepos:
         repos:
           - GitHub
