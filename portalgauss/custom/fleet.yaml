@@ -57,6 +57,7 @@ targetCustomizations:
             - JSC-Cloud
             - LRZ-Staging
             - LRZ
+            - HLRS-Staging
         global:
           # hostname: zam12246.zam.kfa-juelich.de
           hostname: portal-staging.gauss-centre.eu
