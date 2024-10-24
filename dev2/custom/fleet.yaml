@@ -14,7 +14,7 @@ helm:
   releaseName: dev2-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.9
+  version: 0.15.15
   values:
     fullnameOverride: dev2-custom
     customConfig:
@@ -41,6 +41,10 @@ helm:
       syslog:
         enabled: true
         level: 10
+    customConfig:
+      binderRepos:
+        repos:
+          - GitHub
 targetCustomizations:
   - name: jupyter-prod
     clusterSelector:
