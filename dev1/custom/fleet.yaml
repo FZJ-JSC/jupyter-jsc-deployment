@@ -33,6 +33,19 @@ helm:
       syslog:
         enabled: true
         level: 10
+    customConfig:
+      authStateKeys:
+        - services
+        - userModules
+        - backendServices
+        - announcement
+        - groups
+        - systems
+        - incidentCheck
+        - binderRepos
+      binderRepos:
+        repos:
+          - GitHub
 targetCustomizations:
   - name: jupyter-stag
     clusterSelector:
