@@ -27,4 +27,4 @@ extraVolumeMounts:
 nodeSelector:
   worker: "true"
 serviceAccount:
-  nodesClusterRole: true
+  nodesClusterRole: false
