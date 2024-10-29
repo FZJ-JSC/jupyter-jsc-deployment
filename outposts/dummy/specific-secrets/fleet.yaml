@@ -1,4 +1,4 @@
-defaultnamespace: outpost
+defaultnamespace: dummy
 
 labels:
   app: dummyoutpost

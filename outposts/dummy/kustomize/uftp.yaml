@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: uftp
-  namespace: outpost
+  namespace: dummy
 data:
   mount_data_ro.sh: |
     #!/bin/bash

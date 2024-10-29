@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: outpost-kube-flavors-external
-  namespace: outpost
+  namespace: dummy
 data:
   flavors.yaml: |
     flavors:
