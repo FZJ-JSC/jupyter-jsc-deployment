@@ -149,10 +149,7 @@ outpostConfig: |-
       
       return flavor_config["flavors"][flavor].get("resources", {})
 
-  c.JupyterHubOutpost.flavors_update_token = flavors_update_token
-  c.JupyterHubOutpost.flavors = flavors_per_hub
-  c.JupyterHubOutpost.user_flavors = flavors_per_user
-  c.JupyterHubOutpost.flavors_undefined_max = 0
+  c.JupyterHubOutpost.flavors_undefined_max = 5
 
 
   ##########
@@ -209,6 +206,53 @@ outpostConfig: |-
       t = Thread(target=t_send_event, args=(loop, spawner, event))
       t.start()
       t.join()
+
+  def get_gitref(spawner, r2d_type, r2d_repo, r2d_gitref):
+      if r2d_type == "GitHub":
+          try:
+              r2d_repo_api_url = r2d_repo.replace("github.com", "api.github.com/repos").rstrip("/")
+              r2d_repo_tags_url = f"{r2d_repo_api_url}/tags"
+              r2d_repo_commits_url = f"{r2d_repo_api_url}/commits"
+              r2d_repo_branches_url = f"{r2d_repo_api_url}/branches"
+              
+              # If it's a tag: use existing images
+              r = requests.get(r2d_repo_tags_url, headers={"Accept": "application/json"})
+              r.raise_for_status()
+              for tag in r.json():
+                  if tag.get("name", "") == r2d_gitref:
+                      if tag.get("commit", {}).get("sha", False):
+                          r2d_gitref = tag["commit"]["sha"]
+                      return r2d_gitref
+
+              # If it's a Custom Commit Reference -> get sha and use existing images
+              r = requests.get(r2d_repo_commits_url, headers={"Accept": "application/json"})
+              r.raise_for_status()
+              if r2d_gitref in ["HEAD", "@"]:
+                  return r.json()[0]["sha"]
+              elif r2d_gitref.startswith("HEAD~"):
+                  n = int(r2d_gitref[5:])
+                  return r.json()[n]["sha"]
+              elif r2d_gitref.startswith("@~"):
+                  n = int(r2d_gitref[2:])
+                  return r.json()[n]["sha"]
+
+              # If it's a branch: use the last commit in this branch
+              r = requests.get(r2d_repo_branches_url, headers={"Accept": "application/json"})
+              r.raise_for_status()
+              for branch in r.json():
+                  if r2d_gitref == branch["name"]:
+                      if branch.get("commit", {}).get("sha", False):
+                          r2d_gitref = branch["commit"]["sha"]
+                      return r2d_gitref
+          except:
+              spawner.log.exception(f"{spawner._log_name} - Could not check github repository to make caching decision")
+      return r2d_gitref
+
+  def get_image(spawner, r2d_repo, r2d_gitref):
+      image_prefix = os.environ.get("REPO2DOCKER_IMAGE_PREFIX")
+      md5 = hashlib.md5(f"{r2d_repo}:{r2d_gitref}".encode("utf-8")).hexdigest()[:8]
+      image = f"{image_prefix}:v{md5}"
+      return image
 
   def pre_spawn_hook(spawner):
       hub = spawner.extra_labels.get("app", "jupyter")
@@ -320,7 +364,7 @@ outpostConfig: |-
       if get_profile(spawner) == "repo2docker":
           # 1. Inform user it may take a while
           summary = "We will build a docker image from the selected information. This may take a few minutes"
-          details = "We will send an update every 10 seconds."
+          details = "We will send an update every 30 seconds."
           msg = f"<details><summary><span style=\"color:orange;\">{summary}</span></summary>{details}</details>"
           event = {
               "progress": "12",
@@ -335,90 +379,112 @@ outpostConfig: |-
           headers = {
               "Accept": "application/json"
           }
+          r2d_type = spawner.user_options["type"]
           r2d_repo = spawner.user_options["repo"]
-          r2d_gitref = spawner.user_options.get("gitref", "HEAD")
-          data = {
-              "token": token,
-              "ref": "main",
-              "variables[R2D_REPO]": r2d_repo,
-              "variables[R2D_GITREF]": r2d_gitref
-          }
-          image_prefix = os.environ.get("REPO2DOCKER_IMAGE_PREFIX")
-          # image_prefix example: registry.jsc.fz-juelich.de/jupyterjsc/repo2docker/r2d:v
-          md5 = hashlib.md5(f"{r2d_repo}:{r2d_gitref}".encode("utf-8")).hexdigest()[:8]
-          image = f"{image_prefix}{md5}"
-          r = requests.post(url=repo2docker_post_url, data=data, timeout=3)
-          r.raise_for_status()
-          respone_json = r.json()
-          id = response_json["id"]
-          c = 0
-          status = ""
-          web_url = ""
-          while c < 120:
-              c += 1
-              repo2docker_get_url = os.environ.get("REPO2DOCKER_GET_URL", "None")
-              headers = {
-                  "Accept": "application/json"
-              }
-              try:
-                  # url example: https://gitlab.jsc.fz-juelich.de/api/v4/projects/6798/pipelines/213996/
-                  r = requests.get(url=repo2docker_get_url, headers=headers, timeout=3)
+          r2d_gitref_prev = spawner.user_options.get("gitref", "HEAD")
+          
+          r2d_gitref = get_gitref(spawner, r2d_type, r2d_repo, r2d_gitref_prev)
+          image = get_image(spawner, r2d_repo, r2d_gitref)
+
+          # Let's check if this image already exists
+          image_exists = False
+          try:
+              tag_list_url = os.environ.get("REPO2DOCKER_ALL_TAGS_URL", False)
+              if tag_list_url:
+                  r = requests.get(tag_list_url, headers={"Accept":"application/json"})
                   r.raise_for_status()
-                  response_json = r.json()
-                  status = response_json["status"]
-                  web_url = response_json.get("web_url", None)
-                  if status in ["pending", "running"]:
-                      summary = f"Build process is currently in state {status}"
-                      if web_url:
-                          details = f"For more details check the pipeline output at {web_url}"
-                      else:
-                          details = ""
-                      msg = f"<details><summary>{summary}</summary>{details}</details>"
-                      event = {
-                          "progress": "12",
-                          "html_message": msg,
-                          "failed": False
-                      }
-                      sync_send_event(spawner, event)
+                  tags_list = r.json()
+                  for tags_entry in tags_list:
+                      if image == tags_entry.get("location", ""):
+                          image_exists = True
+                          break
+          except:
+              spawner.log.exception(f"{spawner._log_name} - Could not check for existing images")
+              image_exists = False
+
+          if image_exists:
+              spawner.log.exception(f"{spawner._log_name} - Image {image} already exists. No need to build it.")
+          else:
+              data = {
+                  "token": token,
+                  "ref": "main",
+                  "variables[R2D_REPO]": r2d_repo,
+                  "variables[R2D_GITREF]": r2d_gitref,
+                  "variables[R2D_IMAGE]": image,
+              }
+              r = requests.post(url=repo2docker_post_url, data=data, timeout=3)
+              r.raise_for_status()
+              response_json = r.json()
+              id = response_json["id"]
+              c = 0
+              status = ""
+              web_url = ""
+              while c < 120:
+                  c += 1
+                  repo2docker_get_url = os.environ.get("REPO2DOCKER_GET_URL", "None").rstrip("/")
+                  repo2docker_get_url = f"{repo2docker_get_url}/{id}"
+                  headers = {
+                      "Accept": "application/json"
+                  }
+                  try:
+                      # url example: https://gitlab.jsc.fz-juelich.de/api/v4/projects/6798/pipelines/213996/
+                      r = requests.get(url=repo2docker_get_url, headers=headers, timeout=3)
+                      r.raise_for_status()
+                      response_json = r.json()
+                      status = response_json["status"]
+                      web_url = response_json.get("web_url", None)
+                      if status in ["pending", "running"]:
+                          summary = f"Build process is currently in state {status}"
+                          if web_url:
+                              details = f"For more details check the pipeline output at {web_url}"
+                          else:
+                              details = ""
+                          msg = f"<details><summary>{summary}</summary>{details}</details>"
+                          event = {
+                              "progress": "12",
+                              "html_message": msg,
+                              "failed": False
+                          }
+                          sync_send_event(spawner, event)
+                          time.sleep(30)
+                          continue
+                      elif status in ["success"]:
+                          summary = f"Build process complete. Using {image} to start server"
+                          if web_url:
+                              details = f"For more details check the pipeline output at {web_url}"
+                          else:
+                              details = ""
+                          msg = f"<details><summary><span style=\"color:darkgreen;\">{summary}</span></summary>{details}</details>"
+                          msg = f"<details><summary>{summary}</summary>{details}</details>"
+                          event = {
+                              "progress": "13",
+                              "html_message": msg,
+                              "failed": False
+                          }
+                          sync_send_event(spawner, event)
+                          break
+                      elif status in ["failed"]:
+                          summary = f"Build process failed. Please check the logs at {web_url} (click on \"build-image\") to solve the issue."
+                          if web_url:
+                              details = f"Please contact support (mail address in the footer), if you need help."
+                          else:
+                              details = ""
+                          msg = f"<details><summary><span style=\"color:red;\">{summary}</span></summary>{details}</details>"
+                          msg = f"<details><summary>{summary}</summary>{details}</details>"
+                          event = {
+                              "progress": "13",
+                              "html_message": msg,
+                              "failed": False
+                          }
+                          sync_send_event(spawner, event)
+                          break
+                  except:
+                      spawner.log.exception("Could not check build process status")
                       time.sleep(10)
-                      continue
-                  elif status in ["success"]:
-                      summary = f"Build process complete. Using {image} to start server"
-                      if web_url:
-                          details = f"For more details check the pipeline output at {web_url}"
-                      else:
-                          details = ""
-                      msg = f"<details><summary><span style=\"color:darkgreen;\">{summary}</span></summary>{details}</details>"
-                      msg = f"<details><summary>{summary}</summary>{details}</details>"
-                      event = {
-                          "progress": "13",
-                          "html_message": msg,
-                          "failed": False
-                      }
-                      sync_send_event(spawner, event)
-                      break
-                  elif status in ["failed"]:
-                      summary = f"Build process failed. Please check the logs at {web_url} (click on \"build-image\") to solve the issue."
-                      if web_url:
-                          details = f"Please contact support (mail address in the footer), if you need help."
-                      else:
-                          details = ""
-                      msg = f"<details><summary><span style=\"color:red;\">{summary}</span></summary>{details}</details>"
-                      msg = f"<details><summary>{summary}</summary>{details}</details>"
-                      event = {
-                          "progress": "13",
-                          "html_message": msg,
-                          "failed": False
-                      }
-                      sync_send_event(spawner, event)
-                      break
-              except:
-                  spawner.log.exception("Could not check build process status")
-                  time.sleep(10)
-          if c == 120:
-              raise Exception("Timeout. Stop start attempt. Please try again in a few minutes. Caching might solve this issue for the next try.")
-          elif not status or status in ["failed"]:        
-              raise Exception("Build process failed. Stop start attempt.")
+              if c == 120:
+                  raise Exception("Timeout. Stop start attempt. Please try again in a few minutes. Caching might solve this issue for the next try.")
+              elif not status or status in ["failed"]:
+                  raise Exception("Build process failed. Stop start attempt.")
 
 
   c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
@@ -570,7 +636,11 @@ outpostConfig: |-
       spawner.log.info(f"{spawner._log_name} - {flavor_mem_request}M memory for {flavor} ({jupyterhub_name}) requested")
       
       # get all usernodes, sort them by creation date
-      all_nodes = core.list_node().to_dict()
+      try:
+          all_nodes = core.list_node().to_dict()
+      except:
+          spawner.log.info(f"{spawner._log_name} - Could not load node infos")
+          return {"usernode": "true"}
       usernodes = [x for x in all_nodes.get("items", []) if x.get("metadata", {}).get("labels", {}).get("usernode", "false") == "true"]
       usernodes_sorted = sorted(usernodes, key=lambda d: d["metadata"]['creation_timestamp'])
 
@@ -596,7 +666,7 @@ outpostConfig: |-
       # Therefore, it's fine to just create one profile
       jupyterhub_name = spawner.jupyterhub_name
       profile = get_profile(spawner)
-      flavor = spawner.user_options.get("flavor", "default")
+      flavor = spawner.user_options.get("flavor", "m1")
       resources = get_flavor_resources(flavor)
 
       display_name = {
@@ -609,7 +679,7 @@ outpostConfig: |-
           "custom": "JupyterLab/custom",
           "3-6": "JupyterLab/3.6",
           "4-2": "JupyterLab/4.2",
-          "repo2docker": "Repo2Docker"
+          "repo2docker": "JupyterLab/repo2docker"
       }
 
       if profile == "custom":
@@ -630,12 +700,13 @@ outpostConfig: |-
               }
           ]
       elif profile == "repo2docker":
+          r2d_type = spawner.user_options["type"]
           r2d_repo = spawner.user_options["repo"]
-          r2d_gitref = spawner.user_options.get("gitref", "HEAD")
-          image_prefix = os.environ.get("REPO2DOCKER_IMAGE_PREFIX")
-          # image_prefix example: registry.jsc.fz-juelich.de/jupyterjsc/repo2docker/r2d:v
-          md5 = hashlib.md5(f"{r2d_repo}:{r2d_gitref}".encode("utf-8")).hexdigest()[:8]
-          image = f"{image_prefix}{md5}"
+          r2d_gitref_prev = spawner.user_options.get("gitref", "HEAD")
+          
+          r2d_gitref = get_gitref(spawner, r2d_type, r2d_repo, r2d_gitref_prev)
+          image = get_image(spawner, r2d_repo, r2d_gitref)
+          
           return [
               {
                   "display_name": display_name.get(profile, "Repo2Docker"),
