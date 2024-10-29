@@ -149,8 +149,10 @@ outpostConfig: |-
       
       return flavor_config["flavors"][flavor].get("resources", {})
 
-  c.JupyterHubOutpost.flavors_undefined_max = 5
-
+  c.JupyterHubOutpost.flavors_update_token = flavors_update_token
+  c.JupyterHubOutpost.flavors = flavors_per_hub
+  c.JupyterHubOutpost.user_flavors = flavors_per_user
+  c.JupyterHubOutpost.flavors_undefined_max = 0
 
   ##########
   # KubeSpawner
