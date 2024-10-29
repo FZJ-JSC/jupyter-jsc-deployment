@@ -2,17 +2,6 @@ cryptSecret: outpost-cryptkey
 outpostUsers: outpost-users
 extraEnvVarsSecrets:
   - outpost-generics
-extraEnvVars:
-  - name: SQL_USER
-    valueFrom:
-      secretKeyRef:
-        name: outpost.kubeoutpost.postgresql.credentials.postgresql.acid.zalan.do
-        key: username
-  - name: SQL_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: outpost.kubeoutpost.postgresql.credentials.postgresql.acid.zalan.do
-        key: password
 nameOverride: "outpost-kube"
 fullnameOverride: "outpost-kube"
 logging:

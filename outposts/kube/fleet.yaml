@@ -50,6 +50,8 @@ targetCustomizations:
               secretKeyRef:
                 name: outpost.kubeoutpost.postgresql.credentials.postgresql.acid.zalan.do
                 key: password
+          - name: GUNICORN_TIMEOUT
+            value: 1260
   - name: production
     clusterSelector:
       matchLabels:
@@ -69,3 +71,5 @@ targetCustomizations:
               secretKeyRef:
                 name: outpost.kubeoutpost.postgresql.credentials.postgresql.acid.zalan.do
                 key: password
+          - name: GUNICORN_TIMEOUT
+            value: 1260
