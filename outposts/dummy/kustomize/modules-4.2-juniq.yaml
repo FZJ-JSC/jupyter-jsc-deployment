@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: modules-4-2-juniq
+  namespace: outpost
+data:
+  load_jupyter_version.sh: |
+    #!/bin/bash
+
+    module purge
+    module use ${OTHERSTAGES}
+    module load Stages/2024 GCC/12.3.0 ParaStationMPI
+    module load Jupyter-bundle/20240520
+    module load Cartopy/0.22.0 Cirq/1.4.0 DWave/6.8.0 PyQuil/4.8.0 cuQuantum-Python/23.10.0 Qiskit/0.45.1 pulser/0.18.0 myqlm/1.9.9 ParityOS/2.3.0
