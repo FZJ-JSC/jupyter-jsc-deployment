@@ -287,7 +287,7 @@ hub:
                       groups.append(value)
               return groups
         
-          c.CustomGenericOAuthenticator.claim_groups_key = group_management
+          c.CustomGenericOAuthenticator.auth_state_groups_key = group_management
 
       #   c.CustomGenericOAuthenticator.extra_params_allowed_runtime = {
       #       "uy_select_authn": ["jupyterhdfaaiAuthn.hbp", "jupyterldapAuthn.password"]
