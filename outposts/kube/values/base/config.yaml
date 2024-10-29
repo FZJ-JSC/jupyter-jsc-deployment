@@ -423,9 +423,9 @@ outpostConfig: |-
               c = 0
               status = ""
               web_url = ""
+              repo2docker_get_url = f"{repo2docker_get_url}/{id}"
               while c < 120:
                   c += 1
-                  repo2docker_get_url = f"{repo2docker_get_url}/{id}"
                   headers = {
                       "Accept": "application/json"
                   }
