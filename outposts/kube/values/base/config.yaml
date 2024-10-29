@@ -375,7 +375,9 @@ outpostConfig: |-
 
           # Trigger build process
           token = os.environ.get("REPO2DOCKER_TOKEN")
-          repo2docker_post_url = os.environ.get("REPO2DOCKER_POST_URL", "None")
+          repo2docker_project_url = os.environ.get("REPO2DOCKER_PROJECT_URL", "None").rstrip("/")
+          repo2docker_post_url = f"{repo2docker_project_url}/trigger/pipeline"
+          repo2docker_get_url = f"{repo2docker_project_url}/pipelines"
           headers = {
               "Accept": "application/json"
           }
@@ -389,7 +391,7 @@ outpostConfig: |-
           # Let's check if this image already exists
           image_exists = False
           try:
-              tag_list_url = os.environ.get("REPO2DOCKER_ALL_TAGS_URL", False)
+              tag_list_url = os.environ.get("REPO2DOCKER_REPOSITORY_TAGS_URL", False)
               if tag_list_url:
                   r = requests.get(tag_list_url, headers={"Accept":"application/json"})
                   r.raise_for_status()
@@ -421,7 +423,6 @@ outpostConfig: |-
               web_url = ""
               while c < 120:
                   c += 1
-                  repo2docker_get_url = os.environ.get("REPO2DOCKER_GET_URL", "None").rstrip("/")
                   repo2docker_get_url = f"{repo2docker_get_url}/{id}"
                   headers = {
                       "Accept": "application/json"
