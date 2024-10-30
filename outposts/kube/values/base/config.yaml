@@ -6,10 +6,8 @@ outpostConfig: |-
   import logging
   import os
   import requests
-  import time
   import yaml
 
-  from threading import Thread
   from kubernetes import client
   from kubernetes import config
   from kubespawner import KubeSpawner
@@ -195,20 +193,6 @@ outpostConfig: |-
   # KubeSpawner prespawn hook
   ##########
 
-  def sync_send_event(spawner, event):
-      loop = asyncio.new_event_loop()
-
-      async def wait_for_future(future):
-          return await future
-
-      def t_send_event(loop, spawner, event):
-          asyncio.set_event_loop(loop)
-          loop.run_until_complete(wait_for_future(spawner._outpostspawner_send_event(event)))
-          
-      t = Thread(target=t_send_event, args=(loop, spawner, event))
-      t.start()
-      t.join()
-
   def get_gitref(spawner, r2d_type, r2d_repo, r2d_gitref):
       if r2d_type == "GitHub":
           try:
@@ -256,7 +240,7 @@ outpostConfig: |-
       image = f"{image_prefix}:v{md5}"
       return image
 
-  def pre_spawn_hook(spawner):
+  async def pre_spawn_hook(spawner):
       hub = spawner.extra_labels.get("app", "jupyter")
       stage = os.environ.get("STAGE", "staging")
       userid = str(spawner.user.id)
@@ -309,7 +293,7 @@ outpostConfig: |-
                   "html_message": msg,
                   "failed": False
               }
-              sync_send_event(spawner, event)
+              await spawner._outpostspawner_send_event(event)
           except:
               spawner.log.exception(f"{spawner._log_name} - Could not get storage information")
               raise Exception("Could not reach persistent storage manager.")
@@ -373,7 +357,7 @@ outpostConfig: |-
               "html_message": msg,
               "failed": False
           }
-          sync_send_event(spawner, event)
+          await spawner._outpostspawner_send_event(event)
 
           # Trigger build process
           token = os.environ.get("REPO2DOCKER_TOKEN")
@@ -450,8 +434,8 @@ outpostConfig: |-
                               "html_message": msg,
                               "failed": False
                           }
-                          sync_send_event(spawner, event)
-                          time.sleep(10)
+                          await spawner._outpostspawner_send_event(event)
+                          await asyncio.sleep(10)
                           continue
                       elif status in ["success"]:
                           summary = f"Build process complete. Using {image} to start server"
@@ -466,7 +450,7 @@ outpostConfig: |-
                               "html_message": msg,
                               "failed": False
                           }
-                          sync_send_event(spawner, event)
+                          await spawner._outpostspawner_send_event(event)
                           break
                       elif status in ["failed"]:
                           summary = f"Build process failed. Please check the logs at {web_url} (click on \"build-image\") to solve the issue."
@@ -481,11 +465,12 @@ outpostConfig: |-
                               "html_message": msg,
                               "failed": False
                           }
-                          sync_send_event(spawner, event)
+                          await spawner._outpostspawner_send_event(event)
                           break
                   except:
+                      c = 120
                       spawner.log.exception(f"{spawner._log_name} - Could not check build process status")
-                      time.sleep(10)
+                      await asyncio.sleep(10)
               if c == 120:
                   raise Exception("Timeout. Stop start attempt. Please try again in a few minutes. Caching might solve this issue for the next try.")
               elif not status or status in ["failed"]:
