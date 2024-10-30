@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: gunicorn-config
-  namespace: unicore
+  namespace: dummy
 data:
   gunicorn_http.py: |
     import os
