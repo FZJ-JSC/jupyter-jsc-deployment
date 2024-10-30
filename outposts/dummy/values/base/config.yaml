@@ -240,16 +240,197 @@ outpostConfig: |-
       image = f"{image_prefix}:v{md5}"
       return image
 
-  async def pre_spawn_hook(spawner):
-      hub = spawner.extra_labels.get("app", "jupyter")
-      stage = os.environ.get("STAGE", "staging")
-      userid = str(spawner.user.id)
-      soft = "25g"
-      hard = "30g"
+  def get_use_storage(spawner):
+      ret = True
+      if get_profile(spawner) in ["custom", "repo2docker"]
+          if spawner.user_options.get("userdata_path", ""):
+              use_storage = True
+          else:
+              use_storage = False
+      return ret
 
+  async def repo2docker_build(spawner):
+      # 1. Let's check if the image already exists
+      r2d_type = spawner.user_options["type"]
+      r2d_repo = spawner.user_options["repo"]
+      r2d_gitref_prev = spawner.user_options.get("gitref", "HEAD")
+      
+      r2d_gitref = get_gitref(spawner, r2d_type, r2d_repo, r2d_gitref_prev)
+      image = get_image(spawner, r2d_repo, r2d_gitref)
+
+      # Let's check if this image already exists
+      image_exists = False
+      try:
+          tag_list_url = os.environ.get("REPO2DOCKER_REPOSITORY_TAGS_URL", False)
+          if tag_list_url:
+              r = requests.get(tag_list_url, headers={"Accept":"application/json"})
+              r.raise_for_status()
+              tags_list = r.json()
+              for tags_entry in tags_list:
+                  if image == tags_entry.get("location", ""):
+                      image_exists = True
+                      break
+      except:
+          spawner.log.exception(f"{spawner._log_name} - Could not check for existing images")
+          image_exists = False
+
+      if image_exists:
+          spawner.log.info(f"{spawner._log_name} - Image {image} already exists. No need to build it.")
+          return
+        
+      # 2. Inform user it may take a while
+      summary = "We will build a docker image from the selected information. This may take a few minutes"
+      details = "We will send an update every 10 seconds."
+      msg = f"<details><summary><span style=\"color:orange;\">{summary}</span></summary>{details}</details>"
+      event = {
+          "progress": "12",
+          "html_message": msg,
+          "failed": False
+      }
+      await spawner._outpostspawner_send_event(event)
+
+      # 3. Trigger build process
+      token = os.environ.get("REPO2DOCKER_TOKEN")
+      repo2docker_project_url = os.environ.get("REPO2DOCKER_PROJECT_URL", "None").rstrip("/")
+      repo2docker_post_url = f"{repo2docker_project_url}/trigger/pipeline"
+      repo2docker_get_url = f"{repo2docker_project_url}/pipelines"
+      headers = {
+          "Accept": "application/json"
+      }
+
+      data = {
+          "token": token,
+          "ref": "main",
+          "variables[R2D_REPO]": r2d_repo,
+          "variables[R2D_GITREF]": r2d_gitref,
+          "variables[R2D_IMAGE]": image,
+      }
+      r = requests.post(url=repo2docker_post_url, data=data, timeout=3)
+      r.raise_for_status()
+      response_json = r.json()
+      id = response_json["id"]
+      c = 0
+      status = ""
+      web_url = ""
+      repo2docker_get_url = f"{repo2docker_get_url}/{id}"
+      while c < 120:
+          c += 1
+          headers = {
+              "Accept": "application/json"
+          }
+          try:
+              spawner.log.info(f"{spawner._log_name} - Check build status")
+              # url example: https://gitlab.jsc.fz-juelich.de/api/v4/projects/6798/pipelines/213996/
+              r = requests.get(url=repo2docker_get_url, headers=headers, timeout=3)
+              r.raise_for_status()
+              response_json = r.json()
+              status = response_json["status"]
+              spawner.log.info(f"{spawner._log_name} - Check build status: {status}")
+              web_url = response_json.get("web_url", None)
+              if status in ["pending", "running"]:
+                  summary = f"Build process is currently in state {status}"
+                  if web_url:
+                      details = f"For more details check the pipeline output at {web_url}"
+                  else:
+                      details = ""
+                  msg = f"<details><summary>{summary}</summary>{details}</details>"
+                  event = {
+                      "progress": "12",
+                      "html_message": msg,
+                      "failed": False
+                  }
+                  await spawner._outpostspawner_send_event(event)
+                  await asyncio.sleep(10)
+                  continue
+              elif status in ["success"]:
+                  summary = f"Build process complete. Using {image} to start server"
+                  if web_url:
+                      details = f"For more details check the pipeline output at {web_url}"
+                  else:
+                      details = ""
+                  msg = f"<details><summary><span style=\"color:darkgreen;\">{summary}</span></summary>{details}</details>"
+                  msg = f"<details><summary>{summary}</summary>{details}</details>"
+                  event = {
+                      "progress": "13",
+                      "html_message": msg,
+                      "failed": False
+                  }
+                  await spawner._outpostspawner_send_event(event)
+                  break
+              elif status in ["failed"]:
+                  summary = f"Build process failed. Please check the logs at {web_url} (click on \"build-image\") to solve the issue."
+                  if web_url:
+                      details = f"Please contact support (mail address in the footer), if you need help."
+                  else:
+                      details = ""
+                  msg = f"<details><summary><span style=\"color:red;\">{summary}</span></summary>{details}</details>"
+                  msg = f"<details><summary>{summary}</summary>{details}</details>"
+                  event = {
+                      "progress": "13",
+                      "html_message": msg,
+                      "failed": False
+                  }
+                  await spawner._outpostspawner_send_event(event)
+                  break
+          except:
+              c = 120
+              spawner.log.exception(f"{spawner._log_name} - Could not check build process status")
+              await asyncio.sleep(10)
+      if c == 120:
+          raise Exception("Timeout. Stop start attempt. Please try again in a few minutes. Caching might solve this issue for the next try.")
+      elif not status or status in ["failed"]:
+          raise Exception("Build process failed. Stop start attempt.")
+
+  async def create_dockerregistry_secret(spawner):
+      try:
+          config.load_incluster_config()
+          v1 = client.CoreV1Api()
+          image_pull_secret_name = f"{spawner.pod_name}-reg"
+          secret_manifest = {
+              "apiVersion": "v1",
+              "kind": "Secret",
+              "type": "kubernetes.io/dockerconfigjson",
+              "metadata": {
+                  "name": image_pull_secret_name,
+                  "resourceversion": "v1",
+                  "labels": {
+                      "pod": spawner.pod_name
+                  }
+              },
+              "data": {
+                  ".dockerconfigjson": dockerregistry
+              },
+          }
+          try:
+              v1.read_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
+          except:
+              pass
+          else:
+              spawner.log.info(f"{spawner._log_name} - Delete pre existing registry secret {image_pull_secret_name}")
+              v1.delete_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
+          v1.create_namespaced_secret(body=secret_manifest, namespace=spawner.namespace)
+          image_pull_secrets = getattr(spawner, "image_pull_secrets", [])
+          if not image_pull_secrets:
+              image_pull_secrets = [image_pull_secret_name]
+          elif type(image_pull_secrets) == list:
+              image_pull_secrets.append(image_pull_secret_name)
+          elif type(image_pull_secrets) == str:
+              image_pull_secrets = [image_pull_secrets] + [image_pull_secret_name]
+          else:
+              image_pull_secrets = [image_pull_secret_name]
+          spawner.image_pull_secrets = image_pull_secrets
+      except:
+          spawner.log.exception(f"{spawner._log_name} - Could not create dockerregistry secret")
+
+  async def create_storage(spawner):
       token = os.environ.get("STORAGE_MANAGER_TOKEN", None)
       storage_url = os.environ.get("STORAGE_MANAGER_URL", None)
       if storage_url and token:
+          hub = spawner.extra_labels.get("app", "jupyter")
+          stage = os.environ.get("STAGE", "staging")
+          userid = str(spawner.user.id)
+          soft = "25g"
+          hard = "30g"
           request_header = {
               "Content-Type": "application/json",
               "Accept": "application/json",
@@ -300,181 +481,18 @@ outpostConfig: |-
       else:
           spawner.log.warning(f"{spawner._log_name} - Storage Manager env variables not set")
 
-      if "usermount_path" in spawner.user_options:
-          del spawner.user_options["usermount_path"]
+  async def pre_spawn_hook(spawner):
+      # Create User storage and check it's quota if needed
+      if get_use_storage(spawner):
+          await create_storage(spawner)
 
       # Create registry secret, if `dockerregistry` is part of user_options
-      dockerregistry = spawner.user_options.get("dockerregistry", "")
-      if dockerregistry:
-          try:
-              config.load_incluster_config()
-              v1 = client.CoreV1Api()
-              image_pull_secret_name = f"{spawner.pod_name}-reg"
-              secret_manifest = {
-                  "apiVersion": "v1",
-                  "kind": "Secret",
-                  "type": "kubernetes.io/dockerconfigjson",
-                  "metadata": {
-                      "name": image_pull_secret_name,
-                      "resourceversion": "v1",
-                      "labels": {
-                          "pod": spawner.pod_name
-                      }
-                  },
-                  "data": {
-                      ".dockerconfigjson": dockerregistry
-                  },
-              }
-              try:
-                  v1.read_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
-              except:
-                  pass
-              else:
-                  spawner.log.info(f"{spawner._log_name} - Delete pre existing registry secret {image_pull_secret_name}")
-                  v1.delete_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
-              v1.create_namespaced_secret(body=secret_manifest, namespace=spawner.namespace)
-              image_pull_secrets = getattr(spawner, "image_pull_secrets", [])
-              if not image_pull_secrets:
-                  image_pull_secrets = [image_pull_secret_name]
-              elif type(image_pull_secrets) == list:
-                  image_pull_secrets.append(image_pull_secret_name)
-              elif type(image_pull_secrets) == str:
-                  image_pull_secrets = [image_pull_secrets] + [image_pull_secret_name]
-              else:
-                  image_pull_secrets = [image_pull_secret_name]
-              spawner.image_pull_secrets = image_pull_secrets
-          except:
-              spawner.log.exception(f"{spawner._log_name} - Could not create dockerregistry secret")
+      if spawner.user_options.get("dockerregistry", ""):
+          await create_dockerregistry_secret(spawner)          
       
       # if we're using the repo2docker profile, we have to trigger the build + wait until it's finished
       if get_profile(spawner) == "repo2docker":
-          # 1. Inform user it may take a while
-          summary = "We will build a docker image from the selected information. This may take a few minutes"
-          details = "We will send an update every 10 seconds."
-          msg = f"<details><summary><span style=\"color:orange;\">{summary}</span></summary>{details}</details>"
-          event = {
-              "progress": "12",
-              "html_message": msg,
-              "failed": False
-          }
-          await spawner._outpostspawner_send_event(event)
-
-          # Trigger build process
-          token = os.environ.get("REPO2DOCKER_TOKEN")
-          repo2docker_project_url = os.environ.get("REPO2DOCKER_PROJECT_URL", "None").rstrip("/")
-          repo2docker_post_url = f"{repo2docker_project_url}/trigger/pipeline"
-          repo2docker_get_url = f"{repo2docker_project_url}/pipelines"
-          headers = {
-              "Accept": "application/json"
-          }
-          r2d_type = spawner.user_options["type"]
-          r2d_repo = spawner.user_options["repo"]
-          r2d_gitref_prev = spawner.user_options.get("gitref", "HEAD")
-          
-          r2d_gitref = get_gitref(spawner, r2d_type, r2d_repo, r2d_gitref_prev)
-          image = get_image(spawner, r2d_repo, r2d_gitref)
-
-          # Let's check if this image already exists
-          image_exists = False
-          try:
-              tag_list_url = os.environ.get("REPO2DOCKER_REPOSITORY_TAGS_URL", False)
-              if tag_list_url:
-                  r = requests.get(tag_list_url, headers={"Accept":"application/json"})
-                  r.raise_for_status()
-                  tags_list = r.json()
-                  for tags_entry in tags_list:
-                      if image == tags_entry.get("location", ""):
-                          image_exists = True
-                          break
-          except:
-              spawner.log.exception(f"{spawner._log_name} - Could not check for existing images")
-              image_exists = False
-
-          if image_exists:
-              spawner.log.exception(f"{spawner._log_name} - Image {image} already exists. No need to build it.")
-          else:
-              data = {
-                  "token": token,
-                  "ref": "main",
-                  "variables[R2D_REPO]": r2d_repo,
-                  "variables[R2D_GITREF]": r2d_gitref,
-                  "variables[R2D_IMAGE]": image,
-              }
-              r = requests.post(url=repo2docker_post_url, data=data, timeout=3)
-              r.raise_for_status()
-              response_json = r.json()
-              id = response_json["id"]
-              c = 0
-              status = ""
-              web_url = ""
-              repo2docker_get_url = f"{repo2docker_get_url}/{id}"
-              while c < 120:
-                  c += 1
-                  headers = {
-                      "Accept": "application/json"
-                  }
-                  try:
-                      spawner.log.info(f"{spawner._log_name} - Check build status")
-                      # url example: https://gitlab.jsc.fz-juelich.de/api/v4/projects/6798/pipelines/213996/
-                      r = requests.get(url=repo2docker_get_url, headers=headers, timeout=3)
-                      r.raise_for_status()
-                      response_json = r.json()
-                      status = response_json["status"]
-                      spawner.log.info(f"{spawner._log_name} - Check build status: {status}")
-                      web_url = response_json.get("web_url", None)
-                      if status in ["pending", "running"]:
-                          summary = f"Build process is currently in state {status}"
-                          if web_url:
-                              details = f"For more details check the pipeline output at {web_url}"
-                          else:
-                              details = ""
-                          msg = f"<details><summary>{summary}</summary>{details}</details>"
-                          event = {
-                              "progress": "12",
-                              "html_message": msg,
-                              "failed": False
-                          }
-                          await spawner._outpostspawner_send_event(event)
-                          await asyncio.sleep(10)
-                          continue
-                      elif status in ["success"]:
-                          summary = f"Build process complete. Using {image} to start server"
-                          if web_url:
-                              details = f"For more details check the pipeline output at {web_url}"
-                          else:
-                              details = ""
-                          msg = f"<details><summary><span style=\"color:darkgreen;\">{summary}</span></summary>{details}</details>"
-                          msg = f"<details><summary>{summary}</summary>{details}</details>"
-                          event = {
-                              "progress": "13",
-                              "html_message": msg,
-                              "failed": False
-                          }
-                          await spawner._outpostspawner_send_event(event)
-                          break
-                      elif status in ["failed"]:
-                          summary = f"Build process failed. Please check the logs at {web_url} (click on \"build-image\") to solve the issue."
-                          if web_url:
-                              details = f"Please contact support (mail address in the footer), if you need help."
-                          else:
-                              details = ""
-                          msg = f"<details><summary><span style=\"color:red;\">{summary}</span></summary>{details}</details>"
-                          msg = f"<details><summary>{summary}</summary>{details}</details>"
-                          event = {
-                              "progress": "13",
-                              "html_message": msg,
-                              "failed": False
-                          }
-                          await spawner._outpostspawner_send_event(event)
-                          break
-                  except:
-                      c = 120
-                      spawner.log.exception(f"{spawner._log_name} - Could not check build process status")
-                      await asyncio.sleep(10)
-              if c == 120:
-                  raise Exception("Timeout. Stop start attempt. Please try again in a few minutes. Caching might solve this issue for the next try.")
-              elif not status or status in ["failed"]:
-                  raise Exception("Build process failed. Stop start attempt.")
+          await repo2docker_build(spawner)
 
 
   c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
@@ -510,9 +528,10 @@ outpostConfig: |-
 
 
   def get_profile_volume_mounts(spawner):
-      profile = get_profile(spawner)
-      if profile in ["custom", "repo2docker"]:
-          if "userdata_path" in spawner.user_options:
+      use_storage = get_use_storage(spawner)
+      if use_storage:
+          profile = get_profile(spawner)
+          if profile in ["custom", "repo2docker"]:
               userdata_mount = [
                   {
                       "name": "nfs-userdata",
@@ -522,45 +541,45 @@ outpostConfig: |-
               ]
               return userdata_mount
           else:
-              return []
+              common_mounts = [
+                  {
+                      "name": "nfs-software", 
+                      "mountPath": "/p/software/jsccloud", 
+                      "readOnly": True
+                  },
+                  {
+                      "name": "uftp", 
+                      "mountPath": "/tmp/custom/uftp.py",
+                      "subPath": "uftp.py"
+                  },
+                  {
+                      "name": "nfs-userhome",
+                      "mountPath": "/home/jovyan",
+                      "readOnly": False 
+                  }
+              ]
+              profile_mounts = [
+              {
+                      "name": f"modules-{profile}", 
+                      "mountPath": "/tmp/custom/load_jupyter_version.sh", 
+                      "subPath": "load_jupyter_version.sh"
+                  },
+                  {
+                      "name": f"modules-user-{profile}", 
+                      "mountPath": "/tmp/custom/load_jupyter_modules.sh",
+                      "subPath": "load_jupyter_modules.sh"
+                  }
+              ]
+              return common_mounts + profile_mounts
       else:
-          common_mounts = [
-              {
-                  "name": "nfs-software", 
-                  "mountPath": "/p/software/jsccloud", 
-                  "readOnly": True
-              },
-              {
-                  "name": "uftp", 
-                  "mountPath": "/tmp/custom/uftp.py",
-                  "subPath": "uftp.py"
-              },
-              {
-                  "name": "nfs-userhome",
-                  "mountPath": "/home/jovyan",
-                  "readOnly": False 
-              }
-          ]
-          profile_mounts = [
-          {
-                  "name": f"modules-{profile}", 
-                  "mountPath": "/tmp/custom/load_jupyter_version.sh", 
-                  "subPath": "load_jupyter_version.sh"
-              },
-              {
-                  "name": f"modules-user-{profile}", 
-                  "mountPath": "/tmp/custom/load_jupyter_modules.sh",
-                  "subPath": "load_jupyter_modules.sh"
-              }
-          ]
-          return common_mounts + profile_mounts
+          return []
 
   def get_profile_volumes(spawner, jupyterhub_name):
-      profile = get_profile(spawner)
-      stage = os.environ.get("STAGE", "staging")
-
-      if profile in ["custom", "repo2docker"]:
-          if "userdata_path" in spawner.user_options:
+      use_storage = get_use_storage(spawner)
+      if use_storage:
+          profile = get_profile(spawner)
+          stage = os.environ.get("STAGE", "staging")
+          if profile in ["custom", "repo2docker"]:
               userdata_volume = [
               {
                   "name": "nfs-userdata", 
@@ -574,50 +593,50 @@ outpostConfig: |-
               ]
               return userdata_volume
           else:
-              return []
+              common_volumes = [
+                  {
+                      "name": "nfs-software", 
+                      "hostPath": {
+                          "path": "/p/software/jsccloud", 
+                          "type": ""
+                      }
+                  },
+                  {
+                      "name": "uftp", 
+                      "configMap": {
+                          "defaultMode": 292,
+                          "name": "uftp"
+                      }
+                  },
+                  {
+                      "name": "nfs-userhome", 
+                      "hostPath": {
+                          # userid gets expanded by KubeSpawner, do not use mapped 
+                          # hub name here, each hub uses it's own home dir.
+                          "path": f"/p/home/jusers/{stage}/{jupyterhub_name}/{{userid}}",
+                          "type": ""
+                      }
+                  }
+              ]
+              profile_volumes = [
+                  {
+                      "name": f"modules-{profile}", 
+                      "configMap": {
+                          "defaultMode": 292,
+                          "name": f"modules-{profile}"
+                      }
+                  },
+                  {
+                      "name": f"modules-user-{profile}", 
+                      "configMap": {
+                          "defaultMode": 292,
+                          "name": f"modules-user-{profile}"
+                      }
+                  }
+              ]
+              return common_volumes + profile_volumes
       else:
-          common_volumes = [
-              {
-                  "name": "nfs-software", 
-                  "hostPath": {
-                      "path": "/p/software/jsccloud", 
-                      "type": ""
-                  }
-              },
-              {
-                  "name": "uftp", 
-                  "configMap": {
-                      "defaultMode": 292,
-                      "name": "uftp"
-                  }
-              },
-              {
-                  "name": "nfs-userhome", 
-                  "hostPath": {
-                      # userid gets expanded by KubeSpawner, do not use mapped 
-                      # hub name here, each hub uses it's own home dir.
-                      "path": f"/p/home/jusers/{stage}/{jupyterhub_name}/{{userid}}",
-                      "type": ""
-                  }
-              }
-          ]
-          profile_volumes = [
-              {
-                  "name": f"modules-{profile}", 
-                  "configMap": {
-                      "defaultMode": 292,
-                      "name": f"modules-{profile}"
-                  }
-              },
-              {
-                  "name": f"modules-user-{profile}", 
-                  "configMap": {
-                      "defaultMode": 292,
-                      "name": f"modules-user-{profile}"
-                  }
-              }
-          ]
-          return common_volumes + profile_volumes
+          return []
 
   def get_node_selector(spawner, jupyterhub_name, resources, flavor):
       config.load_incluster_config()
