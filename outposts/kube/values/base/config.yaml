@@ -1,3 +1,22 @@
+extraVolumes:
+  - configMap:
+      defaultMode: 256
+      name: gunicorn-config
+    name: gunicorn-config
+  - name: external-flavors
+    configMap:
+      name: outpost-kube-flavors-external
+  - name: tz-config
+    hostPath:
+      path: /usr/share/zoneinfo/Europe/Berlin
+      type: ""
+extraVolumeMounts:
+  - mountPath: /mnt/config
+    name: gunicorn-config
+  - name: external-flavors
+    mountPath: /mnt/flavors
+  - mountPath: /etc/localtime
+    name: tz-config
 outpostConfig: |-
   import asyncio
   import copy
