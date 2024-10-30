@@ -1,6 +1,7 @@
 # InitContainer list in hub component:
 # 0 - prepare-shared-data
 # Container list in hub component:
+### IF custom.ingress.useSidecar enabled , otherwise sidecar-nginx does not exist
 # 0 - check-frontend-files
 # 1 - sidecar-nginx
 # 2 - hub
@@ -10,7 +11,7 @@ patches:
     labelSelector: component=hub
   patch: |-
     - op: add
-      path: /spec/template/spec/containers/2/envFrom
+      path: /spec/template/spec/containers/1/envFrom
       value:
         - secretRef:
             name: generics
