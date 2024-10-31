@@ -261,7 +261,9 @@ outpostConfig: |-
 
   def get_use_storage(spawner):
       ret = True
-      if get_profile(spawner) in ["custom", "repo2docker"]:
+      if get_profile(spawner) in ["repo2docker"]:
+          return False
+      if get_profile(spawner) in ["custom"]:
           if "userdata_path" in spawner.user_options:
               ret = True
           else:
@@ -578,7 +580,7 @@ outpostConfig: |-
                   }
               ]
               profile_mounts = [
-              {
+                  {
                       "name": f"modules-{profile}", 
                       "mountPath": "/tmp/custom/load_jupyter_version.sh", 
                       "subPath": "load_jupyter_version.sh"
@@ -589,6 +591,14 @@ outpostConfig: |-
                       "subPath": "load_jupyter_modules.sh"
                   }
               ]
+              if profile == "4-2":
+                  profile_mounts.append(
+                      {
+                          "name": f"modules-{profile}", 
+                          "mountPath": "/tmp/custom/config.py", 
+                          "subPath": "config.py"
+                      }
+                  )
               return common_mounts + profile_mounts
       else:
           return []
