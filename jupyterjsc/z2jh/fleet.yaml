@@ -60,3 +60,4 @@ targetCustomizations:
       valuesFiles:
         # - ../../base-values/image_devel.yaml
         - ../../base-values/image.yaml
+        - ../../base-values/testingExtraConfig.yaml
