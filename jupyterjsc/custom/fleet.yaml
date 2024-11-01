@@ -65,7 +65,7 @@ targetCustomizations:
             newHost: "jupyter-staging.jsc.fz-juelich.de"
           - name: "staging-nbviewer"
             oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
-            newHost: "docs.jupyter-staging.jsc.fz-juelich.de"
+            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/"
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
