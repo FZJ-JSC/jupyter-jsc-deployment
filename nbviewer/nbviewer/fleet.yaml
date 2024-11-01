@@ -35,6 +35,7 @@ targetCustomizations:
     helm:
       values:
         ingress:
+          enabled: false
           hosts:
             - host: docs.jupyter-staging.jsc.fz-juelich.de
               paths:
