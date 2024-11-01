@@ -58,6 +58,10 @@ targetCustomizations:
           loggerName: CoeRaise
         nfs:
           path: /nfs/hubs/rke2/production/coeraise
+        redirects:
+          - name: "production-docs"
+            oldHost: "docs.jupyter.coe-raise.eu"
+            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
   - name: jupyter-prod
     clusterSelector:
       matchLabels:

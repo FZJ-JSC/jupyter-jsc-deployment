@@ -83,6 +83,10 @@ targetCustomizations:
           loggerName: PortalGauss
         nfs:
           path: /nfs/hubs/rke2/production/portalgauss
+        redirects:
+          - name: "production-docs"
+            oldHost: "docs.portal.gauss-centre.eu"
+            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
   - name: jupyter-prod
     clusterSelector:
       matchLabels:

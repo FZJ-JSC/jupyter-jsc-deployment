@@ -74,6 +74,10 @@ targetCustomizations:
           loggerName: Juniq
         nfs:
           path: /nfs/hubs/rke2/production/juniq
+        redirects:
+          - name: "production-docs"
+            oldHost: "docs.juniq.fz-juelich.de"
+            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/juniq/"
   - name: jupyter-prod
     clusterSelector:
       matchLabels:

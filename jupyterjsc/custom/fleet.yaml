@@ -63,12 +63,12 @@ targetCustomizations:
           - name: "staging"
             oldHost: "jupyter-jsc-staging.fz-juelich.de"
             newHost: "jupyter-staging.jsc.fz-juelich.de"
-          - name: "staging-nbviewer"
-            oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/"
           - name: "staging-docs"
             oldHost: "docs.jupyter-staging.jsc.fz-juelich.de"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/"
+            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
+          - name: "staging-docs-prev"
+            oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
+            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
@@ -85,9 +85,12 @@ targetCustomizations:
           - name: "production"
             oldHost: "jupyter-jsc.fz-juelich.de"
             newHost: "jupyter.jsc.fz-juelich.de"
-          - name: "production-nbviewer"
+          - name: "production-docs-prev"
             oldHost: "docs.jupyter-jsc.fz-juelich.de"
-            newHost: "docs.jupyter.jsc.fz-juelich.de"
+            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
+          - name: "production-docs"
+            oldHost: "docs.jupyter.jsc.fz-juelich.de"
+            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
