@@ -1,0 +1,452 @@
+hub:
+  extraConfig:
+    customConfig: |-
+      import jsc_custom
+      import logging
+      import os
+
+      ## Generic information
+      namespace = os.environ.get("POD_NAMESPACE", "default")
+      jupyterhub_host = get_name("hub")
+      if namespace in ["nfdigeneral"]:
+          oauth_host = "login.helmholtz.de"
+          oauth_path = "oauth2"
+          oauth_scopes = [
+              "display_name",
+              "sn",
+              "single-logout",
+              "offline_access",
+              "voperson_id",
+              "voperson_external_affiliation",
+              "entitlements",
+              "org_domain",
+              "email",
+              "profile",
+          ]
+      else:
+          oauth_host = "login.jsc.fz-juelich.de"
+          oauth_path = "oauth2"
+          oauth_scopes = [
+              "openid",
+              "email",
+              "profile",
+              "eduperson_assurance",
+              "single-logout",
+              "voperson_id",
+              "entitlements"
+          ]
+
+      ## Misc Hub configs
+      base_url = c.JupyterHub.get("base_url", "/")
+      c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
+      c.JupyterHub.default_url = f"{base_url}hub/home"
+      c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
+      c.JupyterHub.hub_connect_url = (
+          f'https://{jupyterhub_host}:{get_name_env("hub", "_SERVICE_PORT")}'
+      )
+      c.JupyterHub.tornado_settings = {'slow_spawn_timeout': 0, 'slow_stop_timeout': 20, 'static_path': '/mnt/shared-data/share/jupyterhub/static'}
+
+      c.JupyterHub.custom_scopes = {
+          "custom:servers:list": {
+              "description": "List all user-id and name of all running servers",
+          },
+          "custom:sshnode:restart": {
+              "description": "Restart port forward processes, when a proxy node was restarted"
+          },
+          "custom:hpcinfos:update": {
+              "description": "Update hpc infos for each user"
+          },
+          "custom:outpostflavors:set": {
+              "description": "Update used flavors in backends"
+          },
+          "custom:reauthenticate:set": {
+              "description": "Triggers a notification to the user"
+          }
+      }
+      c.JupyterHub.proxy_api_ip = '0.0.0.0'
+      c.JupyterHub.ssl_key = ''
+      c.JupyterHub.ssl_cert = ''
+
+
+      ## Logging
+
+      logged_logger_name = os.environ.get("LOGGER_NAME", "JupyterHub")
+
+      c.JupyterHub.log_level = 10
+      jhub_hostname = jsc_custom.spawner.jhub_hostname()
+
+
+      class AppLogLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if str(record.msg).startswith("Authenticated with token"):
+                  return False
+              if record.filename in ["scopes.py"]:
+                  return False
+              if str(record.msg).startswith("Failed to connect to"):
+                  return False
+              return True
+
+      class AccessLogLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if record.funcName in ["log_request"]:
+                  return False
+              return True
+
+      class JupyterHubLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if str(record.msg).startswith("Refreshing auth for"):            
+                  return False
+              return True
+
+      class TornadoGeneralLoggingFilter(logging.Filter):
+          def filter(self, record):
+              if str(record.msg).startswith("Could not open static file"):
+                  return False
+              return True
+
+      # available usual logger keys:
+      # "JupyterHub", "tornado", "tornado.application", "tornado.access", "tornado.general", "oauthlib"
+      logging_filter_classes = {
+          "tornado.application": AppLogLoggingFilter,
+          "tornado.access": AccessLogLoggingFilter,
+          "JupyterHub": JupyterHubLoggingFilter,
+          "tornado.general": TornadoGeneralLoggingFilter
+      }
+      all_loggers = {name: logging.getLogger(name) for name in logging.root.manager.loggerDict if name in logging_filter_classes.keys()}
+      all_loggers_true = {name: logging.getLogger(name) for name in logging.root.manager.loggerDict}
+      for key, value in logging_filter_classes.items():
+          all_loggers[key].addFilter(value())
+
+
+      simple_fmt = f"%(asctime)s logger={logged_logger_name} levelno=%(levelno)s levelname=%(levelname)s file=%(pathname)s line=%(lineno)d function=%(funcName)s : %(message)s"
+      c.JupyterHub.log_format = simple_fmt
+
+
+      ## Database
+      db_host = os.environ.get("SQL_HOST")
+      db_port = os.environ.get("SQL_PORT")
+      db_user = os.environ.get("SQL_USER")
+      db_password = os.environ.get("SQL_PASSWORD")
+      db_database = os.environ.get("SQL_DATABASE")
+      c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
+      # juypterhub upgrade-db
+      #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE 
+      ## Static files + Templates
+      from forwardbasespawner.api_events import user_cancel_message
+      # Call update incidents once to fill incidents dictionary
+      jsc_custom.misc.update_incidents_now()
+      c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
+
+      # Load flavors in template_vars at runtime
+      from outpostspawner.api_flavors_update import sync_get_flavors
+      def get_flavors(user):
+          logger = logging.getLogger(logged_logger_name)
+          ret = sync_get_flavors(logger, user)
+          return ret
+
+      c.JupyterHub.template_vars = {
+          "spawn_progress_update_url": "users/progress/events",
+          "user_cancel_message": user_cancel_message,
+          "hostname": jhub_hostname,
+          "custom_config": jsc_custom.misc.filter_custom_config_by_auth_state_keys,
+          "incidents": jsc_custom.misc.get_incidents,
+          "outpostflavors": get_flavors,
+          "decrypted_user_options": jsc_custom.spawner.utils.decrypted_user_options,
+      }
+      c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
+
+      ## SSL
+      c.JupyterHub.trusted_alt_names = [
+          f"DNS:hub",
+          f"DNS:proxy-public",
+          f"DNS:proxy-public.{namespace}.svc",
+          f"DNS:{jhub_hostname}",
+          "DNS:jrlogin01i",
+          "DNS:jrlogin02i",
+          "DNS:jrlogin03i",
+          "DNS:jrlogin04i",
+          "DNS:jrlogin05i",
+          "DNS:jrlogin06i",
+          "DNS:jrlogin07i",
+          "DNS:jrlogin08i",
+          "DNS:jrlogin09i",
+          "DNS:jrlogin10i",
+          "DNS:jrlogin11i",
+          "DNS:jrlogin12i",
+          "DNS:jrlogin13i",
+          "DNS:jrlogin14i",
+          "DNS:jwlogin00i",
+          "DNS:jwlogin01i",
+          "DNS:jwlogin02i",
+          "DNS:jwlogin03i",
+          "DNS:jwlogin04i",
+          "DNS:jwlogin05i",
+          "DNS:jwlogin06i",
+          "DNS:jwlogin07i",
+          "DNS:jwlogin08i",
+          "DNS:jwlogin09i",
+          "DNS:jwlogin10i",
+          "DNS:jwlogin11i",
+          "DNS:jwvis00i",
+          "DNS:jwvis01i",
+          "DNS:jwvis02i",
+          "DNS:jwvis03i",
+          "DNS:jwlogin21i",
+          "DNS:jwlogin22i",
+          "DNS:jwlogin23i",
+          "DNS:jwlogin24i",
+          "DNS:hdfmll01i",
+          "DNS:hdfmll02i",
+          "DNS:deepv",
+          "DNS:jsfl01i",
+          "DNS:jsfl02i",
+          "DNS:jsfl03i",
+          "DNS:jsfl04i",
+          "DNS:zam12142.zam.kfa-juelich.de",
+          "DNS:zam12065.zam.kfa-juelich.de",
+
+      ]
+
+
+
+      ## Authenticator
+      c.JupyterHub.authenticator_class = jsc_custom.authenticator.CustomGenericOAuthenticator
+      c.Authenticator.admin_users = {
+          'i.ouled.elhaj_at_fz-juelich.de', 
+          't.kreuzer_at_fz-juelich.de',
+      }
+
+      c.CustomGenericOAuthenticator.manage_groups = True
+      c.CustomGenericOAuthenticator.basic_auth = True
+      c.CustomGenericOAuthenticator.enable_auth_state = True
+      c.CustomGenericOAuthenticator.refresh_pre_spawn = True
+      c.CustomGenericOAuthenticator.allow_all = True
+      c.CustomGenericOAuthenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
+      c.CustomGenericOAuthenticator.client_secret = os.environ.get("OAUTH_CLIENT_SECRET")
+      c.CustomGenericOAuthenticator.authorize_url = (
+          f"https://{oauth_host}/{oauth_path}-as/oauth2-authz"
+      )
+      c.CustomGenericOAuthenticator.oauth_callback_url = (
+          f"https://{jhub_hostname}{base_url}hub/oauth_callback"
+      )
+      c.CustomGenericOAuthenticator.token_url = (
+          f"https://{oauth_host}/{oauth_path}/token"
+      )
+      c.CustomGenericOAuthenticator.tokeninfo_url = (
+          f"https://{oauth_host}/{oauth_path}/tokeninfo"
+      )
+      c.CustomGenericOAuthenticator.userdata_url = (
+          f"https://{oauth_host}/{oauth_path}/userinfo"
+      )
+
+      if namespace in ["nfdigeneral"]:
+          def claim_name(resp_json):
+              name = resp_json["voperson_id"]
+              return name
+      else:
+          res_pattern = re.compile(
+              r"^urn:"
+              r"(?P<namespace>.+?(?=:res:)):"
+              r"res:"
+              r"(?P<systempartition>[^:]+):"
+              r"(?P<project>[^:]+):"
+              r"act:"
+              r"(?P<account>[^:]+):"
+              r"(?P<accounttype>[^:]+)$"
+          )
+          def claim_name(resp_json):
+              print(resp_json)
+              if "preferred_username" in resp_json.keys():
+                  preferred_username_is_secondary = False
+                  for entitlement in resp_json.get("entitlements", []):
+                      match = res_pattern.match(entitlement)
+                      if match:
+                          account = match.group("account")
+                          accounttype = match.group("accounttype")
+                          if account == resp_json["preferred_username"]:
+                              if accounttype == "secondary":
+                                  preferred_username_is_secondary = True
+                              break
+                  if preferred_username_is_secondary:
+                      return resp_json["preferred_username"] + "." + resp_json["email"].replace("@", "_at_")
+              return resp_json["email"].replace("@", "_at_")
+      # else:
+      #     def claim_name(resp_json):
+      #         name = resp_json["username_attr"]
+      #         safe_name = name.replace("@", "_at_")
+      #         return safe_name
+
+      c.CustomGenericOAuthenticator.username_claim = claim_name
+      c.CustomGenericOAuthenticator.scope = oauth_scopes
+      c.CustomGenericOAuthenticator.tls_verify = False
+
+      if namespace in ["nfdigeneral"]:
+          def group_management(user_info):
+              """
+              Return all groups a user is part of
+              """
+              groups = ["default"]
+              for attribute in ["org_domain", "voperson_external_affiliation"]:
+                  value = user_info.get(attribute, None)
+                  if value and type(value) == list:
+                      groups.extend(value)
+                  elif value and type(value) == str:
+                      groups.append(value)
+              return groups
+        
+          c.CustomGenericOAuthenticator.auth_state_groups_key = group_management
+
+      #   c.CustomGenericOAuthenticator.extra_params_allowed_runtime = {
+      #       "uy_select_authn": ["jupyterhdfaaiAuthn.hbp", "jupyterldapAuthn.password"]
+      #   }
+      #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterhdfaaiAuthn.hbp
+      #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterldapAuthn.password
+
+      ## Spawner
+      c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
+
+      def ssh_during_startup(spawner):
+          if spawner.user_options.get("system", "") in ["LRZ", "LRZ-Staging", "HLRS", "HLRS-Staging", "MPCDF", "Dummy"]:
+              return True
+          return False
+
+      c.CustomJSCSpawner.ssh_during_startup = ssh_during_startup
+      c.CustomJSCSpawner.extra_labels = jsc_custom.spawner.extra_labels
+      c.CustomJSCSpawner.ssh_custom_forward = jsc_custom.spawner.ssh_custom_forward
+      c.CustomJSCSpawner.ssh_custom_forward_remove = jsc_custom.spawner.ssh_custom_forward_remove
+      c.CustomJSCSpawner.custom_port = jsc_custom.spawner.custom_port
+
+      async def custom_misc(spawner, user_options):
+          if user_options.get("profile", "") in ["JupyterLab/custom", "JupyterLab/repo2docker"]:
+              return { "cmd": "jupyterhub-singleuser" }
+          return {}
+
+      c.CustomJSCSpawner.custom_misc = custom_misc
+
+      c.CustomJSCSpawner.pre_spawn_hook = jsc_custom.spawner.pre_spawn_hook
+      c.CustomJSCSpawner.post_spawn_request_hook = jsc_custom.spawner.post_spawn_request_hook
+      c.CustomJSCSpawner.post_stop_hook = jsc_custom.spawner.post_stop_hook
+      c.CustomJSCSpawner.start_async = True
+      c.CustomJSCSpawner.stop_async = True
+      c.CustomJSCSpawner.custom_user_options = jsc_custom.spawner.custom_user_options
+      c.CustomJSCSpawner.stop_event = jsc_custom.spawner.stop_event
+      c.CustomJSCSpawner.check_allowed = jsc_custom.spawner.is_system_allowed
+      c.CustomJSCSpawner.request_headers = jsc_custom.spawner.request_headers
+      c.CustomJSCSpawner.request_kwargs = jsc_custom.spawner.request_kwargs
+
+      ## Override request_timeout for start request
+      def request_kwargs_start(spawner, user_options):
+          request_kwargs_start = jsc_custom.spawner.request_kwargs(spawner, user_options)
+          if user_options.get("system", "None") in ["LRZ", "LRZ-Staging", "HLRS", "HLRS-Staging"]:
+              request_kwargs_start["request_timeout"] = 1200
+          return request_kwargs_start
+
+      c.CustomJSCSpawner.request_kwargs_start = request_kwargs_start
+
+      c.CustomJSCSpawner.request_url = jsc_custom.spawner.request_url
+      c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}{base_url}hub/api"
+      c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_env
+      c.CustomJSCSpawner.show_first_default_event = False
+      c.CustomJSCSpawner.filter_events = jsc_custom.spawner.filter_events
+
+      async def update_expected_path(spawner, original_ret):
+          system = spawner.user_options.get("system", "unknown")
+          if system == "JSC-Cloud":
+              # Add outpost as namespace
+              ret_split = original_ret.split(":")
+              ret = f"{':'.join(ret_split[:-1])}.outpost.svc:{ret_split[-1]}"
+              spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
+              return ret
+          elif system == "LocalDummy":
+              # LocalDummy Outpost's response would be correct, but we're using async_start
+              # So we're not waiting for the response and we have to add the namespace manually here
+              ret_split = original_ret.split(":")
+              ret = f"{':'.join(ret_split[:-1])}.localdummy.svc:{ret_split[-1]}"
+              spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
+              return ret
+          else:
+              # Since JupyterHub is now running in another namespace, we have to add the tunnel namespace for all other systems
+              ret_split = original_ret.split(":")
+              ret = f"{':'.join(ret_split[:-1])}.jupyter.svc:{ret_split[-1]}"
+              spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
+              return ret
+
+      c.CustomJSCSpawner.update_expected_path = update_expected_path
+
+      from datetime import datetime
+      async def cancel_click_event(spawner):
+          now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+          return {
+              "failed": False,
+              "ready": False,
+              "progress": 99,
+              "message": "",
+              "html_message": f"<details><summary>{now}: Cancelling start ...</summary>Start process is being stopped.</details>",
+          }
+      c.CustomJSCSpawner.cancelling_event = cancel_click_event
+
+      helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
+      c.CustomJSCSpawner.svc_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
+      c.CustomJSCSpawner.svc_create = False
+
+      c.CustomJSCSpawner.custom_poll_interval = jsc_custom.spawner.poll_interval
+      c.CustomJSCSpawner.progress_ready_hook = jsc_custom.spawner.progress_ready_hook
+      c.CustomJSCSpawner.http_timeout = 7200
+
+      ### UNICORE specific config
+      system_config = {
+        "JURECA": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JURECA/rest/core",
+        },
+        "JUWELS": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core",
+        },
+        "JEDI": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JEDI/rest/core",
+        },
+        "JUSUF": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUSUF/rest/core",
+        },
+        "HDFML": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/HDFML/rest/core",
+        },
+        "DEEP": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/DEEP/rest/core",
+        }
+      }
+
+      async def unicore_site_url(spawner):
+        system = spawner.user_options.get("system", "None")
+        url = system_config.get(system, {}).get("site_url", False)
+        if not url:
+          raise Exception(f"URL for system {system} not configured. Available systems: {list(system_config.keys())}")
+        return url
+
+      async def transport_kwargs(spawner):
+        from pyunicore.credentials import OIDCToken
+        auth_state = await spawner.user.get_auth_state()
+        credential = OIDCToken(auth_state["access_token"], None)
+        transport_kwargs = {
+            "credential": credential,
+            # "verify": "/mnt/unicore/cert.crt",
+            "verify": False,
+            "timeout": 30
+        }
+        spawner.log.info(f"{spawner._log_name} - Unicore transport kwargs: {transport_kwargs}")
+        return transport_kwargs
+
+      async def transport_preferences(spawner):
+        account = spawner.user_options.get("account", False)
+        project = spawner.user_options.get("project", False)
+        if account and project:
+          preference = f"uid:{account},group:{project}"
+          spawner.log.info(f"{spawner._log_name} - Set preference: {preference}")
+          return preference
+        else:
+          spawner.log.warning(f"{spawner._log_name} - account ({account}) or project ({project}) not set in user_options ({spawner.user_options}). Do not set preferences in UNICORE transport.")
+          return False
+
+
+      c.CustomJSCSpawner.unicore_site_url = unicore_site_url
+      c.CustomJSCSpawner.unicore_transport_kwargs = transport_kwargs
+      c.CustomJSCSpawner.unicore_transport_preferences = transport_preferences
