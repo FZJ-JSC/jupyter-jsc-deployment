@@ -41,6 +41,8 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        ingress:
+          enabled: false
         global:
           hostname: jupyter-coec.jsc.fz-juelich.de
           loggerName: CoeCProduction

@@ -55,6 +55,8 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        ingress:
+          enabled: false
         global:
           hostname: jupyter.jsc.fz-juelich.de
           loggerName: JupyterJSCProduction

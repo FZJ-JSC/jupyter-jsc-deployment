@@ -6,3 +6,12 @@ resources:
   - jobs-3.6.yaml
   - jobs-4.2.yaml
   - jobs-common.yaml
+
+patches:
+- target:
+    kind: Deployment
+    labelSelector: app.kubernetes.io/instance=unicore
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 0

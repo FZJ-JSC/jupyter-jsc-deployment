@@ -17,3 +17,12 @@ resources:
   - modules-user-juniq-4.2.yaml
   - uftp.yaml
   - flavors-external.yaml
+
+patches:
+- target:
+    kind: Deployment
+    labelSelector: app.kubernetes.io/instance=kube
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 0
