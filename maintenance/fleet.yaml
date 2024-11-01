@@ -44,7 +44,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        prep: "true"
+        prep: "false"
     helm:
       valuesFiles:
         - values/overlays/production/hosts.yaml
@@ -54,7 +54,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        prep: "false"
+        prep: "true"
     helm:
       valuesFiles:
         - values/overlays/production-prep/hosts.yaml
