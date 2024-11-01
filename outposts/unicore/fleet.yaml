@@ -36,8 +36,6 @@ targetCustomizations:
         name: jupyter-stag
     helm:
       values:
-        # image:
-        #   tag: "devel"
         extraEnvVars:
           - name: STAGE
             value: "staging"
@@ -74,3 +72,5 @@ targetCustomizations:
                 key: password
           - name: GUNICORN_CONFIG_FILE
             value: "/mnt/config/gunicorn_http.py"
+    kustomize:
+      dir: ./kustomize-maint

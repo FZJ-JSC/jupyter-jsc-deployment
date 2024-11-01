@@ -73,3 +73,5 @@ targetCustomizations:
                 key: password
           - name: GUNICORN_TIMEOUT
             value: "1260"
+    kustomize:
+      dir: ./kustomize-maint

@@ -1,0 +1,25 @@
+resources:
+  - gunicorn_config.yaml
+  - modules-3.2.yaml
+  - modules-3.4.yaml
+  - modules-3.6.yaml
+  - modules-4.2.yaml
+  - modules-3.6-juniq.yaml
+  - modules-4.2-juniq.yaml
+  - modules-user-3.2.yaml
+  - modules-user-3.4.yaml
+  - modules-user-3.6.yaml
+  - modules-user-3.6-juniq.yaml
+  - modules-user-4.2.yaml
+  - modules-user-4.2-juniq.yaml
+  - uftp.yaml
+  - flavors-external.yaml
+
+patches:
+- target:
+    kind: Deployment
+    labelSelector: app.kubernetes.io/instance=kube
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 0
