@@ -48,7 +48,7 @@ targetCustomizations:
         - values/overlays/production/jupyterhubs.yaml
         - values/overlays/production/misc.yaml
       values:
-        replicas: 0
+        replicas: 2
         servicessh:
           loadBalancerIP: "134.94.198.229"
   - name: production
@@ -61,7 +61,7 @@ targetCustomizations:
         - values/overlays/production/jupyterhubs.yaml
         - values/overlays/production/misc.yaml
       values:
-        replicas: 2
+        replicas: 0
         servicessh:
           loadBalancerIP: "134.94.198.246"
 diff:
