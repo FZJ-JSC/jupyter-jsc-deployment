@@ -1,0 +1,6 @@
+enabled: false
+fullnameOverride: "jhub-maintenance"
+ingress:
+  annotations:
+    acme.cert-manager.io/http01-edit-in-place: "false"
+    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
