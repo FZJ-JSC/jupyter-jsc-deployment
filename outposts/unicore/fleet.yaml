@@ -73,4 +73,4 @@ targetCustomizations:
           - name: GUNICORN_CONFIG_FILE
             value: "/mnt/config/gunicorn_http.py"
     kustomize:
-      dir: ./kustomize-maint
+      dir: ./kustomize
