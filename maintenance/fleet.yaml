@@ -50,7 +50,6 @@ targetCustomizations:
         - values/overlays/production/hosts.yaml
       values:
         enabled: false
-    doNotDeploy: true
   - name: production
     clusterSelector:
       matchLabels:
