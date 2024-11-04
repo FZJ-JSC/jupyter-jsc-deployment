@@ -10,8 +10,7 @@ targetCustomizations:
   - name: staging
     clusterSelector:
       matchLabels:
-        stage: staging
-        app: jupyter
+        name: jupyter-stag
     helm:
       valuesFiles:
         - values/overlays/staging/hosts.yaml
@@ -23,8 +22,7 @@ targetCustomizations:
   - name: production
     clusterSelector:
       matchLabels:
-        stage: production
-        app: jupyter
+        name: jupyter-prod
     helm:
       valuesFiles:
         - values/overlays/production/hosts.yaml
