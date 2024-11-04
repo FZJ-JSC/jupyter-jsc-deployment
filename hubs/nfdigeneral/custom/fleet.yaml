@@ -44,6 +44,8 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        ingress:
+          enabled: false
         global:
           hostname: hub.nfdi-jupyter.de
           loggerName: NFDIGeneralProduction

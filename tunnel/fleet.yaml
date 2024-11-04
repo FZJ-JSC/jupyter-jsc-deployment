@@ -26,7 +26,7 @@ targetCustomizations:
         - values/overlays/production/jupyterhubs.yaml
         - values/overlays/production/misc.yaml
       values:
-        replicas: 2
+        replicas: 0
 diff:
   comparePatches:
   - apiVersion: apps/v1
