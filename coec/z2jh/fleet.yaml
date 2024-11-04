@@ -53,4 +53,4 @@ targetCustomizations:
       valuesFiles:
         - ../../base-values/image_fixed.yaml
     kustomize:
-      dir: ./kustomize
+      dir: ./kustomize-maint
