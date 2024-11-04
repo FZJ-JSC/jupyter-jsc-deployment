@@ -72,6 +72,7 @@ targetCustomizations:
           hostname: hub.nfdi-jupyter.de
         nfs:
           path: /nfs/hubs/rke2/production/nfdigeneral
+        redirectEditInPlace: "false"
         redirects:
           - name: "production-docs"
             oldHost: "docs.hub.nfdi-jupyter.de"

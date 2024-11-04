@@ -74,6 +74,7 @@ targetCustomizations:
           loggerName: Juniq
         nfs:
           path: /nfs/hubs/rke2/production/juniq
+        redirectEditInPlace: "false"
         redirects:
           - name: "production-docs"
             oldHost: "docs.juniq.fz-juelich.de"

@@ -58,6 +58,7 @@ targetCustomizations:
           loggerName: CoeC
         nfs:
           path: /nfs/hubs/rke2/production/coec
+        redirectEditInPlace: "false"
         redirects:
           - name: "production-docs"
             oldHost: "docs.jupyter-coec.jsc.fz-juelich.de"
