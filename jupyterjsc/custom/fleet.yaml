@@ -81,6 +81,7 @@ targetCustomizations:
           loggerName: JupyterJSC
         nfs:
           path: /nfs/hubs/rke2/production/jupyterjsc
+        redirectEditInPlace: "false"
         redirects:
           - name: "production"
             oldHost: "jupyter-jsc.fz-juelich.de"
