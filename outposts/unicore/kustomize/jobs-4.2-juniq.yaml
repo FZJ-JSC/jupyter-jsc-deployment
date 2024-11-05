@@ -50,6 +50,9 @@ data:
       export PID_PATH=${DIR}/service.pid
       export VALIDATE_TOKEN_PID_PATH=${DIR}/validate_token.pid
       export LC_ALL=en_US.UTF-8
+      if [[ -z $SYSTEMNAME ]]; then
+        export SYSTEMNAME=$(cat /etc/FZJ/systemname)
+      fi
       export JUPYTER_LOG_DIR=${DIR}
       export JUPYTER_STDOUT=${JUPYTER_LOG_DIR}/stderr
       export PYTHONPATH=""
