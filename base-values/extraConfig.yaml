@@ -310,7 +310,39 @@ hub:
 
       async def custom_misc(spawner, user_options):
           if user_options.get("profile", "") in ["JupyterLab/custom", "JupyterLab/repo2docker"]:
-              return { "cmd": "jupyterhub-singleuser" }
+              return {
+                "cmd": ['/bin/sh', '-c'],
+                "args": [
+                    '''
+                    #!/bin/sh
+                    # Get the current jupyterhub-singleuser version
+                    version=$(jupyterhub-singleuser --version || echo "0.0.0")
+
+                    # Set the desired version range
+                    min_version="4.0.0"
+                    max_version="5.0.0"
+                    target_version="4.1.6"
+
+                    # Function to check if the version is in range
+                    in_range() {
+                        [ "$(printf '%s\n' "$min_version" "$1" | sort -V | head -n1)" = "$min_version" ] && \
+                        [ "$(printf '%s\n' "$1" "$max_version" | sort -V | head -n1)" = "$1" ]
+                    }
+
+                    # Check if the current version is within the range
+                    if ! in_range "$version"; then
+                        echo "Installing jupyterhub-singleuser $target_version as version $version is not within $min_version - $max_version."
+                        pip install "jupyterhub==$target_version"
+                    else
+                        echo "jupyterhub-singleuser $version is within the required version range."
+                    fi
+
+                    # Start the jupyterhub-singleuser
+                    exec jupyterhub-singleuser
+                    '''
+                ]
+              }
+              # return { "cmd": "jupyterhub-singleuser" }
           return {}
 
       c.CustomJSCSpawner.custom_misc = custom_misc
@@ -349,11 +381,11 @@ hub:
               ret = f"{':'.join(ret_split[:-1])}.outpost.svc:{ret_split[-1]}"
               spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
               return ret
-          elif system == "LocalDummy":
+          elif system == "Dummy":
               # LocalDummy Outpost's response would be correct, but we're using async_start
               # So we're not waiting for the response and we have to add the namespace manually here
               ret_split = original_ret.split(":")
-              ret = f"{':'.join(ret_split[:-1])}.localdummy.svc:{ret_split[-1]}"
+              ret = f"{':'.join(ret_split[:-1])}.dummy.svc:{ret_split[-1]}"
               spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
               return ret
           else:
