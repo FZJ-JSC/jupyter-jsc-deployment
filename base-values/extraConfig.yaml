@@ -381,11 +381,11 @@ hub:
               ret = f"{':'.join(ret_split[:-1])}.outpost.svc:{ret_split[-1]}"
               spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
               return ret
-          elif system == "LocalDummy":
+          elif system == "Dummy":
               # LocalDummy Outpost's response would be correct, but we're using async_start
               # So we're not waiting for the response and we have to add the namespace manually here
               ret_split = original_ret.split(":")
-              ret = f"{':'.join(ret_split[:-1])}.localdummy.svc:{ret_split[-1]}"
+              ret = f"{':'.join(ret_split[:-1])}.dummy.svc:{ret_split[-1]}"
               spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
               return ret
           else:
