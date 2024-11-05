@@ -136,6 +136,7 @@ data:
           fi
           if [[ $index == $start_index ]]; then
             # Tried all login nodes
+            echo "$(date) - Last try: ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api"
             echo "$(date) - Could not find any LoginNode to connect to JupyterHub. Please try again in a few minutes."
             exit 1
           fi
