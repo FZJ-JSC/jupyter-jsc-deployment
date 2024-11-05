@@ -14,7 +14,7 @@ helm:
   releaseName: juniq-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.21
+  version: 0.15.25
   values:
     fullnameOverride: juniq-custom
     customConfig:
@@ -24,7 +24,7 @@ helm:
         body: "Please be advised that our webservice will be undergoing scheduled maintenance on November 4, 2024, from 9:00 AM to 12:00 PM. During this time, the webservice will be unavailable."
       services:
         JupyterLab:
-          defaultOption: "JupyterLab/4.2-juniq"
+          defaultOption: "4.2-juniq"
           "4.2":
             enabled: false
           "4.2-juniq":
@@ -74,6 +74,7 @@ targetCustomizations:
           loggerName: Juniq
         nfs:
           path: /nfs/hubs/rke2/production/juniq
+        redirectEditInPlace: "false"
         redirects:
           - name: "production-docs"
             oldHost: "docs.juniq.fz-juelich.de"

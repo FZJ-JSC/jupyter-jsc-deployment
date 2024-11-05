@@ -53,7 +53,7 @@ targetCustomizations:
       valuesFiles:
         - ../../base-values/image_fixed.yaml
     kustomize:
-      dir: ./kustomize-maint
+      dir: ./kustomize
   - name: staging
     clusterSelector:
       matchLabels:

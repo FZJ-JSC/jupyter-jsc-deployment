@@ -14,7 +14,7 @@ helm:
   releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.21
+  version: 0.15.25
   values:
     fullnameOverride: nfdigeneral-custom
     global:
@@ -36,7 +36,6 @@ helm:
         defaultOption: "4.2"
       systems:
         - JSC-Cloud
-        - MPCDF
 targetCustomizations:
   - name: jupyter-stag
     clusterSelector:
@@ -49,6 +48,9 @@ targetCustomizations:
             show: true
             title: "Jupyter4NFDI - Staging Instance"
             body: "This instance is only used for testing."
+          systems:
+            - JSC-Cloud
+            - MPCDF
         global:
           # hostname: zam12246.zam.kfa-juelich.de
           baseUrl: /
@@ -70,6 +72,7 @@ targetCustomizations:
           hostname: hub.nfdi-jupyter.de
         nfs:
           path: /nfs/hubs/rke2/production/nfdigeneral
+        redirectEditInPlace: "false"
         redirects:
           - name: "production-docs"
             oldHost: "docs.hub.nfdi-jupyter.de"
