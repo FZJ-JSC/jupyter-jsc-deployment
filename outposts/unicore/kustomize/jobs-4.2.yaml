@@ -50,6 +50,9 @@ data:
       export PID_PATH=${DIR}/service.pid
       export VALIDATE_TOKEN_PID_PATH=${DIR}/validate_token.pid
       export LC_ALL=en_US.UTF-8
+      if [[ -z $SYSTEMNAME ]]; then
+        export SYSTEMNAME=$(cat /etc/FZJ/systemname)
+      fi
       export JUPYTER_LOG_DIR=${DIR}
       export JUPYTER_STDOUT=${JUPYTER_LOG_DIR}/stderr
       export PYTHONPATH=""
@@ -133,6 +136,7 @@ data:
           fi
           if [[ $index == $start_index ]]; then
             # Tried all login nodes
+            echo "$(date) - Last try: ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api"
             echo "$(date) - Could not find any LoginNode to connect to JupyterHub. Please try again in a few minutes."
             exit 1
           fi
@@ -304,9 +308,7 @@ data:
         done
         # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
         if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-          if [[ $SYSTEMNAME != "hdfml" ]]; then
-            module load JupyterProxy-NESTDesktop/.0.4.0-4.2.1
-          fi
+          module load JupyterProxy-NESTDesktop/.0.4.0-4.2.1
         fi
 
         if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then

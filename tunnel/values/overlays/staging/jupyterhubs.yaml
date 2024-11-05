@@ -165,14 +165,6 @@ jupyterhubs:
         user: "ljupyter"
         port: 22
         hostname: "jureca12.fz-juelich.de"
-      - name: "hdfmll01i"
-        user: "ljupyter"
-        port: 22
-        hostname: "hdfmll01.fz-juelich.de"
-      - name: "hdfmll02i"
-        user: "ljupyter"
-        port: 22
-        hostname: "hdfmll02.fz-juelich.de"
       - name: "jsfl01i"
         user: "ljupyter"
         port: 22
