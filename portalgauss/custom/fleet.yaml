@@ -14,7 +14,7 @@ helm:
   releaseName: portalgauss-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.21
+  version: 0.15.25
   values:
     fullnameOverride: portalgauss-custom
     global:
@@ -83,6 +83,7 @@ targetCustomizations:
           loggerName: PortalGauss
         nfs:
           path: /nfs/hubs/rke2/production/portalgauss
+        redirectEditInPlace: "false"
         redirects:
           - name: "production-docs"
             oldHost: "docs.portal.gauss-centre.eu"
