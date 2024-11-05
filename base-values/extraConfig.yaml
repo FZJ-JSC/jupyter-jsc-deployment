@@ -310,7 +310,7 @@ hub:
 
       async def custom_misc(spawner, user_options):
           if user_options.get("profile", "") in ["JupyterLab/custom"]:
-              return { "cmd": ["jupyterhub-singleuser"] }
+              return { "cmd": "jupyterhub-singleuser" }
           return {}
 
       c.CustomJSCSpawner.custom_misc = custom_misc
