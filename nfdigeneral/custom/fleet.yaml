@@ -76,7 +76,7 @@ targetCustomizations:
         redirects:
           - name: "production-docs"
             oldHost: "docs.hub.nfdi-jupyter.de"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
+            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyter4nfdi/"
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
