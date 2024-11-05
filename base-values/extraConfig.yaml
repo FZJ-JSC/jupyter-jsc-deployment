@@ -311,7 +311,39 @@ hub:
 
       async def custom_misc(spawner, user_options):
           if user_options.get("profile", "") in ["JupyterLab/custom", "JupyterLab/repo2docker"]:
-              return { "cmd": "jupyterhub-singleuser" }
+              return {
+                "cmd": ['/bin/sh', '-c'],
+                "args": [
+                    '''
+                    #!/bin/sh
+                    # Get the current jupyterhub-singleuser version
+                    version=$(jupyterhub-singleuser --version || echo "0.0.0")
+
+                    # Set the desired version range
+                    min_version="4.0.0"
+                    max_version="5.0.0"
+                    target_version="4.1.6"
+
+                    # Function to check if the version is in range
+                    in_range() {
+                        [ "$(printf '%s\n' "$min_version" "$1" | sort -V | head -n1)" = "$min_version" ] && \
+                        [ "$(printf '%s\n' "$1" "$max_version" | sort -V | head -n1)" = "$1" ]
+                    }
+
+                    # Check if the current version is within the range
+                    if ! in_range "$version"; then
+                        echo "Installing jupyterhub-singleuser $target_version as version $version is not within $min_version - $max_version."
+                        pip install "jupyterhub==$target_version"
+                    else
+                        echo "jupyterhub-singleuser $version is within the required version range."
+                    fi
+
+                    # Start the jupyterhub-singleuser
+                    exec jupyterhub-singleuser
+                    '''
+                ]
+              }
+              # return { "cmd": "jupyterhub-singleuser" }
           return {}
 
       c.CustomJSCSpawner.custom_misc = custom_misc
