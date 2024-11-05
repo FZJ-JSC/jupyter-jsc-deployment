@@ -2,4 +2,4 @@ hub:
   image:
     pullPolicy: "Always"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
-    tag: 3.3.8.post5
+    tag: 3.3.8.post6
