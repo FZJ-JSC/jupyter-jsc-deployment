@@ -153,6 +153,8 @@ hub:
 
       ## SSL
       c.JupyterHub.trusted_alt_names = [
+          "DNS:localhost",
+          "DNS:127.0.0.1",
           f"DNS:hub",
           f"DNS:proxy-public",
           f"DNS:proxy-public.{namespace}.svc",
