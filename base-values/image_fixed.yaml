@@ -1,4 +1,6 @@
 hub:
+  livenessProbe:
+    enabled: true
   image:
     pullPolicy: "Always"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
