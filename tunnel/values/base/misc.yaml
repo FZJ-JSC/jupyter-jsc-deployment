@@ -2,6 +2,7 @@ sshtimeout: 3
 nameOverride: "tunnel"
 nodeSelector:
   worker: "true"
+imagePullSecrets: null
 resources:
   requests:
     cpu: 100m
