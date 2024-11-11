@@ -4,14 +4,14 @@ hub:
   #    chown 1000:1000 -R /mnt/reservation_key &&
   #    chmod 400 /mnt/reservation_key/* &&
   # pip install -i https://test.pypi.org/simple/ -U --no-deps  &&
-  args:
-    - -c
-    - >-
-      pip install --upgrade --upgrade-strategy only-if-needed jupyterhub-unicorespawner==1.0.2 pyunicore==1.0.1 &&
-      jupyterhub -f /usr/local/etc/jupyterhub/jupyterhub_config.py
-  command:
-    - /bin/bash
+  #args:
+  #  - -c
+  #  - >-
+  #    pip install --upgrade --upgrade-strategy only-if-needed jupyterhub-unicorespawner==1.0.2 pyunicore==1.0.1 &&
+  #    jupyterhub -f /usr/local/etc/jupyterhub/jupyterhub_config.py
+  #command:
+  #  - /bin/bash
   image:
     pullPolicy: "Always"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
-    tag: 3.3.8.post6
+    tag: 3.3.8.post7
