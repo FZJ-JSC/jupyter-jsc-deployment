@@ -284,7 +284,7 @@ outpostConfig: |-
       try:
           tag_list_url = os.environ.get("REPO2DOCKER_REPOSITORY_TAGS_URL", False)
           if tag_list_url:
-              r = requests.get(tag_list_url, headers={"Accept":"application/json"})
+              r = requests.get(f"{tag_list_url}?per_page=300", headers={"Accept":"application/json"})
               r.raise_for_status()
               tags_list = r.json()
               for tags_entry in tags_list:
