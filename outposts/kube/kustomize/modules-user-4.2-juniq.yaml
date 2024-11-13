@@ -68,7 +68,7 @@ data:
       module load voila/0.5.7
     fi
     if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
-      module load jupyterai/.2.15.0
+      module load jupyter-ai/.2.15.0
     fi
     if [[ $JUPYTER_MODULE_VARIABLEINSPECTOR_ENABLED -eq 1 ]]; then
       module load jupyterlab-variableinspector/.3.2.1
