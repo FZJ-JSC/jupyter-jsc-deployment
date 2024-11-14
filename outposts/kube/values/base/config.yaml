@@ -514,8 +514,6 @@ outpostConfig: |-
       # if we're using the repo2docker profile, we have to trigger the build + wait until it's finished
       if get_profile(spawner) == "repo2docker":
           await repo2docker_build(spawner)
-      if get_profile(spawner) == "repo2docker":
-          await repo2docker_build(spawner)
 
           notebook = spawner.user_options.get("notebook", "")
           notebook_type = spawner.user_options.get("notebook_type", "File")
