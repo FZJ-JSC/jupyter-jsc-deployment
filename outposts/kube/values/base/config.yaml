@@ -633,7 +633,7 @@ outpostConfig: |-
                       "subPath": "load_jupyter_modules.sh"
                   }
               ]
-              if profile == "4-2":
+              if profile in ["4-2", "4-2-juniq"]:
                   profile_mounts.append(
                       {
                           "name": f"modules-{profile}", 
