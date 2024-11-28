@@ -67,6 +67,9 @@ data:
     if [[ $JUPYTER_MODULE_VOILA_ENABLED -eq 1 ]]; then
       module load voila/0.5.7
     fi
+    if [[ $JUPYTER_MODULE_JUPYTERVIEW_ENABLED -eq 1 ]]; then
+      module load jupyterview/.0.7.0
+    fi
     if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
       module load jupyter-ai/.2.15.0
     fi
