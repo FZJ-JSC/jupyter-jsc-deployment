@@ -14,7 +14,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.32
+  version: 0.15.34
   values:
     fullnameOverride: jupyterjsc-custom
     global:
@@ -22,7 +22,7 @@ helm:
       namespace: jupyterjsc
     customConfig:
       announcement:
-        show: true
+        show: false
         title: "18th of December JupyterLabs stopped"
         body: "An error in the database led to an inconsistent state. We had to stop all running JupyterLabs. We are sorry for the inconvenience caused."
     ingress:

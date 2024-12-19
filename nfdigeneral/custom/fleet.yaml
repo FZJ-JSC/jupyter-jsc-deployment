@@ -14,7 +14,7 @@ helm:
   releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.32
+  version: 0.15.34
   values:
     fullnameOverride: nfdigeneral-custom
     global:
@@ -76,7 +76,7 @@ targetCustomizations:
         redirects:
           - name: "production-docs"
             oldHost: "docs.hub.nfdi-jupyter.de"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyter4nfdi/"
+            newHost: "nfdi-jupyter.de"
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
