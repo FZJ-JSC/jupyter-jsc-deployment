@@ -24,7 +24,7 @@ helm:
       announcement:
         show: true
         title: "18th of December: JupyterLabs stopped"
-        body: "An error in the database led to an inconsistent state. We had to stop all running JupyterLabs. We're sorry for the inconvenience caused."
+        body: "An error in the database led to an inconsistent state. We had to stop all running JupyterLabs. We are sorry for the inconvenience caused."
     ingress:
       enabled: true
     jupyter-metrics:
