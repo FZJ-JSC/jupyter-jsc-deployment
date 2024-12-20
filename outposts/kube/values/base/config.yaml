@@ -261,9 +261,7 @@ outpostConfig: |-
 
   def get_use_storage(spawner):
       ret = True
-      if get_profile(spawner) in ["repo2docker"]:
-          return False
-      if get_profile(spawner) in ["custom"]:
+      if get_profile(spawner) in ["custom", "repo2docker"]:
           if "userdata_path" in spawner.user_options:
               ret = True
           else:
