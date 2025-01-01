@@ -32,7 +32,7 @@ helm:
       #   Set enabled here to false, update ingress in maintenance/fleet.yaml
       enabled: true
   valuesFiles:
-    - ../../base-values/extraConfig.yaml
+    - ../../base-values/extraConfigTmp.yaml
     - ../../base-values/image.yaml
   valuesFrom:
     - configMapKeyRef:
