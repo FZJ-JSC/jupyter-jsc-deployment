@@ -51,7 +51,7 @@ targetCustomizations:
         stage: production
     helm:
       valuesFiles:
-        - ../../base-values/image_fixed.yaml
+        - ../../base-values/image_fixed_tmp.yaml
     kustomize:
       dir: ./kustomize
   - name: staging
