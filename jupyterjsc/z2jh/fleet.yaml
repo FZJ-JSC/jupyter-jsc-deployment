@@ -32,7 +32,7 @@ helm:
       #   Set enabled here to false, update ingress in maintenance/fleet.yaml
       enabled: true
   valuesFiles:
-    - ../../base-values/extraConfigTmp.yaml
+    - ../../base-values/extraConfig.yaml
     - ../../base-values/image.yaml
   valuesFrom:
     - configMapKeyRef:
@@ -51,7 +51,7 @@ targetCustomizations:
         stage: production
     helm:
       valuesFiles:
-        - ../../base-values/image_fixed_tmp.yaml
+        - ../../base-values/image_fixed.yaml
     kustomize:
       dir: ./kustomize
   - name: staging
