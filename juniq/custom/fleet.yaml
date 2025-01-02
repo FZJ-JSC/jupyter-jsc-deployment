@@ -19,9 +19,9 @@ helm:
     fullnameOverride: juniq-custom
     customConfig:
       announcement:
-        show: false
-        title: "18th of December JupyterLabs stopped"
-        body: "An error in the database led to an inconsistent state. We had to stop all running JupyterLabs. We are sorry for the inconvenience caused."
+        show: true
+        title: "Infrastructure Issues Notice"
+        body: "We are experiencing problems with the underlying infrastructure, which may result in slow website loading and difficulties during the startup process."
       services:
         JupyterLab:
           defaultOption: "4.2-juniq"
