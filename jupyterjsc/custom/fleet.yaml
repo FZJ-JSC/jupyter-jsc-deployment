@@ -22,7 +22,7 @@ helm:
       namespace: jupyterjsc
     customConfig:
       announcement:
-        show: true
+        show: false
         title: "Infrastructure Issues Notice"
         body: "We are experiencing problems with the underlying infrastructure, which may result in slow website loading and difficulties during the startup process."
     ingress:
