@@ -11,10 +11,6 @@ dependsOn:
         component: namespaces
   - selector:
       matchLabels:
-        app: postgres-operator
-        component: databases
-  - selector:
-      matchLabels:
         app: kubeoutpost
         component: secrets
 
