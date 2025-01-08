@@ -417,7 +417,7 @@ outpostConfig: |-
                   }
               },
               "data": {
-                  ".dockerconfigjson": dockerregistry
+                  ".dockerconfigjson": spawner.user_options.get("dockerregistry", "")
               },
           }
           try:
