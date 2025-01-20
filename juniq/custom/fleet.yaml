@@ -36,6 +36,8 @@ helm:
     global:
       name: juniq
       namespace: juniq
+    dailyRestart:
+      enabled: false
     ingress:
       enabled: true
     jupyter-metrics:

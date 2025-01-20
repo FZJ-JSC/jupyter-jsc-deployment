@@ -20,6 +20,8 @@ helm:
     global:
       name: coec
       namespace: coec
+    dailyRestart:
+      enabled: false
     ingress:
       enabled: true
     jupyter-metrics:

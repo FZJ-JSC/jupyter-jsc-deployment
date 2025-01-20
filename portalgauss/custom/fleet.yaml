@@ -20,6 +20,8 @@ helm:
     global:
       name: portalgauss
       namespace: portalgauss
+    dailyRestart:
+      enabled: false
     ingress:
       enabled: true
     jupyter-metrics:

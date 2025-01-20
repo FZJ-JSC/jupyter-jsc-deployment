@@ -22,6 +22,8 @@ helm:
       namespace: coeraise
     ingress:
       enabled: true
+    dailyRestart:
+      enabled: false
     jupyter-metrics:
       enabled: true
       nodeSelector:

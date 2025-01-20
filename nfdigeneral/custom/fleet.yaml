@@ -23,6 +23,8 @@ helm:
     oauthSecret: hdfaai-credentials
     ingress:
       enabled: true
+    dailyRestart:
+      enabled: false
     jupyter-metrics:
       enabled: true
       nodeSelector:

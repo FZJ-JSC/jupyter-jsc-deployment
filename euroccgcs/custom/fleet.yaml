@@ -20,6 +20,8 @@ helm:
     global:
       name: euroccgcs
       namespace: euroccgcs
+    dailyRestart:
+      enabled: false
     ingress:
       enabled: true
     jupyter-metrics:
