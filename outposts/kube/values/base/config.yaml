@@ -261,11 +261,16 @@ outpostConfig: |-
 
   def get_use_storage(spawner):
       ret = True
-      if get_profile(spawner) in ["custom", "repo2docker"]:
+      profile = get_profile(spawner)
+      if profile in ["custom", "repo2docker"]:
           if "userdata_path" in spawner.user_options:
               ret = True
           else:
               ret = False
+          # specsp11 temporary implemented directly
+          r2d_repo = spawner.user_options.get("repo", "")
+          if r2d_repo.endswith("Simulation-Benchmarks/11thSPE-CSP"):
+              ret = True
       return ret
 
   async def repo2docker_build(spawner):
@@ -442,6 +447,8 @@ outpostConfig: |-
           spawner.log.exception(f"{spawner._log_name} - Could not create dockerregistry secret")
 
   async def create_storage(spawner):
+      if "userdata_path" not in spawner.user_options:
+          return
       token = os.environ.get("STORAGE_MANAGER_TOKEN", None)
       storage_url = os.environ.get("STORAGE_MANAGER_URL", None)
       if storage_url and token:
@@ -593,13 +600,25 @@ outpostConfig: |-
       if use_storage:
           profile = get_profile(spawner)
           if profile in ["custom", "repo2docker"]:
-              userdata_mount = [
-                  {
-                      "name": "nfs-userdata",
-                      "mountPath": spawner.user_options["userdata_path"],
-                      "readOnly": False 
-                  }
-              ]
+              userdata_mount = []
+              # specsp11 temporary implemented directly
+              r2d_repo = spawner.user_options.get("repo", "")
+              if r2d_repo.endswith("Simulation-Benchmarks/11thSPE-CSP"):
+                  userdata_mount.append(
+                      {
+                          "name": "nfs-specsp",
+                          "mountPath": "/home/jovyan/shared_folder",
+                          "readOnly": True
+                      }
+                  )
+              if spawner.user_options.get("userdata_path"):
+                  userdata_mount.append(
+                      {
+                          "name": "nfs-userdata",
+                          "mountPath": spawner.user_options["userdata_path"],
+                          "readOnly": False
+                      }
+                  )
               return userdata_mount
           else:
               common_mounts = [
@@ -649,17 +668,33 @@ outpostConfig: |-
           profile = get_profile(spawner)
           stage = os.environ.get("STAGE", "staging")
           if profile in ["custom", "repo2docker"]:
-              userdata_volume = [
-              {
-                  "name": "nfs-userdata", 
-                  "hostPath": {
-                      # userid gets expanded by KubeSpawner, do not use mapped 
-                      # hub name here, each hub uses it's own home dir.
-                      "path": f"/p/home/jusers/{stage}/{jupyterhub_name}/{{userid}}",
-                      "type": ""
-                  }
-              }
-              ]
+              userdata_volume = []
+
+              # specsp11 temporary implemented directly
+              r2d_repo = spawner.user_options.get("repo", "")
+              if r2d_repo.endswith("Simulation-Benchmarks/11thSPE-CSP"):
+                  userdata_volume.append(
+                      {
+                          "name": "nfs-specsp",
+                          "nfs": {
+                              "server": "10.0.2.191",
+                              "path": "/mnt/specsp11",
+                              "readOnly": True
+                          }
+                      }
+                  )
+              if spawner.user_options.get("userdata_path"):
+                  userdata_volume.append(
+                    {
+                        "name": "nfs-userdata",
+                        "hostPath": {
+                            # userid gets expanded by KubeSpawner, do not use mapped
+                            # hub name here, each hub uses it's own home dir.
+                            "path": f"/p/home/jusers/{stage}/{jupyterhub_name}/{{userid}}",
+                            "type": ""
+                        }
+                    }
+                  )
               return userdata_volume
           else:
               common_volumes = [
