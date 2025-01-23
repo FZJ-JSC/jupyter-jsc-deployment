@@ -8,4 +8,5 @@ resources:
   - jobs-3.6-juniq.yaml
   - jobs-4.2.yaml
   - jobs-4.2-juniq.yaml
+  - jobs-4.3.yaml
   - jobs-common.yaml
