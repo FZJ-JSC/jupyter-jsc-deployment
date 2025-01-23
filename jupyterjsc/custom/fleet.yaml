@@ -14,7 +14,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.38
+  version: 0.15.41
   values:
     fullnameOverride: jupyterjsc-custom
     global:
@@ -25,6 +25,12 @@ helm:
         show: false
         title: "Infrastructure Issues Notice"
         body: "We are experiencing problems with the underlying infrastructure, which may result in slow website loading and difficulties during the startup process."
+      services:
+        JupyterLab:
+          "4.3":
+            allowedLists:
+              groups:
+                - "geant:dfn.de:fz-juelich.de:jsc:jupyter:beta_tester"
     ingress:
       enabled: true
     jupyter-metrics:
