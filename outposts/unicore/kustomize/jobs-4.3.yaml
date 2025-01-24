@@ -370,16 +370,6 @@ data:
     update_config () {
       sed -i -e "s|_port_|${PORT}|g" -e "s|_home_|${JUPYTERHUB_HOME:-${HOME}}|g" -e "s|_servername_|${JUPYTERHUB_SERVER_NAME}|g" ${DIR}/config.py
       send_spawn_update 85 "Add system specific configuration." "Use system specific jupyter_notebook_config.py files"
-      if [[ -f ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py ]]; then
-        echo "" >> ${DIR}/config.py
-        cat ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py >> ${DIR}/config.py
-        echo "$(date) - Added system specific config ${EBROOTJUPYTERLAB}/etc/jupyter/jupyter_notebook_config.py"
-      fi
-      if [[ -f ${EBROOTJUPYTERMINRESOURCEMINUSAGE}/etc/jupyter/jupyter_notebook_config.py ]]; then
-        echo "" >> ${DIR}/config.py
-        cat ${EBROOTJUPYTERMINRESOURCEMINUSAGE}/etc/jupyter/jupyter_notebook_config.py >> ${DIR}/config.py
-        echo "$(date) - Added system specific config ${EBROOTJUPYTERMINRESOURCEMINUSAGE}/etc/jupyter/jupyter_notebook_config.py"
-      fi
       for path in ${JUPYTER_EXTRA_LABEXTENSIONS_PATH//:/$'\n'}; do
         echo "c.LabServerApp.extra_labextensions_path.append('$path')" >> ${JUPYTER_LOG_DIR}/config.py
       done
