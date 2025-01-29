@@ -83,6 +83,9 @@ targetCustomizations:
           - name: "production-docs"
             oldHost: "docs.hub.nfdi-jupyter.de"
             newHost: "nfdi-jupyter.de"
+          - name: "service-url"
+            oldHost: "jupyter.services.base4nfdi.de"
+            newHost: "nfdi-jupyter.de"
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
