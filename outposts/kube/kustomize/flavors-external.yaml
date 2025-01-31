@@ -33,7 +33,7 @@ data:
       xl1nfdi:
         max: 10
         weight: 18
-        display_name: "8GB RAM, 1VCPUs, 2 days"
+        display_name: "8GB RAM, 1VCPUs, 1 day"
         description: "JupyterLab will run for max 1 day with 8GB RAM and 1VCPUs."
         runtime:
           days: 1
