@@ -24,7 +24,7 @@ helm:
     ingress:
       enabled: true
     dailyRestart:
-      enabled: false
+      enabled: true
     jupyter-metrics:
       enabled: true
       nodeSelector:
