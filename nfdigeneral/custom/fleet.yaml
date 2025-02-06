@@ -34,6 +34,9 @@ helm:
         enabled: true
         level: 10
     customConfig:
+      backendServices:
+        outpostKubeJSCCloud:
+          pollInterval: 180
       announcement:
         show: false
         title: "Infrastructure Issues Notice"
