@@ -257,9 +257,9 @@ data:
         if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Java/2.2.0
         fi
-        # if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
-        #   module load JupyterKernel-Julia/.1.9.3
-        # fi
+        if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
+          module load JupyterKernel-Julia/.1.11.2
+        fi
         if [[ $JUPYTER_MODULE_LFORTRAN_ENABLED -eq 1 ]]; then
           module load JupyterKernel-LFortran/.0.42.0
         fi
