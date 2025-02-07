@@ -447,8 +447,6 @@ outpostConfig: |-
           spawner.log.exception(f"{spawner._log_name} - Could not create dockerregistry secret")
 
   async def create_storage(spawner):
-      if "userdata_path" not in spawner.user_options:
-          return
       token = os.environ.get("STORAGE_MANAGER_TOKEN", None)
       storage_url = os.environ.get("STORAGE_MANAGER_URL", None)
       if storage_url and token:
