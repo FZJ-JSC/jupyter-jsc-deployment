@@ -254,12 +254,12 @@ data:
         if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Cling/.1.2-4.3.4
         fi
-        if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
+        #if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Java/2.2.0
-        fi
-        if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
+        #fi
+        #if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Julia/.1.11.2
-        fi
+        #fi
         if [[ $JUPYTER_MODULE_LFORTRAN_ENABLED -eq 1 ]]; then
           module load JupyterKernel-LFortran/.0.42.0
         fi
@@ -275,9 +275,9 @@ data:
         # if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
         #   module load JupyterKernel-PyDeepLearning/.2024.3-4.2.1
         # fi
-        if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
+        #if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyEarthSystem/.2025.1-4.3.4
-        fi
+        #fi
         # if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
         #   module load JupyterKernel-PyQuantum/.2024.10-4.2.1
         # fi
