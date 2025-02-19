@@ -287,7 +287,7 @@ data:
 
         # Proxies
         # if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
-        #   module load JupyterProxy-XpraHTML5/.0.4.0-4.2.1
+          module load JupyterProxy-XpraHTML5/.0.4.0
         # fi
         # # Load MatLab Proxy module, if user is in matlab group
         # IFS=' ' read -ra groups_array <<< "$(id -Gn)"
@@ -303,7 +303,7 @@ data:
         # fi
         # if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then
         #   if [[ $SYSTEMNAME != "deep" ]]; then
-        #     module load JupyterProxy-RStudio/.2023.09.1-4.2.1
+          module load JupyterProxy-RStudio/.2024.12.0
         #   fi
         # fi
         # # Extensions
