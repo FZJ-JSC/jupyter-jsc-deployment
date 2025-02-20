@@ -1,9 +1,5 @@
 resources:
   - gunicorn_config.yaml
-  - jobs-2.6.yaml
-  - jobs-3.2.yaml
-  - jobs-3.3.yaml
-  - jobs-3.4.yaml
   - jobs-3.6.yaml
   - jobs-3.6-juniq.yaml
   - jobs-4.2.yaml

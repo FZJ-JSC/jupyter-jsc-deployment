@@ -38,6 +38,9 @@ data:
     set_env () {
       echo "$(date) - Set environment variables ..."
       export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+      if [[ -f ${DIR}/.env ]]; then
+        source ${DIR}/.env
+      fi
       export PID_PATH=${DIR}/service.pid
       export VALIDATE_TOKEN_PID_PATH=${DIR}/validate_token.pid
       export LC_ALL=en_US.UTF-8
