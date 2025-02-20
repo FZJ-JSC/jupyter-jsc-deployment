@@ -241,7 +241,7 @@ outpostConfig: |-
       # if internal_ssl is usedon login node, we don't need the ca variable. 
       # We're using the public_api_url, not the internal one
       if "JUPYTERHUB_SSL_CLIENT_CA" in job_description["Environment"].keys():
-        del job_description["Environment"]["JUPYTERHUB_SSL_CLIENT_CA"]    
+        del job_description["Environment"]["JUPYTERHUB_SSL_CLIENT_CA"]
     else:
       nodes = user_options["nodes"]
       runtime = user_options["runtime"]
@@ -262,7 +262,10 @@ outpostConfig: |-
       if reservation and reservation.lower() != "none":
         job_description["Resources"]["Reservation"] = reservation
     
-    
+    if "JUPYTERHUB_API_TOKEN" in job_description["Environment"].keys():
+        del job_description["Environment"]["JUPYTERHUB_API_TOKEN"]
+    if "JPY_API_TOKEN" in job_description["Environment"].keys():
+        del job_description["Environment"]["JPY_API_TOKEN"]
     jd_to_log = job_description.copy()
     if "Imports" in jd_to_log.keys():
       jd_to_log["Imports"] = "..."
