@@ -238,10 +238,6 @@ outpostConfig: |-
       if reservation and reservation.lower() != "none":
         job_description["Resources"]["Reservation"] = reservation
     
-    if "JUPYTERHUB_API_TOKEN" in job_description["Environment"].keys():
-        del job_description["Environment"]["JUPYTERHUB_API_TOKEN"]
-    if "JPY_API_TOKEN" in job_description["Environment"].keys():
-        del job_description["Environment"]["JPY_API_TOKEN"]
     jd_to_log = job_description.copy()
     if "Imports" in jd_to_log.keys():
       jd_to_log["Imports"] = "..."
