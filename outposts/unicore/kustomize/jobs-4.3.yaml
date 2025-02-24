@@ -302,7 +302,7 @@ data:
         # done
         # # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
         # if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-        #   module load JupyterProxy-NESTDesktop/.0.4.0-4.2.1
+          module load JupyterProxy-NESTDesktop/.0.4.0
         # fi
         # if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then
         #   if [[ $SYSTEMNAME != "deep" ]]; then
