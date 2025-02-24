@@ -276,7 +276,7 @@ data:
           module load JupyterKernel-Ruby/.3.4.1
         fi
         # if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
-        #   module load JupyterKernel-PyDeepLearning/.2024.3-4.2.1
+          module load JupyterKernel-PyDeepLearning/.2025.1-4.3.4
         # fi
         #if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyEarthSystem/.2025.1-4.3.4
@@ -285,7 +285,7 @@ data:
         #   module load JupyterKernel-PyQuantum/.2024.10-4.2.1
         # fi
         # if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
-        #   module load JupyterKernel-PyVisualization/.2024.3-4.2.1
+          module load JupyterKernel-PyVisualization/.2025.2-4.3.4
         # fi
 
         # Proxies
