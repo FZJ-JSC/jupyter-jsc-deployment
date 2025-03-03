@@ -311,7 +311,7 @@ data:
         # fi
         # if [[ $JUPYTER_MODULE_VSCODE_ENABLED -eq 1 ]]; then
         #   if [[ $SYSTEMNAME != "deep" ]]; then
-          module load JupyterProxy-VSCode/0.9.2
+          module load JupyterProxy-VSCode/0.9.3
         #   fi
         # fi
         # # Extensions
