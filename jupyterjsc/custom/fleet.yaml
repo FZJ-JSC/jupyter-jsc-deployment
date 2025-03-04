@@ -34,6 +34,13 @@ helm:
             allowedLists:
               groups:
                 - "geant:dfn.de:fz-juelich.de:jsc:jupyter:beta_tester"
+              systems:
+                - JURECA
+                - JUWELS
+                - JEDI
+                - JUSUF
+                - DEEP
+                - JSC-Cloud
     ingress:
       enabled: true
     jupyter-metrics:
