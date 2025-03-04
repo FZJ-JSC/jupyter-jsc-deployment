@@ -33,6 +33,9 @@ helm:
         enabled: true
         level: 10
     customConfig:
+      services:
+        JupyterLab:
+          defaultOption: lrz
       announcement:
         show: true
         title: "Infrastructure Issues Notice"

@@ -31,10 +31,6 @@ helm:
       # Set JupyterHub in maintenance:
       #   Set enabled here to false, update ingress in maintenance/fleet.yaml
       enabled: true
-      customConfig:
-        services:
-          JupyterLab:
-            defaultOption: lrz
   valuesFiles:
     - ../../base-values/extraConfig.yaml
     - ../../base-values/image.yaml
