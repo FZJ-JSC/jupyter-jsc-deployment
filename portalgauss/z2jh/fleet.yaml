@@ -51,6 +51,6 @@ targetCustomizations:
         stage: production
     helm:
       valuesFiles:
-        - ../../base-values/image_fixed.yaml
+        - ../../base-values/image_portalgauss.yaml
     kustomize:
       dir: ./kustomize
