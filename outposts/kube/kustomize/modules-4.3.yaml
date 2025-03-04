@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: modules-4-3
+  namespace: outpost
+data:
+  config.py: |
+    c = get_config()
+    c.ServerApp.root_dir = "/"
+    c.ContentsManager.allow_hidden = True
+    c.ServerApp.terminado_settings = {"shell_command": ["/bin/bash"]}
+    c.ServerApp.default_url = "/lab/workspaces/_servername_/tree/home/jovyan"
+    c.ServerApp.tornado_settings = {"websocket_max_message_size": 1024 * 1024 * 1024}
+    c.ServerApp.max_buffer_size = 1024 * 1024 * 1024
+    c.ServerApp.max_body_size = 1024 * 1024 * 1024
+    c.ServerApp.quit_button = False
+  load_jupyter_version.sh: |
+    #!/bin/bash
+
+    module purge
+    module use ${OTHERSTAGES}
+    module load Stages/2025
+    module load GCCcore/.13.3.0
+    module load Jupyter-bundle/20250114

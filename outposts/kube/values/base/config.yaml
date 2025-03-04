@@ -648,7 +648,7 @@ outpostConfig: |-
                       "subPath": "load_jupyter_modules.sh"
                   }
               ]
-              if profile in ["4-2", "4-2-juniq"]:
+              if profile in ["4-2", "4-2-juniq", "4-3"]:
                   profile_mounts.append(
                       {
                           "name": f"modules-{profile}", 
@@ -784,7 +784,8 @@ outpostConfig: |-
           "custom": "JupyterLab - custom",
           "3-6": "JupyterLab - 3.6",
           "3-6-juniq": "JupyterLab - 3.6 JUNIQ",
-          "4-2": "JupyterLab - 4.2",
+          "4-2": "JupyterLab - 4.2",          
+          "4-3": "JupyterLab - 4.3",
           "4-2-juniq": "JupyterLab - 4.2 JUNIQ",
           "repo2docker": "Repo2Docker"
       }
@@ -793,6 +794,7 @@ outpostConfig: |-
           "3-6": "JupyterLab/3.6",
           "3-6-juniq": "JupyterLab/3.6-juniq",
           "4-2": "JupyterLab/4.2",
+          "4-3": "JupyterLab/4.3",
           "4-2-juniq": "JupyterLab/4.2-juniq",
           "repo2docker": "JupyterLab/repo2docker"
       }
