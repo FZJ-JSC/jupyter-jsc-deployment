@@ -19,9 +19,9 @@ helm:
     fullnameOverride: juniq-custom
     customConfig:
       announcement:
-        show: false
-        title: "Infrastructure Issues Notice"
-        body: "We are experiencing problems with the underlying infrastructure, which may result in slow website loading and difficulties during the startup process."
+        show: true
+        title: "Upcoming Maintenance: 20 Mar 2025, 08:30 - 18:30"
+        body: "All running JupyterLabs will be stopped during this maintenance."
       services:
         JupyterLab:
           defaultOption: "4.2-juniq"

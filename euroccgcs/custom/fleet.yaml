@@ -32,6 +32,11 @@ helm:
       syslog:
         enabled: true
         level: 10
+    customConfig:
+      announcement:
+        show: true
+        title: "Upcoming Maintenance: 20 Mar 2025, 08:30 - 18:30"
+        body: "All running JupyterLabs will be stopped during this maintenance."
 targetCustomizations:
   - name: jupyter-stag
     clusterSelector:
