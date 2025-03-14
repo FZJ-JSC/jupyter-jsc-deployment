@@ -32,6 +32,8 @@ helm:
         JupyterLab:
           "4.3":
             allowedLists:
+              groups:
+                - "geant:dfn.de:fz-juelich.de:jsc:jupyter:beta_tester"
               systems:
                 - JURECA
                 - JUWELS
