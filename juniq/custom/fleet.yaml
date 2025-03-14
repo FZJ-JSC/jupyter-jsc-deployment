@@ -20,7 +20,7 @@ helm:
     customConfig:
       announcement:
         show: true
-        title: "Upcoming Maintenance: 20 Mar 2025, 08:30 - 18:30"
+        title: "Upcoming Maintenance - 20 Mar 2025 08.30 - 18.30"
         body: "All running JupyterLabs will be stopped during this maintenance."
       services:
         JupyterLab:
