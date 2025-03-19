@@ -47,9 +47,9 @@ targetCustomizations:
         prep: "false"
     helm:
       valuesFiles:
-        - values/overlays/production/hosts.yaml
+        - values/overlays/production-prep/hosts.yaml
       values:
-        enabled: false
+        enabled: true
   - name: production
     clusterSelector:
       matchLabels:
