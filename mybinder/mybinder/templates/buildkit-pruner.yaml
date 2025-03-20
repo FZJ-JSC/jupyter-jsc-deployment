@@ -11,6 +11,8 @@ spec:
     spec:
       template:
         spec:
+          nodeSelector:
+            binder: "true"
           restartPolicy: OnFailure
           volumes:
           - name: dind-socket
