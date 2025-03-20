@@ -1,0 +1,55 @@
+{{- if .Values.analyticsPublisher.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics-publisher
+  labels:
+    app: analytics-publisher
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: analytics-publisher
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: analytics-publisher
+        release: {{ .Release.Name }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/analytics-publisher/configmap.yaml") . | sha256sum }}
+    spec:
+      nodeSelector: {{ .Values.analyticsPublisher.nodeSelector | toJson }}
+      volumes:
+      - name: secrets
+        secret:
+          secretName: analytics-publisher-secrets
+      - name: config
+        configMap:
+          name: analytics-publisher
+
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- . | toYaml | nindent 8 }}
+      {{- end }}
+
+      containers:
+      - name: analytics-publisher
+        image: {{ .Values.analyticsPublisher.image.name}}:{{ .Values.analyticsPublisher.image.tag }}
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /secrets/service-account.json
+        volumeMounts:
+          - name: secrets
+            mountPath: /secrets
+            readOnly: true
+          - name: config
+            mountPath: /etc/analytics-publisher
+            readOnly: true
+        resources: {{ .Values.analyticsPublisher.resources | toJson }}
+
+{{- end }}

@@ -1,0 +1,75 @@
+{{- if .Values.proxyPatches.enabled }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: proxy-patches-nginx-config
+data:
+  redirects.conf: |
+    server {
+      listen 80;
+
+      # Return 424 for anything that comes here
+      # serve an informative error about stopped pods
+      error_page 424 /nosuchserver.html;
+      error_page 404 /nosuchserver.html;
+      location /nosuchserver.html {
+        root /srv/proxy-patches;
+        internal;
+      }
+      location /user/ {
+        return 424;
+      }
+      location / {
+        return 404;
+      }
+    }
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: proxy-html-files
+data:
+  nosuchserver.html: >
+    <html>
+    <head>
+    <title>Binder not found</title>
+    {{ $rootUrl := printf "https://%s" (index .Values.binderhub.ingress.hosts 0) }}
+    <link href="{{ $rootUrl }}/static/dist/styles.css" rel="stylesheet">
+    </head>
+    <body>
+    <div class="container">
+    <h2 class="text-center">Oops!</h2>
+    <h3 class="text-center">We can't seem to find the Binder page you are looking for.</h3>
+    <h4>424 error</h4>
+    <p>
+    Here are some helpful tips.
+    </p>
+    <p>
+    <h4>Is this a Binder that you created?</h4>
+    <p>
+    Your Binder stopped due to an error or it was removed
+    due to age or inactivity.
+    </p>
+    <p>
+    Return to the
+    <a href="{{ $rootUrl }}">Binder home page</a>
+    to retry creating your Binder.
+    </p>
+    <h4>Did someone give you this Binder link?</h4>
+    <p>
+    If so, the link is outdated or incorrect. Recheck the link for typos
+    or ask the person who gave you the link for an updated link.
+    A shareable Binder link should look like
+    <tt>{{ $rootUrl }}/v2/gh/...</tt>.
+    </p>
+    <h4><a href="{{ $rootUrl }}">Binder home page</a></h4>
+    </body>
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: proxy-help-config
+data:
+  routes.json: {{ toJson .Values.proxyPatches.routes | quote }}
+{{- end }}
