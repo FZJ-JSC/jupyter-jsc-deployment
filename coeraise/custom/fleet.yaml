@@ -10,6 +10,7 @@ dependsOn:
         app: postgres-operator
         component: namespaces
 
+
 helm:
   releaseName: coeraise-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
