@@ -78,7 +78,6 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "false"
     helm:
       values:
         customConfig:
@@ -101,7 +100,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "true"
+        maintenance: "truedisabled"
     helm:
       values:
         ingress:
