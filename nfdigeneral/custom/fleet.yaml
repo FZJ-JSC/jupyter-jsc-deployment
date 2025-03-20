@@ -38,7 +38,7 @@ helm:
         outpostKubeJSCCloud:
           pollInterval: 180
       services:
-        defaultOption: "4.2"
+        defaultOption: "4.3"
       systems:
         - JSC-Cloud
 targetCustomizations:
@@ -63,9 +63,11 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "false"
     helm:
       values:
+        customConfig:
+          systems:
+            - JSC-Cloud
         global:
           # hostname: zam12246.zam.kfa-juelich.de
           baseUrl: /
@@ -85,7 +87,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "true"
+        maintenance: "true-disabled"
     helm:
       values:
         ingress:
