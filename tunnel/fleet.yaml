@@ -38,7 +38,6 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        prep: "false"
     helm:
       valuesFiles:
         - values/overlays/production/jupyterhubs.yaml
@@ -47,19 +46,6 @@ targetCustomizations:
         replicas: 1
         servicessh:
           loadBalancerIP: "134.94.198.229"
-  - name: production
-    clusterSelector:
-      matchLabels:
-        stage: production
-        prep: "true"
-    helm:
-      valuesFiles:
-        - values/overlays/production/jupyterhubs.yaml
-        - values/overlays/production/misc.yaml
-      values:
-        replicas: 0
-        servicessh:
-          loadBalancerIP: "134.94.198.246"
 diff:
   comparePatches:
   - apiVersion: apps/v1
