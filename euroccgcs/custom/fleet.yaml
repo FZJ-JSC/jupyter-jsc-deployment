@@ -33,10 +33,17 @@ helm:
         enabled: true
         level: 10
     customConfig:
-      announcement:
-        show: true
-        title: "Upcoming Maintenance - 20 Mar 2025 08.30 - 18.30"
-        body: "All running JupyterLabs will be stopped during this maintenance."
+      services:
+        JupyterLab:
+          defaultOption: "4.3"
+          "4.3":
+            allowedLists:
+              systems:
+                - JURECA
+                - JUWELS
+                - JEDI
+                - JUSUF
+                - JSC-Cloud
 targetCustomizations:
   - name: jupyter-stag
     clusterSelector:
@@ -55,7 +62,6 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "false"
     helm:
       values:
         global:
@@ -69,7 +75,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "true"
+        maintenance: "true-disab"
     helm:
       values:
         ingress:
