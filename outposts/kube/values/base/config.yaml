@@ -31,6 +31,8 @@ outpostConfig: |-
   from kubernetes import config
   from kubespawner import KubeSpawner
 
+  lmod_options = ["xpra", "4.3", "4.2", "4.2-juniq", "3.6", "3.6-juniq"]
+
   ##########
   # Logging
   ##########
@@ -176,7 +178,6 @@ outpostConfig: |-
   ##########
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
-  c.KubeSpawner.image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.16"
   c.KubeSpawner.image_pull_policy = "Always"
   c.KubeSpawner.tolerations = [
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
@@ -212,241 +213,167 @@ outpostConfig: |-
   # KubeSpawner prespawn hook
   ##########
 
-  def get_gitref(spawner, r2d_type, r2d_repo, r2d_gitref):
-      if r2d_type == "GitHub":
-          try:
-              r2d_repo_api_url = r2d_repo.replace("github.com", "api.github.com/repos").rstrip("/")
-              r2d_repo_tags_url = f"{r2d_repo_api_url}/tags"
-              r2d_repo_commits_url = f"{r2d_repo_api_url}/commits"
-              r2d_repo_branches_url = f"{r2d_repo_api_url}/branches"
-              
-              # If it's a tag: use existing images
-              r = requests.get(r2d_repo_tags_url, headers={"Accept": "application/json"})
-              r.raise_for_status()
-              for tag in r.json():
-                  if tag.get("name", "") == r2d_gitref:
-                      if tag.get("commit", {}).get("sha", False):
-                          r2d_gitref = tag["commit"]["sha"]
-                      return r2d_gitref
-
-              # If it's a Custom Commit Reference -> get sha and use existing images
-              r = requests.get(r2d_repo_commits_url, headers={"Accept": "application/json"})
-              r.raise_for_status()
-              if r2d_gitref in ["HEAD", "@"]:
-                  return r.json()[0]["sha"]
-              elif r2d_gitref.startswith("HEAD~"):
-                  n = int(r2d_gitref[5:])
-                  return r.json()[n]["sha"]
-              elif r2d_gitref.startswith("@~"):
-                  n = int(r2d_gitref[2:])
-                  return r.json()[n]["sha"]
-
-              # If it's a branch: use the last commit in this branch
-              r = requests.get(r2d_repo_branches_url, headers={"Accept": "application/json"})
-              r.raise_for_status()
-              for branch in r.json():
-                  if r2d_gitref == branch["name"]:
-                      if branch.get("commit", {}).get("sha", False):
-                          r2d_gitref = branch["commit"]["sha"]
-                      return r2d_gitref
-          except:
-              spawner.log.exception(f"{spawner._log_name} - Could not check github repository to make caching decision")
-      return r2d_gitref
-
-  def get_image(spawner, r2d_repo, r2d_gitref):
-      image_prefix = os.environ.get("REPO2DOCKER_IMAGE_PREFIX")
-      md5 = hashlib.md5(f"{r2d_repo}:{r2d_gitref}".encode("utf-8")).hexdigest()[:8]
-      image = f"{image_prefix}:v{md5}"
-      return image
-
-  def get_use_storage(spawner):
-      ret = True
-      profile = get_profile(spawner)
-      if profile in ["custom", "repo2docker"]:
-          if "userdata_path" in spawner.user_options:
-              ret = True
-          else:
-              ret = False
-          # specsp11 temporary implemented directly
-          r2d_repo = spawner.user_options.get("repo", "")
-          if r2d_repo.endswith("Simulation-Benchmarks/11thSPE-CSP"):
-              ret = True
-      return ret
-
-  async def repo2docker_build(spawner):
-      # 1. Let's check if the image already exists
-      r2d_type = spawner.user_options["type"]
-      r2d_repo = spawner.user_options["repo"]
-      r2d_gitref_prev = spawner.user_options.get("gitref", "HEAD")
+  def get_image(spawner):    
+      if spawner.user_options["option"] in lmod_options:
+          lmod_image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.17"
+          return lmod_image
       
-      r2d_gitref = get_gitref(spawner, r2d_type, r2d_repo, r2d_gitref_prev)
-      image = get_image(spawner, r2d_repo, r2d_gitref)
+      if spawner.user_options["option"] == "repo2docker":
+          return spawner.user_options["repo2docker"]["image"];
 
-      # Let's check if this image already exists
-      image_exists = False
-      try:
-          tag_list_url = os.environ.get("REPO2DOCKER_REPOSITORY_TAGS_URL", False)
-          if tag_list_url:
-              r = requests.get(f"{tag_list_url}?per_page=300", headers={"Accept":"application/json"})
-              r.raise_for_status()
-              tags_list = r.json()
-              for tags_entry in tags_list:
-                  if image == tags_entry.get("location", ""):
-                      image_exists = True
-                      break
-      except:
-          spawner.log.exception(f"{spawner._log_name} - Could not check for existing images")
-          image_exists = False
+      if spawner.user_options["option"] == "default":
+          return spawner.user_options.get("default", {}).get("image", "jupyter/minimal-notebook")
 
-      if image_exists:
-          spawner.log.info(f"{spawner._log_name} - Image {image} already exists. No need to build it.")
-          return
-        
-      # 2. Inform user it may take a while
-      summary = "We will build a docker image from the selected information. This may take a few minutes"
-      details = "We will send an update every 10 seconds."
-      msg = f"<details><summary><span style=\"color:orange;\">{summary}</span></summary>{details}</details>"
-      event = {
-          "progress": "12",
-          "html_message": msg,
-          "failed": False
-      }
-      await spawner._outpostspawner_send_event(event)
-
-      # 3. Trigger build process
-      token = os.environ.get("REPO2DOCKER_TOKEN")
-      repo2docker_project_url = os.environ.get("REPO2DOCKER_PROJECT_URL", "None").rstrip("/")
-      repo2docker_post_url = f"{repo2docker_project_url}/trigger/pipeline"
-      repo2docker_get_url = f"{repo2docker_project_url}/pipelines"
-      headers = {
-          "Accept": "application/json"
-      }
-
-      data = {
-          "token": token,
-          "ref": "main",
-          "variables[R2D_REPO]": r2d_repo,
-          "variables[R2D_GITREF]": r2d_gitref,
-          "variables[R2D_IMAGE]": image,
-      }
-      r = requests.post(url=repo2docker_post_url, data=data, timeout=3)
-      r.raise_for_status()
-      response_json = r.json()
-      id = response_json["id"]
-      c = 0
-      status = ""
-      web_url = ""
-      repo2docker_get_url = f"{repo2docker_get_url}/{id}"
-      while c < 120:
-          c += 1
-          headers = {
-              "Accept": "application/json"
-          }
-          try:
-              spawner.log.info(f"{spawner._log_name} - Check build status")
-              # url example: https://gitlab.jsc.fz-juelich.de/api/v4/projects/6798/pipelines/213996/
-              r = requests.get(url=repo2docker_get_url, headers=headers, timeout=3)
-              r.raise_for_status()
-              response_json = r.json()
-              status = response_json["status"]
-              spawner.log.info(f"{spawner._log_name} - Check build status: {status}")
-              web_url = response_json.get("web_url", None)
-              if status in ["pending", "running"]:
-                  summary = f"Build process is currently in state {status}"
-                  if web_url:
-                      details = f"For more details check the pipeline output at {web_url}"
-                  else:
-                      details = ""
-                  msg = f"<details><summary>{summary}</summary>{details}</details>"
-                  event = {
-                      "progress": "12",
-                      "html_message": msg,
-                      "failed": False
-                  }
-                  await spawner._outpostspawner_send_event(event)
-                  await asyncio.sleep(10)
-                  continue
-              elif status in ["success"]:
-                  summary = f"Build process complete. Using {image} to start server"
-                  if web_url:
-                      details = f"For more details check the pipeline output at {web_url}"
-                  else:
-                      details = ""
-                  msg = f"<details><summary><span style=\"color:darkgreen;\">{summary}</span></summary>{details}</details>"
-                  msg = f"<details><summary>{summary}</summary>{details}</details>"
-                  event = {
-                      "progress": "13",
-                      "html_message": msg,
-                      "failed": False
-                  }
-                  await spawner._outpostspawner_send_event(event)
-                  break
-              elif status in ["failed"]:
-                  summary = f"Build process failed. Please check the logs at {web_url} (click on \"build-image\") to solve the issue."
-                  if web_url:
-                      details = f"Please contact support (mail address in the footer), if you need help."
-                  else:
-                      details = ""
-                  msg = f"<details><summary><span style=\"color:red;\">{summary}</span></summary>{details}</details>"
-                  msg = f"<details><summary>{summary}</summary>{details}</details>"
-                  event = {
-                      "progress": "13",
-                      "html_message": msg,
-                      "failed": False
-                  }
-                  await spawner._outpostspawner_send_event(event)
-                  break
-          except:
-              c = 120
-              spawner.log.exception(f"{spawner._log_name} - Could not check build process status")
-              await asyncio.sleep(10)
-      if c == 120:
-          raise Exception("Timeout. Stop start attempt. Please try again in a few minutes. Caching might solve this issue for the next try.")
-      elif not status or status in ["failed"]:
-          raise Exception("Build process failed. Stop start attempt.")
+      return spawner.user_options.get("custom", {}).get("customimage", "No Image provided")    
 
   async def create_dockerregistry_secret(spawner):
-      try:
-          config.load_incluster_config()
-          v1 = client.CoreV1Api()
-          image_pull_secret_name = f"{spawner.pod_name}-reg"
-          secret_manifest = {
-              "apiVersion": "v1",
-              "kind": "Secret",
-              "type": "kubernetes.io/dockerconfigjson",
-              "metadata": {
-                  "name": image_pull_secret_name,
-                  "resourceversion": "v1",
-                  "labels": {
-                      "pod": spawner.pod_name
-                  }
-              },
-              "data": {
-                  ".dockerconfigjson": spawner.user_options.get("dockerregistry", "")
-              },
-          }
+      privaterepo = spawner.user_options.get("custom", {}).get("privaterepo", False)
+      privaterepousername = spawner.user_options.get("custom", {}).get("privaterepousername", False)
+      privaterepopassword = spawner.user_options.get("custom", {}).get("privaterepopassword", False)
+      if privaterepo and privaterepousername and privaterepopassword:
           try:
-              v1.read_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
+              import base64
+              auth_string = f"{privaterepousername}:{privaterepopassword}"
+              auth_encoded = base64.b64encode(auth_string.encode()).decode()
+              dockerregistry_plain_dict = {
+                  "auths": {
+                      privaterepo: {
+                          "auth": auth_encoded
+                      }
+                  }
+              }
+              
+              docker_config_json = json.dumps(dockerregistry_plain_dict)
+              docker_config_base64 = base64.b64encode(docker_config_json.encode()).decode()
+              
+              config.load_incluster_config()
+              v1 = client.CoreV1Api()
+              image_pull_secret_name = f"{spawner.pod_name}-reg"
+              secret_manifest = {
+                  "apiVersion": "v1",
+                  "kind": "Secret",
+                  "type": "kubernetes.io/dockerconfigjson",
+                  "metadata": {
+                      "name": image_pull_secret_name,
+                      "resourceversion": "v1",
+                      "labels": {
+                          "pod": spawner.pod_name
+                      }
+                  },
+                  "data": {
+                      ".dockerconfigjson": docker_config_base64
+                  },
+              }
+              try:
+                  v1.read_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
+              except:
+                  pass
+              else:
+                  spawner.log.info(f"{spawner._log_name} - Delete pre existing registry secret {image_pull_secret_name}")
+                  v1.delete_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
+              v1.create_namespaced_secret(body=secret_manifest, namespace=spawner.namespace)
+              image_pull_secrets = getattr(spawner, "image_pull_secrets", [])
+              if not image_pull_secrets:
+                  image_pull_secrets = [image_pull_secret_name]
+              elif type(image_pull_secrets) == list:
+                  image_pull_secrets.append(image_pull_secret_name)
+              elif type(image_pull_secrets) == str:
+                  image_pull_secrets = [image_pull_secrets] + [image_pull_secret_name]
+              else:
+                  image_pull_secrets = [image_pull_secret_name]
+              spawner.image_pull_secrets = image_pull_secrets
           except:
-              pass
-          else:
-              spawner.log.info(f"{spawner._log_name} - Delete pre existing registry secret {image_pull_secret_name}")
-              v1.delete_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
-          v1.create_namespaced_secret(body=secret_manifest, namespace=spawner.namespace)
-          image_pull_secrets = getattr(spawner, "image_pull_secrets", [])
-          if not image_pull_secrets:
-              image_pull_secrets = [image_pull_secret_name]
-          elif type(image_pull_secrets) == list:
-              image_pull_secrets.append(image_pull_secret_name)
-          elif type(image_pull_secrets) == str:
-              image_pull_secrets = [image_pull_secrets] + [image_pull_secret_name]
-          else:
-              image_pull_secrets = [image_pull_secret_name]
-          spawner.image_pull_secrets = image_pull_secrets
-      except:
-          spawner.log.exception(f"{spawner._log_name} - Could not create dockerregistry secret")
+              spawner.log.exception(f"{spawner._log_name} - Could not create dockerregistry secret")
 
-  async def create_storage(spawner):
+  def delete_previous_events(spawner):
+      config.load_incluster_config()
+      v1 = client.CoreV1Api()
+      events = v1.list_namespaced_event(namespace=spawner.namespace, field_selector=f"involvedObject.name={spawner.pod_name}")
+      for event in events.items:
+          name = event.metadata.name
+          if name:
+              v1.delete_namespaced_event(name=name, namespace=spawner.namespace)
+
+  async def pre_spawn_hook(spawner):
+      # Create registry secret, needed
+      await create_dockerregistry_secret(spawner)
+      
+      # This will avoid the spamming of old events to a new spawn event
+      # Requires JupyterHub Outpost Helm Chart 1.0.7 or newer
+      delete_previous_events(spawner)
+          
+      # if we're using the repo2docker profile, we have to trigger the build + wait until it's finished
+      if spawner.user_options["option"] == "repo2docker":
+          notebook = spawner.user_options.get("repo2docker", {}).get("repopath", "")
+          notebook_type = spawner.user_options.get("repo2docker", {}).get("repopathtype", "file")
+          if notebook_type == "file" and notebook:
+              spawner.default_url = f"/lab/tree/{notebook}"
+          elif notebook_type == "url" and notebook:
+              spawner.default_url = notebook
+
+          spawner.cmd = ["/bin/sh", "-c"]
+          spawner.args = [
+              '''
+              #!/bin/sh
+              # Get the current jupyterhub-singleuser version
+              version=$(jupyterhub-singleuser --version || echo "0.0.0")
+
+              # Set the desired version range
+              min_version="4.0.0"
+              max_version="5.0.0"
+              target_version="4.1.6"
+
+              # Function to check if the version is in range
+              in_range() {
+                  [ "$(printf '%s\n' "$min_version" "$1" | sort -V | head -n1)" = "$min_version" ] && \
+                  [ "$(printf '%s\n' "$1" "$max_version" | sort -V | head -n1)" = "$1" ]
+              }
+
+              # Check if the current version is within the range
+              if ! in_range "$version"; then
+                  echo "Installing jupyterhub-singleuser $target_version as version $version is not within $min_version - $max_version."
+                  pip install "jupyterhub==$target_version"
+              else
+                  echo "jupyterhub-singleuser $version is within the required version range."
+              fi
+
+              # Start the jupyterhub-singleuser
+              exec jupyterhub-singleuser
+              '''
+          ]
+
+
+  c.KubeSpawner.extra_pod_config = {
+      "restartPolicy": "Never"
+  }
+
+  c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
+
+  ##########
+  # KubeSpawner post_stop_hook
+  ##########
+
+  def post_stop_hook(spawner):
+      config.load_incluster_config()
+      v1 = client.CoreV1Api()
+      image_pull_secret_name = f"{spawner.pod_name}-reg"
+      try:
+          v1.read_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
+      except:
+          pass
+      else:
+          spawner.log.info(f"{spawner._log_name} - Delete registry secret {image_pull_secret_name}")
+          v1.delete_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
+
+  c.KubeSpawner.post_stop_hook = post_stop_hook
+
+  ##########
+  # KubeSpawner profiles
+  ##########
+
+
+  async def contact_storage_manager(spawner, localstoragepath):
+      # Ensure the user does have a userhome
       token = os.environ.get("STORAGE_MANAGER_TOKEN", None)
       storage_url = os.environ.get("STORAGE_MANAGER_URL", None)
       if storage_url and token:
@@ -499,258 +426,161 @@ outpostConfig: |-
                   "failed": False
               }
               await spawner._outpostspawner_send_event(event)
-          except:
-              spawner.log.exception(f"{spawner._log_name} - Could not get storage information")
-              raise Exception("Could not reach persistent storage manager.")
-      else:
-          spawner.log.warning(f"{spawner._log_name} - Storage Manager env variables not set")
-
-  async def pre_spawn_hook(spawner):
-      # Create User storage and check it's quota if needed
-      if get_use_storage(spawner):
-          await create_storage(spawner)
-
-      # Create registry secret, if `dockerregistry` is part of user_options
-      if spawner.user_options.get("dockerregistry", ""):
-          await create_dockerregistry_secret(spawner)          
-      
-      # if we're using the repo2docker profile, we have to trigger the build + wait until it's finished
-      if get_profile(spawner) == "repo2docker":
-          await repo2docker_build(spawner)
-
-          notebook = spawner.user_options.get("notebook", "")
-          notebook_type = spawner.user_options.get("notebook_type", "File")
-          if notebook_type == "File" and notebook:
-              spawner.default_url = f"/lab/tree/{notebook}"
-          elif notebook_type == "URL" and notebook:
-              spawner.default_url = notebook
-
-          spawner.cmd = ["/bin/sh", "-c"]
-          spawner.args = [
-              '''
-              #!/bin/sh
-              # Get the current jupyterhub-singleuser version
-              version=$(jupyterhub-singleuser --version || echo "0.0.0")
-
-              # Set the desired version range
-              min_version="4.0.0"
-              max_version="5.0.0"
-              target_version="4.1.6"
-
-              # Function to check if the version is in range
-              in_range() {
-                  [ "$(printf '%s\n' "$min_version" "$1" | sort -V | head -n1)" = "$min_version" ] && \
-                  [ "$(printf '%s\n' "$1" "$max_version" | sort -V | head -n1)" = "$1" ]
-              }
-
-              # Check if the current version is within the range
-              if ! in_range "$version"; then
-                  echo "Installing jupyterhub-singleuser $target_version as version $version is not within $min_version - $max_version."
-                  pip install "jupyterhub==$target_version"
-              else
-                  echo "jupyterhub-singleuser $version is within the required version range."
-              fi
-
-              # Start the jupyterhub-singleuser
-              exec jupyterhub-singleuser
-              '''
-          ]
-
-  c.KubeSpawner.extra_pod_config = {
-      "restartPolicy": "Never"
-  }
-
-
-  c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
-
-  ##########
-  # KubeSpawner post_stop_hook
-  ##########
-
-  def post_stop_hook(spawner):
-      config.load_incluster_config()
-      v1 = client.CoreV1Api()
-      image_pull_secret_name = f"{spawner.pod_name}-reg"
-      try:
-          v1.read_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
-      except:
-          pass
-      else:
-          spawner.log.info(f"{spawner._log_name} - Delete registry secret {image_pull_secret_name}")
-          v1.delete_namespaced_secret(name=image_pull_secret_name, namespace=spawner.namespace)
-
-  c.KubeSpawner.post_stop_hook = post_stop_hook
-
-  ##########
-  # KubeSpawner profiles
-  ##########
-
-  def get_profile(spawner):
-      profile = spawner.user_options.get("profile", "JupyterLab/3.6")
-      if "/" in profile:
-          profile = '-'.join(profile.split("/")[1:])
-      profile = profile.replace(".", "-")
-      return profile
-
-
-  def get_profile_volume_mounts(spawner):
-      use_storage = get_use_storage(spawner)
-      if use_storage:
-          profile = get_profile(spawner)
-          if profile in ["custom", "repo2docker"]:
-              userdata_mount = []
-              # specsp11 temporary implemented directly
-              r2d_repo = spawner.user_options.get("repo", "")
-              if r2d_repo.endswith("Simulation-Benchmarks/11thSPE-CSP"):
-                  userdata_mount.append(
-                      {
-                          "name": "nfs-specsp",
-                          "mountPath": "/home/jovyan/shared_folder",
-                          "readOnly": True
-                      }
-                  )
-              if spawner.user_options.get("userdata_path"):
-                  userdata_mount.append(
-                      {
-                          "name": "nfs-userdata",
-                          "mountPath": spawner.user_options["userdata_path"],
-                          "readOnly": False
-                      }
-                  )
-              return userdata_mount
-          else:
-              common_mounts = [
-                  {
-                      "name": "nfs-software", 
-                      "mountPath": "/p/software/jsccloud", 
-                      "readOnly": True
-                  },
-                  {
-                      "name": "uftp", 
-                      "mountPath": "/tmp/custom/uftp.py",
-                      "subPath": "uftp.py"
-                  },
-                  {
-                      "name": "nfs-userhome",
-                      "mountPath": "/home/jovyan",
+              return {
+                  "volume_mounts": [{
+                      "name": "nfs-userdata",
+                      "mountPath": localstoragepath,
                       "readOnly": False 
-                  }
-              ]
-              profile_mounts = [
-                  {
-                      "name": f"modules-{profile}", 
-                      "mountPath": "/tmp/custom/load_jupyter_version.sh", 
-                      "subPath": "load_jupyter_version.sh"
-                  },
-                  {
-                      "name": f"modules-user-{profile}", 
-                      "mountPath": "/tmp/custom/load_jupyter_modules.sh",
-                      "subPath": "load_jupyter_modules.sh"
-                  }
-              ]
-              if profile in ["4-2", "4-2-juniq", "4-3"]:
-                  profile_mounts.append(
-                      {
-                          "name": f"modules-{profile}", 
-                          "mountPath": "/tmp/custom/config.py", 
-                          "subPath": "config.py"
-                      }
-                  )
-              return common_mounts + profile_mounts
-      else:
-          return []
-
-  def get_profile_volumes(spawner, jupyterhub_name):
-      use_storage = get_use_storage(spawner)
-      if use_storage:
-          profile = get_profile(spawner)
-          stage = os.environ.get("STAGE", "staging")
-          if profile in ["custom", "repo2docker"]:
-              userdata_volume = []
-
-              # specsp11 temporary implemented directly
-              r2d_repo = spawner.user_options.get("repo", "")
-              if r2d_repo.endswith("Simulation-Benchmarks/11thSPE-CSP"):
-                  userdata_volume.append(
-                      {
-                          "name": "nfs-specsp",
-                          "nfs": {
-                              "server": "10.0.2.191",
-                              "path": "/mnt/specsp11",
-                              "readOnly": True
-                          }
-                      }
-                  )
-              if spawner.user_options.get("userdata_path"):
-                  userdata_volume.append(
-                    {
-                        "name": "nfs-userdata",
-                        "hostPath": {
-                            # userid gets expanded by KubeSpawner, do not use mapped
-                            # hub name here, each hub uses it's own home dir.
-                            "path": f"/p/home/jusers/{stage}/{jupyterhub_name}/{{userid}}",
-                            "type": ""
-                        }
-                    }
-                  )
-              return userdata_volume
-          else:
-              common_volumes = [
-                  {
-                      "name": "nfs-software", 
-                      "hostPath": {
-                          "path": "/p/software/jsccloud", 
-                          "type": ""
-                      }
-                  },
-                  {
-                      "name": "uftp", 
-                      "configMap": {
-                          "defaultMode": 292,
-                          "name": "uftp"
-                      }
-                  },
-                  {
-                      "name": "nfs-userhome", 
+                  }],
+                  "volumes": [{
+                      "name": "nfs-userdata", 
                       "hostPath": {
                           # userid gets expanded by KubeSpawner, do not use mapped 
                           # hub name here, each hub uses it's own home dir.
-                          "path": f"/p/home/jusers/{stage}/{jupyterhub_name}/{{userid}}",
+                          "path": f"/p/home/jusers/{stage}/{spawner.jupyterhub_name}/{{userid}}",
                           "type": ""
                       }
-                  }
-              ]
-              profile_volumes = [
-                  {
-                      "name": f"modules-{profile}", 
-                      "configMap": {
-                          "defaultMode": 292,
-                          "name": f"modules-{profile}"
-                      }
-                  },
-                  {
-                      "name": f"modules-user-{profile}", 
-                      "configMap": {
-                          "defaultMode": 292,
-                          "name": f"modules-user-{profile}"
-                      }
-                  }
-              ]
-              return common_volumes + profile_volumes
+                  }]
+              }
+          except:
+              spawner.log.exception(f"{spawner._log_name} - Could not get storage information")
+              return False
       else:
-          return []
+          spawner.log.warning(f"{spawner._log_name} - Storage Manager env variables not set")
+          return False
+
+  async def get_option_storage(spawner, service, option):
+      ret = {
+          "volumes": [],
+          "volume_mounts": []
+      }
+      option_dash = option.replace(".", "-")
+      
+      # specsp11 is a specific case
+      if service == "jupyterlab" and option == "repo2docker" and spawner.user_options.get("repo2docker", {}).get("repourl", "").endswith("Simulation-Benchmarks/11thSPE-CSP"):
+          ret["volumes"].append(
+              {
+                  "name": "nfs-specsp",
+                  "nfs": {
+                      "server": "10.0.2.191",
+                      "path": "/mnt/specsp11",
+                      "readOnly": True
+                  }                
+              }
+          )
+          ret["volume_mounts"].append(
+            {
+                "name": "nfs-specsp",
+                "mountPath": "/home/jovyan/shared_folder",
+                "readOnly": True
+            }
+          )
+      
+      if service == "jupyterlab" and option in lmod_options:
+          # These lmod options need the lua / lmod software stack.
+          ret["volumes"].extend([
+              {
+                  "name": "nfs-software", 
+                  "hostPath": {
+                      "path": "/p/software/jsccloud", 
+                      "type": ""
+                  }
+              },
+              {
+                  "name": "uftp", 
+                  "configMap": {
+                      "defaultMode": 292,
+                      "name": "uftp"
+                  }
+              },
+              {
+                  "name": f"modules-{option_dash}", 
+                  "configMap": {
+                      "defaultMode": 292,
+                      "name": f"modules-{option_dash}"
+                  }
+              },
+              {
+                  "name": f"modules-user-{option_dash}", 
+                  "configMap": {
+                      "defaultMode": 292,
+                      "name": f"modules-user-{option_dash}"
+                  }
+              }
+          ])
+          ret["volume_mounts"].extend([
+              {              
+                  "name": "nfs-software", 
+                  "mountPath": "/p/software/jsccloud", 
+                  "readOnly": True
+              },
+              {
+                  "name": "uftp", 
+                  "mountPath": "/tmp/custom/uftp.py",
+                  "subPath": "uftp.py"
+              },
+              {
+                  "name": f"modules-{option_dash}", 
+                  "mountPath": "/tmp/custom/load_jupyter_version.sh", 
+                  "subPath": "load_jupyter_version.sh"
+              },
+              {
+                  "name": f"modules-{option_dash}", 
+                  "mountPath": "/tmp/custom/config.py", 
+                  "subPath": "config.py"
+              },
+              {
+                  "name": f"modules-user-{option_dash}", 
+                  "mountPath": "/tmp/custom/load_jupyter_modules.sh",
+                  "subPath": "load_jupyter_modules.sh"
+              }
+          ])
+
+      return ret
+
+  async def get_storage(spawner):
+      # Define the volumes and volume mounts
+      ret = {
+          "volume_mounts": [],
+          "volumes": []
+      }
+      
+      # First we add the local persistent storage for the user
+      if spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] in lmod_options:
+          # For these "preconfigured" JupyterLabs, we always have to set the localstoragepath to the userhome
+          if "storage" not in spawner.user_options:
+              spawner.user_options["storage"] = {}
+          spawner.user_options["storage"]["localstoragepath"] = "/home/jovyan"
+      
+      if "localstoragepath" in spawner.user_options.get("storage", {}).keys():
+          # Attach the local JSC-Cloud NFS-Server storage to the server
+          local_storage = await contact_storage_manager(spawner, spawner.user_options["storage"]["localstoragepath"])
+          if local_storage:
+              ret["volume_mounts"].extend(local_storage["volume_mounts"])
+              ret["volumes"].extend(local_storage["volumes"])
+      
+      # Then we add configmaps, which might be required by the defined option
+      option_storage = await get_option_storage(spawner, spawner.user_options["service"], spawner.user_options["option"])    
+      ret["volume_mounts"].extend(option_storage["volume_mounts"])
+      ret["volumes"].extend(option_storage["volumes"])
+      
+      return ret
+      
 
   def get_node_selector(spawner, jupyterhub_name, resources, flavor):
+      # We'tr trying to fill the nodes from oldest to newest, instead of relying on the KubeScheduler.
+      # This way, it's easier to remove node when more and more users left the system.
+      
       config.load_incluster_config()
       core = client.CoreV1Api()
       flavor_mem_request = resources.get("mem_guarantee", "0M")
-      spawner.log.info(f"{spawner._log_name} - {flavor_mem_request}M memory for {flavor} ({jupyterhub_name}) requested")
+      spawner.log.info(f"{spawner._log_name} - NodeSelector: {flavor_mem_request}M memory for {flavor} ({jupyterhub_name}) requested")
       
       # get all usernodes, sort them by creation date
       try:
           all_nodes = core.list_node().to_dict()
       except:
-          spawner.log.info(f"{spawner._log_name} - Could not load node infos")
+          spawner.log.info(f"{spawner._log_name} - NodeSelector: Could not load node infos")
           return {"usernode": "true"}
       usernodes = [x for x in all_nodes.get("items", []) if x.get("metadata", {}).get("labels", {}).get("usernode", "false") == "true"]
       usernodes_sorted = sorted(usernodes, key=lambda d: d["metadata"]['creation_timestamp'])
@@ -762,99 +592,54 @@ outpostConfig: |-
               to_add_bytes = int(flavor_mem_request.replace("M", "")) * 1024 * 1024
               total_bytes = int(usernode.get("status", {}).get("allocatable", {}).get("memory", "0Ki").replace("Ki", ""))*1024 # 8128016
               if node_name and requested_bytes + to_add_bytes < total_bytes:
-                  spawner.log.info(f"{spawner._log_name} - Use {node_name}")
+                  spawner.log.info(f"{spawner._log_name} - NodeSelector: Use {node_name}")
                   return {"kubernetes.io/hostname": node_name}
               else:
-                  spawner.log.info(f"{spawner._log_name} - Do not use {node_name}")
+                  spawner.log.info(f"{spawner._log_name} - NodeSelector: Do not use {node_name}")
           except:
-              spawner.log.info(f"{spawner._log_name} - Could not load node {node_name}")
+              spawner.log.info(f"{spawner._log_name} - NodeSelector: Could not load node {node_name}")
               continue
-      spawner.log.warning("{spawner._log_name} - Use kubernetes scheduler to place node")
+      spawner.log.warning(f"{spawner._log_name} - NodeSelector: Use kubernetes scheduler to place node")
       return {"usernode": "true"}
+
 
   async def profile_list(spawner):
       # We're loading this config file for each Spawner object
-      # Therefore, it's fine to just create one profile
+      # Therefore, it's fine to just create the profile for this specific option    
       jupyterhub_name = spawner.jupyterhub_name
-      profile = get_profile(spawner)
-      flavor = spawner.user_options.get("flavor", "m1")
+      service = spawner.user_options["service"]
+      option = spawner.user_options["option"].replace(".", "-")
+      flavor = spawner.user_options["flavor"]
+      
+      # KubeSpawner relies on spawner.user_options.profile
+      spawner.user_options["profile"] = option
+      
       resources = get_flavor_resources(flavor)
 
-      display_name = {
-          "custom": "JupyterLab - custom",
-          "3-6": "JupyterLab - 3.6",
-          "3-6-juniq": "JupyterLab - 3.6 JUNIQ",
-          "4-2": "JupyterLab - 4.2",          
-          "4-3": "JupyterLab - 4.3",
-          "4-2-juniq": "JupyterLab - 4.2 JUNIQ",
-          "repo2docker": "Repo2Docker"
-      }
-      slug = {
-          "custom": "JupyterLab/custom",
-          "3-6": "JupyterLab/3.6",
-          "3-6-juniq": "JupyterLab/3.6-juniq",
-          "4-2": "JupyterLab/4.2",
-          "4-3": "JupyterLab/4.3",
-          "4-2-juniq": "JupyterLab/4.2-juniq",
-          "repo2docker": "JupyterLab/repo2docker"
-      }
+      node_selector = get_node_selector(spawner, jupyterhub_name, resources, flavor)
+      image = get_image(spawner)
 
-      if profile == "custom":
-          return [
-              {
-                  "display_name": "JupyterLab - custom",
-                  "slug": "JupyterLab/custom",
-                  "kubespawner_override": {
-                      "image": spawner.user_options["image"],
-                      "volume_mounts": get_profile_volume_mounts(spawner),
-                      "volumes": get_profile_volumes(spawner, jupyterhub_name),
-                      "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
-                      "cpu_guarantee": resources["cpu_guarantee"],
-                      "cpu_limit": resources["cpu_limit"],
-                      "mem_guarantee": resources["mem_guarantee"],
-                      "mem_limit": resources["mem_limit"]
-                  }
-              }
-          ]
-      elif profile == "repo2docker":
-          r2d_type = spawner.user_options["type"]
-          r2d_repo = spawner.user_options["repo"]
-          r2d_gitref_prev = spawner.user_options.get("gitref", "HEAD")
-          
-          r2d_gitref = get_gitref(spawner, r2d_type, r2d_repo, r2d_gitref_prev)
-          image = get_image(spawner, r2d_repo, r2d_gitref)
-          
-          return [
-              {
-                  "display_name": display_name.get(profile, "Repo2Docker"),
-                  "slug": slug.get(profile, "repo2docker"),
-                  "kubespawner_override": {
-                      "image": image,
-                      "volume_mounts": get_profile_volume_mounts(spawner),
-                      "volumes": get_profile_volumes(spawner, jupyterhub_name),
-                      "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
-                      "cpu_guarantee": resources["cpu_guarantee"],
-                      "cpu_limit": resources["cpu_limit"],
-                      "mem_guarantee": resources["mem_guarantee"],
-                      "mem_limit": resources["mem_limit"]
-                  }
-              }
-          ]
-      else:
-          return [
-              {
-                  "display_name": display_name.get(profile, "JupyterLab - 4.2"),
-                  "slug": slug.get(profile, "JupyterLab/4.2"),
-                  "kubespawner_override": {
-                      "volume_mounts": get_profile_volume_mounts(spawner),
-                      "volumes": get_profile_volumes(spawner, jupyterhub_name),
-                      "node_selector": get_node_selector(spawner, jupyterhub_name, resources, flavor),
-                      "cpu_guarantee": resources["cpu_guarantee"],
-                      "cpu_limit": resources["cpu_limit"],
-                      "mem_guarantee": resources["mem_guarantee"],
-                      "mem_limit": resources["mem_limit"]
-                  }
-              }
-          ]
+      kubespawner_override = {
+          "cpu_guarantee": resources["cpu_guarantee"],
+          "cpu_limit": resources["cpu_limit"],
+          "mem_guarantee": resources["mem_guarantee"],
+          "mem_limit": resources["mem_limit"],
+          "node_selector": node_selector,
+          "image": image,
+          "slug": option
+      }
+      
+      storage = await get_storage(spawner)
+      if storage:
+          kubespawner_override.update(storage)
+      return [
+        {
+          "display_name": f"{service}/{option}",
+          "slug": option,
+          "kubespawner_override": kubespawner_override
+        }
+      ]
+
+      
 
   c.KubeSpawner.profile_list = profile_list

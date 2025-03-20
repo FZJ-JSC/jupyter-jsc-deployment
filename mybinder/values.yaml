@@ -1,0 +1,37 @@
+replicas: 1
+ingress:
+  enabled: false
+jupyterhub:
+  hub:
+    db:
+      type: sqlite-memory
+  ingress:
+    enabled: false
+  scheduling:
+    userScheduler:
+      enabled: false
+networkPolicy:
+  enabled: false
+hpa:
+  enabled: false
+extraConfig:
+  01-eventlog: |
+    pass
+  02-event-loop-metric: |
+    pass
+config:    
+  BinderHub:
+    extra_footer_scripts: {}
+    base_url: /services/binder/
+    enable_api_only_mode: true
+    image_prefix: registry.jsc.fz-juelich.de/jupyterjsc/repo2docker/
+    build_node_selector:
+      usernode: "true"
+    push_secret: buildpodsregistrycredentials
+  KubernetesBuildExecutor:
+    node_selector:
+      usernode: "true"
+  RateLimiter:
+    period_seconds: 60
+nodeSelector:
+  worker: "true"

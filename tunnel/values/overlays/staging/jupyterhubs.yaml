@@ -25,6 +25,14 @@ jupyterhubs:
           user: "jsc-hlrs-jupyter"
           port: 22
           hostname: "gw.hydra1.hlrs.de"
+      - name: "outpost_tud"
+        user: "jhuboutpost"
+        port: 22
+        hostname: "127.0.0.2"
+      - name: "outpost_tud-staging"
+        user: "jhuboutpost"
+        port: 22
+        hostname: "dev.jupyterhub-outpost.zih.tu-dresden.de"
       - name: "outpost_lrz-staging"
         user: "jhuboutpost"
         port: 22
@@ -37,6 +45,10 @@ jupyterhubs:
         user: "jhuboutpost"
         port: 3121
         hostname: "130.183.217.170"
+      - name: "outpost_denbi-cloud"
+        user: "jhuboutpost"
+        port: 30001
+        hostname: "129.70.51.188"
       - name: "outpost_dummy"
         user: "jhuboutpost"
         port: 22

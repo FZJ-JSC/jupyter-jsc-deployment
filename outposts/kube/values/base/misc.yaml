@@ -8,6 +8,9 @@ logging:
   syslog:
     enabled: true
     level: 10
+    address:
+      - 134.94.199.6
+      - 5141
   stream:
     enabled: true
     level: 20

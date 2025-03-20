@@ -257,12 +257,12 @@ data:
         if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Cling/.1.2-4.3.4
         fi
-        #if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
+        if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Java/2.2.0
-        #fi
-        #if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
+        fi
+        if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Julia/.1.11.2
-        #fi
+        fi
         if [[ $JUPYTER_MODULE_LFORTRAN_ENABLED -eq 1 ]]; then
           module load JupyterKernel-LFortran/.0.42.0
         fi
@@ -275,23 +275,23 @@ data:
         if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
           module load JupyterKernel-Ruby/.3.4.1
         fi
-        # if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
+        if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyDeepLearning/.2025.1-4.3.4
-        # fi
-        #if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
+        fi
+        if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyEarthSystem/.2025.1-4.3.4
-        #fi
+        fi
         # if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
         #   module load JupyterKernel-PyQuantum/.2024.10-4.2.1
         # fi
-        # if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
+        if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyVisualization/.2025.2-4.3.4
-        # fi
+        fi
 
         # Proxies
-        # if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
+        if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
           module load JupyterProxy-XpraHTML5/.0.4.3
-        # fi
+        fi
         # # Load MatLab Proxy module, if user is in matlab group
         # IFS=' ' read -ra groups_array <<< "$(id -Gn)"
         # for group in "${groups_array[@]}"; do
@@ -301,19 +301,19 @@ data:
         #   fi
         # done
         # # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
-        # if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
+        if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
           module load JupyterProxy-NESTDesktop/.0.4.0
-        # fi
-        # if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then
-        #   if [[ $SYSTEMNAME != "deep" ]]; then
-          module load JupyterProxy-RStudio/.2024.12.0
-        #   fi
-        # fi
-        # if [[ $JUPYTER_MODULE_VSCODE_ENABLED -eq 1 ]]; then
-        #   if [[ $SYSTEMNAME != "deep" ]]; then
-          module load JupyterProxy-VSCode/0.9.3
-        #   fi
-        # fi
+        fi
+        if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then
+          if [[ $SYSTEMNAME != "deep" ]]; then
+            module load JupyterProxy-RStudio/.2024.12.0
+          fi
+        fi
+        if [[ $JUPYTER_MODULE_VSCODE_ENABLED -eq 1 ]]; then
+          if [[ $SYSTEMNAME != "deep" ]]; then
+            module load JupyterProxy-VSCode/0.9.3
+          fi
+        fi
         # # Extensions
         if [[ $JUPYTER_MODULE_COLLABORATION_ENABLED -eq 1 ]]; then
           module load jupyter-collaboration/.3.1.0
@@ -466,7 +466,7 @@ data:
         timeout 30d jupyterhub-singleuser ${JUPYTERJSC_CMD_ARGS} ${JUPYTERJSC_USER_CMD_ARGS} &
         child=$!
       else
-        send_spawn_update 95 "Start JupyterLab" "You will be redirected, when your JupyterLab is ready."
+        send_spawn_update 95 "Start JupyterLab" "You will be redirected, when your JupyterLab is ready. This may take a few seconds."
         timeout 30d jupyterhub-singleuser ${JUPYTERJSC_CMD_ARGS} &
         child=$!
       fi

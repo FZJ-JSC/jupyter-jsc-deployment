@@ -21,6 +21,9 @@ logging:
   syslog:
     enabled: true
     level: 10
+    address:
+      - 134.94.199.6
+      - 5141
 extraEnvVars:
   - name: SQL_USER
     valueFrom:

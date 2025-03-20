@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: modules-xpra
+  namespace: outpost
+data:
+  config.py: |
+    import logging
+    import os
+    from jupyter_xprahtml5_proxy import setup_xprahtml5
+
+    # Execute the setup from the Jupyter proxy to retrieve the startup information
+    server_config = setup_xprahtml5()
+
+    # Enable debugging and use the correct network address
+    c.StandaloneProxyServer.log_level = logging.DEBUG
+    c.StandaloneProxyServer.address = "0.0.0.0"
+
+    # Forward the server configuration from the Jupyter proxy to the standalone app
+    c.StandaloneProxyServer.merge(server_config)
+  load_jupyter_version.sh: |
+    #!/bin/bash
+
+    export JUPYTERJSC_USER_CMD="jupyter-standaloneproxy"
+
+    module purge
+    module use ${OTHERSTAGES}
+    module load Stages/2025
+    module load GCCcore/.13.3.0
+    module load Jupyter-bundle/20250114
+    module load jupyter-server-proxy/.20250303
+    module load JupyterProxy-XpraHTML5/.0.4.3
+    module load pyunicore/.1.2.0

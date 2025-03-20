@@ -1,0 +1,8 @@
+patches:
+  - target:
+      kind: Deployment
+      labelSelector: "app=jupyterhub"
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 0

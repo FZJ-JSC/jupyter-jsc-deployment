@@ -5,14 +5,16 @@ resources:
   - modules-3.6.yaml
   - modules-4.2.yaml
   - modules-4.3.yaml
+  - modules-xpra.yaml
   - modules-3.6-juniq.yaml
   - modules-4.2-juniq.yaml
   - modules-user-3.2.yaml
   - modules-user-3.4.yaml
   - modules-user-3.6.yaml
-  - modules-user-3.6-juniq.yaml
   - modules-user-4.2.yaml
-  - modules-user-4.2-juniq.yaml
   - modules-user-4.3.yaml
+  - modules-user-xpra.yaml
+  - modules-user-3.6-juniq.yaml
+  - modules-user-4.2-juniq.yaml
   - uftp.yaml
   - flavors-external.yaml

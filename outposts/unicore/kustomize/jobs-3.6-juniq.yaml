@@ -94,7 +94,7 @@ data:
         export JUPYTERHUB_CERTIFICATE="${DIR}/service_ca.crt"
 
         if [[ $HUB_PROTO == "https" ]]; then
-          export CURL_ARGS="${CURL_ARGS} --cacert ${JUPYTERHUB_CERTIFICATE}"
+          export CURL_ARGS="${CURL_ARGS} -k --cacert ${JUPYTERHUB_CERTIFICATE}"
           export JUPYTERHUB_SSL_CLIENT_CA="${JUPYTERHUB_CERTIFICATE}"
         fi
 

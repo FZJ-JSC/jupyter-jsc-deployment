@@ -11,6 +11,10 @@ extraVolumes:
     name: job-descriptions-common
   - configMap:
       defaultMode: 256
+      name: unicore-jobs-xpra
+    name: job-descriptions-xpra
+  - configMap:
+      defaultMode: 256
       name: unicore-jobs-4-3
     name: job-descriptions-4-3
   - configMap:
@@ -38,15 +42,17 @@ extraVolumeMounts:
     name: gunicorn-config
   - mountPath: /mnt/jobs/common
     name: job-descriptions-common
-  - mountPath: /mnt/jobs/JupyterLab_4.3
+  - mountPath: /mnt/jobs/jupyterlab_xpra
+    name: job-descriptions-xpra
+  - mountPath: /mnt/jobs/jupyterlab_4.3
     name: job-descriptions-4-3
-  - mountPath: /mnt/jobs/JupyterLab_4.2
+  - mountPath: /mnt/jobs/jupyterlab_4.2
     name: job-descriptions-4-2
-  - mountPath: /mnt/jobs/JupyterLab_4.2-juniq
+  - mountPath: /mnt/jobs/jupyterlab_4.2-juniq
     name: job-descriptions-4-2-juniq
-  - mountPath: /mnt/jobs/JupyterLab_3.6
+  - mountPath: /mnt/jobs/jupyterlab_3.6
     name: job-descriptions-3-6
-  - mountPath: /mnt/jobs/JupyterLab_3.6-juniq
+  - mountPath: /mnt/jobs/jupyterlab_3.6-juniq
     name: job-descriptions-3-6-juniq
   - mountPath: /etc/localtime
     name: tz-config
@@ -81,18 +87,19 @@ outpostConfig: |-
   async def job_description(spawner, user_options):
     jhub = spawner.jupyterhub_name
     spawner.log.info(f"{spawner._log_name} - Spawn for {jhub} with user_options: {user_options}")
-    profile = user_options["profile"].replace("/", "_")
+    service = user_options["service"]
+    option = user_options["option"]
     system = user_options["system"]
-    account = user_options["account"]
-    project = user_options["project"]
-    partition = user_options["partition"]
+    account = user_options["hpc"]["account"]
+    project = user_options["hpc"]["project"]
+    partition = user_options["hpc"]["partition"]
     
     # Check if system is configured
     if system not in system_config.keys():
       raise Exception(f"{spawner._log_name} - system {system} currently not configured")
     
-    jhub_job_description = f"/mnt/jobs/{profile}/{jhub}_job_description.json"
-    version_job_description = f"/mnt/jobs/{profile}/job_description.json"
+    jhub_job_description = f"/mnt/jobs/{service}_{option}/{jhub}_job_description.json"
+    version_job_description = f"/mnt/jobs/{service}_{option}/job_description.json"
     common_job_description = f"/mnt/jobs/common/job_description.json"
 
     if os.path.isfile(jhub_job_description):
@@ -105,7 +112,7 @@ outpostConfig: |-
       with open(common_job_description, "r") as f:
         job_description = json.load(f)
     else:
-      raise Exception(f"{spawner._log_name} - Could not find job_description for job {profile}")
+      raise Exception(f"{spawner._log_name} - Could not find job_description for job {service} {option}")
     
     job_description["Imports"] = []
     job_description["Environment"] = spawner.get_env()
@@ -156,10 +163,10 @@ outpostConfig: |-
             })
 
     # Afterwards collect job specific files. Allows easy override of common files
-    spawner.log.info(f"{spawner._log_name} - Walk through: /mnt/jobs/{profile}")
-    for subdir, dirs, files in os.walk(f"/mnt/jobs/{profile}"):
+    spawner.log.info(f"{spawner._log_name} - Walk through: /mnt/jobs/{service}_{option}")
+    for subdir, dirs, files in os.walk(f"/mnt/jobs/{service}_{option}"):
       for file in files:
-        spawner.log.info(f"{spawner._log_name} - profile specific file: {file}")
+        spawner.log.info(f"{spawner._log_name} - option specific file: {file}")
         if file.startswith(prefix):
           # Remove previously stored file
           job_description["Imports"] = [x for x in job_description["Imports"] if x.get("To") != file[len(prefix):]]
@@ -172,7 +179,7 @@ outpostConfig: |-
             })
     
     # Afterwards collect jhub specific files. Allows easy override of previous files
-    for subdir, dirs, files in os.walk(f"/mnt/jobs/{profile}"):
+    for subdir, dirs, files in os.walk(f"/mnt/jobs/{service}_{option}"):
       for file in files:
         if file.startswith(jhub_prefix):
           # Remove previously stored file
@@ -185,7 +192,7 @@ outpostConfig: |-
             })
     
     # Afterwards collect system specific files. Allows easy override of previous files
-    for subdir, dirs, files in os.walk(f"/mnt/jobs/{profile}"):
+    for subdir, dirs, files in os.walk(f"/mnt/jobs/{service}_{option}"):
       for file in files:
         if file.startswith(system_prefix):
           # Remove previously stored file
@@ -198,7 +205,7 @@ outpostConfig: |-
             })
     
     # Afterwards collect jhub-system specific files. Allows easy override of previous files
-    for subdir, dirs, files in os.walk(f"/mnt/jobs/{profile}"):
+    for subdir, dirs, files in os.walk(f"/mnt/jobs/{service}_{option}"):
       for file in files:
         if file.startswith(jhub_system_prefix):
           # Remove previously stored file
@@ -217,13 +224,13 @@ outpostConfig: |-
       # if internal_ssl is usedon login node, we don't need the ca variable. 
       # We're using the public_api_url, not the internal one
       if "JUPYTERHUB_SSL_CLIENT_CA" in job_description["Environment"].keys():
-        del job_description["Environment"]["JUPYTERHUB_SSL_CLIENT_CA"]
+        del job_description["Environment"]["JUPYTERHUB_SSL_CLIENT_CA"]    
     else:
-      nodes = user_options["nodes"]
-      runtime = user_options["runtime"]
-      gpus = user_options.get("gpus", False)
-      xserver = user_options.get("xserver", False)
-      reservation = user_options.get("reservation", False)
+      nodes = user_options["resources"]["nodes"]
+      runtime = user_options["resources"]["runtime"]
+      gpus = user_options.get("resources", {}).get("gpus", False)
+      xserver = user_options.get("resources", {}).get("xserver", False)
+      reservation = user_options.get("resources", {}).get("reservation", False)
 
       job_description["Job type"] = "batch"
       job_description["Resources"] = {
@@ -238,11 +245,13 @@ outpostConfig: |-
       if reservation and reservation.lower() != "none":
         job_description["Resources"]["Reservation"] = reservation
     
+    if "JUPYTERHUB_API_TOKEN" in job_description["Environment"].keys():
+        del job_description["Environment"]["JUPYTERHUB_API_TOKEN"]
+    if "JPY_API_TOKEN" in job_description["Environment"].keys():
+        del job_description["Environment"]["JPY_API_TOKEN"]
     jd_to_log = job_description.copy()
     if "Imports" in jd_to_log.keys():
       jd_to_log["Imports"] = "..."
-    if "Environment" in jd_to_log.keys():
-      jd_to_log["Environment"] = "..."
     spawner.log.info(f"{spawner._log_name} - Use job_description: {jd_to_log}")
     spawner.log.debug(f"{spawner._log_name} - Start job with these input files: {[x.get('To') for x in job_description.get('Imports', [])]}")
     spawner.log.debug(f"{spawner._log_name} - Start job with these environment variables: {list(job_description.get('Environment').keys())}")
@@ -407,8 +416,8 @@ outpostConfig: |-
     return transport_kwargs
 
   async def transport_preferences(spawner):
-    account = spawner.user_options.get("account", False)
-    project = spawner.user_options.get("project", False)
+    account = spawner.user_options.get("hpc", {}).get("account", False)
+    project = spawner.user_options.get("hpc", {}).get("project", False)
     if account and project:
       preference = f"uid:{account},group:{project}"
       spawner.log.info(f"{spawner._log_name} - Set preference: {preference}")

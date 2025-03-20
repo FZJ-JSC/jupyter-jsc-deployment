@@ -30,18 +30,6 @@ data:
           cpu_limit: 1
           mem_guarantee: "256M"
           mem_limit: "4096M"
-      xl1nfdi:
-        max: 10
-        weight: 18
-        display_name: "8GB RAM, 1VCPUs, 1 day"
-        description: "JupyterLab will run for max 1 day with 8GB RAM and 1VCPUs."
-        runtime:
-          days: 1
-        resources:
-          cpu_guarantee: 0.2
-          cpu_limit: 1
-          mem_guarantee: "256M"
-          mem_limit: "8192M"
       m1:
         max: -1
         weight: 10
@@ -56,7 +44,7 @@ data:
           mem_limit: "2048M"
       l1:
         max: 50
-        weight: 8
+        weight: 6
         display_name: "4GB RAM, 1VCPUs, 2 days"
         description: "JupyterLab will run for max 2 days with 4GB RAM and 1VCPUs."
         runtime:
@@ -81,8 +69,8 @@ data:
       workshop:
         max: 25
         weight: 11
-        display_name: "Spring School - 8GB RAM, 2VCPUs, 10 hours"
-        description: "Spring School - JupyterLab will run for max 10 hours with 8GB RAM and 2VCPUs."
+        display_name: "Spring School - 8GB RAM, 2VCPU, 10 hours"
+        description: "Spring School - JupyterLab will run for max 10 hours with 8GB RAM and 2VCPU."
         runtime:
           hours: 10
         resources:
@@ -102,7 +90,7 @@ data:
       nfdi:
         jupyterhubs: ["nfdigeneral"]
         weight: 12
-        flavors: ["m1nfdi", "l1nfdi", "xl1nfdi"]
+        flavors: ["m1nfdi", "l1nfdi"]
       juniq:
         jupyterhubs: ["juniq"]
         weight: 6
