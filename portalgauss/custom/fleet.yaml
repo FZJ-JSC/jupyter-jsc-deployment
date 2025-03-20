@@ -78,6 +78,10 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        customConfig:
+          systems:
+            - JSC-Cloud
+            - LRZ
         global:
           # hostname: zam12246.zam.kfa-juelich.de
           hostname: portal.gauss-centre.eu
