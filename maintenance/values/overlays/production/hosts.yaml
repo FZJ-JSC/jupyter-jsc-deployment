@@ -14,3 +14,5 @@ ingress:
       secretName: portalgauss-tls
     - host: jupyter-coec.jsc.fz-juelich.de
       secretName: coec-tls
+    - host: zam12154.zam.kfa-juelich.de
+      secretName: zam12154-tls

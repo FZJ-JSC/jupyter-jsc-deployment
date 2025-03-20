@@ -1,4 +1,0 @@
-ingress:
-  hosts:
-    - host: zam12185.zam.kfa-juelich.de
-      secretName: zam12185
