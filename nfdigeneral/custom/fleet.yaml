@@ -38,7 +38,8 @@ helm:
         outpostKubeJSCCloud:
           pollInterval: 180
       services:
-        defaultOption: "4.3"
+        JupyterLab:
+          defaultOption: "4.3"
       systems:
         - JSC-Cloud
 targetCustomizations:
