@@ -50,7 +50,6 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "false"
     helm:
       values:
         global:
@@ -69,7 +68,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "true"
+        maintenance: "true-disabl"
     helm:
       values:
         ingress:
