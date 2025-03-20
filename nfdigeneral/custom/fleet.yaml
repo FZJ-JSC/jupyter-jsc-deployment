@@ -40,6 +40,8 @@ helm:
       services:
         JupyterLab:
           defaultOption: "4.3"
+          "3.6":
+            enabled: false
       systems:
         - JSC-Cloud
 targetCustomizations:
