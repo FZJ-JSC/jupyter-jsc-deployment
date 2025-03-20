@@ -128,33 +128,53 @@ hub:
       # juypterhub upgrade-db
       #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE 
       ## Static files + Templates
-      from forwardbasespawner.api_events import user_cancel_message
       # Call update incidents once to fill incidents dictionary
       jsc_custom.misc.update_incidents_now()
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
 
-      # Load flavors in template_vars at runtime
-      from outpostspawner.api_flavors_update import sync_get_flavors
-      def get_flavors(user):
-          logger = logging.getLogger(logged_logger_name)
-          ret = sync_get_flavors(logger, user)
+
+      from jsc_custom.misc import get_reservations
+      from jsc_custom.misc import get_custom_config
+      def frontendCollection(user=None):
+          custom_config = get_custom_config()
+          ret = {      
+              "hostname": jhub_hostname,
+              "incidentCheck": custom_config.get("incidentCheck", {}),
+              "systemConfig": custom_config.get("systems", {}),
+              "mapSystems": {},
+              "mapPartitions": {},
+              "defaultPartitions": {},
+              "serviceConfig": {},
+              "userModules": {},
+              "resourcesConfig": {},
+              "backendServices": {},
+              "incidents": {},
+              "reservations": {},
+              "decrypted_user_options": {}
+          }
+          if user:
+              ret.update({
+                  "mapSystems": custom_config.get("mapSystems", {}),
+                  "mapPartitions": custom_config.get("mapPartitions", {}),
+                  "defaultPartitions": custom_config.get("defaultPartitions", {}),
+                  "serviceConfig": custom_config.get("services", {}),
+                  "userModules": custom_config.get("userModules", {}),
+                  "resourcesConfig": custom_config.get("resources", {}),
+                  "backendServices": custom_config.get("backendServices", {}),
+                  "incidents": jsc_custom.misc.get_incidents(user),
+                  "reservations": get_reservations(),
+                  "decrypted_user_options": jsc_custom.spawner.utils.decrypted_user_options(user)
+              })
           return ret
+          
 
       c.JupyterHub.template_vars = {
-          "spawn_progress_update_url": "users/progress/events",
-          "user_cancel_message": user_cancel_message,
-          "hostname": jhub_hostname,
-          "custom_config": jsc_custom.misc.filter_custom_config_by_auth_state_keys,
-          "incidents": jsc_custom.misc.get_incidents,
-          "outpostflavors": get_flavors,
-          "decrypted_user_options": jsc_custom.spawner.utils.decrypted_user_options,
+          "frontendCollection": frontendCollection
       }
       c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
 
       ## SSL
       c.JupyterHub.trusted_alt_names = [
-          "DNS:localhost",
-          "DNS:127.0.0.1",
           f"DNS:hub",
           f"DNS:proxy-public",
           f"DNS:proxy-public.{namespace}.svc",
@@ -299,8 +319,9 @@ hub:
       ## Spawner
       c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
 
+      ssh_system_list = ["deNBI-Cloud", "TUD", "TUD-Staging", "LRZ", "LRZ-Staging", "HLRS", "HLRS-Staging", "MPCDF"]
       def ssh_during_startup(spawner):
-          if spawner.user_options.get("system", "") in ["LRZ", "LRZ-Staging", "HLRS", "HLRS-Staging", "MPCDF", "Dummy"]:
+          if spawner.user_options.get("system", "") in ssh_system_list:
               return True
           return False
 
@@ -309,45 +330,6 @@ hub:
       c.CustomJSCSpawner.ssh_custom_forward = jsc_custom.spawner.ssh_custom_forward
       c.CustomJSCSpawner.ssh_custom_forward_remove = jsc_custom.spawner.ssh_custom_forward_remove
       c.CustomJSCSpawner.custom_port = jsc_custom.spawner.custom_port
-
-      async def custom_misc(spawner, user_options):
-          if user_options.get("profile", "") in ["JupyterLab/custom", "JupyterLab/repo2docker"]:
-              return {
-                "cmd": ['/bin/sh', '-c'],
-                "args": [
-                    '''
-                    #!/bin/sh
-                    # Get the current jupyterhub-singleuser version
-                    version=$(jupyterhub-singleuser --version || echo "0.0.0")
-
-                    # Set the desired version range
-                    min_version="4.0.0"
-                    max_version="5.0.0"
-                    target_version="4.1.6"
-
-                    # Function to check if the version is in range
-                    in_range() {
-                        [ "$(printf '%s\n' "$min_version" "$1" | sort -V | head -n1)" = "$min_version" ] && \
-                        [ "$(printf '%s\n' "$1" "$max_version" | sort -V | head -n1)" = "$1" ]
-                    }
-
-                    # Check if the current version is within the range
-                    if ! in_range "$version"; then
-                        echo "Installing jupyterhub-singleuser $target_version as version $version is not within $min_version - $max_version."
-                        pip install "jupyterhub==$target_version"
-                    else
-                        echo "jupyterhub-singleuser $version is within the required version range."
-                    fi
-
-                    # Start the jupyterhub-singleuser
-                    exec jupyterhub-singleuser
-                    '''
-                ]
-              }
-              # return { "cmd": "jupyterhub-singleuser" }
-          return {}
-
-      c.CustomJSCSpawner.custom_misc = custom_misc
 
       c.CustomJSCSpawner.pre_spawn_hook = jsc_custom.spawner.pre_spawn_hook
       c.CustomJSCSpawner.pre_poll_hook = jsc_custom.spawner.pre_poll_hook
@@ -364,7 +346,7 @@ hub:
       ## Override request_timeout for start request
       def request_kwargs_start(spawner, user_options):
           request_kwargs_start = jsc_custom.spawner.request_kwargs(spawner, user_options)
-          if user_options.get("system", "None") in ["LRZ", "LRZ-Staging", "HLRS", "HLRS-Staging"]:
+          if user_options.get("system", "None") in ssh_system_list:
               request_kwargs_start["request_timeout"] = 1200
           return request_kwargs_start
 
@@ -372,6 +354,7 @@ hub:
 
       c.CustomJSCSpawner.request_url = jsc_custom.spawner.request_url
       c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}{base_url}hub/api"
+
       c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_env
       c.CustomJSCSpawner.show_first_default_event = False
       c.CustomJSCSpawner.filter_events = jsc_custom.spawner.filter_events
@@ -463,8 +446,8 @@ hub:
         return transport_kwargs
 
       async def transport_preferences(spawner):
-        account = spawner.user_options.get("account", False)
-        project = spawner.user_options.get("project", False)
+        account = spawner.user_options.get("hpc", {}).get("account", False)
+        project = spawner.user_options.get("hpc", {}).get("project", False)
         if account and project:
           preference = f"uid:{account},group:{project}"
           spawner.log.info(f"{spawner._log_name} - Set preference: {preference}")

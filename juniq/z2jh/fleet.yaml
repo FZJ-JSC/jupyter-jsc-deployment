@@ -13,10 +13,6 @@ dependsOn:
       matchLabels:
         app: postgres-operator
         component: namespaces
-  - selector:
-      matchLabels:
-        app: postgres-operator
-        component: databases
 
 kustomize:
   dir: ./kustomize
@@ -49,16 +45,16 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
+        maintenance: "false"
     helm:
       valuesFiles:
-        - ../../base-values/image_fixed.yaml
-    kustomize:
-      dir: ./kustomize
-  - name: staging
+        - ../../base-values/image_prod.yaml
+  - name: production
     clusterSelector:
       matchLabels:
-        stage: staging
+        stage: production
+        maintenance: "true"
     helm:
       valuesFiles:
-        # - ../../base-values/image_devel.yaml
-        - ../../base-values/image.yaml
+        - ../../base-values/image_prod.yaml
+        - ../../base-values/maintenance.yaml

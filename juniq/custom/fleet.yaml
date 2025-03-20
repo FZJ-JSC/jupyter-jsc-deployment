@@ -14,14 +14,10 @@ helm:
   releaseName: juniq-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.15.38
+  version: 0.16.19
   values:
     fullnameOverride: juniq-custom
     customConfig:
-      announcement:
-        show: true
-        title: "Upcoming Maintenance - 20 Mar 2025 08.30 - 18.30"
-        body: "All running JupyterLabs will be stopped during this maintenance."
       services:
         JupyterLab:
           defaultOption: "4.2-juniq"
@@ -66,7 +62,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        prep: "false"
+        maintenance: "false"
     helm:
       values:
         global:
@@ -85,16 +81,16 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        prep: "true"
+        maintenance: "true"
     helm:
       values:
         ingress:
           certmanager: false
         global:
-          hostname: zam12185.zam.kfa-juelich.de
+          hostname: zam12154.zam.kfa-juelich.de
           # hostname: juniq.fz-juelich.de
           baseUrl: /juniq/
           loggerName: Juniq
-          tlssecretname: zam12185
+          tlssecretname: zam12154
         nfs:
           path: /nfs/hubs/rke2/production/juniq

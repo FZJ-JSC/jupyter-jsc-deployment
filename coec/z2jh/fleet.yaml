@@ -13,10 +13,6 @@ dependsOn:
       matchLabels:
         app: postgres-operator
         component: namespaces
-  - selector:
-      matchLabels:
-        app: postgres-operator
-        component: databases
 
 kustomize:
   dir: ./kustomize
@@ -26,11 +22,6 @@ helm:
   # chart: jupyterhub
   # version: 3.1.0
   chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-3.3.8.tgz
-  values:
-    ingress:
-      # Set JupyterHub in maintenance:
-      #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-      enabled: true
   valuesFiles:
     - ../../base-values/extraConfig.yaml
     - ../../base-values/image.yaml
@@ -49,8 +40,16 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
+        maintenance: "false"
     helm:
       valuesFiles:
-        - ../../base-values/image_fixed.yaml
-    kustomize:
-      dir: ./kustomize
+        - ../../base-values/image_prod.yaml
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
+        maintenance: "true"
+    helm:
+      valuesFiles:
+        - ../../base-values/image_prod.yaml
+        - ../../base-values/maintenance.yaml

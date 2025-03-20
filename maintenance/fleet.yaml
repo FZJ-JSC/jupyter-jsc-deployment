@@ -30,33 +30,19 @@ targetCustomizations:
         stage: staging
         maintenance: "false"
     doNotDeploy: true
-  - name: staging
+  - name: production
     clusterSelector:
       matchLabels:
-        stage: staging
+        stage: production
+        maintenance: "false"
+    doNotDeploy: true
+  - name: production
+    clusterSelector:
+      matchLabels:
+        stage: production
         maintenance: "true"
     helm:
       valuesFiles:
-        - values/overlays/staging/hosts.yaml
-      values:
-        enabled: false
-  - name: production
-    clusterSelector:
-      matchLabels:
-        stage: production
-        prep: "false"
-    helm:
-      valuesFiles:
-        - values/overlays/production-prep/hosts.yaml
-      values:
-        enabled: true
-  - name: production
-    clusterSelector:
-      matchLabels:
-        stage: production
-        prep: "true"
-    helm:
-      valuesFiles:
-        - values/overlays/production-prep/hosts.yaml
+        - values/overlays/production/hosts.yaml
       values:
         enabled: true

@@ -1,0 +1,12 @@
+hub:
+  image:
+    pullPolicy: "Always"
+    name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
+    tag: 3.3.8.post30
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1024Mi
+    limits:
+      cpu: 1000m
+      memory: 4096Mi

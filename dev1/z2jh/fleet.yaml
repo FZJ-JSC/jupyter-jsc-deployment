@@ -13,10 +13,6 @@ dependsOn:
       matchLabels:
         app: postgres-operator
         component: namespaces
-  - selector:
-      matchLabels:
-        app: postgres-operator
-        component: databases
 
 kustomize:
   dir: ./kustomize
@@ -51,7 +47,6 @@ helm:
   valuesFiles:
     - ../../base-values/extraConfig.yaml
     - ../../base-values/image.yaml
-    # - ../../base-values/resources_default.yaml
   valuesFrom:
     - configMapKeyRef:
         name: values
