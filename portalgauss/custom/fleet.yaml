@@ -35,7 +35,6 @@ helm:
     customConfig:
       services:
         JupyterLab:
-          defaultOption: default
           default:
             enabled: true
           "3.6":

@@ -34,9 +34,6 @@ helm:
         enabled: true
         level: 10
     customConfig:
-      backendServices:
-        outpostKubeJSCCloud:
-          pollInterval: 180
       services:
         JupyterLab:
           defaultOption: "4.3"

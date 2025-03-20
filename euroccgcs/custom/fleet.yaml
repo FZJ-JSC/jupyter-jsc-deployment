@@ -34,16 +34,15 @@ helm:
         level: 10
     customConfig:
       services:
+    customConfig:
+      services:
         JupyterLab:
-          defaultOption: "4.3"
-          "4.3":
-            allowedLists:
-              systems:
-                - JURECA
-                - JUWELS
-                - JEDI
-                - JUSUF
-                - JSC-Cloud
+          "4.2":
+            enabled: false
+          "3.6":
+            enabled: false
+          "xpra":
+            enabled: false
 targetCustomizations:
   - name: jupyter-stag
     clusterSelector:
