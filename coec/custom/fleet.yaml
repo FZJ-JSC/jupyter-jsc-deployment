@@ -32,6 +32,18 @@ helm:
       syslog:
         enabled: true
         level: 10
+    customConfig:
+      services:
+        JupyterLab:
+          defaultOption: "4.3"
+          "4.3":
+            allowedLists:
+              systems:
+                - JURECA
+                - JUWELS
+                - JEDI
+                - JUSUF
+                - JSC-Cloud
 targetCustomizations:
   - name: jupyter-stag
     clusterSelector:
@@ -50,7 +62,6 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "false"
     helm:
       values:
         global:
@@ -69,7 +80,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "true"
+        maintenance: "true-disab"
     helm:
       values:
         ingress:

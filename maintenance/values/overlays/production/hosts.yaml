@@ -12,5 +12,5 @@ ingress:
       secretName: coeraise-tls
     # - host: portal.gauss-centre.eu
     #   secretName: portalgauss-tls
-    - host: jupyter-coec.jsc.fz-juelich.de
-      secretName: coec-tls
+    #- host: jupyter-coec.jsc.fz-juelich.de
+    #  secretName: coec-tls
