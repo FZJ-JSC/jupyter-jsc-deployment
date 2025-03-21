@@ -359,7 +359,7 @@ outpostConfig: |-
     "JURECA": {
       "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JURECA/rest/core",
       "interactive_partitions": {
-        "LoginNode": "jureca??.fz-juelich.de"
+        "LoginNode": "jureca0?.fz-juelich.de"
       }
     },
     "JUWELS": {
