@@ -93,6 +93,7 @@ data:
         "ApplicationName": "Bash shell",
         "Executable": "/bin/bash",
         "Arguments": [
+            "-l",
             "start.sh"
         ],
         "umask": "022",
