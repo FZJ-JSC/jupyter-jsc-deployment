@@ -14,7 +14,7 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.22
+  version: 0.16.24
   values:
     fullnameOverride: jupyterjsc-custom
     global:
@@ -32,6 +32,11 @@ helm:
                 - JEDI
                 - JUSUF
                 - JSC-Cloud
+          vscode:
+            enabled: true
+            allowedLists:
+              groups:
+                - "geant:dfn.de:fz-juelich.de:jsc:jupyter:beta_tester"
     ingress:
       enabled: true
     jupyter-metrics:
