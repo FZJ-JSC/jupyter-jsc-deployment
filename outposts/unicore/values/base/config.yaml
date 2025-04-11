@@ -11,6 +11,10 @@ extraVolumes:
     name: job-descriptions-common
   - configMap:
       defaultMode: 256
+      name: unicore-jobs-vscode
+    name: job-descriptions-vscode
+  - configMap:
+      defaultMode: 256
       name: unicore-jobs-xpra
     name: job-descriptions-xpra
   - configMap:
@@ -42,6 +46,8 @@ extraVolumeMounts:
     name: gunicorn-config
   - mountPath: /mnt/jobs/common
     name: job-descriptions-common
+  - mountPath: /mnt/jobs/jupyterlab_vscode
+    name: job-descriptions-vscode
   - mountPath: /mnt/jobs/jupyterlab_xpra
     name: job-descriptions-xpra
   - mountPath: /mnt/jobs/jupyterlab_4.3
@@ -359,7 +365,8 @@ outpostConfig: |-
     "JURECA": {
       "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JURECA/rest/core",
       "interactive_partitions": {
-        "LoginNode": "jureca0?.fz-juelich.de"
+        "LoginNode": "jureca0?.fz-juelich.de",
+        "LoginNodeHWAI": "jureca-hwai0?.fz-juelich.de"
       }
     },
     "JUWELS": {
