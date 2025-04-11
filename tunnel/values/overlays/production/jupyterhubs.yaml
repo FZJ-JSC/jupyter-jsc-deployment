@@ -143,6 +143,14 @@ jupyterhubs:
         user: "ljupyter"
         port: 22
         hostname: "jureca12.fz-juelich.de"
+      - name: "jrlogin21i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca-hwai01.fz-juelich.de"
+      - name: "jrlogin22i"
+        user: "ljupyter"
+        port: 22
+        hostname: "jureca-hwai02.fz-juelich.de"
       - name: "jsfl01i"
         user: "ljupyter"
         port: 22
