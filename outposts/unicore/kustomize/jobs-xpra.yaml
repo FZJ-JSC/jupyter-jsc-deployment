@@ -150,7 +150,7 @@ data:
         export JUPYTERHUB_SSL_CERTFILE="${DIR}/service_cert.crt"
       fi
 
-      export XPRA_CONFIG_FILE="${HOME}/.xpra/standalone-config.py"
+      export XPRA_CONFIG_FILE="${JUPYTER_LOG_DIR}/standalone-config.py"
       export JUPYTERJSC_CMD_ARGS="--config=${XPRA_CONFIG_FILE}"
       echo "$(date) - Set environment variables done"
     }
