@@ -321,6 +321,7 @@ data:
       if [ ! -f "${VSCODE_CONFIG_FILE}" ]; then
         mkdir -p "$HOME/.vscode"
         cat << EOF > "${VSCODE_CONFIG_FILE}"
+    import logging
     import os
     from urllib.parse import urlparse, parse_qs
     from jupyter_openvscodeserver_proxy import setup_openvscodeserver
