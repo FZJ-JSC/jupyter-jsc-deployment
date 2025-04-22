@@ -54,6 +54,8 @@ targetCustomizations:
         stage: production
     helm:
       values:
+        image:
+          tag: 1.0.6
         extraEnvVars:
           - name: STAGE
             value: "production"
