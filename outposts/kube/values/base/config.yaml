@@ -310,7 +310,7 @@ outpostConfig: |-
               spawner.default_url = f"/lab/tree/{notebook}"
           elif notebook_type == "url" and notebook:
               spawner.default_url = notebook
-
+      if spawner.user_options["option"] in ["repo2docker", "custom"]:
           spawner.cmd = ["/bin/sh", "-c"]
           spawner.args = [
               '''
@@ -341,7 +341,6 @@ outpostConfig: |-
               exec jupyterhub-singleuser
               '''
           ]
-
 
   c.KubeSpawner.extra_pod_config = {
       "restartPolicy": "Never"
