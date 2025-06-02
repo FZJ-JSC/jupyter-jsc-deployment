@@ -48,7 +48,6 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        prep: "false"
     helm:
       values:
         global:
