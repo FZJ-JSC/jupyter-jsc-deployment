@@ -1,0 +1,8 @@
+resources:
+- frontend-git.yaml
+- generics.yaml
+- hub-metrics.yaml
+- hub-static-secret.yaml
+- internal-ssl.yaml
+- reservation-keypair.yaml
+- unity-secrets.yaml

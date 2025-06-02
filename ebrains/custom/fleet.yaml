@@ -1,0 +1,78 @@
+defaultNamespace: ebrains
+
+labels:
+  app: ebrains
+  component: custom
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: postgres-operator
+        component: namespaces
+
+helm:
+  releaseName: ebrains-custom
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyter-hub-customizations
+  version: 0.16.29
+  values:
+    fullnameOverride: ebrains-custom
+    global:
+      name: ebrains
+      namespace: ebrains
+    ingress:
+      enabled: true
+    jupyter-metrics:
+      enabled: true
+      nodeSelector:
+        worker: "true"
+    logging:
+      syslog:
+        enabled: true
+        level: 10
+targetCustomizations:
+  - name: jupyter-stag
+    clusterSelector:
+      matchLabels:
+        stage: staging
+    helm:
+      values:
+        global:
+          # hostname: zam12246.zam.kfa-juelich.de
+          hostname: twin-staging.ebrains.eu
+          baseUrl: /
+          loggerName: ebrainsStaging
+        nfs:
+          path: /nfs/hubs/rke2/staging/ebrains
+  - name: jupyter-prod
+    clusterSelector:
+      matchLabels:
+        stage: production
+        prep: "false"
+    helm:
+      values:
+        global:
+          # hostname: zam12246.zam.kfa-juelich.de
+          hostname: twin.ebrains.eu
+          baseUrl: /
+          loggerName: ebrains
+        nfs:
+          path: /nfs/hubs/rke2/production/ebrains
+        redirectEditInPlace: "false"
+  - name: jupyter-prod
+    clusterSelector:
+      matchLabels:
+        stage: production
+        prep: "true"
+    helm:
+      values:
+        ingress:
+          certmanager: false
+        global:
+          hostname: zam12185.zam.kfa-juelich.de
+          # hostname: jupyter-ebrains.jsc.fz-juelich.de
+          baseUrl: /ebrains/
+          loggerName: ebrains
+          tlssecretname: zam12185
+        nfs:
+          path: /nfs/hubs/rke2/production/ebrains
