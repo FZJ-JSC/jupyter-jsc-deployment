@@ -58,7 +58,6 @@ targetCustomizations:
           loggerName: ebrains
         nfs:
           path: /nfs/hubs/rke2/production/ebrains
-        redirectEditInPlace: "false"
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
