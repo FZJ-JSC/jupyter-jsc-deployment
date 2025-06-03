@@ -13,6 +13,6 @@ logging:
     address:
       - 134.94.199.6
       - 5141
-
+flavors: null
 nodeSelector:
   worker: "true"

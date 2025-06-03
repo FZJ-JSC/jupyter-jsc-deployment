@@ -17,4 +17,3 @@ resources:
   - modules-user-3.6-juniq.yaml
   - modules-user-4.2-juniq.yaml
   - uftp.yaml
-  - flavors-external.yaml

@@ -279,7 +279,7 @@ outpostConfig: |-
       },
       "JUPITER": {
         "hostname_base": "jpbl",
-        "hostname_all": "'jpbl-s01-01' 'jpbl-s01-02' 'jpbl-s01-03' 'jpbl-s01-04' 'jpbl-s01-05' 'jpbl-s01-06' 'jpbl-s01-07' 'jpbl-s01-08'"
+        "hostname_all": "'jpbl-s01-01-interconnect-1' 'jpbl-s01-02-interconnect-1' 'jpbl-s01-03-interconnect-1' 'jpbl-s01-04-interconnect-1' 'jpbl-s02-01-interconnect-1' 'jpbl-s02-02-interconnect-1' 'jpbl-s02-03-interconnect-1' 'jpbl-s02-04-interconnect-1'"
       },
       "JUSUF": {
         "hostname_base": "jsfl",

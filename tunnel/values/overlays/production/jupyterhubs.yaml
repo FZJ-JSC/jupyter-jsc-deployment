@@ -11,6 +11,7 @@ jupyterhubs:
     additional_remote_hosts:
       - coec
       - coeraise
+      - ebrains
       - euroccgcs
       - juniq
       - portalgauss
@@ -163,7 +164,55 @@ jupyterhubs:
         user: "ljupyter"
         port: 22
         hostname: "jusuf3.fz-juelich.de"
-      - name: "jpblt-s01-01-interconnect-1"
+      - name: "jpbl-s01-01-interconnect-1"
         user: "ljupyter"
         port: 22
-        hostname: "login01.jedi.fz-juelich.de"
+        hostname: "login01.jupiter.fz-juelich.de"
+      - name: "jpbl-s01-02-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login02.jupiter.fz-juelich.de"
+      - name: "jpbl-s01-03-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login03.jupiter.fz-juelich.de"
+      - name: "jpbl-s01-04-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login04.jupiter.fz-juelich.de"
+      - name: "jpbl-s02-01-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login05.jupiter.fz-juelich.de"
+      - name: "jpbl-s02-02-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login06.jupiter.fz-juelich.de"
+      - name: "jpbl-s02-03-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login07.jupiter.fz-juelich.de"
+      - name: "jpbl-s02-04-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login08.jupiter.fz-juelich.de"
+      - name: "jpbl-s03-01-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login09.jupiter.fz-juelich.de"
+        disabled: true
+      - name: "jpbl-s03-02-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login10.jupiter.fz-juelich.de"
+        disabled: true
+      - name: "jpbl-s03-03-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login11.jupiter.fz-juelich.de"
+        disabled: true
+      - name: "jpbl-s03-04-interconnect-1"
+        user: "ljupyter"
+        port: 22
+        hostname: "login12.jupiter.fz-juelich.de"
+        disabled: true

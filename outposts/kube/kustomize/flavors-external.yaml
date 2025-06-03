@@ -1,127 +1,127 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: outpost-kube-flavors-external
-  namespace: outpost
-data:
-  flavors.yaml: |
-    flavors:
-      m1nfdi:
-        max: 50
-        weight: 20
-        display_name: "2GB RAM, 1VCPU, 5 days"
-        description: "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
-        runtime:
-          days: 5
-        resources:
-          cpu_guarantee: 0.2
-          cpu_limit: 1
-          mem_guarantee: "256M"
-          mem_limit: "2048M"
-      l1nfdi:
-        max: 20
-        weight: 19
-        display_name: "4GB RAM, 1VCPUs, 2 days"
-        description: "JupyterLab will run for max 2 days with 4GB RAM and 1VCPUs."
-        runtime:
-          days: 2
-        resources:
-          cpu_guarantee: 0.2
-          cpu_limit: 1
-          mem_guarantee: "256M"
-          mem_limit: "4096M"
-      xl1nfdi:
-        max: 10
-        weight: 18
-        display_name: "8GB RAM, 1VCPUs, 1 day"
-        description: "JupyterLab will run for max 1 day with 8GB RAM and 1VCPUs."
-        runtime:
-          days: 1
-        resources:
-          cpu_guarantee: 0.2
-          cpu_limit: 1
-          mem_guarantee: "256M"
-          mem_limit: "8192M"
-      m1:
-        max: -1
-        weight: 10
-        display_name: "2GB RAM, 1VCPU, 5 days"
-        description: "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
-        runtime:
-          days: 5
-        resources:
-          cpu_guarantee: 0.2
-          cpu_limit: 1
-          mem_guarantee: "1536M"
-          mem_limit: "2048M"
-      l1:
-        max: 50
-        weight: 6
-        display_name: "4GB RAM, 1VCPUs, 2 days"
-        description: "JupyterLab will run for max 2 days with 4GB RAM and 1VCPUs."
-        runtime:
-          days: 2
-        resources:
-          cpu_guarantee: 0.2
-          cpu_limit: 1
-          mem_guarantee: "1024M"
-          mem_limit: "4096M"
-      l2:
-        max: 5
-        weight: 4
-        display_name: "8GB RAM, 2VCPUs, 10 hours"
-        description: "JupyterLab will run for max 10 hours with 8GB RAM and 2VCPUs."
-        runtime:
-          hours: 10
-        resources:
-          cpu_guarantee: 0.2
-          cpu_limit: 2
-          mem_guarantee: "7680M"
-          mem_limit: "8192M"
-      workshop:
-        max: 25
-        weight: 11
-        display_name: "Spring School - 8GB RAM, 2VCPU, 10 hours"
-        description: "Spring School - JupyterLab will run for max 10 hours with 8GB RAM and 2VCPU."
-        runtime:
-          hours: 10
-        resources:
-          cpu_guarantee: 0.2
-          cpu_limit: 2
-          mem_guarantee: "3584M"
-          mem_limit: "8192M"
-    hubs:
-      default:
-        jupyterhubs: ["coec", "coeraise", "ebrains", "euroccgcs", "portalgauss", "dev1", "dev2"]
-        weight: 10
-        flavors: ["m1", "l1"]
-      defaultPlusL2:
-        jupyterhubs: ["jupyterjsc"]
-        weight: 11
-        flavors: ["m1", "l1", "l2"]
-      nfdi:
-        jupyterhubs: ["nfdigeneral"]
-        weight: 12
-        flavors: ["m1nfdi", "l1nfdi", "xl1nfdi"]
-      juniq:
-        jupyterhubs: ["juniq"]
-        weight: 6
-        flavors: ["m1", "l1", "l2", "workshop"]
-    users:
-      nfdifzjstaff:
-        hubs: ["nfdigeneral_unused"]
-        usernames_unused: []
-        groups: ["staff@fz-juelich.de"]
-        weight: 10
-        flavors: ["m1nfdi", "l1nfdi", "l2"]
-        flavorsOverride:
-          l2:
-            max: 10
-        disable: False
-      nfdidefault:
-        hubs: ["nfdigeneral_unused"]
-        usernames_unused: []
-        groups: ["default"]
-        weight: 1
-        flavors: ["m1nfdi", "l1nfdi"]
-        disable: False
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: outpost-kube-flavors-external
+#   namespace: outpost
+# data:
+#   flavors.yaml: |
+#     flavors:
+#       m1nfdi:
+#         max: 50
+#         weight: 20
+#         display_name: "2GB RAM, 1VCPU, 5 days"
+#         description: "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
+#         runtime:
+#           days: 5
+#         resources:
+#           cpu_guarantee: 0.2
+#           cpu_limit: 1
+#           mem_guarantee: "256M"
+#           mem_limit: "2048M"
+#       l1nfdi:
+#         max: 20
+#         weight: 19
+#         display_name: "4GB RAM, 1VCPUs, 2 days"
+#         description: "JupyterLab will run for max 2 days with 4GB RAM and 1VCPUs."
+#         runtime:
+#           days: 2
+#         resources:
+#           cpu_guarantee: 0.2
+#           cpu_limit: 1
+#           mem_guarantee: "256M"
+#           mem_limit: "4096M"
+#       xl1nfdi:
+#         max: 10
+#         weight: 18
+#         display_name: "8GB RAM, 1VCPUs, 1 day"
+#         description: "JupyterLab will run for max 1 day with 8GB RAM and 1VCPUs."
+#         runtime:
+#           days: 1
+#         resources:
+#           cpu_guarantee: 0.2
+#           cpu_limit: 1
+#           mem_guarantee: "256M"
+#           mem_limit: "8192M"
+#       m1:
+#         max: -1
+#         weight: 10
+#         display_name: "2GB RAM, 1VCPU, 5 days"
+#         description: "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
+#         runtime:
+#           days: 5
+#         resources:
+#           cpu_guarantee: 0.2
+#           cpu_limit: 1
+#           mem_guarantee: "1536M"
+#           mem_limit: "2048M"
+#       l1:
+#         max: 50
+#         weight: 6
+#         display_name: "4GB RAM, 1VCPUs, 2 days"
+#         description: "JupyterLab will run for max 2 days with 4GB RAM and 1VCPUs."
+#         runtime:
+#           days: 2
+#         resources:
+#           cpu_guarantee: 0.2
+#           cpu_limit: 1
+#           mem_guarantee: "1024M"
+#           mem_limit: "4096M"
+#       l2:
+#         max: 5
+#         weight: 4
+#         display_name: "8GB RAM, 2VCPUs, 10 hours"
+#         description: "JupyterLab will run for max 10 hours with 8GB RAM and 2VCPUs."
+#         runtime:
+#           hours: 10
+#         resources:
+#           cpu_guarantee: 0.2
+#           cpu_limit: 2
+#           mem_guarantee: "7680M"
+#           mem_limit: "8192M"
+#       workshop:
+#         max: 25
+#         weight: 11
+#         display_name: "Spring School - 8GB RAM, 2VCPU, 10 hours"
+#         description: "Spring School - JupyterLab will run for max 10 hours with 8GB RAM and 2VCPU."
+#         runtime:
+#           hours: 10
+#         resources:
+#           cpu_guarantee: 0.2
+#           cpu_limit: 2
+#           mem_guarantee: "3584M"
+#           mem_limit: "8192M"
+#     hubs:
+#       default:
+#         jupyterhubs: ["coec", "coeraise", "ebrains", "euroccgcs", "portalgauss", "dev1", "dev2"]
+#         weight: 10
+#         flavors: ["m1", "l1"]
+#       defaultPlusL2:
+#         jupyterhubs: ["jupyterjsc"]
+#         weight: 11
+#         flavors: ["m1", "l1", "l2"]
+#       nfdi:
+#         jupyterhubs: ["nfdigeneral"]
+#         weight: 12
+#         flavors: ["m1nfdi", "l1nfdi", "xl1nfdi"]
+#       juniq:
+#         jupyterhubs: ["juniq"]
+#         weight: 6
+#         flavors: ["m1", "l1", "l2", "workshop"]
+#     users:
+#       nfdifzjstaff:
+#         hubs: ["nfdigeneral_unused"]
+#         usernames_unused: []
+#         groups: ["staff@fz-juelich.de"]
+#         weight: 10
+#         flavors: ["m1nfdi", "l1nfdi", "l2"]
+#         flavorsOverride:
+#           l2:
+#             max: 10
+#         disable: False
+#       nfdidefault:
+#         hubs: ["nfdigeneral_unused"]
+#         usernames_unused: []
+#         groups: ["default"]
+#         weight: 1
+#         flavors: ["m1nfdi", "l1nfdi"]
+#         disable: False
