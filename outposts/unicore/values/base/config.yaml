@@ -277,20 +277,14 @@ outpostConfig: |-
         "hostname_cpulimit": "login|vis",
         "hostname_all": "'jrlogin01i' 'jrlogin02i' 'jrlogin03i' 'jrlogin04i' 'jrlogin05i' 'jrlogin06i' 'jrlogin07i' 'jrlogin08i' 'jrlogin09i' 'jrlogin10i' 'jrlogin11i' 'jrlogin12i'"
       },
-      "JEDI": {
-        "hostname_base": "jpblt",
-        "hostname_cpulimit": "jpblt",
-        "hostname_all": "'jpblt-s01-01-interconnect-1'"
+      "JUPITER": {
+        "hostname_base": "jpbl",
+        "hostname_all": "'jpbl-s01-01' 'jpbl-s01-02' 'jpbl-s01-03' 'jpbl-s01-04' 'jpbl-s01-05' 'jpbl-s01-06' 'jpbl-s01-07' 'jpbl-s01-08'"
       },
       "JUSUF": {
         "hostname_base": "jsfl",
         "hostname_cpulimit": "login|vis",
         "hostname_all": "'jsfl01i' 'jsfl02i' 'jsfl03i' 'jsfl04i'"
-      },
-      "HDFML": {
-        "hostname_base": "hdfmll",
-        "hostname_cpulimit": "login|vis",
-        "hostname_all": "'hdfmll01i' 'hdfmll02i'"
       },
       "DEEP": {
         "hostname_base": "deepv",
@@ -319,6 +313,9 @@ outpostConfig: |-
       },
       "portalgauss": {
         "remote_port": "25492",
+      },
+      "ebrains": {
+        "remote_port": "25496",
       }
     },
     "staging": {
@@ -345,6 +342,9 @@ outpostConfig: |-
       },
       "portalgauss": {
         "remote_port": "25493",
+      },
+      "ebrains": {
+        "remote_port": "25497",
       }
     }
   }
@@ -377,22 +377,16 @@ outpostConfig: |-
         "LoginNodeBooster": "juwels2?.fz-juelich.de"
       }
     },
-    "JEDI": {
-      "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JEDI/rest/core",
+    "JUPITER": {
+      "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUPITER/rest/core",
       "interactive_partitions": {
-        "LoginNode": "login01.jedi.fz-juelich.de"
+        "LoginNode": "login0?.jupiter.fz-juelich.de"
       }
     },
     "JUSUF": {
       "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUSUF/rest/core",
       "interactive_partitions": {
         "LoginNode": "jusuf?.fz-juelich.de"
-      }
-    },
-    "HDFML": {
-      "site_url": "https://zam2125.zam.kfa-juelich.de:9112/HDFML/rest/core",
-      "interactive_partitions": {
-        "LoginNode": "hdfmll??.fz-juelich.de"
       }
     },
     "DEEP": {
