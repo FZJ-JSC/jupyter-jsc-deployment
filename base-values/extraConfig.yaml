@@ -218,17 +218,24 @@ hub:
           "DNS:jsfl02i",
           "DNS:jsfl03i",
           "DNS:jsfl04i",
-          "DNS:jpblt-s01-01-interconnect-1",
+          "DNS:jpbl-s01-01-interconnect-1",
+          "DNS:jpbl-s01-02-interconnect-1",
+          "DNS:jpbl-s01-03-interconnect-1",
+          "DNS:jpbl-s01-04-interconnect-1",
+          "DNS:jpbl-s02-01-interconnect-1",
+          "DNS:jpbl-s02-02-interconnect-1",
+          "DNS:jpbl-s02-03-interconnect-1",
+          "DNS:jpbl-s02-04-interconnect-1",
+          "DNS:jpbl-s03-01-interconnect-1",
+          "DNS:jpbl-s03-02-interconnect-1",
+          "DNS:jpbl-s03-03-interconnect-1",
+          "DNS:jpbl-s03-04-interconnect-1",
       ]
 
 
 
       ## Authenticator
       c.JupyterHub.authenticator_class = jsc_custom.authenticator.CustomGenericOAuthenticator
-      c.Authenticator.admin_users = {
-          'i.ouled.elhaj_at_fz-juelich.de', 
-          't.kreuzer_at_fz-juelich.de',
-      }
 
       c.CustomGenericOAuthenticator.manage_groups = True
       c.CustomGenericOAuthenticator.basic_auth = True
@@ -254,10 +261,18 @@ hub:
       )
 
       if namespace in ["nfdigeneral"]:
+          c.CustomGenericOAuthenticator.admin_users = {
+              'i.ouled.elhaj_at_fz-juelich.de',
+              'a6e989845cc0490bbefdd3767085db7a@login.helmholtz.de',
+          }
           def claim_name(resp_json):
               name = resp_json["voperson_id"]
               return name
       else:
+          c.CustomGenericOAuthenticator.admin_users = {
+              'i.ouled.elhaj_at_fz-juelich.de',
+              't.kreuzer_at_fz-juelich.de',
+          }
           res_pattern = re.compile(
               r"^urn:"
               r"(?P<namespace>.+?(?=:res:)):"
@@ -319,11 +334,30 @@ hub:
       ## Spawner
       c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
 
-      ssh_system_list = ["deNBI-Cloud", "TUD", "TUD-Staging", "LRZ", "LRZ-Staging", "HLRS", "HLRS-Staging", "MPCDF"]
+      ssh_startup_system_list = ["deNBI-Cloud", "TUD", "TUD-Staging", "LRZ", "LRZ-Staging", "HLRS", "HLRS-Staging", "MPCDF"]
       def ssh_during_startup(spawner):
-          if spawner.user_options.get("system", "") in ssh_system_list:
-              return True
-          return False
+          return spawner.user_options.get("system", "") in ssh_startup_system_list
+
+      async_system_list = ["JURECA", "JUWELS", "JUSUF", "DEEP", "JSC-Cloud", "LRZ", "LRZ-Staging", "deNBI-Cloud"]
+      def start_async(spawner):
+          return spawner.user_options.get("system", "") in async_system_list
+
+
+      helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
+
+      c.CustomJSCSpawner.svc_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
+      c.CustomJSCSpawner.svc_create = False
+
+      system_namespace_mapping = {}
+
+      async def update_start_response(spawner, original_resp):
+          system = spawner.user_options.get("system", "unknown")
+          if system in async_system_list and system in ssh_startup_system_list:
+              remote_namespace = system_namespace_mapping.get(system, "outpost") 
+              return f"https://{helm_release_name}-{spawner.name}-{spawner.user.id}.{remote_namespace}.svc.cluster.local:{spawner.custom_port}"
+          else:
+              return original_resp
+
 
       c.CustomJSCSpawner.ssh_during_startup = ssh_during_startup
       c.CustomJSCSpawner.extra_labels = jsc_custom.spawner.extra_labels
@@ -335,7 +369,7 @@ hub:
       c.CustomJSCSpawner.pre_poll_hook = jsc_custom.spawner.pre_poll_hook
       c.CustomJSCSpawner.post_spawn_request_hook = jsc_custom.spawner.post_spawn_request_hook
       c.CustomJSCSpawner.post_stop_hook = jsc_custom.spawner.post_stop_hook
-      c.CustomJSCSpawner.start_async = True
+      c.CustomJSCSpawner.start_async = start_async
       c.CustomJSCSpawner.stop_async = True
       c.CustomJSCSpawner.custom_user_options = jsc_custom.spawner.custom_user_options
       c.CustomJSCSpawner.stop_event = jsc_custom.spawner.stop_event
@@ -346,7 +380,7 @@ hub:
       ## Override request_timeout for start request
       def request_kwargs_start(spawner, user_options):
           request_kwargs_start = jsc_custom.spawner.request_kwargs(spawner, user_options)
-          if user_options.get("system", "None") in ssh_system_list:
+          if user_options.get("system", "None") in ssh_startup_system_list:
               request_kwargs_start["request_timeout"] = 1200
           return request_kwargs_start
 
@@ -382,6 +416,7 @@ hub:
               return ret
 
       c.CustomJSCSpawner.update_expected_path = update_expected_path
+      c.CustomJSCSpawner.update_start_response = update_start_response
 
       from datetime import datetime
       async def cancel_click_event(spawner):
@@ -395,10 +430,6 @@ hub:
           }
       c.CustomJSCSpawner.cancelling_event = cancel_click_event
 
-      helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
-      c.CustomJSCSpawner.svc_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
-      c.CustomJSCSpawner.svc_create = False
-
       c.CustomJSCSpawner.custom_poll_interval = jsc_custom.spawner.poll_interval
       c.CustomJSCSpawner.progress_ready_hook = jsc_custom.spawner.progress_ready_hook
       c.CustomJSCSpawner.http_timeout = 7200
@@ -410,6 +441,9 @@ hub:
         },
         "JUWELS": {
           "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core",
+        },
+        "JUPITER": {
+          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUPITER/rest/core",
         },
         "JEDI": {
           "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JEDI/rest/core",
