@@ -92,7 +92,7 @@ data:
           mem_limit: "8192M"
     hubs:
       default:
-        jupyterhubs: ["coec", "coeraise", "euroccgcs", "portalgauss", "dev1", "dev2"]
+        jupyterhubs: ["coec", "coeraise", "ebrains", "euroccgcs", "portalgauss", "dev1", "dev2"]
         weight: 10
         flavors: ["m1", "l1"]
       defaultPlusL2:
