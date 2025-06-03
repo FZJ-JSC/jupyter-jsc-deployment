@@ -406,7 +406,7 @@ outpostConfig: |-
 
   async def transport_kwargs(spawner):
     auth_state = await spawner.user.get_auth_state()
-    credential = pyunicore.credentials.OIDCToken(auth_state["access_token"], None)
+    credential = pyunicore.credentials.OIDCToken(auth_state.get("access_token", "None"), None)
     transport_kwargs = {
         "credential": credential,
         # "verify": "/mnt/unicore/cert.crt",
