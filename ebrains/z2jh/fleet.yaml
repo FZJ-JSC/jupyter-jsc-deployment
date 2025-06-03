@@ -48,6 +48,7 @@ targetCustomizations:
         stage: production
     helm:
       valuesFiles:
-        - ../../base-values/image_prod.yaml
+        - ../../base-values/image_devel.yaml
+        # - ../../base-values/image_prod.yaml
     kustomize:
       dir: ./kustomize
