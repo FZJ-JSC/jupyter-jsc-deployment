@@ -1,3 +1,5 @@
+extraPythonPackages:
+  - jupyterhub-kubespawner==7.0.0
 extraVolumes:
   - configMap:
       defaultMode: 256
