@@ -649,7 +649,7 @@ outpostConfig: |
               '''
               {install_cmd}
               {write_config_cmd}
-              [ -x /tmp/custom/datamount_start-singleuser.sh ] && exec /tmp/custom/datamount_start-singleuser.sh || (command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser)
+              [ -x /tmp/data_mount_config/datamount_start-singleuser.sh ] && exec /tmp/data_mount_config/datamount_start-singleuser.sh || (command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser)
               '''.replace("{write_config_cmd}", write_config_cmd).replace("{install_cmd}", install_cmd)
           ]
 
