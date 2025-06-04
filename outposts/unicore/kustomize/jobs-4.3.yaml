@@ -52,8 +52,10 @@ data:
       export PYTHONPATH=""
       export PYTHONNOUSERSITE=1
       export HOSTNAME_S=$(hostname -s)
-      if [[ ${SYSTEMNAME} == "deep" || ${SYSTEMNAME} == "jupiter" ]]; then
+      if [[ ${SYSTEMNAME} == "deep" ]]; then
         export HOSTNAME_I=${HOSTNAME_S}
+      elif [[ ${SYSTEMNAME} == "jupiter" ]]; then
+        export HOSTNAME_I=$(hostname -s)-interconnect-1
       else
         export HOSTNAME_I=$(hostname -s)i
       fi
