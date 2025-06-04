@@ -607,15 +607,15 @@ outpostConfig: |
           write_config_cmd = ""
           if data_mount_config:
               import base64
-              data_mount_env_sh = "IyBkYXRhX21vdW50X2Vudi5zaApleHBvcnQgSlVQWVRFUl9DT05GSUdfUEFUSD0iJHtKVVBZVEVSX0NPTkZJR19QQVRIOiskSlVQWVRFUl9DT05GSUdfUEFUSDp9L3RtcC9kYXRhX21vdW50X2NvbmZpZyIK"
+              datamount_start_singleuser_sh = "IyEvYmluL3NoCiMgRXhwb3J0IGNvbmZpZyBwYXRoCmV4cG9ydCBKVVBZVEVSX0NPTkZJR19QQVRIPSIke0pVUFlURVJfQ09ORklHX1BBVEg6KyRKVVBZVEVSX0NPTkZJR19QQVRIOn0vdG1wL2RhdGFfbW91bnRfY29uZmlnIgoKIyBEZWZhdWx0IHN0YXJ0dXAgbG9naWMKY29tbWFuZCAtdiBzdGFydC1zaW5nbGV1c2VyLnNoID4vZGV2L251bGwgMj4mMSAmJiBleGVjIHN0YXJ0LXNpbmdsZXVzZXIuc2ggfHwgZXhlYyBqdXB5dGVyaHViLXNpbmdsZXVzZXIK"
               data_mount_config_b64 = base64.b64encode(
                   data_mount_config.encode()
               ).decode()
               write_config_cmd = f"""
               mkdir -p /tmp/data_mount_config && \
               echo '{data_mount_config_b64}' | base64 -d > /tmp/data_mount_config/jupyter_notebook_config.py && \
-              echo '{data_mount_env_sh}' | base64 -d > /tmp/data_mount_config/data_mount_env.sh && \
-              source /tmp/data_mount_config/data_mount_env.sh && \
+              echo '{datamount_start_singleuser_sh}' | base64 -d > /tmp/data_mount_config/datamount_start-singleuser.sh && \
+              chmod +x /tmp/data_mount_config/datamount_start-singleuser.sh && \
               """
           install_cmd = ""
           if spawner.user_options["option"] in ["repo2docker", "custom"]:
@@ -649,7 +649,7 @@ outpostConfig: |
               '''
               {install_cmd}
               {write_config_cmd}
-              command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
+              [ -x /tmp/custom/datamount_start-singleuser.sh ] && exec /tmp/custom/datamount_start-singleuser.sh || (command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser)
               '''.replace("{write_config_cmd}", write_config_cmd).replace("{install_cmd}", install_cmd)
           ]
 
