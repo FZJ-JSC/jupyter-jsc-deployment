@@ -39,6 +39,10 @@ helm:
           defaultOption: "4.3"
           default:
             enabled: true
+            name: "Minimal JupyterLab"
+            allowedLists:
+              systems:
+                - deNBI-Cloud
           "4.2":
             enabled: false
           "3.6":
