@@ -37,10 +37,22 @@ helm:
       services:
         JupyterLab:
           defaultOption: "4.3"
+          default:
+            enabled: true
           "4.2":
             enabled: false
           "3.6":
             enabled: false
+          custom:
+            allowedLists:
+              systems:
+                - JSC-Cloud
+                - deNBI-Cloud
+          repo2docker:
+            allowedLists:
+              systems:
+                - JSC-Cloud
+                - deNBI-Cloud
       systems:
         - JSC-Cloud
         - deNBI-Cloud
