@@ -100,7 +100,7 @@ outpostConfig: |
           return lmod_image
       
       if spawner.user_options["option"] == "repo2docker":
-          return spawner.user_options["repo2docker"]["image"];
+          return spawner.user_options["repo2docker"]["image"]
       
       if spawner.user_options["option"] == "default":
           return spawner.user_options.get("default", {}).get("image", "jupyter/minimal-notebook")
