@@ -23,3 +23,4 @@ data:
     module load GCCcore/.13.3.0
     module load Jupyter-bundle/20250114
     module load pyunicore/.1.2.0
+    module load jupyterlab-data-mount/1.0.0
