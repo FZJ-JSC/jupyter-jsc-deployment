@@ -71,6 +71,7 @@ targetCustomizations:
         customConfig:
           systems:
             - JSC-Cloud
+            - deNBI-Cloud
         global:
           # hostname: zam12246.zam.kfa-juelich.de
           baseUrl: /
