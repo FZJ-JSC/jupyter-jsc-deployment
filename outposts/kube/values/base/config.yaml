@@ -568,6 +568,13 @@ outpostConfig: |
       
       return data_mount_config
 
+  def lmod_image_start_script(spawner):
+      jupyter_config_path_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX1BBVEg9IiR7SlVQWVRFUl9DT05GSUdfUEFUSDorJEpVUFlURVJfQ09ORklHX1BBVEg6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
+      return """#!/bin/sh
+  {jupyter_config_path_b64}
+  command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
+  """.replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
+
 
   def custom_image_start_script(spawner):
       datamount_version = f"=={spawner.data_mount_extension_version}" if spawner.data_mount_extension_version else ""
@@ -704,6 +711,8 @@ outpostConfig: |
 
       if spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] == "custom":
           kubespawner_override["data_mount_start"] = custom_image_start_script
+      if spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] in lmod_options:
+          kubespawner_override["data_mount_start"] = lmod_image_start_script
 
       
       storage = await get_storage(spawner)
