@@ -1,5 +1,5 @@
 extraPythonPackages:
-  - jupyterhub-datamountspawner==1.1.2
+  - jupyterhub-datamountspawner==1.1.1
   - jupyterhub-kubespawner==7.0.0
 extraVolumes:
   - configMap:
@@ -663,7 +663,6 @@ outpostConfig: |
 
   # 9. Set config path
   {jupyter_config_path_b64}
-  {jupyter_config_dir_b64}
 
   # 10. Launch
   echo $JUPYTER_CONFIG_PATH
@@ -672,7 +671,7 @@ outpostConfig: |
   else
       exec jupyterhub-singleuser
   fi
-  """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64).replace("{jupyter_config_dir_b64}", jupyter_config_dir_b64)
+  """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
 
   async def profile_list(spawner):
       # We're loading this config file for each Spawner object
