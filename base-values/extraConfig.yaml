@@ -193,6 +193,8 @@ hub:
           "DNS:jrlogin12i",
           "DNS:jrlogin13i",
           "DNS:jrlogin14i",
+          "DNS:jrlogin21i",
+          "DNS:jrlogin22i",
           "DNS:jwlogin00i",
           "DNS:jwlogin01i",
           "DNS:jwlogin02i",
