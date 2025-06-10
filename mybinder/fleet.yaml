@@ -53,6 +53,8 @@ helm:
       enabled: false
     clusterIssuer:
       enabled: false
+    buildkitPruner:
+      buildkitCacheSize: 100GB
     binderhub:
       replicas: 1
       ingress:
@@ -81,8 +83,6 @@ helm:
           base_url: /services/binder/
           enable_api_only_mode: true
           image_prefix: registry.jsc.fz-juelich.de/jupyterjsc/repo2docker/
-          build_node_selector:
-            binder: "true"
           push_secret: buildpodsregistrycredentials
         KubernetesBuildExecutor:
           node_selector:
