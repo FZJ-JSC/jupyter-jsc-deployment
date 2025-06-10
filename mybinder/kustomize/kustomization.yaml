@@ -6,3 +6,10 @@ patches:
       - op: replace
         path: /spec/replicas
         value: 0
+  - target:
+      kind: Deployment
+      name: binder
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/volumes/1/secret/secretName
+        value: buildpodsregistrycredentials
