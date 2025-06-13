@@ -43,7 +43,7 @@ spec:
               docker image prune --force --all --filter "until={{ .Values.buildkitPruner.olderThanMinutes }}m"
 
               echo "[INFO] Pruning BuildKit builder cache..."
-              docker builder prune --force --all --max-storage={{ .Values.buildkitPruner.buildkitCacheSize }}
+              docker builder prune --force --all --max-used-space={{ .Values.buildkitPruner.buildkitCacheSize }}
 
               echo "[INFO] Disk usage summary:"
               docker system df

@@ -57,6 +57,8 @@ helm:
       buildkitCacheSize: 80GB
     binderhub:
       replicas: 1
+      imageCleaner:
+        enabled: false
       ingress:
         enabled: false
       jupyterhub:
@@ -77,7 +79,7 @@ helm:
           pass
         02-event-loop-metric: |
           pass
-      config:    
+      config:
         BinderHub:
           build_node_selector:
             binder: "true"
