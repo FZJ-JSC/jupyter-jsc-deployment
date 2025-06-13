@@ -1,37 +1,49 @@
 {{ if .Values.buildkitPruner.enabled }}
-apiVersion: batch/v1
-kind: CronJob
+apiVersion: apps/v1
+kind: DaemonSet
 metadata:
   name: build-cache-prune
 spec:
-  schedule: {{ .Values.buildkitPruner.schedule | quote }}
-  # If the previous run is still going, replace it with our new one
-  concurrencyPolicy: Replace
-  jobTemplate:
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      name: build-cache-prune
+  template:
+    metadata:
+      labels:
+        name: build-cache-prune
     spec:
-      template:
-        spec:
-          nodeSelector:
-            binder: "true"
-          restartPolicy: OnFailure
-          volumes:
-          - name: dind-socket
-            hostPath:
-              path: /var/run/dind/docker.sock
-          containers:
-          - name: pruner
-            image: {{ .Values.buildkitPruner.image }}
-            env:
-              - name: DOCKER_HOST
-                value: "unix:///var/run/dind/docker.sock"
-            command:
-            - /bin/sh
-            - -c
-            - |
-              docker image prune --force --all --filter until={{ .Values.buildkitPruner.olderThanMinutes }}m && \
-              docker builder prune --force --all --keep-storage={{ .Values.buildkitPruner.buildkitCacheSize }} && \
+      nodeSelector:
+        binder: "true"
+      volumes:
+      - name: dind-socket
+        hostPath:
+          path: /var/run/dind/docker.sock
+      containers:
+      - name: pruner
+        image: {{ .Values.buildkitPruner.image }}
+        env:
+          - name: DOCKER_HOST
+            value: "unix:///var/run/dind/docker.sock"
+        command:
+          - /bin/sh
+          - -c
+          - |
+            while true; do
+              echo "[INFO] Pruning old Docker images..."
+              docker image prune --force --all --filter "until={{ .Values.buildkitPruner.olderThanMinutes }}m"
+
+              echo "[INFO] Pruning BuildKit builder cache..."
+              docker builder prune --force --all --keep-storage={{ .Values.buildkitPruner.buildkitCacheSize }}
+
+              echo "[INFO] Disk usage summary:"
               docker system df
-            volumeMounts:
-            - name: dind-socket
-              mountPath: /var/run/dind/docker.sock
+
+              echo "[INFO] Sleeping for 5 minutes..."
+              sleep 300
+            done
+        volumeMounts:
+        - name: dind-socket
+          mountPath: /var/run/dind/docker.sock
 {{- end }}

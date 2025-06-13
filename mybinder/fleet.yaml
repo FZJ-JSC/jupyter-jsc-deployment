@@ -79,6 +79,8 @@ helm:
           pass
       config:    
         BinderHub:
+          build_node_selector:
+            binder: "true"
           extra_footer_scripts: {}
           base_url: /services/binder/
           enable_api_only_mode: true
