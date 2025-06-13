@@ -19,7 +19,6 @@ helm:
     fullnameOverride: nfdigeneral-custom
     global:
       name: nfdigeneral
-      appname: nfdigeneralproduction
       namespace: nfdigeneral
     oauthSecret: hdfaai-credentials
     ingress:
