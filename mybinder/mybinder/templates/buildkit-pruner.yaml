@@ -1,12 +1,4 @@
 {{ if .Values.buildkitPruner.enabled }}
-apiVersion: scheduling.k8s.io/v1
-kind: PriorityClass
-metadata:
-  name: image-cleaner-priority
-value: 1000000
-globalDefault: false
-description: "Ensure image-cleaner is not evicted under pressure"
----
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -22,7 +14,6 @@ spec:
       labels:
         name: build-cache-prune
     spec:
-      priorityClassName: image-cleaner-priority
       nodeSelector:
         binder: "true"
       volumes:
@@ -52,7 +43,7 @@ spec:
               docker image prune --force --all --filter "until={{ .Values.buildkitPruner.olderThanMinutes }}m"
 
               echo "[INFO] Pruning BuildKit builder cache..."
-              docker builder prune --force --all --keep-storage={{ .Values.buildkitPruner.buildkitCacheSize }}
+              docker builder prune --force --all --max-storage={{ .Values.buildkitPruner.buildkitCacheSize }}
 
               echo "[INFO] Disk usage summary:"
               docker system df

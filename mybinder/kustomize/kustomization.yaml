@@ -29,6 +29,3 @@ patches:
           requests:
             cpu: 10m
             memory: 20Mi
-      - op: add
-        path: /spec/template/spec/priorityClassName
-        value: image-cleaner-priority
