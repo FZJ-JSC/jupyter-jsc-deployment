@@ -54,7 +54,7 @@ helm:
     clusterIssuer:
       enabled: false
     buildkitPruner:
-      buildkitCacheSize: 100GB
+      buildkitCacheSize: 80GB
     binderhub:
       replicas: 1
       ingress:
