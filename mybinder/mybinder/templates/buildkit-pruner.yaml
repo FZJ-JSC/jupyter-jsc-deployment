@@ -20,9 +20,17 @@ spec:
       - name: dind-socket
         hostPath:
           path: /var/run/dind/docker.sock
+      tolerations:
+        - key: "node.kubernetes.io/disk-pressure"
+          operator: "Exists"
+          effect: "NoExecute"
       containers:
       - name: pruner
         image: {{ .Values.buildkitPruner.image }}
+        resources:
+          requests:
+            cpu: 10m
+            memory: 20Mi
         env:
           - name: DOCKER_HOST
             value: "unix:///var/run/dind/docker.sock"
