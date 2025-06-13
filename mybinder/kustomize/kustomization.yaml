@@ -15,7 +15,7 @@ patches:
         value: buildpodsregistrycredentials
   - target:
       kind: DaemonSet
-      labelSelector: "component=image-cleaner"
+      name: mybinder-image-cleaner
     patch: |-
       - op: add
         path: /spec/template/spec/tolerations/-
