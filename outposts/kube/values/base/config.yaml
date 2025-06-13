@@ -96,7 +96,7 @@ outpostConfig: |
 
   def get_image(spawner):    
       if spawner.user_options["option"] in lmod_options:
-          lmod_image = "registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/user-jupyterlab:lmod-4.0.20"
+          lmod_image = "jupyterjsc/notebook:1.0.0"
           return lmod_image
       
       if spawner.user_options["option"] == "repo2docker":
@@ -581,7 +581,6 @@ outpostConfig: |
 
       # export JUPYTER_CONFIG_PATH="..JUPYTER_CONFIG_PATH....JUPYTER_CONFIG_PATH:.../mnt/datamount_start" in b64, so helm can handle it
       jupyter_config_path_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX1BBVEg9IiR7SlVQWVRFUl9DT05GSUdfUEFUSDorJEpVUFlURVJfQ09ORklHX1BBVEg6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
-      jupyter_config_dir_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX0RJUj0iJHtKVVBZVEVSX0NPTkZJR19ESVI6KyRKVVBZVEVSX0NPTkZJR19ESVI6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
       return """#!/bin/sh
 
   # 1. Check if user is root
