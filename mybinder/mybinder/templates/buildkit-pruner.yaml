@@ -4,8 +4,6 @@ kind: DaemonSet
 metadata:
   name: build-cache-prune
 spec:
-  updateStrategy:
-    type: onDelete
   selector:
     matchLabels:
       name: build-cache-prune
