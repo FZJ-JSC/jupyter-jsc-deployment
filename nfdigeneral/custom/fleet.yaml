@@ -37,12 +37,12 @@ helm:
       services:
         JupyterLab:
           defaultOption: "4.3"
-          #default:
-          #  enabled: true
-          #  name: "Minimal JupyterLab"
-          #  allowedLists:
-          #    systems:
-          #      - deNBI-Cloud
+          default:
+            enabled: true
+            name: "Minimal JupyterLab"
+            allowedLists:
+              systems:
+                - deNBI-Cloud
           "4.2":
             enabled: false
           "3.6":
@@ -59,7 +59,7 @@ helm:
                 - deNBI-Cloud
       systems:
         - JSC-Cloud
-        # - deNBI-Cloud
+        - deNBI-Cloud
 targetCustomizations:
   - name: jupyter-stag
     clusterSelector:
