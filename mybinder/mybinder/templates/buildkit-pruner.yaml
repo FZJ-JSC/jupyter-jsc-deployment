@@ -5,7 +5,7 @@ metadata:
   name: build-cache-prune
 spec:
   updateStrategy:
-    type: RollingUpdate
+    type: onDelete
   selector:
     matchLabels:
       name: build-cache-prune
