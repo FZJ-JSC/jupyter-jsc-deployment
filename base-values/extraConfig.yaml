@@ -1,6 +1,7 @@
 hub:
   extraConfig:
     customConfig: |-
+      import inspect
       import jsc_custom
       import logging
       import os
@@ -355,8 +356,13 @@ hub:
       async def update_start_response(spawner, original_resp):
           system = spawner.user_options.get("system", "unknown")
           if system in async_system_list and system in ssh_startup_system_list:
-              remote_namespace = system_namespace_mapping.get(system, "outpost") 
-              return f"https://{helm_release_name}-{spawner.name}-{spawner.user.id}.{remote_namespace}.svc.cluster.local:{spawner.custom_port}"
+              remote_namespace = system_namespace_mapping.get(system, "outpost")
+              custom_port = spawner.custom_port
+              if callable(custom_port):
+                  custom_port = custom_port(spawner, spawner.user_options)
+                  if inspect.isawaitable(custom_port):
+                      custom_port = await custom_port
+              return f"https://{helm_release_name}-{spawner.name}-{spawner.user.id}.{remote_namespace}.svc.cluster.local:{custom_port}"
           else:
               return original_resp
 
