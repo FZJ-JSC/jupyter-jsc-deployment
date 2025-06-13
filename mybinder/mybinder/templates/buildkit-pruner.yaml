@@ -36,6 +36,7 @@ spec:
           - /bin/sh
           - -c
           - |
+            set -e # Exit if commands returns with non-zero status
             while true; do
               echo "[INFO] Pruning old Docker images..."
               docker image prune --force --all --filter "until={{ .Values.buildkitPruner.olderThanMinutes }}m"
