@@ -84,9 +84,6 @@ targetCustomizations:
         stage: production
     helm:
       values:
-        customConfig:
-          systems:
-            - JSC-Cloud
         global:
           # hostname: zam12246.zam.kfa-juelich.de
           baseUrl: /
