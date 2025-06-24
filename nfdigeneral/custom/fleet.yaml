@@ -14,7 +14,7 @@ helm:
   releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.33
+  version: 0.16.34
   values:
     fullnameOverride: nfdigeneral-custom
     global:
@@ -36,13 +36,16 @@ helm:
     customConfig:
       services:
         JupyterLab:
-          defaultOption: "4.3"
+          defaultOption: "default"
           default:
             enabled: true
-            name: "Minimal JupyterLab"
+            name: "JupyterLab"
             allowedLists:
               systems:
                 - deNBI-Cloud
+                - JSC-Cloud
+          "4.3":
+            name: "JupyterLab XL"
           "4.2":
             enabled: false
           "3.6":
@@ -50,16 +53,16 @@ helm:
           custom:
             allowedLists:
               systems:
-                - JSC-Cloud
                 - deNBI-Cloud
+                - JSC-Cloud
           repo2docker:
             allowedLists:
               systems:
-                - JSC-Cloud
                 - deNBI-Cloud
+                - JSC-Cloud
       systems:
-        - JSC-Cloud
         - deNBI-Cloud
+        - JSC-Cloud
 targetCustomizations:
   - name: jupyter-stag
     clusterSelector:
