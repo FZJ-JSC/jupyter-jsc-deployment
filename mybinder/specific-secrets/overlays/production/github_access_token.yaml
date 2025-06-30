@@ -1,0 +1,16 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: github-access-token
+  namespace: binder
+spec:
+  encryptedData:
+    GITHUB_ACCESS_TOKEN: AgAE7h+bNNpjrGBswJ4d9Qj7s84DL4L/Ow7nIcJAhYdn9PjnW/HM42xzV3YUoI2Rsk7TPe+EZATPsF38gWznr4vXcqkuspmmFqPRGW7pm2b475N50xmX9h6Zjwez3WvIC7hceEiHtKBSkK4Wen6TpSEmE24fGXJkQiggv29iAZ9RcGNlFvs3NkDm5YLDHnSbQquHhzJdZsqDbtXop/U6dGEkiTJAF/+Cjc3F9zIgSDZrdewUuaJa+4KSEaplFRFybMZ4QyjvdmBaqJEq05BlcN3Wi3MIo4DCaMx6rbKr9IsDV5PE9vWrXfbJUnGkihAIheeRGHWZN4iaiZDCgO/dMG9GQSoaTx3C/LIH/4tXsvm77B9wcaisbCTdZDs+qjHFyfUtNQlSRWIalw6XCjhDzPJved+qWBaXtfZKfJ2RgARUy0zVi8xz4JkPvlXIMQlLtCKJ62S4HJvvVObAMoK69qTmQqBtkO6uJtMwe3/c+5RDtH2Y6WlBOe5T6Kr2/raEGbfmDz7egF3J/XOFWv+NFwcAV7HhwJ/Pdao8dPGvEBlptaeW9yh0ZXf682dpj/ZAvGF7BPO72QM50nQNdZR3Lt3rNdo8LHOvovWSG16rY88VzK95O5uyhkvADE5B379j+K80AZodjKIA4lieuUkiGkjL0pBCXN98hdU2vq5UgqL8xYzOA1yd9+KMr+rYAD4Yywvpl0/ON0Tnbxk1SxURpQPlrf15e/m+gS0e15ka0sHv6gpRyIFd+KMyDo2T4rQ6amzID2dV/NqNIU6DOrTm7VgpLLVFLf+prKAgW34MWN6Fo/RyMdMov04jyyzqVNk=
+  template:
+    metadata:
+      creationTimestamp: null
+      name: github-access-token
+      namespace: binder
+    type: Opaque

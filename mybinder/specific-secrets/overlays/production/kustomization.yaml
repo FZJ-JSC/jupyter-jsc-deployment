@@ -1,2 +1,3 @@
 resources:
   - buildpodsregistrycredentials.yaml
+  - github_access_token.yaml

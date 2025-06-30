@@ -57,6 +57,12 @@ helm:
       buildkitCacheSize: 80GB
     binderhub:
       replicas: 1
+      extraEnv:
+        - name: GITHUB_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-access-token
+              key: GITHUB_ACCESS_TOKEN
       ingress:
         enabled: false
       jupyterhub:
