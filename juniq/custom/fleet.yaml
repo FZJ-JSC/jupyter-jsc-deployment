@@ -14,15 +14,19 @@ helm:
   releaseName: juniq-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.36
+  version: 0.16.37
   values:
     fullnameOverride: juniq-custom
     customConfig:
       services:
         JupyterLab:
           defaultOption: "4.2-juniq"
+          "4.3":
+            enabled: false
           "4.2":
             enabled: false
+          "4.3-juniq":
+            enabled: true
           "4.2-juniq":
             enabled: true
           "3.6":
