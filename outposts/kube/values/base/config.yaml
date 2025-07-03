@@ -27,7 +27,7 @@ outpostConfig: |
   from kubernetes import config
   from datamountspawner import KubeSpawner
 
-  lmod_options = ["xpra", "4.3", "4.2", "4.2-juniq", "3.6", "3.6-juniq"]
+  lmod_options = ["xpra", "4.3", "4.3-juniq", "4.2", "4.2-juniq", "3.6", "3.6-juniq"]
   data_mount_enabled = True
 
 
