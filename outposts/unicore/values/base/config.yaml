@@ -31,6 +31,10 @@ extraVolumes:
     name: job-descriptions-4-2-juniq
   - configMap:
       defaultMode: 256
+      name: unicore-jobs-4-3-juniq
+    name: job-descriptions-4-3-juniq
+  - configMap:
+      defaultMode: 256
       name: unicore-jobs-3-6
     name: job-descriptions-3-6
   - configMap:
@@ -56,6 +60,8 @@ extraVolumeMounts:
     name: job-descriptions-4-2
   - mountPath: /mnt/jobs/jupyterlab_4.2-juniq
     name: job-descriptions-4-2-juniq
+  - mountPath: /mnt/jobs/jupyterlab_4.3-juniq
+    name: job-descriptions-4-3-juniq
   - mountPath: /mnt/jobs/jupyterlab_3.6
     name: job-descriptions-3-6
   - mountPath: /mnt/jobs/jupyterlab_3.6-juniq
