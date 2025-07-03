@@ -8,6 +8,7 @@ resources:
   - modules-xpra.yaml
   - modules-3.6-juniq.yaml
   - modules-4.2-juniq.yaml
+  - modules-4.3-juniq.yaml
   - modules-user-3.2.yaml
   - modules-user-3.4.yaml
   - modules-user-3.6.yaml
@@ -16,4 +17,5 @@ resources:
   - modules-user-xpra.yaml
   - modules-user-3.6-juniq.yaml
   - modules-user-4.2-juniq.yaml
+  - modules-user-4.3-juniq.yaml
   - uftp.yaml

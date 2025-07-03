@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: modules-user-4-3
+  namespace: outpost
+data:
+  load_jupyter_modules.sh: |
+    #!/bin/bash
+
+    ## Kernels
+    if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Bash/.0.9.3-4.3.4
+    fi
+    if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Cling/.1.2-4.3.4
+    fi
+    if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Java/2.2.0
+    fi
+    if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Julia/.1.11.2
+    fi
+    if [[ $JUPYTER_MODULE_LFORTRAN_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-LFortran/.0.42.0
+    fi
+    if [[ $JUPYTER_MODULE_OCTAVE_ENABLED  -eq 1 ]]; then
+      module load JupyterKernel-Octave/.9.3.0-4.3.4
+    fi
+    if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-R/.4.4.2-4.3.4
+    fi
+    if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-Ruby/.3.4.1
+    fi
+    if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyDeepLearning/.2025.1-4.3.4
+    fi
+    if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyEarthSystem/.2025.1-4.3.4
+    fi
+    if [[ $JUPYTER_MODULE_PYHPC_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyHPC/2025-4.3.4
+    fi
+    if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyQuantum/.2025.6-4.3.4
+    fi
+    if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
+      module load JupyterKernel-PyVisualization/.2025.2-4.3.4
+    fi
+    ## Proxies
+    if [[ $JUPYTER_MODULE_VSCODE_ENABLED -eq 1 ]]; then
+      module load JupyterProxy-VSCode/0.9.3
+    fi
+    if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then
+      module load JupyterProxy-RStudio/.2024.12.0
+    fi
+    if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
+      module load JupyterProxy-XpraHTML5/.0.4.3
+    fi
+    if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
+      module load JupyterProxy-NESTDesktop/.0.4.0
+    fi
+    ## Extensions
+    if [[ $JUPYTER_MODULE_COLLABORATION_ENABLED -eq 1 ]]; then
+      module load jupyter-collaboration/.3.1.0
+    fi
+    if [[ $JUPYTER_MODULE_IPYVUE_ENABLED -eq 1 ]]; then
+      module load ipyvue/1.11.2
+    fi
+    #if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
+    #  module load jupyter-ai/.2.15.0
+    #fi
+    if [[ $JUPYTER_MODULE_JUPYTERVIEW_ENABLED -eq 1 ]]; then
+      module load jupyterview/0.7.0
+    fi
+    if [[ $JUPYTER_MODULE_KERNELGATEWAY_ENABLED -eq 1 ]]; then
+      module load jupyter-kernel-gateway/3.0.1
+    fi
+    if [[ $JUPYTER_MODULE_NBDEV_ENABLED -eq 1 ]]; then
+      module load nbdev/2.3.34
+    fi
+    if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
+      module load nglview/.3.1.4
+    fi
+    if [[ $JUPYTER_MODULE_SPELLCHECKER_ENABLED -eq 1 ]]; then
+      module load jupyterlab-spellchecker/.0.8.4
+    fi
+    if [[ $JUPYTER_MODULE_VOILA_ENABLED -eq 1 ]]; then
+      module load voila/.0.5.8
+    fi
+    #if [[ $JUPYTER_MODULE_VARIABLEINSPECTOR_ENABLED -eq 1 ]]; then
+    #  module load jupyterlab-variableinspector/.3.2.1
+    #fi
