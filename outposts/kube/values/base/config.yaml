@@ -393,7 +393,7 @@ outpostConfig: |
       }
       
       # First we add the local persistent storage for the user
-      if spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] in lmod_options:
+      if spawner.user_options["service"] == "jupyterlab" and ( spawner.user_options["option"] in lmod_options or spawner.user_options["option"] == "default" ):
           # For these "preconfigured" JupyterLabs, we always have to set the localstoragepath to the userhome
           if "storage" not in spawner.user_options:
               spawner.user_options["storage"] = {}
