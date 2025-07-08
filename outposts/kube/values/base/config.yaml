@@ -103,7 +103,7 @@ outpostConfig: |
           return spawner.user_options["repo2docker"]["image"]
       
       if spawner.user_options["option"] == "default":
-          return spawner.user_options.get("default", {}).get("image", "jupyter/minimal-notebook")
+          return spawner.user_options.get("default", {}).get("image", "jupyterjsc/jsccloud:latest")
       
       return spawner.user_options.get("custom", {}).get("customimage", "No Image provided")    
 
