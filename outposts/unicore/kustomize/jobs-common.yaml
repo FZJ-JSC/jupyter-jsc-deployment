@@ -65,7 +65,7 @@ data:
       export CURL_ARGS=""
     else
       if [[ ${JUPYTERHUB_API_URL} == "https://"* ]]; then
-        export CURL_ARGS="--cacert ${DIR}/notebooks-ca_trust.crt"
+        export CURL_ARGS="-k"
       else
         export CURL_ARGS=""
       fi
