@@ -58,7 +58,6 @@ data:
     # Get current directory
     DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
     TOKEN=$(cat ${DIR}/.jupyter.token)
-    COUNT=0
     HOSTNAME_S=$(hostname -s)
     # If this JupyterLab is running on a LoginNode, we'll use the external api url. Otherwise we have to use a LoginNode as Proxy.
     if [[ ${HOSTNAME_S} == "<hostname_base>"* ]]; then
@@ -75,12 +74,6 @@ data:
         HTTPCODE=$(curl ${CURL_ARGS} --write-out '%{http_code}' --silent --output /dev/null -X "GET" -H "Authorization: token ${TOKEN}" ${JUPYTERHUB_API_URL}/user)
         echo "$(date) - Validate token - Result: ${HTTPCODE}"
         if [[ ${HTTPCODE} -eq 403 ]]; then
-            COUNT=$((COUNT+1))
-            echo "$(date) - 403 Counter: ${COUNT}"
-        else
-            COUNT=0
-        fi
-        if [[ ${COUNT} -ge 3 ]]; then
             echo "$(date) - Kill JupyterLab PID $JLAB_PID ( ${HTTPCODE} )"
             pkill --parent $JLAB_PID
             kill -9 $JLAB_PID
