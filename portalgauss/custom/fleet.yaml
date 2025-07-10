@@ -54,7 +54,7 @@ helm:
           requestKwargs:
             request_timeout: 180
         outpostKubeLRZ:
-          sendAccessToken: false
+          sendAccessToken: true
           urls:
             services: http://vm-138-246-237-228.cloud.mwn.de:8080/services
           requestKwargs:
