@@ -575,6 +575,20 @@ outpostConfig: |
   command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
   """.replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
 
+  def default_image_start_script(spawner):
+      datamount_version = f"=={spawner.data_mount_extension_version}" if spawner.data_mount_extension_version else ""
+      jupyter_config_path_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX1BBVEg9IiR7SlVQWVRFUl9DT05GSUdfUEFUSDorJEpVUFlURVJfQ09ORklHX1BBVEg6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
+      return """#!/bin/sh
+  {jupyter_config_path_b64}
+  if command -v pip >/dev/null 2>&1; then
+      if [ -n "$VIRTUAL_ENV" ]; then
+          pip install jupyterlab-data-mount{datamount_version} jupyter-collaboration
+      else
+          pip install --user jupyterlab-data-mount{datamount_version} jupyter-collaboration
+      fi
+  fi
+  command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
+  """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
 
   def custom_image_start_script(spawner):
       datamount_version = f"=={spawner.data_mount_extension_version}" if spawner.data_mount_extension_version else ""
@@ -654,9 +668,9 @@ outpostConfig: |
       # 8. Install jupyterlab-data-mount
       echo "[INFO] Installing jupyterlab-data-mount..."
       if [ -n "$VIRTUAL_ENV" ]; then
-          pip install jupyterlab-data-mount{datamount_version}
+          pip install jupyterlab-data-mount{datamount_version} jupyter-collaboration
       else
-          pip install --user jupyterlab-data-mount{datamount_version}
+          pip install --user jupyterlab-data-mount{datamount_version} jupyter-collaboration
       fi
   fi
 
@@ -701,6 +715,7 @@ outpostConfig: |
           "node_selector": node_selector,
           "image": image,
           "slug": option,
+          "data_mount_start": default_image_start_script,
           "data_mount_enabled": data_mount_enabled,
           "data_mount_config": data_mount_config,
           "init_mounts": init_mounts
