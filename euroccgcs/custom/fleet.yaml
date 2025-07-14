@@ -34,8 +34,6 @@ helm:
         level: 10
     customConfig:
       services:
-    customConfig:
-      services:
         JupyterLab:
           "4.2":
             enabled: false
