@@ -10,9 +10,9 @@ ingress:
       secretName: eurocc-tls
     - host: juniq.fz-juelich.de
       secretName: juniq-tls
-     - host: jupyter.coe-raise.eu
+    - host: jupyter.coe-raise.eu
       secretName: coeraise-tls
-     - host: portal.gauss-centre.eu
-       secretName: portalgauss-tls
+    - host: portal.gauss-centre.eu
+      secretName: portalgauss-tls
     - host: jupyter-coec.jsc.fz-juelich.de
       secretName: coec-tls

@@ -49,7 +49,7 @@ targetCustomizations:
     helm:
       valuesFiles:
         - ../../base-values/image_prod.yaml
-  - name: production
+  - name: production-maintenace
     clusterSelector:
       matchLabels:
         stage: production
