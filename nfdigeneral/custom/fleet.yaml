@@ -85,6 +85,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
+        maintenance: "false"
     helm:
       values:
         global:
@@ -102,11 +103,11 @@ targetCustomizations:
           - name: "service-url"
             oldHost: "jupyter.services.base4nfdi.de"
             newHost: "nfdi-jupyter.de"
-  - name: jupyter-prod
+  - name: jupyter-prod-maintenance
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "true-disabled"
+        maintenance: "true"
     helm:
       values:
         ingress:

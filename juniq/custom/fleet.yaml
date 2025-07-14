@@ -66,6 +66,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
+        maintenance: "false"
     helm:
       values:
         global:
@@ -80,11 +81,11 @@ targetCustomizations:
           - name: "production-docs"
             oldHost: "docs.juniq.fz-juelich.de"
             newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/juniq/"
-  - name: jupyter-prod
+  - name: jupyter-prod-maintenance
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "true-disabled"
+        maintenance: "true"
     helm:
       values:
         ingress:

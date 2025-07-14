@@ -2,17 +2,17 @@ ingress:
   hosts:
     - host: zam12154.zam.kfa-juelich.de
       secretName: zam12154-tls
-    #- host: jupyter.jsc.fz-juelich.de
-    #  secretName: jupyterjsc-tls
-    #- host: jupyter-jsc.fz-juelich.de
-    #  secretName: jupyterjsc-tls-old
-    #- host: jupyter.eurocc-gcs.de
-    #  secretName: eurocc-tls
-    #- host: juniq.fz-juelich.de
-    #  secretName: juniq-tls
-    # - host: jupyter.coe-raise.eu
-    #  secretName: coeraise-tls
-    # - host: portal.gauss-centre.eu
-    #   secretName: portalgauss-tls
-    #- host: jupyter-coec.jsc.fz-juelich.de
-    #  secretName: coec-tls
+    - host: jupyter.jsc.fz-juelich.de
+      secretName: jupyterjsc-tls
+    - host: jupyter-jsc.fz-juelich.de
+      secretName: jupyterjsc-tls-old
+    - host: jupyter.eurocc-gcs.de
+      secretName: eurocc-tls
+    - host: juniq.fz-juelich.de
+      secretName: juniq-tls
+     - host: jupyter.coe-raise.eu
+      secretName: coeraise-tls
+     - host: portal.gauss-centre.eu
+       secretName: portalgauss-tls
+    - host: jupyter-coec.jsc.fz-juelich.de
+      secretName: coec-tls
