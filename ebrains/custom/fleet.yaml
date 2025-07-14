@@ -48,6 +48,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
+        maintenance: "false"
     helm:
       values:
         global:
@@ -57,11 +58,11 @@ targetCustomizations:
           loggerName: ebrains
         nfs:
           path: /nfs/hubs/rke2/production/ebrains
-  - name: jupyter-prod
+  - name: jupyter-prod-maintenance
     clusterSelector:
       matchLabels:
         stage: production
-        prep: "true"
+        maintenance: "true"
     helm:
       values:
         ingress:
