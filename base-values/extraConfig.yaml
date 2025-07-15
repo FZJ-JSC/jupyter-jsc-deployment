@@ -6,36 +6,10 @@ hub:
       import logging
       import os
 
+
       ## Generic information
       namespace = os.environ.get("POD_NAMESPACE", "default")
       jupyterhub_host = get_name("hub")
-      if namespace in ["nfdigeneral"]:
-          oauth_host = "login.helmholtz.de"
-          oauth_path = "oauth2"
-          oauth_scopes = [
-              "display_name",
-              "sn",
-              "single-logout",
-              "offline_access",
-              "voperson_id",
-              "voperson_external_affiliation",
-              "entitlements",
-              "org_domain",
-              "email",
-              "profile",
-          ]
-      else:
-          oauth_host = "login.jsc.fz-juelich.de"
-          oauth_path = "oauth2"
-          oauth_scopes = [
-              "openid",
-              "email",
-              "profile",
-              "eduperson_assurance",
-              "single-logout",
-              "voperson_id",
-              "entitlements"
-          ]
 
       ## Misc Hub configs
       base_url = c.JupyterHub.get("base_url", "/")
@@ -72,7 +46,6 @@ hub:
       c.JupyterHub.log_level = 10
       jhub_hostname = jsc_custom.spawner.jhub_hostname()
 
-
       class AppLogLoggingFilter(logging.Filter):
           def filter(self, record):
               if str(record.msg).startswith("Authenticated with token"):
@@ -80,6 +53,8 @@ hub:
               if record.filename in ["scopes.py"]:
                   return False
               if str(record.msg).startswith("Failed to connect to"):
+                  return False
+              if str(record.msg).startswith("Setting new xsrf cookie"):
                   return False
               return True
 
@@ -99,6 +74,8 @@ hub:
           def filter(self, record):
               if str(record.msg).startswith("Could not open static file"):
                   return False
+              if record.levelno == 30 and str(record.msg).endswith("Missing or invalid credentials."):
+                  return False
               return True
 
       # available usual logger keys:
@@ -113,11 +90,9 @@ hub:
       all_loggers_true = {name: logging.getLogger(name) for name in logging.root.manager.loggerDict}
       for key, value in logging_filter_classes.items():
           all_loggers[key].addFilter(value())
-
-
-      simple_fmt = f"%(asctime)s logger={logged_logger_name} levelno=%(levelno)s levelname=%(levelname)s file=%(pathname)s line=%(lineno)d function=%(funcName)s : %(message)s"
+        
+      simple_fmt = f"%(asctime)s.%(msecs).03d logger={logged_logger_name} levelno=%(levelno)s levelname=%(levelname)s file=%(pathname)s line=%(lineno)d function=%(funcName)s : %(message)s"
       c.JupyterHub.log_format = simple_fmt
-
 
       ## Database
       db_host = os.environ.get("SQL_HOST")
@@ -244,35 +219,88 @@ hub:
       c.CustomGenericOAuthenticator.basic_auth = True
       c.CustomGenericOAuthenticator.enable_auth_state = True
       c.CustomGenericOAuthenticator.refresh_pre_spawn = True
+      c.CustomGenericOAuthenticator.refresh_pre_stop = True
       c.CustomGenericOAuthenticator.allow_all = True
       c.CustomGenericOAuthenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
       c.CustomGenericOAuthenticator.client_secret = os.environ.get("OAUTH_CLIENT_SECRET")
-      c.CustomGenericOAuthenticator.authorize_url = (
-          f"https://{oauth_host}/{oauth_path}-as/oauth2-authz"
-      )
       c.CustomGenericOAuthenticator.oauth_callback_url = (
           f"https://{jhub_hostname}{base_url}hub/oauth_callback"
       )
-      c.CustomGenericOAuthenticator.token_url = (
-          f"https://{oauth_host}/{oauth_path}/token"
-      )
-      c.CustomGenericOAuthenticator.tokeninfo_url = (
-          f"https://{oauth_host}/{oauth_path}/tokeninfo"
-      )
-      c.CustomGenericOAuthenticator.userdata_url = (
-          f"https://{oauth_host}/{oauth_path}/userinfo"
-      )
+
+      claim_name = None
+      admin_users = {}
+      tokeninfo_url = None
+      group_management = None
 
       if namespace in ["nfdigeneral"]:
-          c.CustomGenericOAuthenticator.admin_users = {
+          admin_users = {
               'i.ouled.elhaj_at_fz-juelich.de',
               'a6e989845cc0490bbefdd3767085db7a@login.helmholtz.de',
           }
-          def claim_name(resp_json):
+          def _claim_name(resp_json):
               name = resp_json["voperson_id"]
               return name
+          claim_name = _claim_name
+
+          def _group_management(user_info):
+              """
+              Return all groups a user is part of
+              """
+              groups = ["default"]
+              for attribute in ["org_domain", "voperson_external_affiliation"]:
+                  value = user_info.get(attribute, None)
+                  if value and type(value) == list:
+                      groups.extend(value)
+                  elif value and type(value) == str:
+                      groups.append(value)
+              return groups
+        
+          group_management = _group_management          
+
+          infraproxy = os.environ.get("USE_INFRAPROXY", "FALSE").lower() == "true"
+          if infraproxy:
+              authorize_url = "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oidc/authorize"
+              token_url = "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oidc/token"
+              userdata_url = "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oidc/userinfo"
+              tokeninfo_url = None
+              oauth_scopes = [
+                  "openid",
+                  "email",
+                  "offline_access",
+              ]
+          else:
+              authorize_url = "https://login.helmholtz.de/oauth2-as/oauth2-authz"
+              token_url = "https://login.helmholtz.de/oauth2/token"
+              userdata_url = "https://login.helmholtz.de/oauth2/userinfo"
+              tokeninfo_url = "https://login.helmholtz.de/oauth2/tokeninfo"
+              oauth_scopes = [
+                  "openid",
+                  "display_name",
+                  "sn",
+                  "single-logout",
+                  "offline_access",
+                  "voperson_id",
+                  "voperson_external_affiliation",
+                  "entitlements",
+                  "org_domain",
+                  "email",
+                  "profile",
+              ]
       else:
-          c.CustomGenericOAuthenticator.admin_users = {
+          authorize_url = "https://login.jsc.fz-juelich.de/oauth2-as/oauth2-authz"
+          token_url = "https://login.jsc.fz-juelich.de/oauth2/token"
+          userdata_url = "https://login.jsc.fz-juelich.de/oauth2/userinfo"
+          tokeninfo_url = "https://login.jsc.fz-juelich.de/oauth2/tokeninfo"
+          oauth_scopes = [
+              "openid",
+              "email",
+              "profile",
+              "eduperson_assurance",
+              "single-logout",
+              "voperson_id",
+              "entitlements",
+          ]
+          admin_users = {
               'i.ouled.elhaj_at_fz-juelich.de',
               't.kreuzer_at_fz-juelich.de',
           }
@@ -286,8 +314,7 @@ hub:
               r"(?P<account>[^:]+):"
               r"(?P<accounttype>[^:]+)$"
           )
-          def claim_name(resp_json):
-              print(resp_json)
+          def _claim_name(resp_json):
               if "preferred_username" in resp_json.keys():
                   preferred_username_is_secondary = False
                   for entitlement in resp_json.get("entitlements", []):
@@ -302,37 +329,44 @@ hub:
                   if preferred_username_is_secondary:
                       return resp_json["preferred_username"] + "." + resp_json["email"].replace("@", "_at_")
               return resp_json["email"].replace("@", "_at_")
-      # else:
-      #     def claim_name(resp_json):
-      #         name = resp_json["username_attr"]
-      #         safe_name = name.replace("@", "_at_")
-      #         return safe_name
+          claim_name = _claim_name
+
+      c.CustomGenericOAuthenticator.authorize_url = authorize_url
+      c.CustomGenericOAuthenticator.token_url = token_url
+      c.CustomGenericOAuthenticator.tokeninfo_url = tokeninfo_url
+      c.CustomGenericOAuthenticator.userdata_url = userdata_url
+      c.CustomGenericOAuthenticator.admin_users = admin_users
+      if group_management:
+          c.CustomGenericOAuthenticator.auth_state_groups_key = group_management
 
       c.CustomGenericOAuthenticator.username_claim = claim_name
       c.CustomGenericOAuthenticator.scope = oauth_scopes
       c.CustomGenericOAuthenticator.tls_verify = False
-
-      if namespace in ["nfdigeneral"]:
-          def group_management(user_info):
-              """
-              Return all groups a user is part of
-              """
-              groups = ["default"]
-              for attribute in ["org_domain", "voperson_external_affiliation"]:
-                  value = user_info.get(attribute, None)
-                  if value and type(value) == list:
-                      groups.extend(value)
-                  elif value and type(value) == str:
-                      groups.append(value)
-              return groups
-        
-          c.CustomGenericOAuthenticator.auth_state_groups_key = group_management
 
       #   c.CustomGenericOAuthenticator.extra_params_allowed_runtime = {
       #       "uy_select_authn": ["jupyterhdfaaiAuthn.hbp", "jupyterldapAuthn.password"]
       #   }
       #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterhdfaaiAuthn.hbp
       #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterldapAuthn.password
+
+      # RTC
+      # allow_global_rtc = namespace in ["nfdigeneral", "jupyterjsc"]
+      allow_global_rtc = True
+      if allow_global_rtc:
+          c.JupyterHub.load_roles.append(
+              {
+                  "name": "user",
+                  "scopes": ["self", "shares!user"],
+              },
+          )
+      else:
+          c.JupyterHub.load_roles.append(
+              {
+                  "name": "user",
+                  "scopes": ["self"],
+              },
+          )
+
 
       ## Spawner
       c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
@@ -378,9 +412,8 @@ hub:
       c.CustomJSCSpawner.post_spawn_request_hook = jsc_custom.spawner.post_spawn_request_hook
       c.CustomJSCSpawner.post_stop_hook = jsc_custom.spawner.post_stop_hook
       c.CustomJSCSpawner.start_async = start_async
-      c.CustomJSCSpawner.stop_async = True
+      c.CustomJSCSpawner.stop_async = False
       c.CustomJSCSpawner.custom_user_options = jsc_custom.spawner.custom_user_options
-      c.CustomJSCSpawner.stop_event = jsc_custom.spawner.stop_event
       c.CustomJSCSpawner.check_allowed = jsc_custom.spawner.is_system_allowed
       c.CustomJSCSpawner.request_headers = jsc_custom.spawner.request_headers
       c.CustomJSCSpawner.request_kwargs = jsc_custom.spawner.request_kwargs

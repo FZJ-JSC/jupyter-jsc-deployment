@@ -1,7 +1,5 @@
 ingress:
   hosts:
-    - host: zam12154.zam.kfa-juelich.de
-      secretName: zam12154-tls
     - host: jupyter.jsc.fz-juelich.de
       secretName: jupyterjsc-tls
     - host: jupyter-jsc.fz-juelich.de
