@@ -1,3 +1,4 @@
+---
 ingress:
   hosts:
     - host: jupyter-staging.jsc.fz-juelich.de

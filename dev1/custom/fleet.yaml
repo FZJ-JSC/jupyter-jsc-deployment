@@ -1,3 +1,4 @@
+---
 defaultNamespace: dev1
 
 labels:
@@ -15,10 +16,6 @@ helm:
   chart: jupyter-hub-customizations
   version: 0.15.36
   values:
-    customConfig:
-      reservationCheck:
-        addUsers: ["petrova1", "kreuzer1"]
-        setAllActive: true
     fullnameOverride: dev1-custom
     global:
       name: dev1
@@ -34,6 +31,9 @@ helm:
         enabled: true
         level: 10
     customConfig:
+      reservationCheck:
+        addUsers: ["petrova1", "kreuzer1"]
+        setAllActive: true
       authStateKeys:
         - services
         - userModules

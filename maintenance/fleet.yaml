@@ -1,3 +1,4 @@
+---
 defaultnamespace: jupyter
 
 labels:
@@ -13,8 +14,6 @@ dependsOn:
       matchLabels:
         app: postgres-operator
         component: namespaces
-
-
 
 helm:
   releaseName: maintenance

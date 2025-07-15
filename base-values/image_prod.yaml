@@ -1,15 +1,16 @@
+---
 hub:
   #    mkdir -p /mnt/reservation_key &&
   #    cp -rp /mnt/reservation-keypair/..data/* /mnt/reservation_key/. &&
   #    chown 1000:1000 -R /mnt/reservation_key &&
   #    chmod 400 /mnt/reservation_key/* &&
   # pip install -i https://test.pypi.org/simple/ -U --no-deps  &&
-  #args:
+  # args:
   #  - -c
   #  - >-
   #    pip install --upgrade --upgrade-strategy only-if-needed jupyterhub-outpostspawner==1.0.2 jupyter-jsc-custom==0.11.7 &&
   #    jupyterhub -f /usr/local/etc/jupyterhub/jupyterhub_config.py
-  #command:
+  # command:
   #  - /bin/bash
   image:
     pullPolicy: "IfNotPresent"
@@ -22,4 +23,4 @@ hub:
     runAsGroup: 100
     capabilities:
       drop:
-      - ALL
+        - ALL

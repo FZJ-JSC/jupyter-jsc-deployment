@@ -1,3 +1,4 @@
+---
 defaultNamespace: jupyterjsc
 
 labels:
@@ -121,10 +122,10 @@ targetCustomizations:
           tlssecretname: zam12154
         nfs:
           path: /nfs/hubs/rke2/production/jupyterjsc
-      # redirects:
-      #   - name: "production"
-      #     oldHost: "jupyter-jsc.fz-juelich.de"
-      #     newHost: "jupyter.jsc.fz-juelich.de"
-      #   - name: "production-nbviewer"
-      #     oldHost: "docs.jupyter-jsc.fz-juelich.de"
-      #     newHost: "docs.jupyter.jsc.fz-juelich.de"
+        # redirects:
+        #   - name: "production"
+        #     oldHost: "jupyter-jsc.fz-juelich.de"
+        #     newHost: "jupyter.jsc.fz-juelich.de"
+        #   - name: "production-nbviewer"
+        #     oldHost: "docs.jupyter-jsc.fz-juelich.de"
+        #     newHost: "docs.jupyter.jsc.fz-juelich.de"
