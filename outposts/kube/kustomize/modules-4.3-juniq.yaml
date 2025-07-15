@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,9 +15,9 @@ data:
     c.ServerApp.max_buffer_size = 1024 * 1024 * 1024
     c.ServerApp.max_body_size = 1024 * 1024 * 1024
     c.ServerApp.quit_button = False
-  load_jupyter_version.sh: |
+  load_jupyter_version.sh: |-
     #!/bin/bash
-    
+
     module purge
     module use ${OTHERSTAGES}
     module load Stages/2025

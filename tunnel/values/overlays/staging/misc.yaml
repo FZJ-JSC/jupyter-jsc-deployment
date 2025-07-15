@@ -1,4 +1,6 @@
+---
 authorized_keys:
-  - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINH3aF9BVaYln3WtNClKb39zdUs0X+5Uk9/LTALtlhFz ljupytershared'
+  - 'restrict,port-forwarding,command="/bin/echo No commands allowed" ssh-ed25519
+    AAAAC3NzaC1lZDI1NTE5AAAAINH3aF9BVaYln3WtNClKb39zdUs0X+5Uk9/LTALtlhFz ljupytershared'
 stage: staging
 loggerName: "TunnelStagingJSC"

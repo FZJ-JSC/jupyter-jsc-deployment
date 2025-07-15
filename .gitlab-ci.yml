@@ -1,0 +1,11 @@
+---
+stages:
+  - lint
+
+yamllint:
+  image: cytopia/yamllint:latest
+  stage: lint
+  script:
+    - >
+      yamllint -d '{extends: default, rules: {line-length: disable}, ignore: ["**/specific-secrets/**", "mybinder/mybinder/**/**"]}'
+      .

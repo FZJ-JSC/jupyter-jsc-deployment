@@ -1,3 +1,4 @@
+---
 flavors:
   flavors:
     default: {}
@@ -78,7 +79,8 @@ flavors:
       max: 25
       weight: 11
       display_name: "Spring School - 8GB RAM, 2VCPU, 10 hours"
-      description: "Spring School - JupyterLab will run for max 10 hours with 8GB RAM and 2VCPU."
+      description: "Spring School - JupyterLab will run for max 10 hours with 8GB
+        RAM and 2VCPU."
       runtime:
         hours: 10
       resources:
@@ -88,7 +90,14 @@ flavors:
         mem_limit: "8192M"
   hubs:
     default:
-      jupyterhub_name: ["coec", "coeraise", "ebrains", "euroccgcs", "portalgauss", "dev1", "dev2"]
+      jupyterhub_name:
+        - coec
+        - coeraise
+        - ebrains
+        - euroccgcs
+        - portalgauss
+        - dev1
+        - dev2
       weight: 10
       flavors: ["m1", "l1"]
     defaultPlusL2:
@@ -113,11 +122,11 @@ flavors:
       flavorsOverride:
         l2:
           max: 10
-      disable: False
+      disable: false
     nfdidefault:
       hubs: ["nfdigeneral_unused"]
       usernames_unused: []
       groups: ["default"]
       weight: 1
       flavors: ["m1nfdi", "l1nfdi"]
-      disable: False
+      disable: false

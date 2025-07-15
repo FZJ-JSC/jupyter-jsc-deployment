@@ -1,3 +1,4 @@
+---
 defaultNamespace: binder
 
 labels:
@@ -99,4 +100,3 @@ helm:
           period_seconds: 60
       nodeSelector:
         worker: "true"
-

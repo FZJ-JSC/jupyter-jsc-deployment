@@ -1,3 +1,4 @@
+---
 resources:
   - gunicorn_config.yaml
   - modules-3.2.yaml

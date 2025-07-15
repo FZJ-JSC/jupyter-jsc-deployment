@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -190,7 +191,6 @@ data:
       sleep $total_seconds && send_spawn_update_fail "Stop JupyterLab" "The runtime of the slurm job $SLURM_JOBID will end within the next 10 seconds. Stop JupyterLab gracefully." &
     }
 
-
     # Check Quota
 
     check_quota () {
@@ -213,7 +213,6 @@ data:
       echo "$(date) - Check quota done"
     }
 
-
     # Hook to load customized environments before loading modules
 
     pre_start () {
@@ -228,7 +227,6 @@ data:
       fi
       echo "$(date) - Pre start done"
     }
-
 
     # Load modules
 
@@ -500,7 +498,6 @@ data:
 
       wait $child
     }
-
 
     requirements
     set_env

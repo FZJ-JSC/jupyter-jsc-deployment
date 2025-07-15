@@ -1,3 +1,4 @@
+---
 defaultNamespace: jupyter
 
 labels:
@@ -18,7 +19,7 @@ helm:
   releaseName: tunnel
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-tunnel
-  version: 3.1.6
+  version: 3.1.8
   valuesFiles:
     - values/base/misc.yaml
 targetCustomizations:
@@ -48,9 +49,9 @@ targetCustomizations:
           loadBalancerIP: "134.94.198.229"
 diff:
   comparePatches:
-  - apiVersion: apps/v1
-    kind: StatefulSet
-    labels:
-      helm.sh/chart-name: jupyter-tunnel
-    operations:
-    - {"op":"remove", "path":"/spec/replicas"}
+    - apiVersion: apps/v1
+      kind: StatefulSet
+      labels:
+        helm.sh/chart-name: jupyter-tunnel
+      operations:
+        - {"op": "remove", "path": "/spec/replicas"}

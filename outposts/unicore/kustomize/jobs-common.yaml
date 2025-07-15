@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -95,5 +96,3 @@ data:
             "bssStatus": ["PENDING", "CONFIGURING"]
         }
     }
-
-

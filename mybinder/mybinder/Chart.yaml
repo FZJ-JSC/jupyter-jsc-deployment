@@ -1,3 +1,4 @@
+---
 apiVersion: v2
 description: A meta-chart for the binderhub deployment on mybinder.org
 name: mybinder

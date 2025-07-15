@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,5 +10,5 @@ data:
 
     module purge
     module use ${OTHERSTAGES}
-    module load Stages/2023 
+    module load Stages/2023
     module load GCCcore/.11.3.0 Python JupyterLab/2023.3.6

@@ -1,3 +1,4 @@
+---
 replicas: 1
 ingress:
   enabled: false
@@ -19,7 +20,7 @@ extraConfig:
     pass
   02-event-loop-metric: |
     pass
-config:    
+config:
   BinderHub:
     extra_footer_scripts: {}
     base_url: /services/binder/

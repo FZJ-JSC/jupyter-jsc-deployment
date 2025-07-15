@@ -1,3 +1,4 @@
+---
 cryptSecret: outpost-cryptkey
 outpostUsers: outpost-users
 extraEnvVarsSecrets:
