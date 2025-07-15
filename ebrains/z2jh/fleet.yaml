@@ -30,14 +30,14 @@ helm:
       enabled: true
   valuesFiles:
     - ../../base-values/extraConfig.yaml
-    #- ../../base-values/image_devel.yaml
+    # - ../../base-values/image_devel.yaml
     - ../../base-values/image.yaml
   valuesFrom:
     - configMapKeyRef:
         name: values
         namespace: ebrains
         key: values.yaml
-    #- secretKeyRef:
+    # - secretKeyRef:
     #    name: static-hub-secret
     #    namespace: ebrains
     #    key: values.yaml
