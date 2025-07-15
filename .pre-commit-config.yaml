@@ -1,0 +1,18 @@
+---
+repos:
+  - repo: local
+    hooks:
+      - id: format-yaml
+        name: Format YAML files
+        entry: python format_yaml.py
+        language: system
+        types: [yaml]
+  - repo: local
+    hooks:
+      - id: yamllint
+        name: yamllint with line-length disabled
+        entry: >
+          yamllint -d '{extends: default, rules: {line-length: disable, comments-indentation:
+          disable}, ignore: "**/specific-secrets/**"}' .
+        language: system
+        pass_filenames: false

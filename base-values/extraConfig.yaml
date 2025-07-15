@@ -1,3 +1,4 @@
+---
 hub:
   extraConfig:
     customConfig: |-
@@ -5,7 +6,6 @@ hub:
       import jsc_custom
       import logging
       import os
-
 
       ## Generic information
       namespace = os.environ.get("POD_NAMESPACE", "default")
@@ -66,7 +66,7 @@ hub:
 
       class JupyterHubLoggingFilter(logging.Filter):
           def filter(self, record):
-              if str(record.msg).startswith("Refreshing auth for"):            
+              if str(record.msg).startswith("Refreshing auth for"):
                   return False
               return True
 
@@ -90,7 +90,7 @@ hub:
       all_loggers_true = {name: logging.getLogger(name) for name in logging.root.manager.loggerDict}
       for key, value in logging_filter_classes.items():
           all_loggers[key].addFilter(value())
-        
+
       simple_fmt = f"%(asctime)s.%(msecs).03d logger={logged_logger_name} levelno=%(levelno)s levelname=%(levelname)s file=%(pathname)s line=%(lineno)d function=%(funcName)s : %(message)s"
       c.JupyterHub.log_format = simple_fmt
 
@@ -102,18 +102,17 @@ hub:
       db_database = os.environ.get("SQL_DATABASE")
       c.JupyterHub.db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
       # juypterhub upgrade-db
-      #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE 
+      #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE
       ## Static files + Templates
       # Call update incidents once to fill incidents dictionary
       jsc_custom.misc.update_incidents_now()
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
 
-
       from jsc_custom.misc import get_reservations
       from jsc_custom.misc import get_custom_config
       def frontendCollection(user=None):
           custom_config = get_custom_config()
-          ret = {      
+          ret = {
               "hostname": jhub_hostname,
               "incidentCheck": custom_config.get("incidentCheck", {}),
               "systemConfig": custom_config.get("systems", {}),
@@ -142,7 +141,6 @@ hub:
                   "decrypted_user_options": jsc_custom.spawner.utils.decrypted_user_options(user)
               })
           return ret
-          
 
       c.JupyterHub.template_vars = {
           "frontendCollection": frontendCollection
@@ -210,8 +208,6 @@ hub:
           "DNS:jpbl-s03-04-interconnect-1",
       ]
 
-
-
       ## Authenticator
       c.JupyterHub.authenticator_class = jsc_custom.authenticator.CustomGenericOAuthenticator
 
@@ -254,8 +250,8 @@ hub:
                   elif value and type(value) == str:
                       groups.append(value)
               return groups
-        
-          group_management = _group_management          
+
+          group_management = _group_management
 
           infraproxy = os.environ.get("USE_INFRAPROXY", "FALSE").lower() == "true"
           if infraproxy:
@@ -367,7 +363,6 @@ hub:
               },
           )
 
-
       ## Spawner
       c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
 
@@ -378,7 +373,6 @@ hub:
       async_system_list = ["JURECA", "JUWELS", "JUSUF", "DEEP", "JSC-Cloud", "LRZ", "LRZ-Staging", "deNBI-Cloud"]
       def start_async(spawner):
           return spawner.user_options.get("system", "") in async_system_list
-
 
       helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
 
@@ -399,7 +393,6 @@ hub:
               return f"https://{helm_release_name}-{spawner.name}-{spawner.user.id}.{remote_namespace}.svc.cluster.local:{custom_port}"
           else:
               return original_resp
-
 
       c.CustomJSCSpawner.ssh_during_startup = ssh_during_startup
       c.CustomJSCSpawner.extra_labels = jsc_custom.spawner.extra_labels
@@ -530,7 +523,6 @@ hub:
         else:
           spawner.log.warning(f"{spawner._log_name} - account ({account}) or project ({project}) not set in user_options ({spawner.user_options}). Do not set preferences in UNICORE transport.")
           return False
-
 
       c.CustomJSCSpawner.unicore_site_url = unicore_site_url
       c.CustomJSCSpawner.unicore_transport_kwargs = transport_kwargs
