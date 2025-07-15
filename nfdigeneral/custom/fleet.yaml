@@ -15,7 +15,7 @@ helm:
   releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.40
+  version: 0.16.41
   values:
     fullnameOverride: nfdigeneral-custom
     global:
@@ -25,7 +25,7 @@ helm:
     ingress:
       enabled: true
     dailyRestart:
-      enabled: true
+      enabled: false
     jupyter-metrics:
       enabled: true
       nodeSelector:
