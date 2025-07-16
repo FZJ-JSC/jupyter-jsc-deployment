@@ -4,7 +4,7 @@ from ruamel.yaml import YAML
 
 yaml = YAML()
 yaml.preserve_quotes = True
-yaml.explicit_start = False
+yaml.explicit_start = True
 yaml.indent(mapping=2, sequence=4, offset=2)
 
 def format_yaml_file(file_path):
