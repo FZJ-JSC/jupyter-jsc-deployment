@@ -11,7 +11,7 @@ patches:
       labelSelector: component=hub
     patch: |-
       - op: add
-        path: /spec/template/spec/containers/2/envFrom
+        path: /spec/template/spec/containers/0/envFrom
         value:
           - secretRef:
               name: generics
