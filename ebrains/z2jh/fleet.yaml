@@ -47,10 +47,17 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
+        maintenance: "false"
     helm:
       valuesFiles:
-        # - ../../base-values/image_devel.yaml
         - ../../base-values/image_prod.yaml
         - ../../base-values/resources.yaml
-    kustomize:
-      dir: ./kustomize
+  - name: production-maintenace
+    clusterSelector:
+      matchLabels:
+        stage: production
+        maintenance: "true"
+    helm:
+      valuesFiles:
+        - ../../base-values/image_prod.yaml
+        - ../../base-values/maintenance.yaml
