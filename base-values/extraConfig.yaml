@@ -66,7 +66,7 @@ hub:
 
       class JupyterHubLoggingFilter(logging.Filter):
           def filter(self, record):
-              if str(record.msg).startswith("Failing suspected API request to not-running server"):
+              if str(record.msg).startswith("Refreshing auth for"):
                   return False
               return True
 
@@ -105,7 +105,10 @@ hub:
       #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE
       ## Static files + Templates
       # Call update incidents once to fill incidents dictionary
-      jsc_custom.misc.update_incidents_now()
+      try:
+        jsc_custom.misc.update_incidents_now_sync()
+      except:
+        jsc_custom.misc.update_incidents_now()
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
 
       from jsc_custom.misc import get_reservations
