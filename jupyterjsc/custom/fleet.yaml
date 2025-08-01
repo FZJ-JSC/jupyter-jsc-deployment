@@ -56,6 +56,8 @@ helm:
       secretSuffixes:
         - user-kpi-codebase
     logging:
+      stream:
+        level: 10
       syslog:
         enabled: true
         level: 10
