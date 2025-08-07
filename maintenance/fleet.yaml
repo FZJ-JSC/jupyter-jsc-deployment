@@ -34,6 +34,7 @@ targetCustomizations:
       matchLabels:
         stage: production
         maintenance: "false"
+    doNotDeploy: true
     helm:
       values:
         enabled: false
