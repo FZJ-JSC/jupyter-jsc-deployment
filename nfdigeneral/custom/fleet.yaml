@@ -62,8 +62,8 @@ helm:
                 - deNBI-Cloud
                 - JSC-Cloud
       systems:
-        - deNBI-Cloud
         - JSC-Cloud
+        # - deNBI-Cloud
 targetCustomizations:
   - name: jupyter-stag
     clusterSelector:
