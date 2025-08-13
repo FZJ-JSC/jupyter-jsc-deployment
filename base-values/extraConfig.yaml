@@ -105,12 +105,9 @@ hub:
       #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE
       ## Static files + Templates
       # Call update incidents once to fill incidents dictionary
-      try:
-          jsc_custom.misc.update_incidents_now_sync()
-      except:
-          jsc_custom.misc.update_incidents_now()
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
 
+      from jsc_custom.misc import get_incidents
       from jsc_custom.misc import get_reservations
       from jsc_custom.misc import get_custom_config
       def frontendCollection(user=None):
@@ -139,7 +136,7 @@ hub:
                   "userModules": custom_config.get("userModules", {}),
                   "resourcesConfig": custom_config.get("resources", {}),
                   "backendServices": custom_config.get("backendServices", {}),
-                  "incidents": jsc_custom.misc.get_incidents(user),
+                  "incidents": get_incidents(),
                   "reservations": get_reservations(),
                   "decrypted_user_options": jsc_custom.spawner.utils.decrypted_user_options(user)
               })
