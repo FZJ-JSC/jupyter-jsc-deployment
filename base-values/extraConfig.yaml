@@ -66,7 +66,7 @@ hub:
 
       class JupyterHubLoggingFilter(logging.Filter):
           def filter(self, record):
-              if str(record.msg).startswith("Refreshing auth for"):
+              if str(record.msg).startswith("Failing suspected API request to not-running server"):
                   return False
               return True
 
@@ -106,9 +106,9 @@ hub:
       ## Static files + Templates
       # Call update incidents once to fill incidents dictionary
       try:
-        jsc_custom.misc.update_incidents_now_sync()
+          jsc_custom.misc.update_incidents_now_sync()
       except:
-        jsc_custom.misc.update_incidents_now()
+          jsc_custom.misc.update_incidents_now()
       c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
 
       from jsc_custom.misc import get_reservations
@@ -229,35 +229,51 @@ hub:
       claim_name = None
       admin_users = {}
       tokeninfo_url = None
-      group_management = None
+
+      def _group_management(user_info):
+          """
+          Return all groups a user is part of
+          """
+          groups = ["default"]
+          for attribute in ["org_domain", "voperson_external_affiliation"]:
+              value = user_info.get(attribute, None)
+              if value and type(value) == list:
+                  groups.extend(value)
+              elif value and type(value) == str:
+                  groups.append(value)
+          oauth_user = user_info.get("oauth_user", user_info)
+          email = oauth_user.get("email", None)
+          if email:
+              groups.append(f"email:{email}")
+
+          displayname = oauth_user.get("name", email)
+          if displayname:
+              groups.append(f"displayname:{displayname}")
+
+          return groups
+
+      group_management = _group_management
 
       if namespace in ["nfdigeneral"]:
           admin_users = {
               'i.ouled.elhaj_at_fz-juelich.de',
               'a6e989845cc0490bbefdd3767085db7a@login.helmholtz.de',
           }
-          def _claim_name(resp_json):
-              name = resp_json["voperson_id"]
-              return name
-          claim_name = _claim_name
-
-          def _group_management(user_info):
-              """
-              Return all groups a user is part of
-              """
-              groups = ["default"]
-              for attribute in ["org_domain", "voperson_external_affiliation"]:
-                  value = user_info.get(attribute, None)
-                  if value and type(value) == list:
-                      groups.extend(value)
-                  elif value and type(value) == str:
-                      groups.append(value)
-              return groups
-
-          group_management = _group_management
 
           infraproxy = os.environ.get("USE_INFRAPROXY", "FALSE").lower() == "true"
           if infraproxy:
+              def _claim_name(resp_json):
+                  if "voperson_id" in resp_json.keys():
+                      name = resp_json["voperson_id"]
+                      if type(name) == list:
+                          name = name[0]
+                  elif "sub" in resp_json.keys():
+                      name = resp_json["sub"]
+                  else:
+                      name = resp_json["email"].replace("@", "_at_")
+                  assert name is not None
+                  return name
+              claim_name = _claim_name
               authorize_url = "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oidc/authorize"
               token_url = "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oidc/token"
               userdata_url = "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oidc/userinfo"
@@ -268,6 +284,10 @@ hub:
                   "offline_access",
               ]
           else:
+              def _claim_name(resp_json):
+                  name = resp_json["voperson_id"]
+                  return name
+              claim_name = _claim_name
               authorize_url = "https://login.helmholtz.de/oauth2-as/oauth2-authz"
               token_url = "https://login.helmholtz.de/oauth2/token"
               userdata_url = "https://login.helmholtz.de/oauth2/userinfo"
@@ -473,60 +493,66 @@ hub:
 
       ### UNICORE specific config
       system_config = {
-        "JURECA": {
-          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JURECA/rest/core",
-        },
-        "JUWELS": {
-          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core",
-        },
-        "JUPITER": {
-          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUPITER/rest/core",
-        },
-        "JEDI": {
-          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JEDI/rest/core",
-        },
-        "JUSUF": {
-          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUSUF/rest/core",
-        },
-        "HDFML": {
-          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/HDFML/rest/core",
-        },
-        "DEEP": {
-          "site_url": "https://zam2125.zam.kfa-juelich.de:9112/DEEP/rest/core",
-        }
+          "JURECA": {
+              "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JURECA/rest/core",
+          },
+          "JUWELS": {
+              "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core",
+          },
+          "JUPITER": {
+              "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUPITER/rest/core",
+          },
+          "JEDI": {
+              "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JEDI/rest/core",
+          },
+          "JUSUF": {
+              "site_url": "https://zam2125.zam.kfa-juelich.de:9112/JUSUF/rest/core",
+          },
+          "HDFML": {
+              "site_url": "https://zam2125.zam.kfa-juelich.de:9112/HDFML/rest/core",
+          },
+          "DEEP": {
+              "site_url": "https://zam2125.zam.kfa-juelich.de:9112/DEEP/rest/core",
+          }
       }
 
       async def unicore_site_url(spawner):
-        system = spawner.user_options.get("system", "None")
-        url = system_config.get(system, {}).get("site_url", False)
-        if not url:
-          raise Exception(f"URL for system {system} not configured. Available systems: {list(system_config.keys())}")
-        return url
+          system = spawner.user_options.get("system", "None")
+          url = system_config.get(system, {}).get("site_url", False)
+          if not url:
+              raise Exception(f"URL for system {system} not configured. Available systems: {list(system_config.keys())}")
+          return url
 
       async def transport_kwargs(spawner):
-        from pyunicore.credentials import OIDCToken
-        auth_state = await spawner.user.get_auth_state()
-        credential = OIDCToken(auth_state["access_token"], None)
-        transport_kwargs = {
-            "credential": credential,
-            # "verify": "/mnt/unicore/cert.crt",
-            "verify": False,
-            "timeout": 30
-        }
-        spawner.log.info(f"{spawner._log_name} - Unicore transport kwargs: {transport_kwargs}")
-        return transport_kwargs
+          from pyunicore.credentials import OIDCToken
+          auth_state = await spawner.user.get_auth_state()
+          credential = OIDCToken(auth_state["access_token"], None)
+          transport_kwargs = {
+              "credential": credential,
+              # "verify": "/mnt/unicore/cert.crt",
+              "verify": False,
+              "timeout": 30
+          }
+          spawner.log.info(f"{spawner._log_name} - Unicore transport kwargs: {transport_kwargs}")
+          return transport_kwargs
 
       async def transport_preferences(spawner):
-        account = spawner.user_options.get("hpc", {}).get("account", False)
-        project = spawner.user_options.get("hpc", {}).get("project", False)
-        if account and project:
-          preference = f"uid:{account},group:{project}"
-          spawner.log.info(f"{spawner._log_name} - Set preference: {preference}")
-          return preference
-        else:
-          spawner.log.warning(f"{spawner._log_name} - account ({account}) or project ({project}) not set in user_options ({spawner.user_options}). Do not set preferences in UNICORE transport.")
-          return False
+          account = spawner.user_options.get("hpc", {}).get("account", False)
+          project = spawner.user_options.get("hpc", {}).get("project", False)
+          if account and project:
+              preference = f"uid:{account},group:{project}"
+              spawner.log.info(f"{spawner._log_name} - Set preference: {preference}")
+              return preference
+          else:
+              spawner.log.warning(f"{spawner._log_name} - account ({account}) or project ({project}) not set in user_options ({spawner.user_options}). Do not set preferences in UNICORE transport.")
+              return False
 
       c.CustomJSCSpawner.unicore_site_url = unicore_site_url
       c.CustomJSCSpawner.unicore_transport_kwargs = transport_kwargs
       c.CustomJSCSpawner.unicore_transport_preferences = transport_preferences
+
+      if os.environ.get("PYTHONASYNCIODEBUG", "0").lower() in ["1", "true"]:
+          import asyncio
+          loop = asyncio.get_event_loop()
+          loop.set_debug(True)
+          loop.slow_callback_duration = 0.2
