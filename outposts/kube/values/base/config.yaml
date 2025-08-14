@@ -643,9 +643,9 @@ outpostConfig: |
       set -a
       . /tmp/jovyan.env
       set +a
-      export JUPYTERHUB_OAUTH_SCOPES=$(cat /tmp/jovyan_JUPYTERHUB_OAUTH_SCOPES.env)
-      export JUPYTERHUB_OAUTH_ACCESS_SCOPES=$(cat /tmp/jovyan_JUPYTERHUB_OAUTH_ACCESS_SCOPES.env)
-      export JUPYTERHUB_OAUTH_CLIENT_ALLOWED_SCOPES=$(cat /tmp/jovyan_JUPYTERHUB_OAUTH_CLIENT_ALLOWED_SCOPES.env)
+      export JUPYTERHUB_OAUTH_SCOPES="$(cat /tmp/jovyan_JUPYTERHUB_OAUTH_SCOPES.env)"
+      export JUPYTERHUB_OAUTH_ACCESS_SCOPES="$(cat /tmp/jovyan_JUPYTERHUB_OAUTH_ACCESS_SCOPES.env)"
+      export JUPYTERHUB_OAUTH_CLIENT_ALLOWED_SCOPES="$(cat /tmp/jovyan_JUPYTERHUB_OAUTH_CLIENT_ALLOWED_SCOPES.env)"
   fi
 
   if [ -f /tmp/jupyterhub_venv/bin/activate ]; then
