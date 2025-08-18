@@ -252,7 +252,7 @@ outpostConfig: |-
         "Runtime": f"{runtime}min"
       }
       if gpus:
-        job_description["Resources"]["GPUsPerNode"] = gpus
+        job_description["Resources"]["GPUS"] = gpus
       if xserver:
         job_description["Resources"]["StartXServer"] = xserver
       if reservation and reservation.lower() != "none":
