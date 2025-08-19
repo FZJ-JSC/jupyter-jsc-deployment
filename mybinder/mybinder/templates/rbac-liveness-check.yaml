@@ -1,0 +1,43 @@
+{{- if or .Values.dind.daemonset.livenessProbe.enabled .Values.dailyRestart.enabled}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: liveness-check-role
+  labels:
+    app: binder
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+rules:
+  - apiGroups: ["apps"]
+    resources: ["daemonsets"]
+    verbs: ["get", "list", "patch"]
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec"]
+    verbs: ["get", "list", "create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: liveness-check-rolebinding
+  labels:
+    app: binder
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: liveness-check-role
+subjects:
+  - kind: ServiceAccount
+    name: dind-checker
+    namespace: binder
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dind-checker
+  labels:
+    app: binder
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+{{- end }}

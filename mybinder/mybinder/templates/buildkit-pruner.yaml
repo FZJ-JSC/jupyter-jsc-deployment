@@ -1,56 +1,35 @@
 {{ if .Values.buildkitPruner.enabled }}
-apiVersion: apps/v1
-kind: DaemonSet
+apiVersion: batch/v1
+kind: CronJob
 metadata:
   name: build-cache-prune
 spec:
-  selector:
-    matchLabels:
-      name: build-cache-prune
-  template:
-    metadata:
-      labels:
-        name: build-cache-prune
+  schedule: {{ .Values.buildkitPruner.schedule | quote }}
+  # If the previous run is still going, replace it with our new one
+  concurrencyPolicy: Replace
+  jobTemplate:
     spec:
-      nodeSelector:
-        binder: "true"
-      volumes:
-      - name: dind-socket
-        hostPath:
-          path: /var/run/dind/docker.sock
-      tolerations:
-        - key: "node.kubernetes.io/disk-pressure"
-          operator: "Exists"
-          effect: "NoExecute"
-      containers:
-      - name: pruner
-        image: {{ .Values.buildkitPruner.image }}
-        resources:
-          requests:
-            cpu: 10m
-            memory: 20Mi
-        env:
-          - name: DOCKER_HOST
-            value: "unix:///var/run/dind/docker.sock"
-        command:
-          - /bin/sh
-          - -c
-          - |
-            set -e # Exit if commands returns with non-zero status
-            while true; do
-              echo "[INFO] Pruning old Docker images..."
-              docker image prune --force --all --filter "until={{ .Values.buildkitPruner.olderThanMinutes }}m"
-
-              echo "[INFO] Pruning BuildKit builder cache..."
-              docker builder prune --force --all --max-used-space={{ .Values.buildkitPruner.buildkitCacheSize }}
-
-              echo "[INFO] Disk usage summary:"
+      template:
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+          - name: dind-socket
+            hostPath:
+              path: /var/run/dind/docker.sock
+          containers:
+          - name: pruner
+            image: {{ .Values.buildkitPruner.image }}
+            env:
+              - name: DOCKER_HOST
+                value: "unix:///var/run/dind/docker.sock"
+            command:
+            - /bin/sh
+            - -c
+            - |
+              docker image prune --force --all --filter until={{ .Values.buildkitPruner.olderThanMinutes }}m && \
+              docker builder prune --force --all --max-used-space={{ .Values.buildkitPruner.buildkitCacheSize }} && \
               docker system df
-
-              echo "[INFO] Sleeping for 5 minutes..."
-              sleep 300
-            done
-        volumeMounts:
-        - name: dind-socket
-          mountPath: /var/run/dind/docker.sock
+            volumeMounts:
+            - name: dind-socket
+              mountPath: /var/run/dind/docker.sock
 {{- end }}

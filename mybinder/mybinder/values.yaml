@@ -346,6 +346,8 @@ binderhub:
   imageBuilderType: dind
   dind:
     daemonset:
+      livenessProbe:
+        enabled: true
       extraArgs:
         # Allow for concurrent pushes so pushes are faster
         - --max-concurrent-uploads=32
