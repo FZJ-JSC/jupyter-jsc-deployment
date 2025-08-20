@@ -9,3 +9,15 @@ yamllint:
     - >
       yamllint -d '{extends: default, rules: {line-length: disable}, ignore: ["**/specific-secrets/**", "mybinder/mybinder/**/**"]}'
       .
+
+helmdry:
+  stage: lint
+  image:
+    name: alpine
+  tags:
+    - public-docker
+  before_script:
+    - apk add --no-cache bash curl git yq
+    - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | VERIFY_CHECKSUM=false bash
+  script:
+    - bash $CI_PROJECT_DIR/helm_dry.sh
