@@ -1,4 +1,3 @@
-{{- if or .Values.dind.daemonset.livenessProbe.enabled .Values.dailyRestart.enabled}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -40,4 +39,3 @@ metadata:
     app: binder
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
-{{- end }}

@@ -1,4 +1,3 @@
-{{- if .Values.dind.daemonset.livenessProbe.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,7 +28,7 @@ spec:
             - name: DIND_NAMESPACE
               value: binder
             - name: DIND_DAEMONSET
-              value: {{ .Release.Name }}-{{ $builderName }}
+              value: {{ .Release.Name }}-dind
           command:
             - /bin/sh
             - -c
@@ -49,4 +48,3 @@ spec:
               done
           securityContext:
             runAsUser: 0
-{{- end }}
