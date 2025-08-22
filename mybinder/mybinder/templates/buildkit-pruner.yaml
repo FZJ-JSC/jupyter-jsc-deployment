@@ -16,6 +16,8 @@ spec:
           - name: dind-socket
             hostPath:
               path: /var/run/dind/docker.sock
+          nodeSelector:
+            binder: "true"
           containers:
           - name: pruner
             image: {{ .Values.buildkitPruner.image }}
