@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: check-mybinder-liveness
+  labels:
+    app: binder
+    component: check-liveness
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: binder
+      component: check-liveness
+  template:
+    metadata:
+      labels:
+        app: binder
+        component: check-liveness
+    spec:
+      serviceAccountName: dind-checker
+      restartPolicy: Always
+      containers:
+        - name: check-liveness
+          image: bitnami/kubectl:1.30.7
+          env:
+            - name: DIND_NAMESPACE
+              value: binder
+            - name: DIND_DAEMONSET
+              value: {{ .Release.Name }}-dind
+          command:
+            - /bin/sh
+            - -c
+            - |
+              DIND_POD=$(kubectl get pods -n $DIND_NAMESPACE -l name=$DIND_DAEMONSET -o jsonpath='{.items[0].metadata.name}')
+              echo "Monitoring dind pod: $DIND_POD"
+              while true; do
+                if kubectl exec -n $DIND_NAMESPACE $DIND_POD -- docker -H unix:///var/run/dind/docker.sock info >/dev/null 2>&1; then
+                  echo "[$(date)] dind pod is LIVE"
+                else
+                  echo "[$(date)] dind pod is DOWN, restarting it now"
+                  kubectl rollout restart daemonset $DIND_DAEMONSET
+                  sleep 30
+                  DIND_POD=$(kubectl get pods -n $DIND_NAMESPACE -l name=$DIND_DAEMONSET -o jsonpath='{.items[0].metadata.name}')
+                fi
+                sleep 30
+              done
+          securityContext:
+            runAsUser: 0
