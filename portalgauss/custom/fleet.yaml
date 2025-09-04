@@ -15,7 +15,7 @@ helm:
   releaseName: portalgauss-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.52
+  version: 0.16.53
   values:
     fullnameOverride: portalgauss-custom
     global:
