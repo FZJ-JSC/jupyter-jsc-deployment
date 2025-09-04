@@ -396,7 +396,7 @@ data:
         fi
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
-          module load jupyterlab-nvdashboard/.0.12.0
+          module load jupyterlab-nvdashboard/.0.12.0 || true
         fi
         send_spawn_update 80 "Load default modules done" "Loaded Jupyter-bundle/20250114 in Stages/2025."
       fi
