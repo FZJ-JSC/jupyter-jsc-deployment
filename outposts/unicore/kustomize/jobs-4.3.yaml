@@ -148,7 +148,7 @@ data:
 
       MAX_TRIES=5
       for i in $(seq 1 $MAX_TRIES); do
-        export JUPYTERLAB_PORT=$(python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
+        export JUPYTERLAB_PORT=$(/usr/bin/python3 -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
         if [ -n "$JUPYTERLAB_PORT" ]; then
           echo "$(date) - Use free port: ${JUPYTERLAB_PORT}"
           break
