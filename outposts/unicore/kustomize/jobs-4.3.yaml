@@ -158,9 +158,30 @@ data:
         fi
       done
       if [ -z "$JUPYTERLAB_PORT" ]; then
-          echo "$(date) - Could not get a free port via python sockets package. Exit Start."
-          send_spawn_update_fail "Could not find free port on ${HOSTNAME} - Cancel start." "Jupyter tries to find a free port on the node. This was tried ${MAX_TRIES} times and was not successful."
-          exit 0
+        echo "$(date) - Could not get a free port via python sockets package. Use bash fallback solution."
+
+        MIN_PORT=8000
+        MAX_PORT=9000
+
+        for i in $(seq 1 $MAX_TRIES); do
+            # Pick a random port in the range
+            TMP_PORT=$(( RANDOM % (MAX_PORT - MIN_PORT + 1) + MIN_PORT ))
+
+            # Check if the port is free
+            if ! lsof -iTCP:$TMP_PORT -sTCP:LISTEN >/dev/null 2>&1; then
+                JUPYTERLAB_PORT=$TMP_PORT
+                echo "$(date) - Found free port via bash fallback: $JUPYTERLAB_PORT"
+                break
+            else
+                echo "$(date) - Port $TMP_PORT is in use, retrying..."
+                sleep 1
+            fi
+        done
+      fi
+      if [ -z "$JUPYTERLAB_PORT" ]; then
+        echo "$(date) - Could not get a free port via bash fallback. Exit start."
+        send_spawn_update_fail "Could not find free port on ${HOSTNAME} - Cancel start." "Jupyter tries to find a free port on the node. This was tried ${MAX_TRIES} times and was not successful."
+        exit 0
       fi
       # Replace previously defined port as ip and port passed via
       #  cmd line arguments are ignored as in the new implementation of jupyterhub-singleuser
