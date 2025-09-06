@@ -21,10 +21,7 @@ helm:
   releaseName: unicore
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyterhub-outpost
-  version: 2.0.0
-  values:
-    image:
-      tag: 2.0.1
+  version: 2.0.2
   valuesFiles:
     - values/base/misc.yaml
     - values/base/config.yaml

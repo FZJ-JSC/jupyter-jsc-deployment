@@ -21,7 +21,7 @@ helm:
   releaseName: kube
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyterhub-outpost
-  version: 2.0.0
+  version: 2.0.2
   valuesFiles:
     - values/base/misc.yaml
     - values/base/config.yaml
@@ -33,8 +33,6 @@ targetCustomizations:
         stage: staging
     helm:
       values:
-        image:
-          tag: "2.0.1"
         extraEnvVars:
           - name: STAGE
             value: "staging"
