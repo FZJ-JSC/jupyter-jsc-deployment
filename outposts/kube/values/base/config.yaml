@@ -479,7 +479,7 @@ outpostConfig: |
       data_mount_config = """
   c.NotebookApp.root_dir = "/"
   c.LabApp.default_url = "/lab/tree/home/jovyan"
-  def get_access_token():
+  def get_access_token(_=None):
       import os
       import requests
       jhub_api_token = os.environ.get("JUPYTERHUB_API_TOKEN", None)
