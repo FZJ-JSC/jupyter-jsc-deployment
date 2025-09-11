@@ -62,8 +62,11 @@ data:
       module load JupyterProxy-NESTDesktop/.0.4.0
     fi
     ## Extensions
-    if [[ $JUPYTER_MODULE_COLLABORATION_ENABLED -eq 1 ]]; then
-      module load jupyter-collaboration/.3.1.0
+    #if [[ $JUPYTER_MODULE_COLLABORATION_ENABLED -eq 1 ]]; then
+    #  module load jupyter-collaboration/.3.1.0
+    #fi
+    if [[ $JUPYTER_MODULE_UNICORESHELL_ENABLED -eq 1 ]]; then
+      module load jupyterlab-unicore-shell/0.3.4
     fi
     if [[ $JUPYTER_MODULE_IPYVUE_ENABLED -eq 1 ]]; then
       module load ipyvue/1.11.2
