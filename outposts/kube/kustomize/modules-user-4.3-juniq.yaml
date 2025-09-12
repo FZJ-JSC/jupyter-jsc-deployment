@@ -66,7 +66,7 @@ data:
     fi
     # # Extensions
     if [[ $JUPYTER_MODULE_UNICORESHELL_ENABLED -eq 1 ]]; then
-      module load jupyterlab-unicore-shell/0.3.5
+      module load jupyterlab-unicore-shell/0.4.0
     fi
     if [[ $JUPYTER_MODULE_IPYVUE_ENABLED -eq 1 ]]; then
       module load ipyvue/1.11.2
