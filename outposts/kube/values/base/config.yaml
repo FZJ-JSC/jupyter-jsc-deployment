@@ -564,7 +564,7 @@ outpostConfig: |
   c.DataMount.uftp_label = "JUST"
   c.UNICOREReverseShell.enabled = True
   c.UNICOREReverseShell.access_token = get_access_token
-  c.UNICOREReverseShell.systems = ["JUWELS", "JURECA", "JUSUF", "JUPITER", "DEEP"]
+  c.UNICOREReverseShell.systems = ["JUWELS", "JURECA", "JUSUF", "JUPITER"]
   c.UNICOREReverseShell.unicore_forward_debug = False
   """.replace("{unity_userinfo_url}", unity_userinfo_url)
 
