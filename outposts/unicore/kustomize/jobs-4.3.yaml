@@ -278,7 +278,7 @@ data:
       else
         send_spawn_update 70 "Load default modules ..." "Loading Jupyter-bundle/20250114 in Stages/2025."
 
-        module purge
+        module purge --force
         module use ${OTHERSTAGES}
         module load Stages/2025
         module load GCCcore/.13.3.0
