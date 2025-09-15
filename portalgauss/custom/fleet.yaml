@@ -45,6 +45,7 @@ helm:
           "repo2docker":
             allowedLists:
               systems:
+                - JSC-Cloud
                 - LRZ
       systems:
         - JSC-Cloud
