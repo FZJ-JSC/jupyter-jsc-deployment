@@ -42,6 +42,10 @@ helm:
             enabled: false
           "4.2":
             enabled: false
+          "repo2docker":
+            allowedLists:
+              systems:
+                - LRZ
       systems:
         - JSC-Cloud
         - LRZ-Staging
