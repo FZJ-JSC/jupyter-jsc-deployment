@@ -15,7 +15,7 @@ helm:
   releaseName: euroccgcs-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.60
+  version: 0.16.63
   values:
     fullnameOverride: euroccgcs-custom
     global:
