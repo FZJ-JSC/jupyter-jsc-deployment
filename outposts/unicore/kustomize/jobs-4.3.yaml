@@ -358,9 +358,12 @@ data:
         if [[ $JUPYTER_MODULE_IPYVUE_ENABLED -eq 1 ]]; then
           module load ipyvue/1.11.2
         fi
-        # if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
-        #   module load jupyter-ai/.2.15.0
-        # fi
+        if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
+          if [[ $SYSTEMNAME != "deep" && $SYSTEMNAME != "jsccloud" && $SYSTEMNAME != "jupiter" ]]; then
+            export USERINSTALLATIONS=/p/usersoftware/swmanage/goebbert1/stage2025/jupyter-ai
+            module load GCCcore/.13.3.0 jupyter-ai-bundle
+          fi
+        fi
         if [[ $JUPYTER_MODULE_JUPYTERVIEW_ENABLED -eq 1 ]]; then
           module load jupyterview/0.7.0
         fi
