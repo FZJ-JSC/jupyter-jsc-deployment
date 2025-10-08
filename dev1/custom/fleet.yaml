@@ -14,7 +14,7 @@ dependsOn:
 helm:
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.68
+  version: 0.16.69
   values:
     fullnameOverride: dev1-custom
     global:
