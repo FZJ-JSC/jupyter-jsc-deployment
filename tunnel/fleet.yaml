@@ -19,7 +19,7 @@ helm:
   releaseName: tunnel
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-tunnel
-  version: 3.1.8
+  version: 3.1.11
   valuesFiles:
     - values/base/misc.yaml
 targetCustomizations:
@@ -44,6 +44,7 @@ targetCustomizations:
         - values/overlays/production/jupyterhubs.yaml
         - values/overlays/production/misc.yaml
       values:
+        periodicCheckInterval: 1800
         replicas: 1
         servicessh:
           loadBalancerIP: "134.94.198.229"
