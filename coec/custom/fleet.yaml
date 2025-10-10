@@ -15,7 +15,7 @@ helm:
   releaseName: coec-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.69
+  version: 0.16.70
   values:
     fullnameOverride: coec-custom
     global:
@@ -70,6 +70,7 @@ targetCustomizations:
           loggerName: CoeC
         nfs:
           path: /nfs/hubs/rke2/production/coec
+        sidecarCheckInterval: 300
         redirectEditInPlace: "false"
         redirects:
           - name: "production-docs"
