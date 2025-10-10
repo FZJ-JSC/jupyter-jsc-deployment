@@ -21,6 +21,7 @@ jupyterhubs:
       - name: outpost_hlrs-staging
         user: jhuboutpost
         port: 32022
+        remote: false
         hostname: 192.168.12.3
         proxy:
           user: "jsc-hlrs-jupyter"
@@ -29,30 +30,37 @@ jupyterhubs:
       - name: "outpost_tud"
         user: "jhuboutpost"
         port: 22
+        remote: false
         hostname: "127.0.0.2"
       - name: "outpost_tud-staging"
         user: "jhuboutpost"
         port: 22
+        remote: false
         hostname: "dev.jupyterhub-outpost.zih.tu-dresden.de"
       - name: "outpost_lrz-staging"
         user: "jhuboutpost"
         port: 22
+        remote: false
         hostname: "138.246.238.81"
       - name: "outpost_lrz"
         user: "jhuboutpost"
         port: 22
+        remote: false
         hostname: "138.246.236.238"
       - name: "outpost_mpcdf"
         user: "jhuboutpost"
         port: 3121
+        remote: false
         hostname: "130.183.217.170"
       - name: "outpost_denbi-cloud"
         user: "jhuboutpost"
         port: 30001
+        remote: false
         hostname: "129.70.51.188"
       - name: "outpost_dummy"
         user: "jhuboutpost"
         port: 22
+        remote: false
         hostname: "jupyterhub-outpost-ssh.dummy.svc"
       - name: "deepv"
         user: "ljupyter"

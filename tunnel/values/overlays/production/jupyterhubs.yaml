@@ -19,10 +19,12 @@ jupyterhubs:
     ssh_config_hosts:
       - name: "outpost_lrz"
         user: "jhuboutpost"
+        remote: false
         port: 22
         hostname: "138.246.236.238"
       - name: "outpost_denbi-cloud"
         user: "jhuboutpost"
+        remote: false
         port: 30001
         hostname: "129.70.51.188"
       - name: "deepv"
