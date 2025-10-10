@@ -24,7 +24,7 @@ helm:
     - values/base/misc.yaml
   values:
     image:
-      tag: "3.1.6-post.0"
+      tag: "3.1.6-post.1"
 targetCustomizations:
   - name: staging
     clusterSelector:
