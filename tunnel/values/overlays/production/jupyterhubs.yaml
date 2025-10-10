@@ -158,6 +158,7 @@ jupyterhubs:
         hostname: "jureca-hwai01.fz-juelich.de"
       - name: "jrlogin22i"
         user: "ljupyter"
+        disabled: true
         port: 22
         hostname: "jureca-hwai02.fz-juelich.de"
       - name: "jsfl01i"
