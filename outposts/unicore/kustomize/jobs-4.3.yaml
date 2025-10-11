@@ -317,6 +317,9 @@ data:
         fi
         if [[ $JUPYTER_MODULE_PYNEUROSCIENCE_ENABLED -eq 1 ]]; then
           module load JupyterBundle-PyNeuroscience
+          module use /p/usersoftware/swmanage/goebbert1/stage2025/vbt/easybuild/$SYSTEMNAME/modules/all/Compiler/GCCcore/13.3.0/
+          module load JupyterKernel-VirtualBrainTwin
+        fi
         fi
         if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyQuantum/.2025.6-4.3.4
