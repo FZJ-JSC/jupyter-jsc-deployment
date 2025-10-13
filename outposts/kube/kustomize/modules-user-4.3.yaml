@@ -51,7 +51,6 @@ data:
     if [[ $JUPYTER_MODULE_CUBEWEBSERVICE_ENABLED -eq 1 ]]; then
       # USERINSTALLATION
       module load JupyterProxy-CubeWebservice
-      fi
     fi
     ## Proxies
     if [[ $JUPYTER_MODULE_VSCODE_ENABLED -eq 1 ]]; then
