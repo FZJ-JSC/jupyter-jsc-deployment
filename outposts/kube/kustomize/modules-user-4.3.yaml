@@ -49,7 +49,7 @@ data:
       module load JupyterKernel-PyVisualization/.2025.2-4.3.4
     fi
     if [[ $JUPYTER_MODULE_CUBEWEBSERVICE_ENABLED -eq 1 ]]; then
-      # USERINSTALLATION
+      # USERINSTALLATION=/p/usersoftware/swmanage/goebbert1/stage2025/cubewebservice
       module load JupyterProxy-CubeWebservice
     fi
     ## Proxies
@@ -76,7 +76,7 @@ data:
       module load ipyvue/1.11.2
     fi
     if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
-      # USERINSTALLATION
+      # USERINSTALLATION=/p/usersoftware/swmanage/goebbert1/stage2025/jupyter-ai
       module load jupyter-ai-bundle
     fi
     if [[ $JUPYTER_MODULE_JUPYTERVIEW_ENABLED -eq 1 ]]; then
