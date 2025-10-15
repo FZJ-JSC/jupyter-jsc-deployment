@@ -316,7 +316,9 @@ data:
           module load JupyterKernel-PyEarthSystem/.2025.1-4.3.4
         fi
         if [[ $JUPYTER_MODULE_PYNEUROSCIENCE_ENABLED -eq 1 ]]; then
-          module load JupyterBundle-PyNeuroscience
+          if [[ $SYSTEMNAME != "jupiter" ]]; then
+            module load JupyterBundle-PyNeuroscience
+          fi
         fi
         if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
           module load JupyterKernel-PyQuantum/.2025.6-4.3.4
