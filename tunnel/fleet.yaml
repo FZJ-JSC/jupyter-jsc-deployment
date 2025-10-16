@@ -19,12 +19,12 @@ helm:
   releaseName: tunnel
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-tunnel
-  version: 3.1.11
+  version: 3.1.12
   valuesFiles:
     - values/base/misc.yaml
-  values:
-    image:
-      tag: "3.1.6-post.1"
+  #values:
+  #  image:
+  #    tag: "3.1.6-post.1"
 targetCustomizations:
   - name: staging
     clusterSelector:
