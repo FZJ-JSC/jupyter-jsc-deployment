@@ -15,11 +15,12 @@ helm:
   releaseName: ebrains-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.73
+  version: 0.16.74
   values:
     fullnameOverride: ebrains-custom
     dailyRestart:
-      enabled: false
+      enabled: true
+      restartSchedule: "0 2 * * 0"
     global:
       name: ebrains
       namespace: ebrains
