@@ -15,7 +15,7 @@ helm:
   releaseName: juniq-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.73
+  version: 0.16.74
   values:
     fullnameOverride: juniq-custom
     customConfig:
@@ -38,7 +38,8 @@ helm:
       name: juniq
       namespace: juniq
     dailyRestart:
-      enabled: false
+      enabled: true
+      restartSchedule: "0 2 * * 0"
     ingress:
       enabled: true
     jupyter-metrics:
