@@ -23,7 +23,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: check-liveness
-          image: bitnami/kubectl:1.30.7
+          image: alpine/kubectl:1.34.1
           env:
             - name: DIND_NAMESPACE
               value: binder

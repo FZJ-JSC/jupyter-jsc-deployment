@@ -282,113 +282,115 @@ data:
         module use ${OTHERSTAGES}
         module load Stages/2025
         module load GCCcore/.13.3.0
-        module load Jupyter-bundle/20250114
+
+        modules=()
+        modules+=("Jupyter-bundle/20250114")
 
         # Kernels
         if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Bash/.0.9.3-4.3.4
+          modules+=("JupyterKernel-Bash/.0.9.3-4.3.4")
         fi
         if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Cling/.1.2-4.3.4
+          modules+=("JupyterKernel-Cling/.1.2-4.3.4")
         fi
         if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Java/2.2.0
+          modules+=("JupyterKernel-Java/2.2.0")
         fi
         if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Julia/.1.11.2
+          modules+=("JupyterKernel-Julia/.1.11.2")
         fi
         if [[ $JUPYTER_MODULE_LFORTRAN_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-LFortran/.0.42.0
+          modules+=("JupyterKernel-LFortran/.0.42.0")
         fi
         if [[ $JUPYTER_MODULE_OCTAVE_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Octave/.9.3.0-4.3.4
+          modules+=("JupyterKernel-Octave/.9.3.0-4.3.4")
         fi
         if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-R/.4.4.2-4.3.4
+          modules+=("JupyterKernel-R/.4.4.2-4.3.4")
         fi
         if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-Ruby/.3.4.1
+          modules+=("JupyterKernel-Ruby/.3.4.1")
         fi
         if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyDeepLearning/.2025.1-4.3.4
+          modules+=("JupyterKernel-PyDeepLearning/.2025.1-4.3.4")
         fi
         if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyEarthSystem/.2025.1-4.3.4
+          modules+=("JupyterKernel-PyEarthSystem/.2025.1-4.3.4")
         fi
         if [[ $JUPYTER_MODULE_PYNEUROSCIENCE_ENABLED -eq 1 ]]; then
           if [[ $SYSTEMNAME != "jupiter" ]]; then
-            module load JupyterBundle-PyNeuroscience
+            modules+=("JupyterBundle-PyNeuroscience")
           fi
         fi
         if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyQuantum/.2025.6-4.3.4
+          modules+=("JupyterKernel-PyQuantum/.2025.6-4.3.4")
         fi
         if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
-          module load JupyterKernel-PyVisualization/.2025.2-4.3.4
+          modules+=("JupyterKernel-PyVisualization/.2025.2-4.3.4")
         fi
 
         # Proxies
         if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
-          module load JupyterProxy-XpraHTML5/.0.4.3
+          modules+=("JupyterProxy-XpraHTML5/.0.4.3")
         fi
         # # Load MatLab Proxy module, if user is in matlab group
         # IFS=' ' read -ra groups_array <<< "$(id -Gn)"
         # for group in "${groups_array[@]}"; do
         #   if [[ "$group" == "matlab" ]]; then
-        #     module load JupyterProxy-Matlab/.0.12.2-4.2.1
+        #     modules+=("JupyterProxy-Matlab/.0.12.2-4.2.1")
         #     break
         #   fi
         # done
         # # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
         if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
-          module load JupyterProxy-NESTDesktop/.0.4.0
+          modules+=("JupyterProxy-NESTDesktop/.0.4.0")
         fi
         if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then
           if [[ $SYSTEMNAME != "deep" ]]; then
-            module load JupyterProxy-RStudio/.2024.12.0
+            modules+=("JupyterProxy-RStudio/.2024.12.0")
           fi
         fi
         if [[ $JUPYTER_MODULE_VSCODE_ENABLED -eq 1 ]]; then
           if [[ $SYSTEMNAME != "deep" ]]; then
-            module load JupyterProxy-VSCode/0.9.3
+            modules+=("JupyterProxy-VSCode/0.9.3")
           fi
         fi
         if [[ $JUPYTER_MODULE_CUBEWEBSERVICE_ENABLED -eq 1 ]]; then
           if [[ $SYSTEMNAME != "deep" ]]; then
             module use /p/usersoftware/swmanage/goebbert1/stage2025/cubewebservice/easybuild/${SYSTEMNAME}/modules/all/Compiler/GCCcore/13.3.0/
-            module load JupyterProxy-CubeWebservice
+            modules+=("JupyterProxy-CubeWebservice")
           fi
         fi
         # # Extensions
         if [[ $JUPYTER_MODULE_COLLABORATION_ENABLED -eq 1 ]]; then
-          module load jupyter-collaboration/.3.1.0
+          modules+=("jupyter-collaboration/.3.1.0")
         fi
         if [[ $JUPYTER_MODULE_IPYVUE_ENABLED -eq 1 ]]; then
-          module load ipyvue/1.11.2
+          modules+=("ipyvue/1.11.2")
         fi
         if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
           if [[ $SYSTEMNAME != "deep" ]]; then
             module use /p/usersoftware/swmanage/goebbert1/stage2025/jupyter-ai/easybuild/${SYSTEMNAME}/modules/all/Compiler/GCCcore/13.3.0/
-            module load jupyter-ai-bundle
+            modules+=("jupyter-ai-bundle")
           fi
         fi
         if [[ $JUPYTER_MODULE_JUPYTERVIEW_ENABLED -eq 1 ]]; then
-          module load jupyterview/0.7.0
+          modules+=("jupyterview/0.7.0")
         fi
         if [[ $JUPYTER_MODULE_KERNELGATEWAY_ENABLED -eq 1 ]]; then
-          module load jupyter-kernel-gateway/3.0.1
+          modules+=("jupyter-kernel-gateway/3.0.1")
         fi
         if [[ $JUPYTER_MODULE_NBDEV_ENABLED -eq 1 ]]; then
-          module load nbdev/2.3.34
+          modules+=("nbdev/2.3.34")
         fi
         if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
-          module load nglview/.3.1.4
+          modules+=("nglview/.3.1.4")
         fi
         if [[ $JUPYTER_MODULE_SPELLCHECKER_ENABLED -eq 1 ]]; then
-          module load jupyterlab-spellchecker/.0.8.4
+          modules+=("jupyterlab-spellchecker/.0.8.4")
         fi
         if [[ $JUPYTER_MODULE_SLURMWRAPPER_ENABLED -eq 1 ]]; then
-          module load jupyter-slurm-provisioner/.0.6.0
+          modules+=("jupyter-slurm-provisioner/.0.6.0")
           export SLURMEL_DOCUMENTATION_HREF="https://docs.jupyter.jsc.fz-juelich.de/github/FZJ-JSC/jupyter-jsc-notebooks/blob/documentation/05-News&Updates/Announcement-2022-12_Slurm_Wrapped_Kernels.ipynb"
           export JUPYTERJSC_CMD_ARGS="${JUPYTERJSC_CMD_ARGS} --ServerApp.kernel_manager_class=jupyter_slurm_provisioner.SlurmAsyncMappingKernelManager"
           export SLURM_PROVISIONER_NODE_SUFFIX="i"
@@ -399,12 +401,13 @@ data:
         fi
         #if [[ $JUPYTER_MODULE_TRAMEMANAGER_ENABLED -eq 1 ]]; then
         #  if [[ $SYSTEMNAME != "deep" ]]; then
-        #    module load jupyterlab-trame-manager/.0.6.1-4.2.1
+        #    modules+=("jupyterlab-trame-manager/.0.6.1-4.2.1")
         #  fi
         #fi
         if [[ $JUPYTER_MODULE_VOILA_ENABLED -eq 1 ]]; then
-          module load voila/.0.5.8
+          modules+=("voila/.0.5.8")
         fi
+        module load ${modules[@]}
         lspci -k | grep -A 2 -i "NVIDIA" | grep "Kernel driver in use:" | grep "nvidia"
         if [ $? -eq 0 ]; then
           module load jupyterlab-nvdashboard/.0.12.0 || true
