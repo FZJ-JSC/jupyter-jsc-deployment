@@ -103,6 +103,7 @@ data:
         start_index=$index
         for _ in ${ALL_REMOTE_NODES[@]}
         do
+          echo "$(date) - Try: ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api to reach Hub"
           HTTPCODE=$(curl -X "GET" ${CURL_ARGS} ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api)
           if [[ ${HTTPCODE} -ge 200 ]] && [[ ${HTTPCODE} -le 299 ]]; then
             if [[ ${SYSTEMNAME} == "deep" || ${SYSTEMNAME} == "jupiter" ]]; then
