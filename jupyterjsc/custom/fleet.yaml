@@ -19,7 +19,7 @@ helm:
   values:
     dailyRestart:
       enabled: true
-      restartSchedule: "0 2 * * 0"
+      restartSchedule: "0 2 * * */2"
     fullnameOverride: jupyterjsc-custom
     global:
       name: jupyterjsc
