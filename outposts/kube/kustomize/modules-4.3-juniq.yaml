@@ -22,25 +22,112 @@ data:
     module use ${OTHERSTAGES}
     module load Stages/2025
     module load GCC/13.3.0
-    module load ParaStationMPI/5.10.0-1
-    module load Jupyter-bundle/20250114
+    modules=()
+    modules+=("ParaStationMPI/5.10.0-1")
+    modules+=("Jupyter-bundle/20250114")
 
-    module load Cartopy/0.24.1
-    module load plotly.py/5.24.1
-    module load matplotlib/3.9.2
-    module load ParityOS/2.6.0
-    module load qutip/5.0.4
-    module load pulser/1.3.0
-    module load PyQuil/4.16.2
-    module load Cirq/1.5.0
-    module load DWave/8.0.1
-    module load CUDA/12
-    module load Qiskit/1.2.4
-    module load cuQuantum/24.11.0-CUDA-12
-    module load cuQuantum-Python/24.11.0-CUDA-12
-    module load cudaQ/0.9.0-CUDA-12
-    module load PennyLane/0.39.0-CUDA-12
-    module load qoqo-quest/0.16.1-CUDA-12
-    module load myqlm/1.11.2
-    module load pyunicore/.1.2.0
-    module load jupyterlab-data-mount/1.0.0
+    modules+=("Cartopy/0.24.1")
+    modules+=("plotly.py/5.24.1")
+    modules+=("matplotlib/3.9.2")
+    modules+=("ParityOS/2.6.0")
+    modules+=("qutip/5.0.4")
+    modules+=("pulser/1.3.0")
+    modules+=("PyQuil/4.16.2")
+    modules+=("Cirq/1.5.0")
+    modules+=("DWave/8.0.1")
+    modules+=("CUDA/12")
+    modules+=("Qiskit/1.2.4")
+    modules+=("cuQuantum/24.11.0-CUDA-12")
+    modules+=("cuQuantum-Python/24.11.0-CUDA-12")
+    modules+=("cudaQ/0.9.0-CUDA-12")
+    modules+=("PennyLane/0.39.0-CUDA-12")
+    modules+=("qoqo-quest/0.16.1-CUDA-12")
+    modules+=("myqlm/1.11.2")
+    modules+=("pyunicore/.1.2.0")
+    modules+=("jupyterlab-data-mount/1.0.0")
+
+    # Kernels
+    if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-Bash/.0.9.3-4.3.4")
+    fi
+    if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-Cling/.1.2-4.3.4")
+    fi
+    if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-Java/2.2.0")
+    fi
+    if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-Julia/.1.11.2")
+    fi
+    if [[ $JUPYTER_MODULE_LFORTRAN_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-LFortran/.0.42.0")
+    fi
+    if [[ $JUPYTER_MODULE_OCTAVE_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-Octave/.9.3.0-4.3.4")
+    fi
+    if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-R/.4.4.2-4.3.4")
+    fi
+    if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-Ruby/.3.4.1")
+    fi
+    if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-PyDeepLearning/.2025.1-4.3.4")
+    fi
+    if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-PyEarthSystem/.2025.1-4.3.4")
+    fi
+    if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-PyQuantum/.2025.6-4.3.4")
+    fi
+    if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-PyVisualization/.2025.2-4.3.4")
+    fi
+
+    # Proxies
+    if [[ $JUPYTER_MODULE_XPRAHTML5_ENABLED -eq 1 ]]; then
+      modules+=("JupyterProxy-XpraHTML5/.0.4.3")
+    fi
+    # # NEST does not support nodejs v 18 ( https://github.com/nest-desktop/nest-desktop/issues/509 )
+    if [[ $JUPYTER_MODULE_NEST_ENABLED -eq 1 ]]; then
+      modules+=("JupyterProxy-NESTDesktop/.0.4.0")
+    fi
+    if [[ $JUPYTER_MODULE_RSTUDIO_ENABLED -eq 1 ]]; then
+      if [[ $SYSTEMNAME != "deep" ]]; then
+        modules+=("JupyterProxy-RStudio/.2024.12.0")
+      fi
+    fi
+    if [[ $JUPYTER_MODULE_VSCODE_ENABLED -eq 1 ]]; then
+      if [[ $SYSTEMNAME != "deep" ]]; then
+        modules+=("JupyterProxy-VSCode/0.9.3")
+      fi
+    fi
+    # # Extensions
+    if [[ $JUPYTER_MODULE_UNICORESHELL_ENABLED -eq 1 ]]; then
+      modules+=("jupyterlab-unicore-shell/0.4.3")
+    fi
+    if [[ $JUPYTER_MODULE_IPYVUE_ENABLED -eq 1 ]]; then
+      modules+=("ipyvue/1.11.2")
+    fi
+    # if [[ $JUPYTER_MODULE_JUPYTERAI_ENABLED -eq 1 ]]; then
+    #   modules+=("jupyter-ai/.2.15.0")
+    # fi
+    if [[ $JUPYTER_MODULE_JUPYTERVIEW_ENABLED -eq 1 ]]; then
+      modules+=("jupyterview/0.7.0")
+    fi
+    if [[ $JUPYTER_MODULE_KERNELGATEWAY_ENABLED -eq 1 ]]; then
+      modules+=("jupyter-kernel-gateway/3.0.1")
+    fi
+    if [[ $JUPYTER_MODULE_NBDEV_ENABLED -eq 1 ]]; then
+      modules+=("nbdev/2.3.34")
+    fi
+    if [[ $JUPYTER_MODULE_NGLVIEW_ENABLED -eq 1 ]]; then
+      modules+=("nglview/.3.1.4")
+    fi
+    if [[ $JUPYTER_MODULE_SPELLCHECKER_ENABLED -eq 1 ]]; then
+      modules+=("jupyterlab-spellchecker/.0.8.4")
+    fi
+    if [[ $JUPYTER_MODULE_VOILA_ENABLED -eq 1 ]]; then
+      modules+=("voila/.0.5.8")
+    fi
+    module load "${modules[@]}"
