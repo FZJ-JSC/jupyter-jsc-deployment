@@ -338,7 +338,7 @@ data:
         IFS=' ' read -ra groups_array <<< "$(id -Gn)"
         for group in "${groups_array[@]}"; do
           if [[ "$group" == "matlab" ]]; then
-            module load JupyterProxy-Matlab/.0.17.1
+            modules]=("JupyterProxy-Matlab/.0.17.1")
             break
           fi
         done
