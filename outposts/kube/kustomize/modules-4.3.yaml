@@ -22,9 +22,9 @@ data:
     module use ${OTHERSTAGES}
     module load Stages/2025
     module load GCCcore/.13.3.0
+    module load Jupyter-bundle/20250114
     modules=()
 
-    modules+=("Jupyter-bundle/20250114")
     modules+=("pyunicore/.1.3.5")
     modules+=("jupyterlab-data-mount/1.1.0")
     ## Kernels
