@@ -96,7 +96,7 @@ outpostConfig: |
 
   def get_image(spawner):
       if spawner.user_options["option"] in lmod_options:
-          lmod_image = "jupyterjsc/notebook:1.0.3"
+          lmod_image = "jupyterjsc/notebook:1.0.5"
           return lmod_image
 
       if spawner.user_options["option"] == "repo2docker":
@@ -589,9 +589,9 @@ outpostConfig: |
   {jupyter_config_path_b64}
   if command -v pip >/dev/null 2>&1; then
       if [ -n "$VIRTUAL_ENV" ]; then
-          pip install jupyterlab-data-mount{datamount_version} jupyter-collaboration
+          pip install jupyterlab-data-mount{datamount_version} jupyter-collaboration jupyterlab-hub-credit-extension
       else
-          pip install --user jupyterlab-data-mount{datamount_version} jupyter-collaboration
+          pip install --user jupyterlab-data-mount{datamount_version} jupyter-collaboration jupyterlab-hub-credit-extension
       fi
   fi
   command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
@@ -675,9 +675,9 @@ outpostConfig: |
       # 8. Install jupyterlab-data-mount
       echo "[INFO] Installing jupyterlab-data-mount..."
       if [ -n "$VIRTUAL_ENV" ]; then
-          pip install jupyterlab-data-mount{datamount_version} jupyter-collaboration
+          pip install jupyterlab-data-mount{datamount_version} jupyter-collaboration jupyterlab-hub-credit-extension
       else
-          pip install --user jupyterlab-data-mount{datamount_version} jupyter-collaboration
+          pip install --user jupyterlab-data-mount{datamount_version} jupyter-collaboration jupyterlab-hub-credit-extension
       fi
   fi
 
