@@ -96,7 +96,7 @@ outpostConfig: |
 
   def get_image(spawner):
       if spawner.user_options["option"] in lmod_options:
-          lmod_image = "jupyterjsc/notebook:1.0.5"
+          lmod_image = "jupyterjsc/notebook:1.0.6"
           return lmod_image
 
       if spawner.user_options["option"] == "repo2docker":
