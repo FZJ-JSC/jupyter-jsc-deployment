@@ -10,3 +10,11 @@ hub:
       /src/entrypoint.sh
   command:
     - /bin/bash
+  containerSecurityContext:
+    runAsGroup: 0
+    runAsUser: 0
+    allowPrivilegeEscalation: true
+    capabilities:
+      drop: []
+  podSecurityContext:
+    runAsNonRoot: false

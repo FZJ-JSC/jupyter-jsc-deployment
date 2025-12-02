@@ -15,12 +15,9 @@ helm:
   releaseName: ebrains-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.75
+  version: 0.24.4
   values:
     fullnameOverride: ebrains-custom
-    dailyRestart:
-      enabled: true
-      restartSchedule: "0 2 * * 0"
     global:
       name: ebrains
       namespace: ebrains
@@ -29,8 +26,6 @@ helm:
         kernels:
           pyneuroscience:
             default: true
-    ingress:
-      enabled: true
     jupyter-metrics:
       enabled: true
       nodeSelector:
@@ -51,13 +46,14 @@ targetCustomizations:
           hostname: twin-staging.ebrains.eu
           baseUrl: /
           loggerName: ebrainsStaging
+        sidecarCheckInterval: 1200
         nfs:
           path: /nfs/hubs/rke2/staging/ebrains
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "false"
+        prep: "false"
     helm:
       values:
         global:
@@ -65,14 +61,13 @@ targetCustomizations:
           hostname: twin.ebrains.eu
           baseUrl: /
           loggerName: ebrains
-        sidecarCheckInterval: 300
         nfs:
           path: /nfs/hubs/rke2/production/ebrains
-  - name: jupyter-prod-maintenance
+  - name: jupyter-prod
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "true"
+        prep: "true"
     helm:
       values:
         ingress:

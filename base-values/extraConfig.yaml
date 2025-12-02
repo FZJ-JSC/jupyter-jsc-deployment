@@ -10,40 +10,33 @@ hub:
       namespace = os.environ.get("POD_NAMESPACE", "default")
       jupyterhub_host = get_name("hub")
 
+      jhub_hostname = jsc_custom.spawner.jhub_hostname()
+
       ## Misc Hub configs
       base_url = c.JupyterHub.get("base_url", "/")
-      c.ConfigurableHTTPProxy.api_url = f'https://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
-      c.JupyterHub.default_url = f"{base_url}hub/home"
-      c.JupyterHub.hub_bind_url = f"https://:{hub_container_port}"
-      c.JupyterHub.hub_connect_url = (
-          f'https://{jupyterhub_host}:{get_name_env("hub", "_SERVICE_PORT")}'
-      )
-      c.JupyterHub.tornado_settings = {'slow_spawn_timeout': 0, 'slow_stop_timeout': 20, 'static_path': '/mnt/shared-data/share/jupyterhub/static'}
 
-      c.JupyterHub.custom_scopes = {
-          "custom:servers:list": {
-              "description": "List all user-id and name of all running servers",
-          },
-          "custom:sshnode:restart": {
-              "description": "Restart port forward processes, when a proxy node was restarted"
-          },
-          "custom:hpcinfos:update": {
-              "description": "Update hpc infos for each user"
-          },
-          "custom:outpostflavors:set": {
-              "description": "Update used flavors in backends"
-          },
-          "custom:reauthenticate:set": {
-              "description": "Triggers a notification to the user"
-          }
-      }
+      from jsc_custom.proxy import SSLTraefikEtcdProxy
+      c.JupyterHub.proxy_class = SSLTraefikEtcdProxy
+
+      c.SSLTraefikEtcdProxy.etcd_url = "http://etcd.etcd.svc:2379"
+      c.SSLTraefikEtcdProxy.should_start = False
+      c.SSLTraefikEtcdProxy.skip_hub_route = True
+      c.SSLTraefikEtcdProxy.skip_services_route = False
+      c.SSLTraefikEtcdProxy.enable_setup_dynamic_config = False
+      c.SSLTraefikEtcdProxy.traefik_http_servers_transport = f"{namespace}-{namespace}@kubernetescrd"
+      c.SSLTraefikEtcdProxy.traefik_router_middlewares = [] # [f"{namespace}-buffering@kubernetescrd"]
+      c.SSLTraefikEtcdProxy.traefik_api_url = "http://traefik-internal.traefik.svc:8080"
+      c.SSLTraefikEtcdProxy.traefik_api_entrypoint = "traefik"
+      c.SSLTraefikEtcdProxy.traefik_entrypoint = "web"
+      c.SSLTraefikEtcdProxy.traefik_alias_prefix = namespace
+      c.SSLTraefikEtcdProxy.kv_jupyterhub_prefix = namespace
+      c.SSLTraefikEtcdProxy.traefik_enforce_host_in_rules = jhub_hostname
 
       ## Logging
 
       logged_logger_name = os.environ.get("LOGGER_NAME", "JupyterHub")
 
       c.JupyterHub.log_level = 10
-      jhub_hostname = jsc_custom.spawner.jhub_hostname()
 
       class AppLogLoggingFilter(logging.Filter):
           def filter(self, record):
@@ -104,8 +97,6 @@ hub:
       #  --db=postgresql://$SQL_USER:$SQL_PASSWORD@$SQL_HOST:$SQL_PORT/$SQL_DATABASE
       ## Static files + Templates
       # Call update incidents once to fill incidents dictionary
-      c.JupyterHub.template_paths = ["/mnt/shared-data/share/jupyterhub/templates"]
-
       from jsc_custom.misc import get_incidents
       from jsc_custom.misc import get_reservations
       from jsc_custom.misc import get_custom_config
@@ -150,87 +141,190 @@ hub:
       c.JupyterHub.template_vars = {
           "frontendCollection": frontendCollection
       }
-      c.JupyterHub.data_files_path = "/mnt/shared-data/share/jupyterhub/static"
-
-      ## SSL
-      c.JupyterHub.trusted_alt_names = [
-          "DNS:hub",
-          "DNS:proxy-public",
-          "DNS:proxy-api",
-          f"DNS:{jhub_hostname}",
-          "DNS:jrlogin01i",
-          "DNS:jrlogin02i",
-          "DNS:jrlogin03i",
-          "DNS:jrlogin04i",
-          "DNS:jrlogin05i",
-          "DNS:jrlogin06i",
-          "DNS:jrlogin07i",
-          "DNS:jrlogin08i",
-          "DNS:jrlogin09i",
-          "DNS:jrlogin10i",
-          "DNS:jrlogin11i",
-          "DNS:jrlogin12i",
-          "DNS:jrlogin13i",
-          "DNS:jrlogin14i",
-          "DNS:jrlogin21i",
-          "DNS:jrlogin22i",
-          "DNS:jwlogin00i",
-          "DNS:jwlogin01i",
-          "DNS:jwlogin02i",
-          "DNS:jwlogin03i",
-          "DNS:jwlogin04i",
-          "DNS:jwlogin05i",
-          "DNS:jwlogin06i",
-          "DNS:jwlogin07i",
-          "DNS:jwlogin08i",
-          "DNS:jwlogin09i",
-          "DNS:jwlogin10i",
-          "DNS:jwlogin11i",
-          "DNS:jwvis00i",
-          "DNS:jwvis01i",
-          "DNS:jwvis02i",
-          "DNS:jwvis03i",
-          "DNS:jwlogin21i",
-          "DNS:jwlogin22i",
-          "DNS:jwlogin23i",
-          "DNS:jwlogin24i",
-          "DNS:deepv",
-          "DNS:jsfl01i",
-          "DNS:jsfl02i",
-          "DNS:jsfl03i",
-          "DNS:jsfl04i",
-          "DNS:jpbl-s01-01-interconnect-1",
-          "DNS:jpbl-s01-02-interconnect-1",
-          "DNS:jpbl-s01-03-interconnect-1",
-          "DNS:jpbl-s01-04-interconnect-1",
-          "DNS:jpbl-s02-01-interconnect-1",
-          "DNS:jpbl-s02-02-interconnect-1",
-          "DNS:jpbl-s02-03-interconnect-1",
-          "DNS:jpbl-s02-04-interconnect-1",
-          "DNS:jpbl-s03-01-interconnect-1",
-          "DNS:jpbl-s03-02-interconnect-1",
-          "DNS:jpbl-s03-03-interconnect-1",
-          "DNS:jpbl-s03-04-interconnect-1",
-      ]
 
       ## Authenticator
-      c.JupyterHub.authenticator_class = jsc_custom.authenticator.CustomGenericOAuthenticator
+      from jupyterhub_credit_service import CreditsAuthenticator
+      import asyncio
+      from jupyterhub import orm
 
-      c.CustomGenericOAuthenticator.manage_groups = True
-      c.CustomGenericOAuthenticator.basic_auth = True
-      c.CustomGenericOAuthenticator.enable_auth_state = True
-      c.CustomGenericOAuthenticator.refresh_pre_spawn = True
-      c.CustomGenericOAuthenticator.refresh_pre_stop = True
-      c.CustomGenericOAuthenticator.allow_all = True
-      c.CustomGenericOAuthenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
-      c.CustomGenericOAuthenticator.client_secret = os.environ.get("OAUTH_CLIENT_SECRET")
-      c.CustomGenericOAuthenticator.oauth_callback_url = (
+      from jsc_custom.misc import get_global_sse
+
+      global_sse = get_global_sse()
+      async def task_hook():
+          global_sse.set()
+          await asyncio.sleep(0)
+          global_sse.clear()
+
+      #class Authenticator(jsc_custom.authenticator.CustomGenericOAuthenticator):
+      class Authenticator(jsc_custom.authenticator.CustomGenericOAuthenticator, CreditsAuthenticator):
+          cull_task = None
+
+          # Check every 5 minutes
+          cull_task_sleep = 300
+
+          # Total max idle time: 3 / 5 days
+          global_max_idle_time = 3 * 24 * 3600
+          global_user_max_idle_time = 5 * 24 * 3600
+
+          async def flavor_based_culling(self):
+              def done_callback(fut):
+                  asyncio.create_task(task_hook())
+              while True:
+                  for user_name, mem_user in self.user_credits_dict.items():
+                      for spawner in mem_user.spawners.values():
+                          if not spawner.ready:
+                              continue
+                          system = spawner.user_options.get("system", None)
+                          flavor = spawner.user_options.get("flavor", None)
+                          if not flavor or not system:
+                              # HPC systems are not culled at the moment
+                              continue
+                          auth_state = await mem_user.get_auth_state()
+                          outpost_flavors = auth_state.get("outpost_flavors", {})
+                          if not outpost_flavors:
+                              continue
+                          flavor_config = outpost_flavors.get(system, {}).get(flavor, {})
+                          if not flavor_config:
+                              continue
+                          max_idle_time = flavor_config.get("max_idle_time", None)
+                          last_activity = spawner.last_activity
+                          now = orm.utcnow()
+                          idle_time = (now - last_activity).total_seconds()
+                          if idle_time > self.global_max_idle_time:
+                              self.log.info("Culling user %s spawner %s due to global max idle time exceeded (%s > %s)", user_name, spawner.name, idle_time, self.global_max_idle_time)
+                              task = asyncio.create_task(mem_user.stop(spawner.name))
+                              task.add_done_callback(done_callback)
+                          user_last_activity = mem_user.orm_user.last_activity
+                          user_idle_time = (now - user_last_activity).total_seconds()
+                          if user_idle_time > self.global_user_max_idle_time:
+                              self.log.info("Culling user %s spawner %s due to global user max idle time exceeded (%s > %s)", user_name, spawner.name, user_idle_time, self.global_user_max_idle_time)
+                              task = asyncio.create_task(mem_user.stop(spawner.name))
+                              task.add_done_callback(done_callback)
+                          if not max_idle_time:
+                              continue
+                          if idle_time > max_idle_time:
+                              self.log.info("Culling user %s spawner %s due to flavor based max idle time exceeded (%s > %s)", user_name, spawner.name, idle_time, max_idle_time)
+                              task = asyncio.create_task(mem_user.stop(spawner.name))
+                              task.add_done_callback(done_callback)
+                  await asyncio.sleep(self.cull_task_sleep)
+
+          def __init__(self, **kwargs):
+              super().__init__(**kwargs)
+              self.cull_task = asyncio.create_task(self.flavor_based_culling())
+
+      async def credits_user(authenticator, user_name, user_groups, user_admin, auth_state):
+          from tornado.httpclient import HTTPRequest
+          import json
+          from jupyterhub_credit_service.orm import CreditsUser
+
+          custom_config = get_custom_config()
+          ret = []
+          tasks = []
+          system_names = []
+
+          orm_credits = CreditsUser.get_user(authenticator.parent.db, user_name)
+          prev_credits_per_system = {}
+          if orm_credits and orm_credits.credits_user_values:
+              for cuv in orm_credits.credits_user_values:
+                  if cuv.user_options and "system" in cuv.user_options:
+                      prev_credits_per_system[cuv.user_options["system"]] = {
+                          "name": cuv.user_options["system"],
+                          "cap": cuv.cap,
+                          "grant_value": cuv.grant_value,
+                          "grant_interval": cuv.grant_interval,
+                          "user_options": cuv.user_options
+                      }
+                      if cuv.project:
+                          prev_credits_per_system[cuv.user_options["system"]]["project"] = {
+                              "name": cuv.project.name,
+                              "cap": cuv.project.cap,
+                              "grant_value": cuv.project.grant_value,
+                              "grant_interval": cuv.project.grant_interval
+                          }
+
+          for system, system_config in custom_config.get("systems", {}).items():
+              outpost_name = system_config.get("backendService", "")
+              outpost_config = custom_config.get("backendServices", {}).get(outpost_name, {})
+              user_credits = outpost_config.get("urls", {}).get("usercredits", False)
+              if user_credits:
+                  request_kwargs = system_config.get("usercredits", {}).get("requestKwargs", {"request_timeout": 2})
+                  auth = os.environ.get(f"AUTH_{outpost_name.upper()}")
+                  body = {
+                  "username": user_name,
+                  "groups": user_groups,
+                  "email": auth_state.get("email", "")
+                  }
+                  if system_config.get("usercredits", {}).get("sendAuthState", False):
+                      body["auth_state"] = auth_state
+                  req = HTTPRequest(
+                      user_credits,
+                      method="POST",
+                      headers={"Authorization": f"Basic {auth}"},
+                      body=json.dumps(body),
+                      **request_kwargs,
+                  )
+                  tasks.append(authenticator.http_client.fetch(req, raise_error=False))
+                  system_names.append(system)
+          try:
+              results = await asyncio.gather(*tasks, return_exceptions=True)
+              names_results = list(zip(system_names, results))
+              for name_result in names_results:
+                  try:
+                      if name_result[1].code == 200:
+                          authenticator.log.debug(
+                              f"OutpostCredits user specific - {name_result[0]} successful"
+                          )
+                          result_json = json.loads(name_result[1].body)
+                          if result_json:
+                              if len(result_json) > 1:
+                                  authenticator.log.info(f"OutpostCredits user specific - {name_result[0]} - Result has {len(result_json)} items, use first one.")
+                              result = max(result_json.values(), key=lambda x: x.get("weight", 0))
+                              result["user_options"] = {"system": name_result[0]}
+                              if "name" not in result:
+                                  result["name"] = name_result[0]
+                              ret.append(result)
+                      else:
+                          if name_result[0] in prev_credits_per_system:
+                              authenticator.log.warning(
+                                  f"OutpostCredits user specific - {name_result[0]} - Using previous credits due to error {name_result[1].code} ({name_result[1]})"
+                              )
+                              ret.append(prev_credits_per_system[name_result[0]])
+                          else:
+                              authenticator.log.warning(
+                                  f"OutpostCredits user specific - {name_result[0]} - Answered with {name_result[1].code} ({name_result[1]})"
+                              )
+                  except:
+                      authenticator.log.exception(
+                          f"OutpostCredits user specific - {name_result[0] if len(name_result) > 0 else 'unknown'} Could not load result into json"
+                      )
+          except:
+              authenticator.log.exception("OutpostCredits user specific - Could not load credits")
+          return ret
+
+      c.JupyterHub.authenticator_class = Authenticator
+
+      c.Authenticator.credits_task_interval = 180
+
+      c.Authenticator.credits_task_post_hook = task_hook
+      c.Authenticator.credits_user = credits_user
+      c.Authenticator.manage_groups = True
+      c.Authenticator.basic_auth = True
+      c.Authenticator.enable_auth_state = True
+      c.Authenticator.refresh_pre_spawn = True
+      c.Authenticator.refresh_pre_stop = True
+      c.Authenticator.allow_all = True
+      c.Authenticator.client_id = os.environ.get("OAUTH_CLIENT_ID")
+      c.Authenticator.client_secret = os.environ.get("OAUTH_CLIENT_SECRET")
+      c.Authenticator.oauth_callback_url = (
           f"https://{jhub_hostname}{base_url}hub/oauth_callback"
       )
 
       claim_name = None
       admin_users = {}
       tokeninfo_url = None
+      revocation_url = None
+      end_session_url = None
+      revocation_type = "Unity"
 
       res_groups_pattern = re.compile(
           r"^urn:"
@@ -263,6 +357,8 @@ hub:
           entitlements = user_info.get(
               "entitlements", user_info.get("oauth_user", {}).get("entitlements", [])
           )
+          if type(entitlements) == str:
+              entitlements = entitlements.split()
 
           def add_sub_groups(group, role, authority, rightmost_group=True):
               if role and rightmost_group:
@@ -277,6 +373,13 @@ hub:
                   group_role_authority = f"{group}:role={role}#{authority}"
                   if group_role_authority not in groups:
                       groups.append(group_role_authority)
+
+          schac_home_organization = user_info.get("schac_home_organization", user_info.get("oauth_user", {}).get("schac_home_organization", None))
+          if schac_home_organization:
+              groups.append(f"schac_home_organization:{schac_home_organization}")
+          eduperson_assurance = user_info.get("eduperson_assurance", user_info.get("oauth_user", {}).get("eduperson_assurance", []))
+          for assurance in eduperson_assurance:
+              groups.append(f"eduperson_assurance:{assurance}")
 
           for entry in entitlements:
               match = group_pattern.match(entry)
@@ -378,10 +481,14 @@ hub:
               token_url = "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oidc/token"
               userdata_url = "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oidc/userinfo"
               tokeninfo_url = None
+              revocation_type = "InfraProxy"
+              revocation_url = "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oauth2/revocation"
+              end_session_url = None # "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oidc/end-session"
               oauth_scopes = [
                   "openid",
                   "email",
                   "offline_access",
+                  "voperson_external_affiliation",
               ]
           else:
               def _claim_name(resp_json):
@@ -451,23 +558,26 @@ hub:
               return resp_json["email"].replace("@", "_at_")
           claim_name = _claim_name
 
-      c.CustomGenericOAuthenticator.authorize_url = authorize_url
-      c.CustomGenericOAuthenticator.token_url = token_url
-      c.CustomGenericOAuthenticator.tokeninfo_url = tokeninfo_url
-      c.CustomGenericOAuthenticator.userdata_url = userdata_url
-      c.CustomGenericOAuthenticator.admin_users = admin_users
+      c.Authenticator.authorize_url = authorize_url
+      c.Authenticator.token_url = token_url
+      c.Authenticator.tokeninfo_url = tokeninfo_url
+      c.Authenticator.revocation_url = revocation_url
+      c.Authenticator.end_session_url = end_session_url
+      c.Authenticator.revocation_type = revocation_type
+      c.Authenticator.userdata_url = userdata_url
+      c.Authenticator.admin_users = admin_users
       if group_management:
-          c.CustomGenericOAuthenticator.auth_state_groups_key = group_management
+          c.Authenticator.auth_state_groups_key = group_management
 
-      c.CustomGenericOAuthenticator.username_claim = claim_name
-      c.CustomGenericOAuthenticator.scope = oauth_scopes
-      c.CustomGenericOAuthenticator.tls_verify = False
+      c.Authenticator.username_claim = claim_name
+      c.Authenticator.scope = oauth_scopes
+      c.Authenticator.tls_verify = False
       if "staging" in jhub_hostname:
-          c.CustomGenericOAuthenticator.extra_authorize_params = {
+          c.Authenticator.extra_authorize_params = {
               "acr_values": "https://refeds.org/profile/mfa"
           }
 
-      #   c.CustomGenericOAuthenticator.extra_params_allowed_runtime = {
+      #   c.Authenticator.extra_params_allowed_runtime = {
       #       "uy_select_authn": ["jupyterhdfaaiAuthn.hbp", "jupyterldapAuthn.password"]
       #   }
       #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterhdfaaiAuthn.hbp
@@ -492,9 +602,31 @@ hub:
           )
 
       ## Spawner
-      c.JupyterHub.spawner_class = jsc_custom.spawner.CustomJSCSpawner
+      from jupyterhub_credit_service import CreditsSpawner
+      class Spawner(jsc_custom.spawner.CustomJSCSpawner, CreditsSpawner):
+          pass
+      c.JupyterHub.spawner_class = Spawner
 
-      ssh_startup_system_list = ["deNBI-Cloud", "TUD-Cloud", "TUD-Cloud-Staging", "LRZ", "LRZ-Ganta", "LRZ-Ganta-Staging", "LRZ-Staging", "HLRS", "HLRS-Staging", "MPCDF"]
+      async def billing_value(spawner):
+          auth_state = await spawner.user.get_auth_state()
+          system = spawner.user_options.get("system", "")
+          flavor = spawner.user_options.get("flavor", "")
+          value = auth_state.get("outpost_flavors", {}).get(system, {}).get(flavor, {}).get("credits", {}).get("value", 0)
+          spawner.log.info(f"{spawner._log_name} - Billing value for system {system} flavor {flavor}: {value}")
+          return value
+
+      async def billing_interval(spawner):
+          auth_state = await spawner.user.get_auth_state()
+          system = spawner.user_options.get("system", "")
+          flavor = spawner.user_options.get("flavor", "")
+          interval = auth_state.get("outpost_flavors", {}).get(system, {}).get(flavor, {}).get("credits", {}).get("interval", 86400)
+          spawner.log.info(f"{spawner._log_name} - Billing interval for system {system} flavor {flavor}: {interval}")
+          return interval
+
+      c.Spawner.billing_value = billing_value
+      c.Spawner.billing_interval = billing_interval
+
+      ssh_startup_system_list = ["deNBI-Cloud", "TUD-Cloud", "TUD-Cloud-Staging", "LRZ", "LRZ-Ganta", "LRZ-Ganta-Staging", "GWDG-Staging", "LRZ-Staging", "HLRS", "HLRS-Staging", "MPCDF"]
       def ssh_during_startup(spawner):
           return spawner.user_options.get("system", "") in ssh_startup_system_list
 
@@ -504,8 +636,8 @@ hub:
 
       helm_release_name = os.environ.get("HELM_RELEASE_NAME", "default")
 
-      c.CustomJSCSpawner.svc_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
-      c.CustomJSCSpawner.svc_create = False
+      c.Spawner.svc_name_template = f"{helm_release_name}-{{servername}}-{{userid}}"
+      c.Spawner.svc_create = False
 
       system_namespace_mapping = {}
 
@@ -522,23 +654,23 @@ hub:
           else:
               return original_resp
 
-      c.CustomJSCSpawner.ssh_during_startup = ssh_during_startup
-      c.CustomJSCSpawner.extra_labels = jsc_custom.spawner.extra_labels
-      c.CustomJSCSpawner.ssh_custom_forward = jsc_custom.spawner.ssh_custom_forward
-      c.CustomJSCSpawner.ssh_custom_forward_remove = jsc_custom.spawner.ssh_custom_forward_remove
-      c.CustomJSCSpawner.custom_port = jsc_custom.spawner.custom_port
+      c.Spawner.ssh_during_startup = ssh_during_startup
+      c.Spawner.extra_labels = jsc_custom.spawner.extra_labels
+      c.Spawner.ssh_custom_forward = jsc_custom.spawner.ssh_custom_forward
+      c.Spawner.ssh_custom_forward_remove = jsc_custom.spawner.ssh_custom_forward_remove
+      c.Spawner.custom_port = jsc_custom.spawner.custom_port
 
-      c.CustomJSCSpawner.pre_spawn_hook = jsc_custom.spawner.pre_spawn_hook
-      c.CustomJSCSpawner.pre_poll_hook = jsc_custom.spawner.pre_poll_hook
-      c.CustomJSCSpawner.post_spawn_request_hook = jsc_custom.spawner.post_spawn_request_hook
-      c.CustomJSCSpawner.pre_stop_hook = jsc_custom.spawner.pre_stop_hook
-      c.CustomJSCSpawner.post_stop_hook = jsc_custom.spawner.post_stop_hook
-      c.CustomJSCSpawner.start_async = start_async
-      c.CustomJSCSpawner.stop_async = False
-      c.CustomJSCSpawner.custom_user_options = jsc_custom.spawner.custom_user_options
-      c.CustomJSCSpawner.check_allowed = jsc_custom.spawner.is_system_allowed
-      c.CustomJSCSpawner.request_headers = jsc_custom.spawner.request_headers
-      c.CustomJSCSpawner.request_kwargs = jsc_custom.spawner.request_kwargs
+      c.Spawner.pre_spawn_hook = jsc_custom.spawner.pre_spawn_hook
+      c.Spawner.pre_poll_hook = jsc_custom.spawner.pre_poll_hook
+      c.Spawner.post_spawn_request_hook = jsc_custom.spawner.post_spawn_request_hook
+      c.Spawner.pre_stop_hook = jsc_custom.spawner.pre_stop_hook
+      c.Spawner.post_stop_hook = jsc_custom.spawner.post_stop_hook
+      c.Spawner.start_async = start_async
+      c.Spawner.stop_async = False
+      c.Spawner.custom_user_options = jsc_custom.spawner.custom_user_options
+      c.Spawner.check_allowed = jsc_custom.spawner.is_system_allowed
+      c.Spawner.request_headers = jsc_custom.spawner.request_headers
+      c.Spawner.request_kwargs = jsc_custom.spawner.request_kwargs
 
       ## Override request_timeout for start request
       def request_kwargs_start(spawner, user_options):
@@ -547,23 +679,23 @@ hub:
               request_kwargs_start["request_timeout"] = 1200
           return request_kwargs_start
 
-      c.CustomJSCSpawner.request_kwargs_start = request_kwargs_start
+      c.Spawner.request_kwargs_start = request_kwargs_start
 
-      c.CustomJSCSpawner.request_url = jsc_custom.spawner.request_url
-      c.CustomJSCSpawner.public_api_url = f"https://{jhub_hostname}{base_url}hub/api"
+      c.Spawner.request_url = jsc_custom.spawner.request_url
+      c.Spawner.public_api_url = f"https://{jhub_hostname}{base_url}hub/api"
 
-      c.CustomJSCSpawner.custom_env = jsc_custom.spawner.custom_env
-      c.CustomJSCSpawner.show_first_default_event = False
-      c.CustomJSCSpawner.filter_events = jsc_custom.spawner.filter_events
+      c.Spawner.custom_env = jsc_custom.spawner.custom_env
+      c.Spawner.show_first_default_event = False
+      c.Spawner.filter_events = jsc_custom.spawner.filter_events
 
-      c.CustomJSCSpawner.ssl_alt_names_include_local = False
+      c.Spawner.ssl_alt_names_include_local = False
 
       async def alt_names(spawner):
           system = spawner.user_options.get("system", "unknown")
           config = get_custom_config()
           backend_service = config.get("systems", {}).get(system, {}).get("backendService", "UNKNOWN")
           namespace = config.get("backendServices", {}).get(backend_service, {}).get("namespace", "jupyter")
-          usernamepasswordb64 = os.environ.get(f"AUTH_{backend_service.upper()}")
+          usernamepasswordb64 = os.environ.get("TUNNEL_AUTHENTICATION_TOKEN")
           import base64
           usernamepassword = base64.b64decode(usernamepasswordb64).decode()
           username = usernamepassword.split(":")[0]
@@ -575,13 +707,18 @@ hub:
           ret = ""
           try:
               with open("/mnt/persistent/internal-ssl/lets_encrypt.crt", "r") as f:
-                  ret = f.read()
+                  ret += f.read()
           except:
               spawner.log.exception("Could not load Let's Encrypt CA")
+          try:
+              with open("/mnt/persistent/internal-ssl/ljupyter-ca.crt", "r") as f:
+                  ret += f.read()
+          except:
+              spawner.log.exception("Could not load ljupyter CA")
           return ret
 
-      c.CustomJSCSpawner.additional_cafile = additional_cafile
-      c.CustomJSCSpawner.ssl_alt_names = alt_names
+      c.Spawner.additional_cafile = additional_cafile
+      c.Spawner.ssl_alt_names = alt_names
 
       async def update_expected_path(spawner, original_ret):
           system = spawner.user_options.get("system", "unknown")
@@ -605,8 +742,8 @@ hub:
               spawner.log.info(f"{spawner._log_name} - Update expected path for {system} from {original_ret} to {ret}")
               return ret
 
-      c.CustomJSCSpawner.update_expected_path = update_expected_path
-      c.CustomJSCSpawner.update_start_response = update_start_response
+      c.Spawner.update_expected_path = update_expected_path
+      c.Spawner.update_start_response = update_start_response
 
       from datetime import datetime
       async def cancel_click_event(spawner):
@@ -618,11 +755,11 @@ hub:
               "message": "",
               "html_message": f"<details><summary>{now}: Cancelling start ...</summary>Start process is being stopped.</details>",
           }
-      c.CustomJSCSpawner.cancelling_event = cancel_click_event
+      c.Spawner.cancelling_event = cancel_click_event
 
-      c.CustomJSCSpawner.custom_poll_interval = jsc_custom.spawner.poll_interval
-      c.CustomJSCSpawner.progress_ready_hook = jsc_custom.spawner.progress_ready_hook
-      c.CustomJSCSpawner.http_timeout = 7200
+      c.Spawner.custom_poll_interval = jsc_custom.spawner.poll_interval
+      c.Spawner.progress_ready_hook = jsc_custom.spawner.progress_ready_hook
+      c.Spawner.http_timeout = 7200
 
       ### UNICORE specific config
       system_config = {
@@ -680,47 +817,12 @@ hub:
               spawner.log.warning(f"{spawner._log_name} - account ({account}) or project ({project}) not set in user_options ({spawner.user_options}). Do not set preferences in UNICORE transport.")
               return False
 
-      c.CustomJSCSpawner.unicore_site_url = unicore_site_url
-      c.CustomJSCSpawner.unicore_transport_kwargs = transport_kwargs
-      c.CustomJSCSpawner.unicore_transport_preferences = transport_preferences
+      c.Spawner.unicore_site_url = unicore_site_url
+      c.Spawner.unicore_transport_kwargs = transport_kwargs
+      c.Spawner.unicore_transport_preferences = transport_preferences
 
       if os.environ.get("PYTHONASYNCIODEBUG", "0").lower() in ["1", "true"]:
           import asyncio
           loop = asyncio.get_event_loop()
           loop.set_debug(True)
           loop.slow_callback_duration = 0.2
-
-      jupyterhub_idle_culler_role = {
-          "name": "jupyterhub-idle-culler",
-          "scopes": [
-              "list:users",
-              "read:users:activity",
-              "read:servers",
-              "delete:servers",
-          ],
-          # assign the role to a jupyterhub service, so it gains these permissions
-          "services": ["jupyterhub-idle-culler"],
-      }
-      base_url = c.JupyterHub.get("base_url", "/")
-      cull_cmd = [
-          "python3",
-          "-m",
-          "jupyterhub_idle_culler",
-          f"--url=https://localhost:8081{url_path_join(base_url, 'hub/api')}",
-          "--timeout=432000",
-          "--cull-every=180",
-          "--concurrency=5",
-          "--max-age=2419200",
-          "--internal-certs-location=/mnt/persistent/internal-ssl-tmp",
-          "--ssl-enabled"
-      ]
-      import shutil
-      os.makedirs("/mnt/persistent/internal-ssl-tmp/hub-ca", exist_ok=True)
-      shutil.copyfile("/mnt/persistent/internal-ssl/hub-ca/hub-ca.crt", "/mnt/persistent/internal-ssl-tmp/hub-ca/hub-ca.crt")
-      c.JupyterHub.services.append(
-          {
-              "name": "jupyterhub-idle-culler",
-              "command": cull_cmd,
-          }
-      )
-      c.JupyterHub.load_roles.append(jupyterhub_idle_culler_role)
