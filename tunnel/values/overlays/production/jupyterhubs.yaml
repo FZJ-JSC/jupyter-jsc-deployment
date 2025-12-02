@@ -9,13 +9,7 @@
 #         hostname: "k8smgr.hlrs.de"
 jupyterhubs:
   default:
-    additional_remote_hosts:
-      - coec
-      - coeraise
-      - ebrains
-      - euroccgcs
-      - juniq
-      - portalgauss
+    additional_remote_hosts: []
     ssh_config_hosts:
       - name: "outpost_lrz"
         user: "jhuboutpost"

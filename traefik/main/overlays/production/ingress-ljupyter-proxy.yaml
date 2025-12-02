@@ -1,0 +1,598 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ljupyter-proxy-ingress
+  namespace: traefik
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  ingressClassName: nginx
+  tls:
+    - secretName: ljupyter-proxy-tls
+      hosts:
+        - jrlogin01i
+        - jrlogin02i
+        - jrlogin03i
+        - jrlogin04i
+        - jrlogin05i
+        - jrlogin06i
+        - jrlogin07i
+        - jrlogin08i
+        - jrlogin09i
+        - jrlogin10i
+        - jrlogin11i
+        - jrlogin12i
+        - jrlogin13i
+        - jrlogin14i
+        - jrlogin21i
+        - jrlogin22i
+        - jwlogin00i
+        - jwlogin01i
+        - jwlogin02i
+        - jwlogin03i
+        - jwlogin04i
+        - jwlogin05i
+        - jwlogin06i
+        - jwlogin07i
+        - jwlogin08i
+        - jwlogin09i
+        - jwlogin10i
+        - jwlogin11i
+        - jwvis00i
+        - jwvis01i
+        - jwvis02i
+        - jwvis03i
+        - jwlogin21i
+        - jwlogin22i
+        - jwlogin23i
+        - jwlogin24i
+        - deepv
+        - jsfl01i
+        - jsfl02i
+        - jsfl03i
+        - jsfl04i
+        - jpbl-s01-01-interconnect-1
+        - jpbl-s01-02-interconnect-1
+        - jpbl-s01-03-interconnect-1
+        - jpbl-s01-04-interconnect-1
+        - jpbl-s02-01-interconnect-1
+        - jpbl-s02-02-interconnect-1
+        - jpbl-s02-03-interconnect-1
+        - jpbl-s02-04-interconnect-1
+        - jpbl-s03-01-interconnect-1
+        - jpbl-s03-02-interconnect-1
+        - jpbl-s03-03-interconnect-1
+        - jpbl-s03-04-interconnect-1
+  rules:
+    - host: jrlogin01i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin02i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin03i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin04i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin05i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin06i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin07i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin08i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin09i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin10i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin11i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin12i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin13i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin14i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin21i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jrlogin22i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin00i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin01i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin02i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin03i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin04i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin05i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin06i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin07i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin08i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin09i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin10i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin11i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwvis00i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwvis01i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwvis02i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwvis03i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin21i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin22i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin23i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jwlogin24i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: deepv
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jsfl01i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jsfl02i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jsfl03i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jsfl04i
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s01-01-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s01-02-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s01-03-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s01-04-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s02-01-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s02-02-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s02-03-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s02-04-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s03-01-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s03-02-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s03-03-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+    - host: jpbl-s03-04-interconnect-1
+      http:
+        paths:
+          - path: /proxy
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik
+                port:
+                  name: web

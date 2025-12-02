@@ -21,10 +21,11 @@ helm:
   releaseName: kube
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyterhub-outpost
-  version: 2.0.3
+  version: 2.1.2
   valuesFiles:
     - values/base/misc.yaml
     - values/base/config.yaml
+    - values/base/credits.yaml
     - values/base/flavor.yaml
 targetCustomizations:
   - name: staging

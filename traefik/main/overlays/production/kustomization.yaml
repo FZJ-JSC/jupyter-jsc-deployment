@@ -1,0 +1,135 @@
+---
+resources:
+  - default-tls-options.yaml
+  - ingress-coec-redirect-1.yaml
+  - ingress-coeraise-redirect-1.yaml
+  - ingress-ebrains-redirect-1.yaml
+  - ingress-juniq-redirect-1.yaml
+  - ingress-jupyter-collection.yaml
+  - ingress-jupyterjsc-redirect-1.yaml
+  - ingress-jupyterjsc-redirect-2.yaml
+  - ingress-jupyterjsc-redirect-3.yaml
+  - ingress-ljupyter-proxy.yaml
+  - ingress-nfdigeneral-redirect-1.yaml
+  - ingress-portalgauss-redirect-1.yaml
+  - service-internal.yaml
+
+patches:
+  - target:
+      kind: Service
+      name: traefik
+    patch: |-
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-1
+          port: 8081
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-2
+          port: 8082
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-3
+          port: 8083
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-4
+          port: 8084
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-5
+          port: 8085
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-6
+          port: 8086
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-7
+          port: 8087
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-8
+          port: 8088
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-9
+          port: 8089
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-10
+          port: 8090
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-11
+          port: 8091
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-12
+          port: 8092
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-13
+          port: 8093
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-14
+          port: 8094
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-15
+          port: 8095
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-16
+          port: 8096
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-17
+          port: 8097
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-18
+          port: 8098
+          targetPort: web
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: backup-19
+          port: 8099
+          targetPort: web

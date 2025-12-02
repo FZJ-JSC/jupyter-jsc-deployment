@@ -26,6 +26,7 @@ data:
     module load Jupyter-bundle/20250114
 
     modules=()
+    modules+=("jupyterlab-hub-credit-extension/0.2.1")
     modules+=("Cartopy/0.24.1")
     modules+=("plotly.py/5.24.1")
     modules+=("matplotlib/3.9.2")

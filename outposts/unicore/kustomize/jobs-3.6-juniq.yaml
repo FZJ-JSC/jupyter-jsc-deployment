@@ -92,10 +92,11 @@ data:
         # batch node, no internet connection to the outside world
         export PREVIOUS_API_URL=${JUPYTERHUB_API_URL}
         export REMOTE_PORT="<remote_port>"
+        export JUPYTERHUB_NAME="<hub>"
         export JUPYTERHUB_CERTIFICATE="${DIR}/service_ca.crt"
 
         if [[ $HUB_PROTO == "https" ]]; then
-          export CURL_ARGS="${CURL_ARGS} -k --cacert ${JUPYTERHUB_CERTIFICATE}"
+          export CURL_ARGS="${CURL_ARGS} --cacert ${JUPYTERHUB_CERTIFICATE}"
           export JUPYTERHUB_SSL_CLIENT_CA="${JUPYTERHUB_CERTIFICATE}"
         fi
 
@@ -107,10 +108,10 @@ data:
         start_index=$index
         for _ in ${ALL_REMOTE_NODES[@]}
         do
-          HTTPCODE=$(curl -X "GET" ${CURL_ARGS} ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api)
+          HTTPCODE=$(curl -X "GET" ${CURL_ARGS} ${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/proxy/${JUPYTERHUB_NAME}/hub/api)
           if [[ ${HTTPCODE} -ge 200 ]] && [[ ${HTTPCODE} -le 299 ]]; then
             if [[ ${SYSTEMNAME} == "deep" ]]; then
-              export JUPYTERHUB_API_URL="${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api"
+              export JUPYTERHUB_API_URL="${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/proxy/${JUPYTERHUB_NAME}/hub/api"
               export SSH_NODE=${ALL_REMOTE_NODES[$index]}
               echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub and ${SSH_NODE} as jump node."
               break
@@ -120,7 +121,7 @@ data:
             STATUSOUTCODE=$(echo "${STATUSOUT}" | tail -n 1)
             STATUSOUTMAINT=$(echo "${STATUSOUT}" | grep -E '^maint_status' | cut -d' ' -f2)
             if [[ $STATUSOUTCODE -eq 200 ]] && [[ ${STATUSOUTMAINT} -eq 0 ]]; then
-              export JUPYTERHUB_API_URL="${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/hub/api"
+              export JUPYTERHUB_API_URL="${HUB_PROTO}://${ALL_REMOTE_NODES[$index]}:${REMOTE_PORT}/proxy/${JUPYTERHUB_NAME}/hub/api"
               export SSH_NODE=${ALL_REMOTE_NODES[$index]}
               echo "$(date) - Use ${JUPYTERHUB_API_URL} to communicate with JupyterHub and ${SSH_NODE} as jump node."
               break

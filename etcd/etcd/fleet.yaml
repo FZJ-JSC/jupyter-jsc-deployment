@@ -1,0 +1,57 @@
+---
+defaultNamespace: etcd
+
+labels:
+  app: etcd
+  component: main
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: etcd
+        component: volumes
+
+kustomize:
+  dir: ./kustomize
+
+helm:
+  releaseName: etcd
+  chart: oci://registry-1.docker.io/cloudpirates/etcd
+  version: 0.3.3
+  values:
+    networkPolicy:
+      enabled: true
+      allowExternal: false
+      extraIngress:
+        # Allow Hub pods in any namespace
+        - from:
+            - namespaceSelector: {}    #  all namespaces
+              podSelector:
+                matchLabels:
+                  component: hub
+          ports:
+            - port: 2379
+              protocol: TCP
+        # Allow Traefik pods in the traefik namespace
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  name: traefik
+              podSelector: {}
+          ports:
+            - port: 2379
+              protocol: TCP
+    service:
+      clientPort: 2379      # etcd client port
+      peerPort: 2380        # etcd peer port for replication
+      metricsPort: 2381     # etcd metrics port for Prometheus
+    metrics:
+      enabled: true
+    replicaCount: 1
+    config:
+      logLevel: "debug"
+    commonLabels:
+      component: "etcd"
+    persistence:
+      enabled: true
+      size: 5Gi

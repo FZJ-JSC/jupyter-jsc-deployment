@@ -6,10 +6,12 @@ flavors:
     m1nfdi:
       max: 50
       weight: 20
-      display_name: "2GB RAM, 1VCPU, 5 days"
-      description: "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
-      runtime:
-        days: 5
+      display_name: "2GB RAM, 1VCPU, 10 credits per hour"
+      description: "JupyterLab will run with 2GB RAM and 1VCPU."
+      max_idle_time: 75600
+      credits:
+        value: 1
+        interval: 360
       resources:
         cpu_guarantee: 0.2
         cpu_limit: 1
@@ -18,10 +20,12 @@ flavors:
     l1nfdi:
       max: 20
       weight: 19
-      display_name: "4GB RAM, 1VCPUs, 2 days"
-      description: "JupyterLab will run for max 2 days with 4GB RAM and 1VCPUs."
-      runtime:
-        days: 2
+      display_name: "4GB RAM, 1VCPUs, 20 credits per hour"
+      description: "JupyterLab will run with 4GB RAM and 1VCPUs."
+      max_idle_time: 75600
+      credits:
+        value: 1
+        interval: 180      
       resources:
         cpu_guarantee: 0.2
         cpu_limit: 1
@@ -30,57 +34,157 @@ flavors:
     xl1nfdi:
       max: 25
       weight: 18
-      display_name: "8GB RAM, 1VCPUs, 1 day"
-      description: "JupyterLab will run for max 1 day with 8GB RAM and 1VCPUs."
-      runtime:
-        days: 1
+      display_name: "8GB RAM, 1VCPUs, 40 credits per hour"
+      description: "JupyterLab will run with 8GB RAM and 1VCPUs."
+      max_idle_time: 75600
+      credits:
+        value: 1
+        interval: 90
       resources:
         cpu_guarantee: 0.2
         cpu_limit: 1
-        mem_guarantee: "4096M"
+        mem_guarantee: "256M"
         mem_limit: "8192M"
+    m1nfdigpu:
+      max: 10
+      weight: 9
+      display_name: "1 GPU, 2GB RAM, 1VCPU, 30 credits per hour"
+      description: "JupyterLab will run with 1 GPU, 2GB RAM and 1VCPU."
+      max_idle_time: 3600
+      credits:
+        value: 1
+        interval: 120
+      resources:
+        cpu_guarantee: 0.2
+        cpu_limit: 1
+        mem_guarantee: "256M"
+        mem_limit: "2048M"
+        gpu_limit: 1
+    l1nfdigpu:
+      max: 10
+      weight: 8
+      display_name: "1 GPU, 4GB RAM, 1VCPU, 40 credits per hour"
+      description: "JupyterLab will run with 1 GPU, 4GB RAM and 1VCPU."
+      max_idle_time: 3600
+      credits:
+        value: 1
+        interval: 72
+      resources:
+        cpu_guarantee: 0.2
+        cpu_limit: 1
+        mem_guarantee: "256M"
+        mem_limit: "4096M"
+        gpu_limit: 1
+    xl1nfdigpu:
+      max: 10
+      weight: 7
+      display_name: "1 GPU, 8GB RAM, 1VCPU, 60 credits per hour"
+      description: "JupyterLab will run with 1 GPU, 8GB RAM and 1VCPU."
+      max_idle_time: 3600
+      credits:
+        value: 1
+        interval: 60
+      resources:
+        cpu_guarantee: 0.2
+        cpu_limit: 1
+        mem_guarantee: "256M"
+        mem_limit: "8192M"
+        gpu_limit: 1
     m1:
       max: -1
-      weight: 10
-      display_name: "2GB RAM, 1VCPU, 5 days"
-      description: "JupyterLab will run for max 5 days with 2GB RAM and 1VCPU."
-      runtime:
-        days: 5
+      weight: 20
+      display_name: "2GB RAM, 1VCPU, 10 credits per hour"
+      description: "JupyterLab will run with 2GB RAM and 1VCPU."
+      max_idle_time: 75600
+      credits:
+        value: 1
+        interval: 360
       resources:
         cpu_guarantee: 0.2
         cpu_limit: 1
-        mem_guarantee: "1536M"
+        mem_guarantee: "256M"
         mem_limit: "2048M"
     l1:
       max: 50
-      weight: 6
-      display_name: "4GB RAM, 1VCPUs, 2 days"
-      description: "JupyterLab will run for max 2 days with 4GB RAM and 1VCPUs."
-      runtime:
-        days: 2
+      weight: 19
+      display_name: "4GB RAM, 1VCPUs, 20 credits per hour"
+      description: "JupyterLab will run with 4GB RAM and 1VCPUs."
+      max_idle_time: 75600
+      credits:
+        value: 1
+        interval: 180      
       resources:
         cpu_guarantee: 0.2
         cpu_limit: 1
-        mem_guarantee: "1024M"
+        mem_guarantee: "256M"
         mem_limit: "4096M"
-    l2:
+    l1:
       max: 5
-      weight: 4
-      display_name: "8GB RAM, 2VCPUs, 10 hours"
-      description: "JupyterLab will run for max 10 hours with 8GB RAM and 2VCPUs."
-      runtime:
-        hours: 10
+      weight: 17
+      display_name: "8GB RAM, 1VCPUs, 40 credits per hour"
+      description: "JupyterLab will run with 8GB RAM and 1VCPUs."
+      max_idle_time: 75600
+      credits:
+        value: 1
+        interval: 90
       resources:
         cpu_guarantee: 0.2
-        cpu_limit: 2
-        mem_guarantee: "7680M"
+        cpu_limit: 1
+        mem_guarantee: "256M"
         mem_limit: "8192M"
+    m1gpu:
+      max: 10
+      weight: 9
+      display_name: "1 GPU, 2GB RAM, 1VCPU, 30 credits per hour"
+      description: "JupyterLab will run with 1 GPU, 2GB RAM and 1VCPU."
+      max_idle_time: 3600
+      credits:
+        value: 1
+        interval: 120
+      resources:
+        cpu_guarantee: 0.2
+        cpu_limit: 1
+        mem_guarantee: "256M"
+        mem_limit: "2048M"
+        gpu_limit: 1
+    l1gpu:
+      max: 10
+      weight: 8
+      display_name: "1 GPU, 4GB RAM, 1VCPU, 40 credits per hour"
+      description: "JupyterLab will run with 1 GPU, 4GB RAM and 1VCPU."
+      max_idle_time: 3600
+      credits:
+        value: 1
+        interval: 72
+      resources:
+        cpu_guarantee: 0.2
+        cpu_limit: 1
+        mem_guarantee: "256M"
+        mem_limit: "4096M"
+        gpu_limit: 1
+    xl1gpu:
+      max: 10
+      weight: 7
+      display_name: "1 GPU, 8GB RAM, 1VCPU, 60 credits per hour"
+      description: "JupyterLab will run with 1 GPU, 8GB RAM and 1VCPU."
+      max_idle_time: 3600
+      credits:
+        value: 1
+        interval: 60
+      resources:
+        cpu_guarantee: 0.2
+        cpu_limit: 1
+        mem_guarantee: "256M"
+        mem_limit: "8192M"
+        gpu_limit: 1
     workshop:
       max: 25
       weight: 11
       display_name: "JUNIQ School - 8GB RAM, 2VCPU, 10 hours"
-      description: "JUNIQ School - JupyterLab will run for max 10 hours with 8GB
-        RAM and 2VCPU."
+      description: "JUNIQ School - JupyterLab will run for max 10 hours with 8GB RAM and 2VCPU."
+      credits:
+        value: 0
+        interval: 86400
       runtime:
         hours: 10
       resources:
@@ -100,27 +204,27 @@ flavors:
         - dev2
       weight: 10
       flavors: ["m1", "l1"]
-    defaultPlusL2:
+    defaultPlusL1:
       jupyterhub_name: ["jupyterjsc"]
       weight: 11
-      flavors: ["m1", "l1", "l2"]
+      flavors: ["m1", "l1", "xl1"]
     nfdi:
       jupyterhub_name: ["nfdigeneral"]
       weight: 12
-      flavors: ["m1nfdi", "l1nfdi", "xl1nfdi"]
+      flavors: ["m1nfdi", "l1nfdi", "xl1nfdi", "m1nfdigpu", "l1nfdigpu", "xl1nfdigpu"]
     juniq:
       jupyterhub_name: ["juniq"]
       weight: 6
-      flavors: ["m1", "l1", "l2", "workshop"]
+      flavors: ["m1", "l1", "xl1", "workshop"]
   users:
     nfdifzjstaff:
       hubs: ["nfdigeneral_unused"]
       usernames_unused: []
       groups: ["staff@fz-juelich.de"]
       weight: 10
-      flavors: ["m1nfdi", "l1nfdi", "l2"]
+      flavors: ["m1nfdi", "l1nfdi", "l1nfdi"]
       flavorsOverride:
-        l2:
+        l1:
           max: 10
       disable: false
     nfdidefault:

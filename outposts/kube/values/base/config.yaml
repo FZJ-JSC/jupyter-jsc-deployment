@@ -728,9 +728,23 @@ outpostConfig: |
           "init_mounts": init_mounts
       }
 
+      gpu = False
+      if "gpu_guarantee" in resources.keys():
+          kubespawner_override["extra_resource_guarantees"] = {"nvidia.com/gpu": f"{resources['gpu_guarantee']}"}
+          gpu = True
+      if "gpu_limit" in resources.keys():
+          kubespawner_override["extra_resource_limits"] = {"nvidia.com/gpu": f"{resources['gpu_limit']}"}
+          gpu = True
+      if gpu:
+          kubespawner_override["extra_pod_config"] = {
+              "restartPolicy": "Never",
+              "runtimeClassName": "nvidia"
+          }
+          kubespawner_override["node_selector"] = {"usernode-gpu": "true"}
+
       if spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] == "custom":
           kubespawner_override["data_mount_start"] = custom_image_start_script
-      if spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] in lmod_options:
+      elif spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] in lmod_options:
           kubespawner_override["data_mount_start"] = lmod_image_start_script
 
       storage = await get_storage(spawner)

@@ -1,0 +1,20 @@
+---
+defaultNamespace: etcd
+
+labels:
+  app: etcd
+  component: volumes
+
+targetCustomizations:
+  - name: jupyter-stag
+    clusterSelector:
+      matchLabels:
+        name: jupyter-stag
+    kustomize:
+      dir: overlays/jupyter-stag
+  - name: jupyter-prod
+    clusterSelector:
+      matchLabels:
+        name: jupyter-prod
+    kustomize:
+      dir: overlays/jupyter-prod

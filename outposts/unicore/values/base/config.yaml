@@ -1,6 +1,6 @@
 ---
 extraPythonPackages:
-  - jupyterhub-unicorespawner==2.0.2
+  - jupyterhub-unicorespawner==2.1.0
 extraVolumes:
   - configMap:
       defaultMode: 256
@@ -176,14 +176,14 @@ outpostConfig: |-
             })
 
     # Afterwards collect job specific files. Allows easy override of common files
-    spawner.log.info(f"{spawner._log_name} - Walk through: /mnt/jobs/{service}_{option}")
+    spawner.log.debug(f"{spawner._log_name} - Walk through: /mnt/jobs/{service}_{option}")
     for subdir, dirs, files in os.walk(f"/mnt/jobs/{service}_{option}"):
       for file in files:
-        spawner.log.info(f"{spawner._log_name} - option specific file: {file}")
+        spawner.log.debug(f"{spawner._log_name} - option specific file: {file}")
         if file.startswith(prefix):
           # Remove previously stored file
           job_description["Imports"] = [x for x in job_description["Imports"] if x.get("To") != file[len(prefix):]]
-          spawner.log.info(f"{spawner._log_name} - Add as filename: {file[len(prefix):]}")
+          spawner.log.debug(f"{spawner._log_name} - Add as filename: {file[len(prefix):]}")
           with open(os.path.join(subdir, file), "r") as f:
             job_description["Imports"].append({
               "From": "inline://dummy",
@@ -302,56 +302,10 @@ outpostConfig: |-
 
   stage_hub_replacements = {
     "production": {
-      "coec": {
-        "remote_port": "25480",
-      },
-      "coeraise": {
-        "remote_port": "25482",
-      },
-      "euroccgcs": {
-        "remote_port": "25486",
-      },
-      "juniq": {
-        "remote_port": "25488",
-      },
-      "jupyterjsc": {
-        "remote_port": "25490",
-      },
-      "portalgauss": {
-        "remote_port": "25492",
-      },
-      "ebrains": {
-        "remote_port": "25496",
-      }
+      "remote_port": "25280",
     },
     "staging": {
-      "coec": {
-        "remote_port": "25481",
-      },
-      "coeraise": {
-        "remote_port": "25483",
-      },
-      "dev1": {
-        "remote_port": "25484",
-      },
-      "dev2": {
-        "remote_port": "25485",
-      },
-      "euroccgcs": {
-        "remote_port": "25487",
-      },
-      "juniq": {
-        "remote_port": "25489",
-      },
-      "jupyterjsc": {
-        "remote_port": "25491",
-      },
-      "portalgauss": {
-        "remote_port": "25493",
-      },
-      "ebrains": {
-        "remote_port": "25497",
-      }
+      "remote_port": "25281",
     }
   }
 
@@ -360,11 +314,12 @@ outpostConfig: |-
     hub = spawner.jupyterhub_name
     system = spawner.user_options.get("system", "undefined")
     ret = additional_replacements_base.copy()
-    remote_port_replaces = stage_hub_replacements.get(stage, {}).get(hub, {})
+    remote_port_replaces = stage_hub_replacements.get(stage, {})
     if remote_port_replaces:
       ret["system"][system].update(remote_port_replaces)
     else:
       spawner.log.error(f"Remote port for {hub}-{system} (hub-system) not defined.")
+    ret["system"][system]["hub"] = hub
     return ret
 
   system_config = {

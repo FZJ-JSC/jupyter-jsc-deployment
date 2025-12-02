@@ -1,0 +1,80 @@
+---
+credits:
+  credits:
+    public:
+      cap: 60
+      grant_value: 60
+      grant_interval: 86400
+    default:
+      cap: 120
+      grant_value: 120
+      grant_interval: 86400
+    priority:
+      cap: 240
+      grant_value: 240
+      grant_interval: 86400
+  users:
+    gmailusers:
+      hubs:
+        - jupyterjsc
+        - portalgauss
+        - juniq
+        - coec
+        - coeraise
+        - ebrains
+        - euroccgcs
+        - dev1
+        - dev2
+        - nfdigeneral
+      authentication:
+        username: ".*g(oogle)?mail.com$"
+      weight: 9999
+      credits:
+        - public
+    public:
+      negate_authentication: true
+      hubs:
+        - jupyterjsc
+        - portalgauss
+        - juniq
+      authentication:
+        groups: ["geant:helmholtz.de:Helmholtz-member"]
+      weight: 100
+      credits:
+        - public
+    defaultusers:
+      hubs:
+        - jupyterjsc
+        - portalgauss
+        - juniq
+        - nfdigeneral
+      authentication:
+        groups: ["geant:helmholtz.de:Helmholtz-member"]
+      weight: 90
+      credits:
+        - default
+    priorityusers:
+      hubs:
+        - jupyterjsc
+        - portalgauss
+        - juniq
+        - nfdigeneral
+      authentication:
+        groups: "geant:dfn.de:fz-juelich.de*"
+      weight: 95
+      credits:
+        - priority
+    free:
+      hubs:
+        - coec
+        - coeraise
+        - ebrains
+        - euroccgcs
+        - dev1
+        - dev2
+        - nfdigeneral
+      authentication:
+        username: ".*"
+      weight: 94
+      credits:
+        - default

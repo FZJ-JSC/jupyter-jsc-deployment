@@ -1,0 +1,167 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/server-snippet: |-
+      # Managing requests to JupyterHubs with retry mechanism
+      location ~* "^/" {
+          proxy_pass                              http://traefik-retries;
+          #allow                                   134.94.0.0/16;
+          #deny                                    all;
+
+          proxy_set_header X-Real-IP              $remote_addr;
+          proxy_set_header Host                   $host;
+          proxy_set_header X-Forwarded-For        $proxy_add_x_forwarded_for;
+
+          # websocket headers
+          proxy_set_header Upgrade                $http_upgrade;
+          proxy_set_header Connection             $connection_upgrade;
+          proxy_set_header X-Scheme               $scheme;
+
+          # mitigate HTTPoxy Vulnerability
+          # https://www.nginx.com/blog/mitigating-the-httpoxy-vulnerability-with-nginx/
+          proxy_set_header Proxy                  "";
+
+          # Custom headers to proxied server
+          client_max_body_size                    "2g";
+          proxy_connect_timeout                   "60s";
+          proxy_send_timeout                      "600s";
+          proxy_read_timeout                      "600s";
+
+          # proxy_buffering                         off;
+          # proxy_buffer_size                       4k;
+          # proxy_buffers                           4 4k;
+
+          proxy_buffering                         off;
+          proxy_buffer_size                       16k;
+          proxy_buffers                           8 16k;
+
+          proxy_max_temp_file_size                "1024m";
+
+          proxy_request_buffering                 off;
+          proxy_http_version                      1.1;
+
+          proxy_cookie_domain                     off;
+          proxy_cookie_path                       off;
+
+          # In case of errors try the next upstream server before returning an error
+          proxy_next_upstream                     error timeout http_500 http_502 http_503;
+          proxy_next_upstream_timeout             1;
+          proxy_next_upstream_tries               0;
+
+          proxy_redirect                          off;
+      }
+  name: jupyter-collection
+  namespace: traefik
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: jupyter-staging.jsc.fz-juelich.de
+      http:
+        paths:
+          - backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+            path: /neverCalled
+            pathType: Exact
+    - host: juniq-staging.fz-juelich.de
+      http:
+        paths:
+          - backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+            path: /neverCalled
+            pathType: Exact
+    - host: hub-staging.nfdi-jupyter.de
+      http:
+        paths:
+          - backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+            path: /neverCalled
+            pathType: Exact
+    - host: portal-staging.gauss-centre.eu
+      http:
+        paths:
+          - backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+            path: /neverCalled
+            pathType: Exact
+    - host: twin-staging.ebrains.eu
+      http:
+        paths:
+          - backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+            path: /neverCalled
+            pathType: Exact
+    - host: jupyter-coec-staging.jsc.fz-juelich.de
+      http:
+        paths:
+          - backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+            path: /neverCalled
+            pathType: Exact
+    - host: jupyter-staging.coe-raise.eu
+      http:
+        paths:
+          - backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+            path: /neverCalled
+            pathType: Exact
+    - host: jupyter-staging.eurocc-gcs.de
+      http:
+        paths:
+          - backend:
+              service:
+                name: traefik
+                port:
+                  name: web
+            path: /neverCalled
+            pathType: Exact
+  tls:
+    - hosts:
+        - jupyter-staging.jsc.fz-juelich.de
+      secretName: jupyterjsc-tls
+    - hosts:
+        - juniq-staging.fz-juelich.de
+      secretName: juniq-tls
+    - hosts:
+        - hub-staging.nfdi-jupyter.de
+      secretName: nfdigeneral-tls
+    - hosts:
+        - portal-staging.gauss-centre.eu
+      secretName: portalgauss-tls
+    - hosts:
+        - twin-staging.ebrains.eu
+      secretName: ebrains-tls
+    - hosts:
+        - jupyter-coec-staging.jsc.fz-juelich.de
+      secretName: coec-tls
+    - hosts:
+        - jupyter-staging.coe-raise.eu
+      secretName: coeraise-tls
+    - hosts:
+        - jupyter-staging.eurocc-gcs.de
+      secretName: euroccgcs-tls

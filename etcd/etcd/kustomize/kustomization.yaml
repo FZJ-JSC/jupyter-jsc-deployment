@@ -1,0 +1,33 @@
+---
+patches:
+  - target:
+      kind: StatefulSet
+      labelSelector: app.kubernetes.io/name=etcd
+    patch: |-
+      - op: add
+        path: /spec/volumeClaimTemplates/0/spec/selector
+        value:
+          matchLabels:
+            etcd-volume: "true"
+      - op: add
+        path: /spec/template/spec/initContainers
+        value: []
+      - op: add
+        path: /spec/template/spec/initContainers/-
+        value:
+          name: fix-etcd-permissions
+          image: alpine:3.22
+          command: ["/bin/sh"]
+          args:
+            - "-c"
+            - |
+              # Only chown if directory is owned by root
+              if [ "$(stat -c '%u' /var/run/etcd)" = "0" ]; then
+                echo "Changing ownership of /var/run/etcd to 1000:1000"
+                chown -R 1000:1000 /var/run/etcd
+              else
+                echo "/var/run/etcd already has correct ownership"
+              fi
+          volumeMounts:
+            - name: data
+              mountPath: /var/run/etcd

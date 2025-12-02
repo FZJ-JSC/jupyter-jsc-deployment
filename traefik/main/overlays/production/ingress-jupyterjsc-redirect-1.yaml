@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
+    nginx.ingress.kubernetes.io/permanent-redirect: https://jupyter.jsc.fz-juelich.de
+  name: jupyterjsc-redirect-1
+  namespace: traefik
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - jupyter-jsc.fz-juelich.de
+    secretName: jupyterjsc-redirect-1
+  rules:
+  - host: jupyter-jsc.fz-juelich.de

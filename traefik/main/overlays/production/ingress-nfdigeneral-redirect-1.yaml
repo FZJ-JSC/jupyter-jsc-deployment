@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
+    nginx.ingress.kubernetes.io/permanent-redirect: https://nfdi-jupyter.de
+  name: nfdigeneral-redirect-1
+  namespace: traefik
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - docs.hub.nfdi-jupyter.de
+    secretName: nfdigeneral-redirect-1
+  rules:
+  - host: docs.hub.nfdi-jupyter.de
