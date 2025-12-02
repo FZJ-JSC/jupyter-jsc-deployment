@@ -15,12 +15,22 @@ patches:
         value:
           - secretRef:
               name: generics
-  - target:
-      kind: Ingress
-      group: networking.k8s.io
-      version: v1
-      labelSelector: app=jupyterhub
-    patch: |-
-      - op: replace
-        path: "/spec/rules/0/http/paths/0/backend/service/port/name"
-        value: https
+patchesStrategicMerge:
+  - |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: proxy
+    $patch: delete
+  - |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: proxy-public
+    $patch: delete
+  - |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: proxy-api
+    $patch: delete

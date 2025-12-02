@@ -1,5 +1,5 @@
 ---
-defaultnamespace: dev1
+defaultNamespace: dev1
 
 labels:
   app: dev1
@@ -22,7 +22,8 @@ helm:
   # repo: https://jupyterhub.github.io/helm-chart/
   # chart: jupyterhub
   # version: 3.1.0
-  chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-4.2.0.tgz
+  chart:
+    https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-4.2.0.tgz
   values:
     ingress:
       # Set JupyterHub in maintenance:
@@ -63,4 +64,9 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
+    doNotDeploy: true
+  - name: staging
+    clusterSelector:
+      matchLabels:
+        stage: staging
     doNotDeploy: true

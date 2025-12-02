@@ -1,26 +1,9 @@
 ---
-proxy:
-  chp:
-    image:
-      tag: "5"
-      pullPolicy: "Always"
 hub:
-  #    mkdir -p /mnt/reservation_key &&
-  #    cp -rp /mnt/reservation-keypair/..data/* /mnt/reservation_key/. &&
-  #    chown 1000:1000 -R /mnt/reservation_key &&
-  #    chmod 400 /mnt/reservation_key/* &&
-  # pip install -i https://test.pypi.org/simple/ -U --no-deps  &&
-  # args:
-  #  - -c
-  #  - >-
-  #    pip install --upgrade --upgrade-strategy only-if-needed jupyterhub-outpostspawner==1.0.2 jupyter-jsc-custom==0.11.7 &&
-  #    jupyterhub -f /usr/local/etc/jupyterhub/jupyterhub_config.py
-  # command:
-  #  - /bin/bash
   image:
     pullPolicy: "IfNotPresent"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
-    tag: 5.3.0-post.23
+    tag: 5.4.2-notls.4
   podSecurityContext:
     runAsNonRoot: false
   containerSecurityContext:

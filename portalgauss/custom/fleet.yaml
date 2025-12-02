@@ -15,17 +15,16 @@ helm:
   releaseName: portalgauss-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.74
+  version: 0.24.4
   values:
     fullnameOverride: portalgauss-custom
+    traefik:
+      proxy: false
     global:
       name: portalgauss
       namespace: portalgauss
     dailyRestart:
-      enabled: true
-      restartSchedule: "0 2 * * 0"
-    ingress:
-      enabled: true
+      enabled: false
     jupyter-metrics:
       enabled: true
       nodeSelector:
@@ -47,7 +46,7 @@ helm:
             allowedLists:
               systems:
                 - JSC-Cloud
-                - LRZ
+                - LRZ-Staging
       systems:
         - JSC-Cloud
         - LRZ-Staging
@@ -55,7 +54,7 @@ helm:
         - HLRS-Staging
       backendServices:
         outpostKubeLRZStaging:
-          sendAccessToken: false
+          sendAccessToken: true
           urls:
             services: http://vm-138-246-238-21.cloud.mwn.de:8080/services
           requestKwargs:
@@ -73,13 +72,27 @@ targetCustomizations:
         stage: staging
     helm:
       values:
+        customConfig:
+          backendServices:
+            outpostKubeHLRSStaging:
+              requestKwargs:
+                request_timeout: 180
+          systems:
+            - JSC-Cloud
+            - LRZ-Staging
+            - LRZ-Ganta-Staging
+            - LRZ
+            - HLRS-Staging
         global:
           # hostname: zam12246.zam.kfa-juelich.de
           hostname: portal-staging.gauss-centre.eu
           baseUrl: /
           loggerName: PortalGaussStaging
+        sidecarCheckInterval: 1200
         nfs:
           path: /nfs/hubs/rke2/staging/portalgauss
+        livenessProbe:
+          enabled: false
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
@@ -98,12 +111,6 @@ targetCustomizations:
           loggerName: PortalGauss
         nfs:
           path: /nfs/hubs/rke2/production/portalgauss
-        sidecarCheckInterval: 300
-        redirectEditInPlace: "false"
-        redirects:
-          - name: "production-docs"
-            oldHost: "docs.portal.gauss-centre.eu"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
   - name: jupyter-prod-maintenance
     clusterSelector:
       matchLabels:

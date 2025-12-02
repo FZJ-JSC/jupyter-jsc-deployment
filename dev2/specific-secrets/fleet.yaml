@@ -1,4 +1,4 @@
-defaultnamespace: dev2
+defaultNamespace: dev2
 
 labels:
   app: dev2

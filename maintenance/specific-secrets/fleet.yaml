@@ -1,4 +1,4 @@
-defaultnamespace: jupyter
+defaultNamespace: jupyter
 
 labels:
   app: maintenance

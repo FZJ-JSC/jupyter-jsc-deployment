@@ -1,5 +1,5 @@
 ---
-defaultnamespace: juniq
+defaultNamespace: juniq
 
 labels:
   app: juniq
@@ -22,12 +22,8 @@ helm:
   # repo: https://jupyterhub.github.io/helm-chart/
   # chart: jupyterhub
   # version: 3.1.0
-  chart: https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-4.2.0.tgz
-  values:
-    ingress:
-      # Set JupyterHub in maintenance:
-      #   Set enabled here to false, update ingress in maintenance/fleet.yaml
-      enabled: true
+  chart:
+    https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-4.3.1.tgz
   valuesFiles:
     - ../../base-values/extraConfig.yaml
     - ../../base-values/image.yaml
@@ -46,17 +42,6 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "false"
     helm:
       valuesFiles:
-        - ../../base-values/image_prod.yaml
         - ../../base-values/resources.yaml
-  - name: production
-    clusterSelector:
-      matchLabels:
-        stage: production
-        maintenance: "true"
-    helm:
-      valuesFiles:
-        - ../../base-values/image_prod.yaml
-        - ../../base-values/maintenance.yaml

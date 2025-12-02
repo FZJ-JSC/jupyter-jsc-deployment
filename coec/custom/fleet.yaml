@@ -15,17 +15,14 @@ helm:
   releaseName: coec-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.74
+  version: 0.24.4
   values:
     fullnameOverride: coec-custom
     global:
       name: coec
       namespace: coec
     dailyRestart:
-      enabled: true
-      restartSchedule: "0 2 * * 0"
-    ingress:
-      enabled: true
+      enabled: false
     jupyter-metrics:
       enabled: true
       nodeSelector:
@@ -55,6 +52,7 @@ targetCustomizations:
           hostname: jupyter-coec-staging.jsc.fz-juelich.de
           baseUrl: /
           loggerName: CoeCStaging
+        sidecarCheckInterval: 1200
         nfs:
           path: /nfs/hubs/rke2/staging/coec
   - name: jupyter-prod
@@ -71,12 +69,6 @@ targetCustomizations:
           loggerName: CoeC
         nfs:
           path: /nfs/hubs/rke2/production/coec
-        sidecarCheckInterval: 300
-        redirectEditInPlace: "false"
-        redirects:
-          - name: "production-docs"
-            oldHost: "docs.jupyter-coec.jsc.fz-juelich.de"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
   - name: jupyter-prod-maintenance
     clusterSelector:
       matchLabels:

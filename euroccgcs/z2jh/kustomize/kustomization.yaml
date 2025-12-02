@@ -15,6 +15,26 @@ patches:
         value:
           - secretRef:
               name: generics
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: PROXY_API_SERVICE_PORT
+          value: "8001"
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: PROXY_API_SERVICE_HOST
+          value: "_"
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: PROXY_PUBLIC_SERVICE_PORT
+          value: "443"
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: PROXY_PUBLIC_SERVICE_HOST
+          value: "_"
   - target:
       kind: Ingress
       group: networking.k8s.io
@@ -22,5 +42,31 @@ patches:
       labelSelector: app=jupyterhub
     patch: |-
       - op: replace
-        path: "/spec/rules/0/http/paths/0/backend/service/port/name"
-        value: https
+        path: /metadata/namespace
+        value: traefik
+      - op: replace
+        path: /spec/rules/0/http/paths/0/backend/service/name
+        value: traefik
+      - op: replace
+        path: /spec/rules/0/http/paths/0/backend/service/port/name
+        value: web
+
+patchesStrategicMerge:
+  - |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: proxy
+    $patch: delete
+  - |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: proxy-public
+    $patch: delete
+  - |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: proxy-api
+    $patch: delete

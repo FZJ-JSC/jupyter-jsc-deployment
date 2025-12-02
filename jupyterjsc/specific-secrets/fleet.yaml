@@ -1,4 +1,4 @@
-defaultnamespace: jupyterjsc
+defaultNamespace: jupyterjsc
 
 labels:
   app: jupyterjsc

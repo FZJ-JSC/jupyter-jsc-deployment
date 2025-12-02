@@ -1,4 +1,4 @@
-defaultnamespace: portalgauss
+defaultNamespace: portalgauss
 
 labels:
   app: portalgauss

@@ -15,18 +15,17 @@ helm:
   releaseName: nfdigeneral-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.74
+  version: 0.24.4
   values:
     fullnameOverride: nfdigeneral-custom
     global:
       name: nfdigeneral
       namespace: nfdigeneral
-    oauthSecret: hdfaai-credentials
-    ingress:
-      enabled: true
+    oauthSecret: infraproxy-credentials
+    traefik:
+      proxy: false
     dailyRestart:
-      enabled: true
-      restartSchedule: "0 2 * * 0"
+      enabled: false
     jupyter-metrics:
       enabled: true
       nodeSelector:
@@ -76,13 +75,67 @@ targetCustomizations:
           systems:
             - JSC-Cloud
             - MPCDF
+            - TUD-Cloud-Staging
+            - TUD-HPC-Staging
+            - GWDG-Staging
+            - deNBI-Cloud
+          systemsMaxPerUser:
+            TUD-Cloud-Staging:
+              default: 5
+          services:
+            JupyterLab:
+              defaultOption: "default"
+              default:
+                enabled: true
+                allowedLists:
+                  systems:
+                    - JSC-Cloud
+                    - LRZ-Staging
+                    - LRZ
+                    - MPCDF
+                    - TUD-Cloud-Staging
+                    - TUD-HPC-Staging
+                    - GWDG-Staging
+                    - deNBI-Cloud
+              "4.3":
+                name: "JupyterLab XL"
+                allowedLists:
+                  groups:
+                    - "geant:dfn.de:fz-juelich.de:jsc:jupyter:beta_tester"
+              custom:
+                allowedLists:
+                  systems:
+                    - JSC-Cloud
+                    - LRZ-Staging
+                    - LRZ
+                    - MPCDF
+                    - LocalDummy
+                    - Dummy
+                    - deNBI-Cloud
+                    - TUD-Cloud-Staging
+              repo2docker:
+                allowedLists:
+                  systems:
+                    - JSC-Cloud
+                    - LocalDummy
+                    - Dummy
+                    - deNBI-Cloud
+          backendServices:
+            outpostKubeMPCDF:
+              flavorsRequired: true
+            outpostKubeTUDCloudStaging:
+              flavorsRequired: true
+              userflavors: true
         global:
           # hostname: zam12246.zam.kfa-juelich.de
           baseUrl: /
           loggerName: NFDIGeneralStaging
           hostname: hub-staging.nfdi-jupyter.de
+        sidecarCheckInterval: 1200
         nfs:
           path: /nfs/hubs/rke2/staging/nfdigeneral
+        livenessProbe:
+          enabled: false
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
@@ -97,15 +150,6 @@ targetCustomizations:
           hostname: hub.nfdi-jupyter.de
         nfs:
           path: /nfs/hubs/rke2/production/nfdigeneral
-        sidecarCheckInterval: 300
-        redirectEditInPlace: "false"
-        redirects:
-          - name: "production-docs"
-            oldHost: "docs.hub.nfdi-jupyter.de"
-            newHost: "nfdi-jupyter.de"
-          - name: "service-url"
-            oldHost: "jupyter.services.base4nfdi.de"
-            newHost: "nfdi-jupyter.de"
   - name: jupyter-prod-maintenance
     clusterSelector:
       matchLabels:

@@ -15,17 +15,14 @@ helm:
   releaseName: coeraise-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.74
+  version: 0.24.4
   values:
     fullnameOverride: coeraise-custom
     global:
       name: coeraise
       namespace: coeraise
-    ingress:
-      enabled: true
     dailyRestart:
-      enabled: true
-      restartSchedule: "0 2 * * 0"
+      enabled: false
     jupyter-metrics:
       enabled: true
       nodeSelector:
@@ -55,6 +52,7 @@ targetCustomizations:
           hostname: jupyter-staging.coe-raise.eu
           baseUrl: /
           loggerName: CoeRaiseStaging
+        sidecarCheckInterval: 1200
         nfs:
           path: /nfs/hubs/rke2/staging/coeraise
   - name: jupyter-prod
@@ -71,12 +69,6 @@ targetCustomizations:
           loggerName: CoeRaise
         nfs:
           path: /nfs/hubs/rke2/production/coeraise
-        sidecarCheckInterval: 300
-        redirectEditInPlace: "false"
-        redirects:
-          - name: "production-docs"
-            oldHost: "docs.jupyter.coe-raise.eu"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
   - name: jupyter-prod-maintenance
     clusterSelector:
       matchLabels:

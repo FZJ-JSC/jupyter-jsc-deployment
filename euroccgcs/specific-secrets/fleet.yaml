@@ -1,4 +1,4 @@
-defaultnamespace: euroccgcs
+defaultNamespace: euroccgcs
 
 labels:
   app: euroccgcs

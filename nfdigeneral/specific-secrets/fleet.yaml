@@ -1,4 +1,4 @@
-defaultnamespace: nfdigeneral
+defaultNamespace: nfdigeneral
 
 labels:
   app: nfdigeneral

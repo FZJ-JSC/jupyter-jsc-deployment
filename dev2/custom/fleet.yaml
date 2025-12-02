@@ -15,7 +15,7 @@ helm:
   releaseName: dev2-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.74
+  version: 0.16.69
   values:
     fullnameOverride: dev2-custom
     global:
@@ -43,6 +43,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: staging
+    doNotDeploy: true
     helm:
       values:
         global:

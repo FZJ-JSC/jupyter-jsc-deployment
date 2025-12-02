@@ -1,5 +1,5 @@
 ---
-defaultnamespace: jupyter
+defaultNamespace: jupyter
 
 labels:
   app: maintenance
@@ -19,32 +19,42 @@ helm:
   releaseName: maintenance
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-maintenance
-  version: 0.9.0
-  valuesFiles:
-    - values/base/misc.yaml
+  version: 0.10.0
+  values:
+    enabled: true
+    fullnameOverride: "jhub-maintenance"
 targetCustomizations:
   - name: staging
     clusterSelector:
       matchLabels:
         stage: staging
-        maintenance: "false"
     doNotDeploy: true
+    helm:
+      values:
+        traefik:
+          hosts:
+            - jupyter-staging.jsc.fz-juelich.de
+            - juniq-staging.fz-juelich.de
+            - hub-staging.nfdi-jupyter.de
+            - portal-staging.gauss-centre.eu
+            - jupyter-staging.eurocc-gcs.de
+            - jupyter-staging.coe-raise.eu
+            - jupyter-coec-staging.jsc.fz-juelich.de
+            - twin-staging.ebrains.eu
   - name: production
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "false"
     doNotDeploy: true
     helm:
       values:
-        enabled: false
-  - name: production
-    clusterSelector:
-      matchLabels:
-        stage: production
-        maintenance: "true"
-    helm:
-      valuesFiles:
-        - values/overlays/production/hosts.yaml
-      values:
-        enabled: true
+        traefik:
+          hosts:
+            - jupyter.jsc.fz-juelich.de
+            - juniq.fz-juelich.de
+            - hub.nfdi-jupyter.de
+            - portal.gauss-centre.eu
+            - jupyter.eurocc-gcs.de
+            - jupyter.coe-raise.eu
+            - jupyter-coec.jsc.fz-juelich.de
+            - twin.ebrains.eu

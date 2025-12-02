@@ -1,4 +1,4 @@
-defaultnamespace: coec
+defaultNamespace: coec
 labels:
   app: coec
   component: secrets

@@ -3,7 +3,7 @@ resources:
 - generics.yaml
 - hub-metrics-codebase.yaml
 - hub-metrics.yaml
-- internal-ssl.yaml
+# - internal-ssl.yaml
 - reservation-keypair.yaml
 - unity-secrets.yaml
 - user-kpi-codebase.yaml

@@ -1,4 +1,4 @@
-defaultnamespace: juniq
+defaultNamespace: juniq
 
 labels:
   app: juniq

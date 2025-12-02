@@ -15,11 +15,10 @@ helm:
   releaseName: jupyterjsc-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.16.74
+  version: 0.24.4
   values:
     dailyRestart:
-      enabled: true
-      restartSchedule: "0 2 * * */2"
+      enabled: false
     fullnameOverride: jupyterjsc-custom
     global:
       name: jupyterjsc
@@ -41,8 +40,6 @@ helm:
             allowedLists:
               groups:
                 - "geant:dfn.de:fz-juelich.de:jsc:jupyter:beta_tester"
-    ingress:
-      enabled: true
     jupyter-metrics:
       enabled: true
       nodeSelector:
@@ -70,28 +67,19 @@ targetCustomizations:
     helm:
       values:
         global:
-          # hostname: zam12246.zam.kfa-juelich.de
+          # hostname: zam12246.jsc.fz-juelich.de
           hostname: jupyter-staging.jsc.fz-juelich.de
           baseUrl: /
           loggerName: JupyterJSCStaging
+        sidecarCheckInterval: 1200
         nfs:
           path: /nfs/hubs/rke2/staging/jupyterjsc
-        redirectEditInPlace: "false"
-        redirects:
-          - name: "staging"
-            oldHost: "jupyter-jsc-staging.fz-juelich.de"
-            newHost: "jupyter-staging.jsc.fz-juelich.de"
-          - name: "staging-docs"
-            oldHost: "docs.jupyter-staging.jsc.fz-juelich.de"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
-          - name: "staging-docs-prev"
-            oldHost: "docs.jupyter-jsc-staging.fz-juelich.de"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
+        livenessProbe:
+          enabled: false
   - name: jupyter-prod
     clusterSelector:
       matchLabels:
         stage: production
-        maintenance: "false"
     helm:
       values:
         global:
@@ -99,39 +87,3 @@ targetCustomizations:
           loggerName: JupyterJSC
         nfs:
           path: /nfs/hubs/rke2/production/jupyterjsc
-        sidecarCheckInterval: 300
-        redirectEditInPlace: "false"
-        redirects:
-          - name: "production"
-            oldHost: "jupyter-jsc.fz-juelich.de"
-            newHost: "jupyter.jsc.fz-juelich.de"
-          - name: "production-docs-prev"
-            oldHost: "docs.jupyter-jsc.fz-juelich.de"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
-          - name: "production-docs"
-            oldHost: "docs.jupyter.jsc.fz-juelich.de"
-            newHost: "jupyterjsc.pages.jsc.fz-juelich.de/docs/jupyterjsc/"
-  - name: jupyter-prod-maintenance
-    clusterSelector:
-      matchLabels:
-        stage: production
-        maintenance: "true"
-    helm:
-      values:
-        ingress:
-          certmanager: false
-        global:
-          hostname: zam12154.zam.kfa-juelich.de
-          # hostname: jupyter.jsc.fz-juelich.de
-          baseUrl: /jupyterjsc/
-          loggerName: JupyterJSC
-          tlssecretname: zam12154
-        nfs:
-          path: /nfs/hubs/rke2/production/jupyterjsc
-        # redirects:
-        #   - name: "production"
-        #     oldHost: "jupyter-jsc.fz-juelich.de"
-        #     newHost: "jupyter.jsc.fz-juelich.de"
-        #   - name: "production-nbviewer"
-        #     oldHost: "docs.jupyter-jsc.fz-juelich.de"
-        #     newHost: "docs.jupyter.jsc.fz-juelich.de"
