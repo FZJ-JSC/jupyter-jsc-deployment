@@ -3,7 +3,6 @@ resources:
   - default-tls-options.yaml
   - ingress-coec-redirect-1.yaml
   - ingress-coeraise-redirect-1.yaml
-  - ingress-ebrains-redirect-1.yaml
   - ingress-juniq-redirect-1.yaml
   - ingress-jupyter-collection.yaml
   - ingress-jupyterjsc-redirect-1.yaml
