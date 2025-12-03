@@ -1,6 +1,6 @@
 ---
 extraPythonPackages:
-  - jupyterhub-datamountspawner==1.1.6
+  - jupyterhub-datamountspawner==1.2.1
   - jupyterhub-kubespawner==7.0.0
 extraVolumes:
   - configMap:
