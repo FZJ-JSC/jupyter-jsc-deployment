@@ -3,9 +3,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    acme.cert-manager.io/http01-edit-in-place: "true"
+    acme.cert-manager.io/http01-edit-in-place: "false"
     cert-manager.io/cluster-issuer: letsencrypt-cluster-issuer
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/server-snippet: |-
       # Managing requests to JupyterHubs with retry mechanism
       location ~* "^/" {
