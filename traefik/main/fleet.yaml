@@ -17,6 +17,8 @@ helm:
   chart: traefik
   version: 37.4.0
   values:
+    nodeSelector:
+      worker: "true"
     deployment:
       replicas: 1
     ingressClass:
