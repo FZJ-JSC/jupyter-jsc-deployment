@@ -45,7 +45,7 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-    doNotDeploy: true
+    doNotDeploy: false
     helm:
       values:
         traefik:
