@@ -50,7 +50,7 @@ targetCustomizations:
       values:
         traefik:
           hosts:
-            - jupyter.jsc.fz-juelich.de
+            # - jupyter.jsc.fz-juelich.de
             - juniq.fz-juelich.de
             - hub.nfdi-jupyter.de
             - portal.gauss-centre.eu
