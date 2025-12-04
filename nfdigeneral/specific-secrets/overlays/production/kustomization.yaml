@@ -4,5 +4,5 @@ resources:
 - hdfaai-credentials.yaml
 - hub-metrics.yaml
 - hub-static-secret.yaml
-- internal-ssl.yaml
+- infraproxy.yaml
 - reservation-keypair.yaml

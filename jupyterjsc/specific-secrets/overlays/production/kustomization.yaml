@@ -4,7 +4,6 @@ resources:
 - hub-metrics-codebase.yaml
 - hub-metrics.yaml
 - hub-static-secret.yaml
-- internal-ssl.yaml
 - reservation-keypair.yaml
 - unity-secrets.yaml
 - user-kpi-codebase.yaml
