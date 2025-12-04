@@ -439,7 +439,7 @@ outpostConfig: |
       except:
           spawner.log.info(f"{spawner._log_name} - NodeSelector: Could not load node infos")
           return {"usernode": "true"}
-      usernodes = [x for x in all_nodes.get("items", []) if x.get("metadata", {}).get("labels", {}).get("usernode", "false") == "true"]
+      usernodes = [x for x in all_nodes.get("items", []) if x.get("metadata", {}).get("labels", {}).get("usernode", "false") == "true" and x.get("metadata", {}).get("labels", {}).get("usernode-gpu", "true") == "false"]
       usernodes_sorted = sorted(usernodes, key=lambda d: d["metadata"]['creation_timestamp'])
 
       for usernode in usernodes_sorted:
