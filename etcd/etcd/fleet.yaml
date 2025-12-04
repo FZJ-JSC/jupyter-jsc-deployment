@@ -38,7 +38,7 @@ helm:
         - from:
             - namespaceSelector:
                 matchLabels:
-                  name: traefik
+                  kubernetes.io/metadata.name: traefik
               podSelector: {}
           ports:
             - port: 2379
