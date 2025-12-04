@@ -53,7 +53,6 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-        prep: "false"
     helm:
       values:
         global:
@@ -61,22 +60,5 @@ targetCustomizations:
           hostname: twin.ebrains.eu
           baseUrl: /
           loggerName: ebrains
-        nfs:
-          path: /nfs/hubs/rke2/production/ebrains
-  - name: jupyter-prod
-    clusterSelector:
-      matchLabels:
-        stage: production
-        prep: "true"
-    helm:
-      values:
-        ingress:
-          certmanager: false
-        global:
-          hostname: zam12185.zam.kfa-juelich.de
-          # hostname: jupyter-ebrains.jsc.fz-juelich.de
-          baseUrl: /ebrains/
-          loggerName: ebrains
-          tlssecretname: zam12185
         nfs:
           path: /nfs/hubs/rke2/production/ebrains
