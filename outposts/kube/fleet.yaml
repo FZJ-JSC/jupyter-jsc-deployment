@@ -49,6 +49,8 @@ targetCustomizations:
                 key: password
           - name: GUNICORN_TIMEOUT
             value: "1260"
+          - name: JUPYTERHUB_CLEANUP_K8S_CHECK
+            value: "true"
   - name: production
     clusterSelector:
       matchLabels:
@@ -70,5 +72,7 @@ targetCustomizations:
                 key: password
           - name: GUNICORN_TIMEOUT
             value: "1260"
+          - name: JUPYTERHUB_CLEANUP_K8S_CHECK
+            value: "true"
     kustomize:
       dir: ./kustomize
