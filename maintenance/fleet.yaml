@@ -45,14 +45,14 @@ targetCustomizations:
     clusterSelector:
       matchLabels:
         stage: production
-    doNotDeploy: false
+    doNotDeploy: true
     helm:
       values:
         traefik:
           hosts:
             # - jupyter.jsc.fz-juelich.de
             # - juniq.fz-juelich.de
-            - hub.nfdi-jupyter.de
+            # - hub.nfdi-jupyter.de
             # - portal.gauss-centre.eu
             # - jupyter.eurocc-gcs.de
             # - jupyter.coe-raise.eu
