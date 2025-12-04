@@ -15,7 +15,7 @@ helm:
   releaseName: ebrains-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.24.4
+  version: 0.24.5
   values:
     fullnameOverride: ebrains-custom
     global:
