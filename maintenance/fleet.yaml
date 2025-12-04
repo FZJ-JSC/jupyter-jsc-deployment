@@ -51,10 +51,10 @@ targetCustomizations:
         traefik:
           hosts:
             # - jupyter.jsc.fz-juelich.de
-            - juniq.fz-juelich.de
+            # - juniq.fz-juelich.de
             - hub.nfdi-jupyter.de
-            - portal.gauss-centre.eu
+            # - portal.gauss-centre.eu
             # - jupyter.eurocc-gcs.de
-            - jupyter.coe-raise.eu
-            - jupyter-coec.jsc.fz-juelich.de
-            - twin.ebrains.eu
+            # - jupyter.coe-raise.eu
+            # - jupyter-coec.jsc.fz-juelich.de
+            # - twin.ebrains.eu
