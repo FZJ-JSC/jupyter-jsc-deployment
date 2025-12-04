@@ -26,7 +26,8 @@ helm:
     https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-4.3.1.tgz
   valuesFiles:
     - ../../base-values/extraConfig.yaml
-    - ../../base-values/image.yaml
+    # - ../../base-values/image.yaml
+    # - ../../base-values/image_devel.yaml
   valuesFrom:
     - configMapKeyRef:
         name: values
@@ -44,4 +45,5 @@ targetCustomizations:
         stage: production
     helm:
       valuesFiles:
-        - ../../base-values/resources.yaml
+        # - ../../base-values/resources.yaml
+        - ../../base-values/image_devel.yaml
