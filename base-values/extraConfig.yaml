@@ -166,6 +166,13 @@ hub:
           global_max_idle_time = 3 * 24 * 3600
           global_user_max_idle_time = 5 * 24 * 3600
 
+          # Return list because sets are not JSON serializable
+          async def get_user_groups(self, auth_state: dict):
+              groups = await super().get_user_groups(auth_state)
+              if type(groups) == set:
+                  groups = list(groups)
+              return groups
+
           async def flavor_based_culling(self):
               def done_callback(fut):
                   asyncio.create_task(task_hook())
@@ -217,6 +224,9 @@ hub:
           import json
           from jupyterhub_credit_service.orm import CreditsUser
 
+          if type(user_groups) == set:
+              user_groups = list(user_groups)
+
           custom_config = get_custom_config()
           ret = []
           tasks = []
@@ -250,9 +260,9 @@ hub:
                   request_kwargs = system_config.get("usercredits", {}).get("requestKwargs", {"request_timeout": 2})
                   auth = os.environ.get(f"AUTH_{outpost_name.upper()}")
                   body = {
-                  "username": user_name,
-                  "groups": user_groups,
-                  "email": auth_state.get("email", "")
+                      "username": user_name,
+                      "groups": user_groups,
+                      "email": auth_state.get("email", "")
                   }
                   if system_config.get("usercredits", {}).get("sendAuthState", False):
                       body["auth_state"] = auth_state
