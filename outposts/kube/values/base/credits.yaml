@@ -38,8 +38,8 @@ credits:
         - portalgauss
         - juniq
       authentication:
-        groups: ["geant:helmholtz.de:Helmholtz-member"]
-      weight: 100
+        groups: ["urn:geant:helmholtz.de:Helmholtz-member"]
+      weight: 90
       credits:
         - public
     defaultusers:
@@ -49,7 +49,7 @@ credits:
         - juniq
         - nfdigeneral
       authentication:
-        groups: ["geant:helmholtz.de:Helmholtz-member"]
+        groups: ["urn:geant:helmholtz.de:Helmholtz-member"]
       weight: 90
       credits:
         - default
@@ -60,7 +60,7 @@ credits:
         - juniq
         - nfdigeneral
       authentication:
-        groups: "geant:dfn.de:fz-juelich.de*"
+        username: "*fz-juelich.de"
       weight: 95
       credits:
         - priority
