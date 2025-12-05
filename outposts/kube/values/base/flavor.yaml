@@ -118,7 +118,7 @@ flavors:
         cpu_limit: 1
         mem_guarantee: "256M"
         mem_limit: "4096M"
-    l1:
+    xl1:
       max: 5
       weight: 17
       display_name: "8GB RAM, 1VCPUs, 40 credits per hour"
