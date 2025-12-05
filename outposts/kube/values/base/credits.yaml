@@ -2,16 +2,16 @@
 credits:
   credits:
     public:
-      cap: 60
-      grant_value: 60
+      cap: 70
+      grant_value: 70
       grant_interval: 86400
     default:
-      cap: 120
-      grant_value: 120
+      cap: 130
+      grant_value: 130
       grant_interval: 86400
     priority:
-      cap: 240
-      grant_value: 240
+      cap: 250
+      grant_value: 250
       grant_interval: 86400
   users:
     gmailusers:
