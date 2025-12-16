@@ -211,7 +211,7 @@ flavors:
     nfdi:
       jupyterhub_name: ["nfdigeneral"]
       weight: 12
-      flavors: ["m1nfdi", "l1nfdi", "xl1nfdi", "m1nfdigpu", "l1nfdigpu", "xl1nfdigpu"]
+      flavors: ["m1nfdi", "l1nfdi", "xl1nfdi"]
     juniq:
       jupyterhub_name: ["juniq"]
       weight: 6
