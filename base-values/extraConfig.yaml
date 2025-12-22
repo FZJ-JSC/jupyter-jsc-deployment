@@ -60,6 +60,8 @@ hub:
           def filter(self, record):
               if str(record.msg).startswith("Failing suspected API request to not-running server"):
                   return False
+              elif str(record.msg).startswith("Adding route for Hub:"):
+                  return False
               return True
 
       class TornadoGeneralLoggingFilter(logging.Filter):
