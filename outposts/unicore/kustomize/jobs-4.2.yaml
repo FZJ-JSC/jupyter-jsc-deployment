@@ -361,6 +361,9 @@ data:
           modules+=("jupyterlab-nvdashboard/.0.10.0")
         fi
         module load "${modules[@]}"
+        if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
+          module load JupyterKernel-Java/.1.3.0 || true;
+        fi
         send_spawn_update 80 "Load default modules done" "Loaded Jupyter-bundle/20240300 in Stages/2024."
       fi
       echo "$(date) - Load modules done"
