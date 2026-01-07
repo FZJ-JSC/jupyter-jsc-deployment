@@ -266,9 +266,9 @@ data:
         if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
           modules+=("JupyterKernel-Cling/.20231018-4.2.1")
         fi
-        if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
-          modules+=("JupyterKernel-Java/.1.3.0")
-        fi
+        # if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
+        #   modules+=("JupyterKernel-Java/.1.3.0")
+        # fi
         if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
           modules+=("JupyterKernel-Julia/.1.9.3")
         fi
