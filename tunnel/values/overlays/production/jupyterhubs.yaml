@@ -24,7 +24,7 @@ jupyterhubs:
       - name: "deepv"
         user: "ljupyter"
         port: 22
-        disabled: true
+        disabled: false
         hostname: "deep.fz-juelich.de"
       - name: "jwlogin01i"
         user: "ljupyter"
