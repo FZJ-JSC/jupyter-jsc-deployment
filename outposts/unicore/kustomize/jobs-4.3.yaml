@@ -361,10 +361,10 @@ data:
         if [[ $JUPYTER_MODULE_CUBEWEBSERVICE_ENABLED -eq 1 ]]; then
           if [[ $SYSTEMNAME != "deep" ]]; then
             module use /p/usersoftware/swmanage/visser1/stage2025/easybuild/${SYSTEMNAME}/modules/all/Compiler/GCCcore/13.3.0/
-            if [[ $JUPYTER_MODULE_CUBEWEBSERVICE_VERSION == "latest" ]]; then
-              modules+=("JupyterProxy-CubeWebservice/release")
+            if [[ $JUPYTER_MODULE_CUBEWEBSERVICE_VERSION == "latest" || $JUPYTER_MODULE_CUBEWEBSERVICE_VERSION == "stable" ]]; then
+              modules+=("JupyterProxy-CubeWebservice/stable")
             elif [[ -z $JUPYTER_MODULE_CUBEWEBSERVICE_VERSION ]]; then
-              modules+=("JupyterProxy-CubeWebservice/release")
+              modules+=("JupyterProxy-CubeWebservice/stable")
             else
               modules+=("JupyterProxy-CubeWebservice/${JUPYTER_MODULE_CUBEWEBSERVICE_VERSION}")
             fi
