@@ -226,7 +226,7 @@ binderhub:
             })();
           }
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2025.08.0-83.g2456a4d
+      build_image: quay.io/jupyterhub/repo2docker:2025.12.1.dev6-gc8b2679fa
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud
