@@ -360,8 +360,14 @@ data:
         fi
         if [[ $JUPYTER_MODULE_CUBEWEBSERVICE_ENABLED -eq 1 ]]; then
           if [[ $SYSTEMNAME != "deep" ]]; then
-            module use /p/usersoftware/swmanage/goebbert1/stage2025/cubewebservice/easybuild/${SYSTEMNAME}/modules/all/Compiler/GCCcore/13.3.0/
-            modules+=("JupyterProxy-CubeWebservice")
+            module use /p/usersoftware/swmanage/visser1/stage2025/easybuild/${SYSTEMNAME}/modules/all/Compiler/GCCcore/13.3.0/
+            if [[ $JUPYTER_MODULE_CUBEWEBSERVICE_VERSION == "latest" ]]; then
+              modules+=("JupyterProxy-CubeWebservice/release")
+            elif [[ -z $JUPYTER_MODULE_CUBEWEBSERVICE_VERSION ]]; then
+              modules+=("JupyterProxy-CubeWebservice/release")
+            else
+              modules+=("JupyterProxy-CubeWebservice/${JUPYTER_MODULE_CUBEWEBSERVICE_VERSION}")
+            fi
           fi
         fi
         # # Extensions
