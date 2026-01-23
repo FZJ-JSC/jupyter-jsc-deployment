@@ -171,65 +171,7 @@ hub:
           # Total max idle time: 3 / 5 days
           global_max_idle_time = 3 * 24 * 3600
           global_user_max_idle_time = 5 * 24 * 3600
-
-          workshops = {}
-          workshops_update_interval = 120  # 2 minutes
-          workshops_last_update = 0
-
-          async def get_workshops(self, workshops_config_url):
-              from tornado.httpclient import HTTPRequest
-              import base64
-              import json
-              import time
-              now = time.time()
-              if now - self.workshops_last_update > self.workshops_update_interval:
-                  github_token = os.environ.get("GITHUB_WORKSHOP_TOKEN", None)
-                  if not github_token:
-                      self.log.warning("No GITHUB_WORKSHOP_TOKEN set, cannot fetch workshops.json")
-                      return workshops
-                  req = HTTPRequest(
-                      workshops_config_url,
-                      method="GET",
-                      headers={"Authorization": f"Bearer {github_token}"}
-                  )
-                  try:
-                      response = await self.http_client.fetch(req)
-                      content_json = json.loads(response.body)
-                      workshops_json_str = base64.b64decode(content_json["content"]).decode("utf-8")
-                      workshops = json.loads(workshops_json_str)
-                      for existing_workshop in self.workshops.keys():
-                          if existing_workshop not in workshops:
-                              del self.workshops[existing_workshop]
-                      for workshop_name, workshop_config in workshops.items():
-                          # Fetch userlist from workshop specific git repo
-                          try:
-                              userfile = workshop_config.get("userfile", None)
-                              req = HTTPRequest(
-                                  userfile,
-                                  method="GET",
-                                  headers={"Authorization": f"Bearer {github_token}"}
-                              )
-                              workshop_response = await self.http_client.fetch(req)
-                              content_json = json.loads(workshop_response.body)
-                              users_txt = base64.b64decode(content_json["content"]).decode("utf-8")
-                              users = [
-                                  line.strip()
-                                  for line in users_txt.splitlines()
-                                  if line.strip() and not line.strip().startswith("#")
-                              ]
-                              if workshop_name not in self.workshops:
-                                  self.workshops[workshop_name] = {}
-                              self.workshops[workshop_name]["credits"] = workshop_config.get("credits", {})
-                              self.workshops[workshop_name]["priority"] = workshop_config.get("priority", 1)
-                              self.workshops[workshop_name]["users"] = users
-                          except:
-                              self.log.warning(f"Failed to fetch userfile {userfile} for workshop {workshop_name}")
-                              continue
-                  except:
-                      self.log.warning("Failed to fetch workshops.json from GitHub")
-                  self.workshops_last_update = now
-              return self.workshops
-
+          
           # Return list because sets are not JSON serializable
           async def get_user_groups(self, auth_state: dict):
               groups = await super().get_user_groups(auth_state)
@@ -283,14 +225,10 @@ hub:
               super().__init__(**kwargs)
               self.cull_task = asyncio.create_task(self.flavor_based_culling())
 
-
-      workshop_sources = {
-        "nfdigeneral": "https://api.github.com/repos/NFDI-Jupyter/Workshops/contents/workshops.json?ref=main"
-      }
-
       async def credits_user(authenticator, user_name, user_groups, user_admin, auth_state):
-          from tornado.httpclient import HTTPRequest
+          from datetime import datetime
           import json
+          from tornado.httpclient import HTTPRequest
           from jupyterhub_credit_service.orm import CreditsUser
 
           if type(user_groups) == set:
@@ -378,9 +316,9 @@ hub:
                       )
           except:
               authenticator.log.exception("OutpostCredits user specific - Could not load credits")
-
-          workshop_config_url = workshop_sources.get(namespace, None)
-          if not workshop_config_url:
+          
+          workshops_configured = get_custom_config().get("workshopcredits", {})
+          if not workshops_configured:
               return ret
           email = ""
           for group in user_groups:
@@ -390,24 +328,34 @@ hub:
           if not email:
               return ret
 
-          workshops_config_url = "https://api.github.com/repos/NFDI-Jupyter/Workshops/contents/workshops.json?ref=main"
-          workshops = await authenticator.get_workshops(workshops_config_url)
+          from jsc_custom.orm.workshops import WorkshopShares
           # Check every cuv value if a user is part of a workshop
           for cuv in ret:
-              # run through all workshops
-              for workshop_name, workshop_config in sorted(workshops.items(), key=lambda x: x[1].get("priority", 1)):
+              # run through all workshops in custom configuration
+              for workshop_name, workshop_config in sorted(workshops_configured.items(), key=lambda x: x[1].get("priority", 1)):
+                  if workshop_config.get("enabled", False) == False:
+                      authenticator.log.debug(f"Do not add workshop credits for user {user_name}. Workshop {workshop_name} is disabled, skipping")
+                      continue
+                  start_time = datetime.strptime(workshop_config['start'], "%Y-%m-%d %H:%M")
+                  end_time = datetime.strptime(workshop_config['end'], "%Y-%m-%d %H:%M")
+                  if not (start_time <= datetime.now() <= end_time):
+                      authenticator.log.debug(f"Do not add workshop credits for user {user_name}. Workshop {workshop_name} is not active yet, skipping")
+                      continue
                   if cuv.get("user_options") == workshop_config.get("credits", {}).get("user_options", {}):
-                      # Check if user is part of the workshop
-                      if email in workshop_config.get("users", []):
-                          authenticator.log.debug(f"Adding workshop credits for user {user_name} for workshop {workshop_name}")
-                          workshop_credits = workshop_config.get("credits", {})
-                          # Add workshop credits
-                          cuv["project"] = {
-                              "name": workshop_name,
-                              "cap": workshop_credits.get("cap", 0),
-                              "grant_value": workshop_credits.get("grant_value", 0),
-                              "grant_interval": workshop_credits.get("grant_interval", 0)
-                          }
+                      # Check if user is part of the workshop in the database
+                      workshop_db = WorkshopShares.find_by_workshop_id(authenticator.parent.db, workshop_name)
+                      if workshop_db:
+                          workshop_userlist = [x for x in workshop_db.user_options.get("userlist", "").split("\n") if x.startswith("#") == False and x.strip() != ""]
+                          if email in workshop_userlist:
+                              authenticator.log.debug(f"Adding workshop credits for user {user_name} for workshop {workshop_name}")
+                              workshop_credits = workshop_config.get("credits", {})
+                              # Add workshop credits
+                              cuv["project"] = {
+                                  "name": workshop_config.get("display_name", workshop_name),
+                                  "cap": workshop_credits.get("cap", 0),
+                                  "grant_value": workshop_credits.get("grant_value", 0),
+                                  "grant_interval": workshop_credits.get("grant_interval", 0)
+                              }
           return ret
 
       c.JupyterHub.authenticator_class = Authenticator
