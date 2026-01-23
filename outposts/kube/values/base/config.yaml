@@ -190,10 +190,6 @@ outpostConfig: |
               spawner.default_url = f"/lab/tree/{notebook}"
           elif notebook_type == "url" and notebook:
               spawner.default_url = notebook
-          else:
-              spawner.default_url = "/lab/tree/home/jovyan"
-      elif spawner.user_options["option"] == "custom":
-          spawner.default_url = "/lab/tree/home/jovyan"
 
 
   c.KubeSpawner.extra_pod_config = {
@@ -224,16 +220,21 @@ outpostConfig: |
   # KubeSpawner profiles
   ##########
 
-  async def contact_storage_manager(spawner, localstoragepath):
+  async def contact_storage_manager(spawner, localstoragepath, type="user"):
       # Ensure the user does have a userhome
       token = os.environ.get("STORAGE_MANAGER_TOKEN", None)
       storage_url = os.environ.get("STORAGE_MANAGER_URL", None)
       if storage_url and token:
           hub = spawner.extra_labels.get("app", "jupyter")
           stage = os.environ.get("STAGE", "staging")
-          userid = str(spawner.user.id)
-          soft = "25g"
-          hard = "30g"
+          if type == "workshop":
+              userid = f"workshop_{spawner.user_options.get('workshop_id', 'unknown')}"
+              soft = "45g"
+              hard = "50g"
+          else:
+              userid = str(spawner.user.id)
+              soft = "25g"
+              hard = "30g"
           request_header = {
               "Content-Type": "application/json",
               "Accept": "application/json",
@@ -256,14 +257,23 @@ outpostConfig: |
               orange = False
               if int(storage_info.get("bytes", {}).get("used", "0")) >= int(storage_info.get("bytes", {}).get("hard")):
                   red = True
-                  summary = f"Hard limit of disk quota exceeded ({used} / {soft}). Your container might not start for this reason. Please contact support (see button in footer) to solve this."
+                  if type == "workshop":
+                      summary = f"Hard limit of workshop disk quota exceeded ({used} / {soft}). Your container might not start for this reason. Please contact support (see button in footer) to solve this."
+                  else:
+                      summary = f"Hard limit of disk quota exceeded ({used} / {soft}). Your container might not start for this reason. Please contact support (see button in footer) to solve this."
                   details = f"You're allowed to use up to {soft} disk space. Please keep your disk usage below this threshold."
               elif int(storage_info.get("bytes", {}).get("used", "0")) > int(storage_info.get("bytes", {}).get("soft")):
-                  summary = f"Soft limit of disk quota exceeded ({used} / {soft}). Please remove some files to stay below {soft}. Your container might not start for this reason. Please contact support (see button in footer) to solve this."
+                  if type == "workshop":
+                      summary = f"Soft limit of workshop disk quota exceeded ({used} / {soft}). Please remove some files to stay below {soft}. Your container might not start for this reason. Please contact support (see button in footer) to solve this."
+                  else:
+                      summary = f"Soft limit of disk quota exceeded ({used} / {soft}). Please remove some files to stay below {soft}. Your container might not start for this reason. Please contact support (see button in footer) to solve this."
                   details = f"It's possible to use up to {hard} for maximum 7 days. Afterwards, file creation in your directory is impossible, which may prevent a service start."
                   orange = True
               else:
-                  summary = f"Disk quota status: {used} / {soft}"
+                  if type == "workshop":
+                      summary = f"Workshop disk quota status: {used} / {soft}"
+                  else:
+                      summary = f"Disk quota status: {used} / {soft}"
                   details = f"It's possible to use up to {hard} for maximum 7 days. Afterwards, file creation in your directory is impossible, which may prevent a service start."
 
               if red:
@@ -278,22 +288,47 @@ outpostConfig: |
                   "failed": False
               }
               await spawner._outpostspawner_send_event(event)
-              return {
+              workshop_tutor = False
+              if type == "workshop":
+                  name = "nfs-workshopdata"
+                  path = f"/p/home/jusers/{stage}/{spawner.jupyterhub_name}/{userid}"
+                  rwaccess = spawner.user_options.get("workshop_storage_rw", False)
+                  workshop_tutor = spawner.user_options.get("workshop_tutor", False)
+              else:
+                  name = "nfs-userdata"
+                  path = f"/p/home/jusers/{stage}/{spawner.jupyterhub_name}/{{userid}}"
+                  rwaccess = True
+              ret = {
                   "volume_mounts": [{
-                      "name": "nfs-userdata",
+                      "name": name,
                       "mountPath": localstoragepath,
-                      "readOnly": False
+                      "readOnly": not rwaccess
                   }],
                   "volumes": [{
-                      "name": "nfs-userdata",
+                      "name": name,
                       "hostPath": {
                           # userid gets expanded by KubeSpawner, do not use mapped
                           # hub name here, each hub uses it's own home dir.
-                          "path": f"/p/home/jusers/{stage}/{spawner.jupyterhub_name}/{{userid}}",
+                          "path": path,
                           "type": ""
                       }
                   }]
               }
+              if workshop_tutor:
+                  ret["volume_mounts"].append({
+                      "name": f"{name}-tutor",
+                      "mountPath": f"{localstoragepath.rstrip('/')}README",
+                      "readOnly": True
+                  })
+
+                  ret["volumes"].append({
+                      "name": f"{name}-tutor",
+                      "hostPath": {
+                          "path": f"/p/home/jusers/{stage}/{spawner.jupyterhub_name}/_workshopREADME",
+                          "type": ""
+                      }
+                  })
+              return ret
           except:
               spawner.log.exception(f"{spawner._log_name} - Could not get storage information")
               return False
@@ -353,13 +388,6 @@ outpostConfig: |
                   }
               },
               {
-                  "name": f"modules-{option_dash}-config",
-                  "configMap": {
-                      "defaultMode": 292,
-                      "name": f"modules-{option_dash}"
-                  }
-              },
-              {
                   "name": f"modules-user-{option_dash}",
                   "configMap": {
                       "defaultMode": 292,
@@ -384,7 +412,7 @@ outpostConfig: |
                   "subPath": "load_jupyter_version.sh"
               },
               {
-                  "name": f"modules-{option_dash}-config",
+                  "name": f"modules-{option_dash}",
                   "mountPath": "/tmp/custom/config.py",
                   "subPath": "config.py"
               },
@@ -416,6 +444,17 @@ outpostConfig: |
           if local_storage:
               ret["volume_mounts"].extend(local_storage["volume_mounts"])
               ret["volumes"].extend(local_storage["volumes"])
+
+      if "workshop_id" in spawner.user_options.keys():
+          jupyter_path = spawner.environment.get("JUPYTER_PATH", "")
+          if jupyter_path:
+              spawner.environment["JUPYTER_PATH"] = f"{jupyter_path}:/home/jovyan/workshop/share/jupyter"
+          else:
+              spawner.environment["JUPYTER_PATH"] = "/home/jovyan/workshop/share/jupyter"
+          workshop_storage = await contact_storage_manager(spawner, f"/home/jovyan/workshop", type="workshop")
+          if workshop_storage:
+              ret["volume_mounts"].extend(workshop_storage["volume_mounts"])
+              ret["volumes"].extend(workshop_storage["volumes"])
 
       # Then we add configmaps, which might be required by the defined option
       option_storage = await get_option_storage(spawner, spawner.user_options["service"], spawner.user_options["option"])
@@ -673,9 +712,9 @@ outpostConfig: |
       if ! command -v jupyterhub-singleuser >/dev/null 2>&1; then
           echo "[INFO] Installing jupyterhub-singleuser (current: $version)"
           if [ -n "$VIRTUAL_ENV" ]; then
-              pip install jupyterhub jupyterlab
+              pip install jupyterhub jupyterlab jupyterlab-hub-credit-extension
           else
-              pip install --user jupyterhub jupyterlab
+              pip install --user jupyterhub jupyterlab jupyterlab-hub-credit-extension
           fi
       fi
 
