@@ -380,13 +380,6 @@ outpostConfig: |
                       "name": "uftp"
                   }
               },
-            {
-                  "name": f"modules-{option_dash}-config",
-                  "configMap": {
-                      "defaultMode": 292,
-                      "name": f"modules-{option_dash}-config"
-                  }
-              },
               {
                   "name": f"modules-{option_dash}",
                   "configMap": {
@@ -417,11 +410,6 @@ outpostConfig: |
                   "name": f"modules-{option_dash}",
                   "mountPath": "/tmp/custom/load_jupyter_version.sh",
                   "subPath": "load_jupyter_version.sh"
-              },
-              {
-                  "name": f"modules-{option_dash}-config",
-                  "mountPath": "/tmp/custom/config.py",
-                  "subPath": "config.py"
               },
               {
                   "name": f"modules-user-{option_dash}",
