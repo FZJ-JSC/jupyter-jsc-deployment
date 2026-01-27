@@ -3,7 +3,7 @@ hub:
   image:
     pullPolicy: "IfNotPresent"
     name: registry.jsc.fz-juelich.de/jupyterjsc/k8s/images/jhub
-    tag: 5.4.3-notls.18
+    tag: 5.4.3-notls.20
   podSecurityContext:
     runAsNonRoot: false
   containerSecurityContext:
