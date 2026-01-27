@@ -1,6 +1,6 @@
 ---
 extraPythonPackages:
-  - jupyterhub-unicorespawner==2.1.0
+  - jupyterhub-unicorespawner==2.1.1
 extraVolumes:
   - configMap:
       defaultMode: 256
