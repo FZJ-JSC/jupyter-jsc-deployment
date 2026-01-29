@@ -18,7 +18,7 @@ helm:
   version: 0.24.14
   values:
     dailyRestart:
-      enabled: true
+      enabled: false
     fullnameOverride: jupyterjsc-custom
     global:
       name: jupyterjsc
