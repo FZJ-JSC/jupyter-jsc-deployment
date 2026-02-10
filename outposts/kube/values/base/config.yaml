@@ -293,7 +293,7 @@ outpostConfig: |
               else:
                   msg = f"<details><summary>{summary}</summary>{details}</details>"
               event = {
-                  "progress": "10",
+                  "progress": "20",
                   "html_message": msg,
                   "failed": False
               }
