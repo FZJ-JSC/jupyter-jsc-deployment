@@ -21,7 +21,7 @@ helm:
   releaseName: unicore
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyterhub-outpost
-  version: 2.1.2
+  version: 2.2.0
   valuesFiles:
     - values/base/misc.yaml
     - values/base/config.yaml
@@ -55,8 +55,6 @@ targetCustomizations:
         stage: production
     helm:
       values:
-        image:
-          tag: "2.1.3"
         extraEnvVars:
           - name: STAGE
             value: "production"
