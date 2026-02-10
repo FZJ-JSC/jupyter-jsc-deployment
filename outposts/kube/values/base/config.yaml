@@ -26,7 +26,7 @@ outpostConfig: |
 
   from kubernetes import client
   from kubernetes import config
-  from datamountspawner import KubeSpawner
+  from datamountspawner import KubeSpawner as datamountKubeSpawner
 
   lmod_options = ["xpra", "4.3", "4.3-juniq", "4.2", "4.2-juniq", "3.6", "3.6-juniq"]
   data_mount_enabled = True
@@ -51,8 +51,18 @@ outpostConfig: |
   uvicorn_access.addFilter(UvicornFilter())
   logging.getLogger(logged_logger_name).addFilter(EventsCheckFilter())
 
+  class KubeSpawner(datamountKubeSpawner):
+      async def get_jupyter_server_logs(self):
+          try:
+              logs = await self.api.read_namespaced_pod_log(name=self.pod_name, namespace=self.namespace, container="notebook")
+              return logs.splitlines()
+          except Exception as e:
+              self.log.error(f"{self._log_name} - Could not get logs for pod {self.pod_name}: {e}")
+              return []
+
   c.JupyterHubOutpost.spawner_class = KubeSpawner
 
+  c.KubeSpawner.delete_stopped_pods = False
   c.KubeSpawner.image_pull_policy = "Always"
   c.KubeSpawner.tolerations = [
       {"key": "usernode", "value": "true", "effect": "NoExecute"}
