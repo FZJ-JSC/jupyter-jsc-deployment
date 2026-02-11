@@ -876,48 +876,87 @@ hub:
 
       async def prepare_job(request, spawner):
           import json
-          import requests
-          import sseclient
+          import httpx
           from tornado.httputil import url_concat
+          MAX_LOG_LINES = 500
+
           user_options = spawner.user_options
-          if user_options.get("option", "") == "repo2docker":
-              r2dtype = user_options.get("repo2docker", {}).get("repotype", "gh")
-              r2durl = user_options.get("repo2docker", {}).get("repourl", "")
-              r2dref = user_options.get("repo2docker", {}).get("reporef", "HEAD")
-              url = url_path_join(f"{request.protocol}://{request.host}", "services", "binder", "build", r2dtype, r2durl, r2dref)
-              url = url_concat(url, {"build_only": "true"})
-              spawner.log.debug(f"{spawner._log_name} - Starting job preparation for repo2docker option. URL: {url}", extra={"action": "job_prepare", "status": "started"})
-              response = requests.get(url, stream=True)
-              client = sseclient.SSEClient(response)
-              logs = spawner.logs or []
-              last_status = None
-              for _event in client.events():
-                  event = json.loads(_event.data.strip())
-                  msg = event.get("message", "")
-                  if last_status != event.get("phase") and event.get("phase") != "unknown":
-                      last_status = event.get("phase")
-                      spawner.log.debug(f"{spawner._log_name} - Job preparation status: {last_status}", extra={"action": "job_prepare", "status": last_status, "event_message": msg})
-                  if msg:
-                      if len(logs) > 0 and logs[-1] != msg:
-                          logs.append(msg)
-                      elif len(logs) == 0:
-                          logs.append(msg)
-                      spawner.logs = logs
-                  if event.get("phase") in ["ready", "built", "launching"]:
-                      spawner.user_options["repo2docker"]["image"] = event["imageName"]
-                      spawner.log.info(f"{spawner._log_name} - Job preparation completed for repo2docker option. Image built: {event['imageName']}", extra={"action": "job_prepare", "status": event.get("phase", "")})
-                      return
-                  elif event.get("phase") == "failed":
-                      spawner.logs = [f"Job preparation failed: {msg}"]
-                      spawner.log.error(f"{spawner._log_name} - Job preparation failed: {msg}", extra={"action": "job_prepare", "status": "failed"})
-                      raise Exception(f"Job preparation failed: {msg}")
-              if "image" not in spawner.user_options.get("repo2docker", {}):
+          if user_options.get("option", "") != "repo2docker":
+              spawner.log.info(
+                  f"{spawner._log_name} - No job preparation needed for option: "
+                  f"{user_options.get('option', '')}"
+              )
+              return
+
+          r2dtype = user_options.get("repo2docker", {}).get("repotype", "gh")
+          r2durl = user_options.get("repo2docker", {}).get("repourl", "")
+          r2dref = user_options.get("repo2docker", {}).get("reporef", "HEAD")
+          url = url_path_join(f"{request.protocol}://{request.host}", "services", "binder", "build", r2dtype, r2durl, r2dref)
+          url = url_concat(url, {"build_only": "true"})
+          spawner.log.debug(f"{spawner._log_name} - Starting job preparation for repo2docker option. URL: {url}", extra={"action": "job_prepare", "status": "started"})
+
+          timeout = httpx.Timeout(
+              connect=10.0,
+              read=None,
+              write=30.0,
+              pool=None,
+          )
+          logs = spawner.logs or []
+          last_status = None
+
+          try:
+              async with httpx.AsyncClient(timeout=timeout) as client:
+                  async with client.stream("GET", url) as response:
+                      if response.status_code != 200:
+                          raise RuntimeError(f"Binder build request failed: HTTP {response.status_code}")
+                      async for line in response.aiter_lines():
+                          if not line:
+                              continue
+                          if not line.startswith("data:"):
+                              continue
+                          raw_data = line[5:].strip()
+                          if not raw_data:
+                              continue
+                          try:
+                              event = json.loads(raw_data)
+                          except:
+                              continue
+                          msg = event.get("message", "")
+                          if last_status != event.get("phase") and event.get("phase") != "unknown":
+                              last_status = event.get("phase")
+                              spawner.log.debug(f"{spawner._log_name} - Job preparation status: {last_status}", extra={"action": "job_prepare", "status": last_status, "event_message": msg})
+                          if msg:
+                              if not logs or logs[-1] != msg:
+                                  logs.append(msg)
+                                  spawner.logs = logs[-MAX_LOG_LINES:]
+                          if event.get("phase") in ["ready", "built", "launching"]:
+                              image = event.get("imageName")
+                              if not image:
+                                  raise RuntimeError("Build completed but imageName missing")
+                              spawner.user_options["repo2docker"]["image"] = image
+                              spawner.log.info(f"{spawner._log_name} - Job preparation completed for repo2docker option. Image built: {event['imageName']}", extra={"action": "job_prepare", "status": event.get("phase", "")})
+                              return
+                          elif event.get("phase") == "failed":
+                              try:
+                                  spawner.logs.append(f"Job preparation failed: {msg}")
+                              except:
+                                  spawner.logs = [f"Job preparation failed: {msg}"]
+                              spawner.log.error(f"{spawner._log_name} - Job preparation failed: {msg}", extra={"action": "job_prepare", "status": "failed"})
+                              raise Exception(f"Job preparation failed: {msg}")
+          except asyncio.CancelledError:
+              spawner.log.warning(
+                  f"{spawner._log_name} - Job preparation cancelled",
+                  extra={"action": "job_prepare", "status": "cancelled"},
+              )
+              raise
+          if "image" not in spawner.user_options.get("repo2docker", {}):
+              try:
+                  spawner.logs.append(f"Job preparation failed: No image built")
+              except:
                   spawner.logs = [f"Job preparation failed: No image built"]
-                  spawner.log.error(f"{spawner._log_name} - Job preparation failed: No image built", extra={"action": "job_prepare", "status": "failed"})
-                  raise Exception(f"Job preparation failed: No image built")
-              spawner.log.info(f"{spawner._log_name} - Job preparation completed for repo2docker option.")
-          else:
-              spawner.log.info(f"{spawner._log_name} - No job preparation needed for option: {user_options.get("option", "")}")
+              spawner.log.error(f"{spawner._log_name} - Job preparation failed: No image built", extra={"action": "job_prepare", "status": "failed"})
+              raise RuntimeError(f"Job preparation failed: No image built")
+          spawner.log.info(f"{spawner._log_name} - Job preparation completed for repo2docker option.")
 
       c.JobAPIHandlerConfig.prepare_job = prepare_job
       c.JobAPIHandlerConfig.job_server_limit_per_user = 5
