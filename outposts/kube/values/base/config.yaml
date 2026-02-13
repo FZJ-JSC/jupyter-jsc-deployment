@@ -630,6 +630,7 @@ outpostConfig: |
       jupyter_config_path_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX1BBVEg9IiR7SlVQWVRFUl9DT05GSUdfUEFUSDorJEpVUFlURVJfQ09ORklHX1BBVEg6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
       return """#!/bin/sh
   {jupyter_config_path_b64}
+  jupyter labextension disable @jupyter/collaboration-extension:shared-link
   command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
   """.replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
 
@@ -645,6 +646,7 @@ outpostConfig: |
           pip install --user jupyterlab-data-mount{datamount_version} jupyter-collaboration jupyterlab-hub-credit-extension
       fi
   fi
+  jupyter labextension disable @jupyter/collaboration-extension:shared-link
   command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
   """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
 
@@ -737,6 +739,7 @@ outpostConfig: |
 
   # 10. Launch
   echo $JUPYTER_CONFIG_PATH
+  jupyter labextension disable @jupyter/collaboration-extension:shared-link
   if command -v start-singleuser.sh >/dev/null 2>&1; then
       exec start-singleuser.sh
   else
