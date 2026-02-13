@@ -520,7 +520,7 @@ outpostConfig: |
               row["path"] = path
               template = value.get("template", "undefined")
               count = len([x for x in init_mounts if x.get("options", {}).get("template", None) == template]) + 1
-              row["options"] = { "displayName": f"{display_names.get(template, template)} #{count}", "template": template, "readonly": value.get("readonly", False), "config": {} }
+              row["options"] = { "displayName": f"{display_names.get(template, template)} #{count}", "template": template, "readonly": str(value.get("readonly", "false")).lower() in ["true", "1"], "config": {} }
               for k, v in value.items():
                   if k in ["path", "template", "readonly"]:
                       continue
