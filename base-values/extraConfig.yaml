@@ -2,6 +2,7 @@
 hub:
   extraConfig:
     customConfig: |-
+      import hashlib
       import inspect
       import jsc_custom
       import logging
@@ -530,6 +531,8 @@ hub:
               else:
                   name = resp_json["email"].replace("@", "_at_")
               assert name is not None
+              if len(name) > 64:
+                  name = hashlib.shake_256(name.encode()).hexdigest(32)
               return name
           claim_name = _claim_name
           authorize_url = "https://infraproxy.nfdi-aai.dfn.de/idp/profile/oidc/authorize"
@@ -588,7 +591,10 @@ hub:
                               break
                   if preferred_username_is_secondary:
                       return resp_json["preferred_username"] + "." + resp_json["email"].replace("@", "_at_")
-              return resp_json["email"].replace("@", "_at_")
+              name = resp_json["email"].replace("@", "_at_")
+              if len(name) > 64:
+                  name = hashlib.shake_256(name.encode()).hexdigest(32)
+              return name
           claim_name = _claim_name
 
       c.Authenticator.authorize_url = authorize_url
