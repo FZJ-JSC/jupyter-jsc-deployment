@@ -32,7 +32,7 @@ flavors:
         mem_guarantee: "256M"
         mem_limit: "4096M"
     xl1nfdi:
-      max: 25
+      max: 35
       weight: 18
       display_name: "8GB RAM, 1VCPUs, 40 credits per hour"
       description: "JupyterLab will run with 8GB RAM and 1VCPUs."
