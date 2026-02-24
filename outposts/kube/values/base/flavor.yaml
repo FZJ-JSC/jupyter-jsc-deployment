@@ -177,19 +177,32 @@ flavors:
         mem_guarantee: "256M"
         mem_limit: "8192M"
         gpu_limit: 1
-    workshop:
-      max: 25
+    lectures:
+      max: -1
       weight: 11
-      display_name: "JUNIQ School - 8GB RAM, 2VCPU, 10 hours"
-      description: "JUNIQ School - JupyterLab will run for max 10 hours with 8GB RAM and 2VCPU."
+      display_name: "JUNIQ Lectures - 8GB RAM, 2VCPU, 40 credits per hour"
+      description: "JUNIQ Lectures - JupyterLab will run with 8GB RAM and 2VCPUs."
+      max_idle_time: 259200
       credits:
-        value: 0
-        interval: 86400
-      runtime:
-        hours: 10
+        value: 1
+        interval: 90
       resources:
         cpu_guarantee: 0.2
         cpu_limit: 2
+        mem_guarantee: "3584M"
+        mem_limit: "8192M"
+    workshop:
+      max: -1
+      weight: 12
+      display_name: "JUNIQ Workshop - 8GB RAM, 4VCPU, 60 credits per hour"
+      description: "JUNIQ Workshop - JupyterLab will run with 8GB RAM and 4VCPUs."
+      max_idle_time: 259200
+      credits:
+        value: 1
+        interval: 60
+      resources:
+        cpu_guarantee: 0.2
+        cpu_limit: 4
         mem_guarantee: "3584M"
         mem_limit: "8192M"
   hubs:
@@ -215,7 +228,7 @@ flavors:
     juniq:
       jupyterhub_name: ["juniq"]
       weight: 6
-      flavors: ["m1", "l1", "xl1", "workshop"]
+      flavors: ["m1", "l1", "xl1", "workshop", "lectures"]
   users:
     nfdifzjstaff:
       hubs: ["nfdigeneral_unused"]
