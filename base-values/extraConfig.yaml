@@ -496,12 +496,27 @@ hub:
                           add_sub_groups(group, role, authority, rightmost_group)
                           rightmost_group = False
 
-          for attribute in ["org_domain", "voperson_external_affiliation"]:
-              value = user_info.get(attribute, None)
-              if value and type(value) == list:
-                  groups.extend(value)
-              elif value and type(value) == str:
-                  groups.append(value)
+          for key in ["last_idp", "preferred_username", "org_domain"]:
+              value = user_info.get(key, None)
+              if value and type(value) == str:
+                  groups.append(f"{key}:{value}")
+              elif value and type(value) == list:
+                  groups.extend([f"{key}:{v}" for v in value])
+
+          value = user_info.get("voperson_external_affiliation", None)
+          if value and type(value) == str:
+              value = [value]
+          if value and type(value) == list:
+              groups.append(f"voperson_external_affiliation:true")
+              for v in value:
+                  try:
+                      role = v.split("@")[0]
+                      domain = v.split("@")[1]
+                      groups.append(f"voperson_external_affiliation_role:{role}")
+                      groups.append(f"voperson_external_affiliation_domain:{domain}")
+                  except:
+                      pass
+                  groups.append(f"voperson_external_affiliation:{v}")
           oauth_user = user_info.get("oauth_user", user_info)
           email = oauth_user.get("email", None)
           if email:
@@ -734,12 +749,17 @@ hub:
           config = get_custom_config()
           backend_service = config.get("systems", {}).get(system, {}).get("backendService", "UNKNOWN")
           namespace = config.get("backendServices", {}).get(backend_service, {}).get("namespace", "jupyter")
-          usernamepasswordb64 = os.environ.get("TUNNEL_AUTHENTICATION_TOKEN")
-          import base64
-          usernamepassword = base64.b64decode(usernamepasswordb64).decode()
-          username = usernamepassword.split(":")[0]
+          ret = [f"DNS:{jhub_hostname}"]
+          try:
+              usernamepasswordb64 = os.environ.get("TUNNEL_AUTHENTICATION_TOKEN")
+              import base64
+              usernamepassword = base64.b64decode(usernamepasswordb64).decode()
+              username = usernamepassword.split(":")[0]
+              ret.append(f"DNS:{username}-{spawner.name}-{spawner.user.id}.{namespace}.svc")
+          except:
+              spawner.log.exception("Could not load TUNNEL_AUTHENTICATION_TOKEN, skipping adding spawner specific DNS entry to SSL alt names")
 
-          return [f"DNS:{username}-{spawner.name}-{spawner.user.id}.{namespace}.svc", f"DNS:{jhub_hostname}"]
+          return ret
 
       async def additional_cafile(spawner):
           # Let's Encrypt ISRG-ROOT-X1 + 2
