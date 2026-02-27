@@ -1,80 +1,146 @@
 ---
 credits:
   credits:
-    public:
-      cap: 70
-      grant_value: 70
+    juelich:
+      cap: 500
+      grant_value: 500
       grant_interval: 86400
-    default:
-      cap: 130
-      grant_value: 130
-      grant_interval: 86400
-    priority:
+    employee:
       cap: 250
       grant_value: 250
       grant_interval: 86400
-  users:
-    gmailusers:
-      hubs:
-        - jupyterjsc
-        - portalgauss
-        - juniq
-        - coec
-        - coeraise
-        - ebrains
-        - euroccgcs
-        - dev1
-        - dev2
-        - nfdigeneral
-      authentication:
-        username: ".*g(oogle)?mail.com$"
-      weight: 9999
-      credits:
-        - public
+    student:
+      cap: 190
+      grant_value: 190
+      grant_interval: 86400
+    alum:
+      cap: 130
+      grant_value: 130
+      grant_interval: 86400
+    default:
+      cap: 120
+      grant_value: 120
+      grant_interval: 86400
     public:
-      negate_authentication: true
-      hubs:
-        - jupyterjsc
-        - portalgauss
-        - juniq
-      authentication:
-        groups: ["urn:geant:helmholtz.de:Helmholtz-member"]
-      weight: 90
-      credits:
-        - public
-    defaultusers:
-      hubs:
-        - jupyterjsc
-        - portalgauss
-        - juniq
-        - nfdigeneral
-      authentication:
-        groups: ["urn:geant:helmholtz.de:Helmholtz-member"]
-      weight: 90
-      credits:
-        - default
-    priorityusers:
-      hubs:
-        - jupyterjsc
-        - portalgauss
-        - juniq
-        - nfdigeneral
-      authentication:
-        username: "*fz-juelich.de"
-      weight: 95
-      credits:
-        - priority
-    free:
-      hubs:
+      cap: 60
+      grant_value: 60
+      grant_interval: 86400
+  users:
+    juelich:
+      hub:
         - coec
         - coeraise
         - ebrains
         - euroccgcs
         - dev1
         - dev2
+        - portalgauss
         - nfdigeneral
+        - juniq
+        - jupyterjsc
       authentication:
-        username: ".*"
-      weight: 94
+        groups:
+          - "voperson_external_affiliation_domain:fz-juelich.de"
+          - "last_idp:https://judoor.fz-juelich.de/oauth2/access_token"
+          - "geant:helmholtz.de:FZJ"
+      weight: 25
+      credits:
+        - juelich
+    employees:
+      hub:
+        - coec
+        - coeraise
+        - ebrains
+        - euroccgcs
+        - dev1
+        - dev2
+        - portalgauss
+        - nfdigeneral
+        - juniq
+        - jupyterjsc
+      authentication:
+        groups:
+          - "voperson_external_affiliation_role:employee"
+          - "voperson_external_affiliation_role:faculty"
+          - "voperson_external_affiliation_role:staff"
+          - "eduperson_assurance:https://refeds.org/assurance/profile/cappuccino"
+          - "eduperson_assurance:https://refeds.org/assurance/IAP/local-enterprise"
+      weight: 19
+      credits:
+        - employee
+    students:
+      hub:
+        - coec
+        - coeraise
+        - ebrains
+        - euroccgcs
+        - dev1
+        - dev2
+        - portalgauss
+        - nfdigeneral
+        - juniq
+        - jupyterjsc
+      authentication:
+        groups:
+          - "voperson_external_affiliation_role:student"
+          - "voperson_external_affiliation_role:member"
+          - "eduperson_assurance:https://refeds.org/assurance/IAP/medium"
+      weight: 18
+      credits:
+        - student
+    alum:
+      hub:
+        - coec
+        - coeraise
+        - ebrains
+        - euroccgcs
+        - dev1
+        - dev2
+        - portalgauss
+        - nfdigeneral
+        - juniq
+        - jupyterjsc
+      authentication:
+        groups:
+          - "voperson_external_affiliation_role:alum"
+          - "voperson_external_affiliation_role:affiliate"
+      weight: 17
+      credits:
+        - alum
+    default:
+      hub:
+        - coec
+        - coeraise
+        - ebrains
+        - euroccgcs
+        - dev1
+        - dev2
+        - portalgauss
+        - nfdigeneral
+        - juniq
+        - jupyterjsc
+      authentication:
+        groups:
+          - "voperson_external_affiliation:true"
+      weight: 16
       credits:
         - default
+    public:
+      hub:
+        - coec
+        - coeraise
+        - ebrains
+        - euroccgcs
+        - dev1
+        - dev2
+        - portalgauss
+        - nfdigeneral
+        - juniq
+        - jupyterjsc
+      negate_authentication: true
+      authentication:
+        groups:
+          - "voperson_external_affiliation:true"
+      weight: 15
+      credits:
+        - public
