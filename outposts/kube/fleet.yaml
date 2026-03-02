@@ -27,6 +27,9 @@ helm:
     - values/base/config.yaml
     - values/base/credits.yaml
     - values/base/flavor.yaml
+  values:
+    image:
+      tag: "2.2.2"
 targetCustomizations:
   - name: staging
     clusterSelector:

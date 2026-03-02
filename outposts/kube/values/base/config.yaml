@@ -61,6 +61,7 @@ outpostConfig: |
               return []
 
   c.JupyterHubOutpost.spawner_class = KubeSpawner
+  oom_watchdog_script = "IyEvYmluL3NoCgojIENvbXB1dGUgZHluYW1pYyBjZ3JvdXAgcGF0aApDR1JPVVBfUEFUSD0kKGF3ayAtRjogJy8wOjovIHtwcmludCAkM30nIC9wcm9jL3NlbGYvY2dyb3VwKQpDR1JPVVA9Ii9zeXMvZnMvY2dyb3VwJHtDR1JPVVBfUEFUSH0iCgojIEJ1ZmZlcjogNTEyIE1CIGZvciBqdXB5dGVyIHNlcnZlcgpCVUZGRVI9JCgoICg1MTIpICogMTAyNCAqIDEwMjQgKSkKCndoaWxlIHRydWU7IGRvCiAgdXNhZ2U9JChjYXQgIiRDR1JPVVAvbWVtb3J5LmN1cnJlbnQiKQogIGxpbWl0PSQoY2F0ICIkQ0dST1VQL21lbW9yeS5tYXgiKQoKICBpZiBbICIkbGltaXQiICE9ICJtYXgiIF07IHRoZW4KICAgIHRocmVzaG9sZD0kKChsaW1pdCAtIEJVRkZFUikpCgogICAgaWYgWyAiJHVzYWdlIiAtZ3QgIiR0aHJlc2hvbGQiIF07IHRoZW4KICAgICAgZWNobyAiW09PTS1XQVRDSERPRyAtICQoZGF0ZSldIE1lbW9yeSBjcml0aWNhbCIKICAgICAgZWNobyAiVXNhZ2U6ICAgICAkdXNhZ2UiCiAgICAgIGVjaG8gIlRocmVzaG9sZDogJHRocmVzaG9sZCIKICAgICAgZWNobyAiTGltaXQ6ICAgICAkbGltaXQiCgogICAgICAjIEZpbmQgbGFyZ2VzdCBrZXJuZWwgcHJvY2VzcwogICAgICBwaWQ9JChwcyAtZW8gcGlkLHJzcyxjbWQgLS1zb3J0PS1yc3MgfCBcCiAgICAgICAgICAgIGdyZXAgaXB5a2VybmVsX2xhdW5jaGVyIHwgXAogICAgICAgICAgICBncmVwIC12IGdyZXAgfCBcCiAgICAgICAgICAgIGhlYWQgLW4gMSB8IFwKICAgICAgICAgICAgYXdrICd7cHJpbnQgJDF9JykKCiAgICAgIGlmIFsgLW4gIiRwaWQiIF07IHRoZW4KICAgICAgICBlY2hvICJbT09NLVdBVENIRE9HIC0gJChkYXRlKV0gS2lsbGluZyBrZXJuZWwgUElEICRwaWQiCiAgICAgICAga2lsbCAtOSAiJHBpZCIKICAgICAgZWxzZQogICAgICAgIGVjaG8gIltPT00tV0FUQ0hET0cgLSAkKGRhdGUpXSBObyBrZXJuZWwgZm91bmQiCiAgICAgIGZpCiAgICBmaQogIGZpCgogIHNsZWVwIDEKZG9uZQo="
 
   c.KubeSpawner.delete_stopped_pods = False
   c.KubeSpawner.image_pull_policy = "Always"
@@ -630,15 +631,19 @@ outpostConfig: |
       jupyter_config_path_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX1BBVEg9IiR7SlVQWVRFUl9DT05GSUdfUEFUSDorJEpVUFlURVJfQ09ORklHX1BBVEg6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
       return """#!/bin/sh
   {jupyter_config_path_b64}
+  echo -n "{oom_watchdog_script}" | base64 -d > /tmp/oom_watchdog.sh
+  sh /tmp/oom_watchdog.sh &
   jupyter labextension disable @jupyter/collaboration-extension:shared-link
   command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
-  """.replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
+  """.replace("{jupyter_config_path_b64}", jupyter_config_path_b64).replace("{oom_watchdog_script}", oom_watchdog_script)
 
   def default_image_start_script(spawner):
       datamount_version = f"=={spawner.data_mount_extension_version}" if spawner.data_mount_extension_version else ""
       jupyter_config_path_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX1BBVEg9IiR7SlVQWVRFUl9DT05GSUdfUEFUSDorJEpVUFlURVJfQ09ORklHX1BBVEg6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
       return """#!/bin/sh
   {jupyter_config_path_b64}
+  echo -n "{oom_watchdog_script}" | base64 -d > /tmp/oom_watchdog.sh
+  sh /tmp/oom_watchdog.sh &
   if command -v pip >/dev/null 2>&1; then
       if [ -n "$VIRTUAL_ENV" ]; then
           pip install jupyterlab-data-mount{datamount_version} jupyter-collaboration jupyterlab-hub-credit-extension
@@ -648,7 +653,7 @@ outpostConfig: |
   fi
   jupyter labextension disable @jupyter/collaboration-extension:shared-link
   command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
-  """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
+  """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64).replace("{oom_watchdog_script}", oom_watchdog_script)
 
   def custom_image_start_script(spawner):
       datamount_version = f"=={spawner.data_mount_extension_version}" if spawner.data_mount_extension_version else ""
@@ -736,6 +741,8 @@ outpostConfig: |
 
   # 9. Set config path
   {jupyter_config_path_b64}
+  echo -n "{oom_watchdog_script}" | base64 -d > /tmp/oom_watchdog.sh
+  sh /tmp/oom_watchdog.sh &
 
   # 10. Launch
   echo $JUPYTER_CONFIG_PATH
@@ -745,7 +752,7 @@ outpostConfig: |
   else
       exec jupyterhub-singleuser
   fi
-  """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
+  """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64).replace("{oom_watchdog_script}", oom_watchdog_script)
 
   async def profile_list(spawner):
       # We're loading this config file for each Spawner object
