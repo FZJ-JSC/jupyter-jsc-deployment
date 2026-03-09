@@ -73,13 +73,6 @@ outpostConfig: |
   c.KubeSpawner.secret_name_template = "tls-{userid}-{servername}"
   c.KubeSpawner.start_timeout = 600
   c.KubeSpawner.fs_gid = 100
-  c.KubeSpawner.container_security_context = {
-      "allowPrivilegeEscalation": True,
-      "privileged": True,
-      "capabilities": {
-          "add": ["CAP_SYS_ADMIN"]
-      }
-  }
 
   c.KubeSpawner.delete_grace_period = 20
   c.KubeSpawner.lifecycle_hooks = {
