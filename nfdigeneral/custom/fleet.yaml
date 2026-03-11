@@ -36,6 +36,17 @@ helm:
         level: 10
     customConfig:
       workshopcredits:
+        dsc-2026-02:
+          priority: 10
+          enabled: true
+          start: "2026-03-11 08:00"
+          end: "2026-03-19 07:00"
+          credits:
+            cap: 600
+            grant_interval: 3600
+            grant_value: 600
+            user_options:
+              system: JSC-Cloud
         denbiworkshop:
           priority: 1
           enabled: true
