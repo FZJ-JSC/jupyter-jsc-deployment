@@ -20,6 +20,17 @@ helm:
     fullnameOverride: juniq-custom
     customConfig:
       workshopcredits:
+        ion_hack_2026:
+          priority: 10
+          enabled: true
+          start: "2026-03-12 14:00"
+          end: "2026-03-15 20:30"
+          credits:
+            cap: 800
+            grant_interval: 3600
+            grant_value: 800
+            user_options:
+              system: JSC-Cloud
         qsolid-bull:
           priority: 1
           enabled: true
