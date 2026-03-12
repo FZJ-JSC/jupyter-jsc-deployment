@@ -1,0 +1,16 @@
+---
+defaultNamespace: outpost
+
+labels:
+  app: oomprotector
+  component: main
+
+helm:
+  releaseName: oomprotector
+  repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
+  chart: jupyter-server-oom-protection
+  version: 0.1.0
+  values:
+    fullnameOverride: jupyter-server-oom-protector
+    nodeSelector:
+      usernode: "true"
