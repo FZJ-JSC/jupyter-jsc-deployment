@@ -35,7 +35,7 @@ credits:
         - nfdigeneral
       authentication:
         username:
-          - "dd6d90d84e114298bdb6c6a70a919a2c@login.helmholtz.de"
+          - "a5b2ead107f14e07a6491f53d62bf789@login.helmholtz.de"
       weight: 30
       credits:
         - pointcloudanalysis
