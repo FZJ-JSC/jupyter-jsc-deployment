@@ -20,6 +20,10 @@ extraVolumes:
     name: job-descriptions-xpra
   - configMap:
       defaultMode: 256
+      name: unicore-jobs-4-5
+    name: job-descriptions-4-5
+  - configMap:
+      defaultMode: 256
       name: unicore-jobs-4-3
     name: job-descriptions-4-3
   - configMap:
@@ -55,6 +59,8 @@ extraVolumeMounts:
     name: job-descriptions-vscode
   - mountPath: /mnt/jobs/jupyterlab_xpra
     name: job-descriptions-xpra
+  - mountPath: /mnt/jobs/jupyterlab_4.5
+    name: job-descriptions-4-5
   - mountPath: /mnt/jobs/jupyterlab_4.3
     name: job-descriptions-4-3
   - mountPath: /mnt/jobs/jupyterlab_4.2

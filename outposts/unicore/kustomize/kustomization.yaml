@@ -7,6 +7,7 @@ resources:
   - jobs-4.2-juniq.yaml
   - jobs-4.3.yaml
   - jobs-4.3-juniq.yaml
+  - jobs-4.5.yaml
   - jobs-vscode.yaml
   - jobs-xpra.yaml
   - jobs-common.yaml
