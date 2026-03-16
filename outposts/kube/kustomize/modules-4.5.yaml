@@ -21,60 +21,83 @@ data:
     module purge --force
     module use ${OTHERSTAGES}
     module load Stages/2026
+
+    module load GCCcore/.14.3.0
+    modules=()
+
+    modules+=("Jupyter-bundle/20260310")
+    modules+=("pyunicore/1.3.5")
+    modules+=("jupyterlab-data-mount/1.1.0")
+    modules+=("jupyterlab-hub-credit-extension/0.2.1")
+
     if [[ $JUPYTERHUB_API_URL == "https://juniq.fz-juelich.de/hub/api" || $JUPYTERHUB_API_URL == "https://juniq-staging.fz-juelich.de/hub/api" ]]; then
       echo "$(date) - Loading JUNIQ specific modules"
-    else
-      echo "$(date) - Loading standard modules"
-    fi
-    echo "$(date) - No modules available at the moment"
-    exit 1
-    # module load GCCcore/.13.3.0
-    # modules=()
+      modules+=("GCC/14.3.0")
+      modules+=("GCC/14.3.0")
+      modules+=("OpenMPI/5.0.8")
 
-    # modules+=("Jupyter-bundle/20250114")
-    # modules+=("pyunicore/.1.3.5")
-    # modules+=("jupyterlab-data-mount/1.1.0")
-    # modules+=("jupyterlab-hub-credit-extension/0.2.1")
-    # ## Kernels
-    # if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
-    #   modules+=("JupyterKernel-Bash/.0.9.3-4.3.4")
-    # fi
-    # if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
-    #   modules+=("JupyterKernel-Cling/.1.2-4.3.4")
-    # fi
-    # if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
-    #   modules+=("JupyterKernel-Java/2.2.0")
-    # fi
+      modules+=("Cartopy/0.25.0")
+      modules+=("ipympl/0.9.8")
+      modules+=("plotly.py/6.5.0")
+      modules+=("matplotlib/3.10.5")
+      modules+=("ParityOS/2.8.0")
+      modules+=("DWave/9.0.0")
+      modules+=("Qutip/5.2.1")
+      modules+=("Pulser/1.6.2")
+      # module load PyQuil/4.16.2
+      modules+=("cuQuantum/25.09.0")
+      modules+=("cuQuantum-Python/25.09.0")
+      modules+=("cudaQ/0.13.0")
+      modules+=("Qiskit/2.2.0")
+      modules+=("PennyLane/0.43.0")
+      # modules+=("MyQLM/1.12.2")
+      # modules+=("qoqo-quest/0.18.0")
+      modules+=("Cirq/2025.09")
+      # modules+=("mGST/0.3.0")
+      # module load yael
+    fi
+
+
+    ## Kernels
+    if [[ $JUPYTER_MODULE_BASH_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-Bash/0.10.0-4.5.5")
+    fi
+    if [[ $JUPYTER_MODULE_CLING_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-Cling/1.2-4.5.5")
+    fi
+    if [[ $JUPYTER_MODULE_JAVA_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-Java/3.0.2")
+    fi
     # if [[ $JUPYTER_MODULE_JULIA_ENABLED -eq 1 ]]; then
     #   modules+=("JupyterKernel-Julia/.1.11.2")
     # fi
-    # if [[ $JUPYTER_MODULE_LFORTRAN_ENABLED -eq 1 ]]; then
-    #   modules+=("JupyterKernel-LFortran/.0.42.0")
-    # fi
+    if [[ $JUPYTER_MODULE_LFORTRAN_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-LFortran/0.61.0")
+    fi
     # if [[ $JUPYTER_MODULE_OCTAVE_ENABLED  -eq 1 ]]; then
     #   modules+=("JupyterKernel-Octave/.9.3.0-4.3.4")
     # fi
     # if [[ $JUPYTER_MODULE_R_ENABLED -eq 1 ]]; then
     #   modules+=("JupyterKernel-R/.4.4.2-4.3.4")
     # fi
-    # if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
-    #   modules+=("JupyterKernel-Ruby/.3.4.1")
-    # fi
+    if [[ $JUPYTER_MODULE_RUBY_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-Ruby/3.4.7")
+    fi
     # if [[ $JUPYTER_MODULE_PYDEEPLEARNING_ENABLED -eq 1 ]]; then
     #   modules+=("JupyterKernel-PyDeepLearning/.2025.1-4.3.4")
     # fi
-    # if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
-    #   modules+=("JupyterKernel-PyEarthSystem/.2025.1-4.3.4")
-    # fi
+    if [[ $JUPYTER_MODULE_PYEARTHSYSTEM_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-PyEarthSystem/2026.3-4.5.5")
+    fi
     # if [[ $JUPYTER_MODULE_PYHPC_ENABLED -eq 1 ]]; then
     #   modules+=("JupyterKernel-PyHPC/2025-4.3.4")
     # fi
     # if [[ $JUPYTER_MODULE_PYNEUROSCIENCE_ENABLED -eq 1 ]]; then
     #   modules+=("JupyterBundle-PyNeuroscience")
     # fi
-    # if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
-    #   modules+=("JupyterKernel-PyQuantum/.2025.6-4.3.4")
-    # fi
+    if [[ $JUPYTER_MODULE_PYQUANTUM_ENABLED -eq 1 ]]; then
+      modules+=("JupyterKernel-PyQuantum/2026.01-4.5.5")
+    fi
     # if [[ $JUPYTER_MODULE_PYVISUALIZATION_ENABLED -eq 1 ]]; then
     #   modules+=("JupyterKernel-PyVisualization/.2025.2-4.3.4")
     # fi
@@ -109,9 +132,9 @@ data:
     #   # USERINSTALLATION=/p/usersoftware/swmanage/goebbert1/stage2025/jupyter-ai
     #   modules+=("jupyter-ai-bundle")
     # fi
-    # if [[ $JUPYTER_MODULE_JUPYTERVIEW_ENABLED -eq 1 ]]; then
-    #   modules+=("jupyterview/0.7.0")
-    # fi
+    if [[ $JUPYTER_MODULE_JUPYTERVIEW_ENABLED -eq 1 ]]; then
+      modules+=("jupyterview/0.8.0")
+    fi
     # if [[ $JUPYTER_MODULE_KERNELGATEWAY_ENABLED -eq 1 ]]; then
     #   modules+=("jupyter-kernel-gateway/3.0.1")
     # fi
@@ -131,4 +154,10 @@ data:
     # #  modules+=("jupyterlab-variableinspector/.3.2.1")
     # #fi
 
-    # module load ${modules[@]}
+    module load ${modules[@]}
+
+    if [[ $JUPYTERHUB_WORKSHOP == "juniq_school_on_qc" ]]; then
+      if [[ ! -e "/home/jovyan/JUNIQ_School_on_QC" ]]; then
+        git clone https://jugit.fz-juelich.de/qip/JUNIQ_School_on_QC /home/jovyan/JUNIQ_School_on_QC
+      fi
+    fi

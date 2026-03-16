@@ -61,7 +61,7 @@ outpostConfig: |
               return []
 
   c.JupyterHubOutpost.spawner_class = KubeSpawner
-  
+
   c.KubeSpawner.delete_stopped_pods = False
   c.KubeSpawner.image_pull_policy = "Always"
   c.KubeSpawner.tolerations = [
@@ -69,6 +69,7 @@ outpostConfig: |
   ]
   # We set all the labels we want in extra_labels, so overwrite common_labels
   c.KubeSpawner.common_labels = {}
+
   c.KubeSpawner.secret_name_template = "tls-{userid}-{servername}"
   c.KubeSpawner.start_timeout = 600
   c.KubeSpawner.fs_gid = 100
@@ -193,7 +194,6 @@ outpostConfig: |
               spawner.default_url = f"/lab/tree/{notebook}"
           elif notebook_type == "url" and notebook:
               spawner.default_url = notebook
-
 
   c.KubeSpawner.extra_pod_config = {
       "restartPolicy": "Never"
@@ -728,6 +728,7 @@ outpostConfig: |
   fi
 
   # 9. Set config path
+
   {jupyter_config_path_b64}
 
   # 10. Launch
@@ -739,6 +740,7 @@ outpostConfig: |
       exec jupyterhub-singleuser
   fi
   """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
+
 
   async def profile_list(spawner):
       # We're loading this config file for each Spawner object
@@ -755,7 +757,6 @@ outpostConfig: |
       workshop_id = spawner.user_options.get('workshop_id', "")
       env["JUPYTERHUB_FLAVOR"] = flavor
       env["JUPYTERHUB_WORKSHOP"] = workshop_id
-
       resources = get_flavor_resources(flavor)
 
       node_selector = get_node_selector(spawner, jupyterhub_name, resources, flavor)
@@ -776,8 +777,8 @@ outpostConfig: |
           "node_selector": node_selector,
           "image": image,
           "slug": option,
-          "data_mount_enabled": data_mount_enabled,
           "data_mount_start": default_image_start_script,
+          "data_mount_enabled": data_mount_enabled,
           "common_labels": common_labels,
           "env": env
       }
