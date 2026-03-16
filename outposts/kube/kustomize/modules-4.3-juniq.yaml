@@ -132,3 +132,9 @@ data:
       modules+=("voila/.0.5.8")
     fi
     module load "${modules[@]}"
+
+    if [[ $JUPYTERHUB_WORKSHOP == "juniq_school_on_qc" ]]; then
+      if [[ ! -e "/home/jovyan/JUNIQ_School_on_QC" ]]; then
+        git clone https://jugit.fz-juelich.de/qip/JUNIQ_School_on_QC /home/jovyan/JUNIQ_School_on_QC
+      fi
+    fi
