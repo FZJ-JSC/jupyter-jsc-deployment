@@ -22,6 +22,17 @@ helm:
     fullnameOverride: juniq-custom
     customConfig:
       workshopcredits:
+        junior_school_on_qc:
+          priority: 11
+          enabled: true
+          start: "2026-03-16 07:30"
+          end: "2026-03-21 07:30"
+          credits:
+            cap: 1500
+            grant_interval: 3600
+            grant_value: 1500
+            user_options:
+              system: JSC-Cloud
         ion_hack_2026:
           priority: 10
           enabled: true
