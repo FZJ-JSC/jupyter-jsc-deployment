@@ -22,7 +22,7 @@ helm:
     fullnameOverride: juniq-custom
     customConfig:
       workshopcredits:
-        junior_school_on_qc:
+        juniq_school_on_qc:
           priority: 11
           enabled: true
           start: "2026-03-16 07:30"
