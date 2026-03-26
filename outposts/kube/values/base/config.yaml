@@ -346,8 +346,8 @@ outpostConfig: |
       }
       option_dash = option.replace(".", "-")
 
-      # specsp11 is a specific case
-      if service == "jupyterlab" and option == "repo2docker" and spawner.user_options.get("repo2docker", {}).get("repourl", "").endswith("Simulation-Benchmarks/11thSPE-CSP"):
+      # specsp11 / ML4GCS is a specific case
+      if service == "jupyterlab" and option == "repo2docker" and (spawner.user_options.get("repo2docker", {}).get("repourl", "").endswith("Simulation-Benchmarks/11thSPE-CSP") or spawner.user_options.get("repo2docker", {}).get("repourl", "").endswith("Simulation-Benchmarks/ML4GCS")):
           ret["volumes"].append(
               {
                   "name": "nfs-specsp",
