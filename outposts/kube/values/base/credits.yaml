@@ -5,6 +5,10 @@ credits:
       cap: 800
       grant_value: 800
       grant_interval: 86400
+    jupyter4nfdiinternals:
+      cap: 500
+      grant_value: 500
+      grant_interval: 86400
     juelich:
       cap: 500
       grant_value: 500
@@ -39,6 +43,15 @@ credits:
       weight: 30
       credits:
         - pointcloudanalysis
+    jupyter4nfdiinternals:
+      hub:
+        - nfdigeneral
+      authentication:
+        username:
+          - "21214a39c1994a0b8b6985fc44f272ad@login.helmholtz.de"
+      weight: 26
+      credits:
+        - jupyter4nfdiinternals
     juelich:
       hub:
         - coec
