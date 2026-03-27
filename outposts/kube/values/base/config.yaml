@@ -73,6 +73,7 @@ outpostConfig: |
   c.KubeSpawner.secret_name_template = "tls-{userid}-{servername}"
   c.KubeSpawner.start_timeout = 600
   c.KubeSpawner.fs_gid = 100
+  c.KubeSpawner.data_mounts_image = "jupyterjsc/jupyterlab-data-mount-api:v1.0.4"
 
   c.KubeSpawner.delete_grace_period = 20
   c.KubeSpawner.lifecycle_hooks = {
