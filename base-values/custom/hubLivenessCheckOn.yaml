@@ -1,0 +1,5 @@
+hubLivenessCheckEnabled: true
+hubLivenessCheck:
+  numberOfFails: 6
+  sleep: 10
+  initialDelaySeconds: 180

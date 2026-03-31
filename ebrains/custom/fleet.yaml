@@ -15,7 +15,13 @@ helm:
   releaseName: ebrains-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.25.4
+  version: 0.27.1
+  valuesFiles:
+    - ../../base-values/custom/image.yaml
+    - ../../base-values/custom/ljupyterProxyOn.yaml
+    # - ../../base-values/custom/imagePullOff.yaml
+    # - ../../base-values/custom/userKPIOn.yaml
+    # - ../../base-values/custom/dailyRestartOn.yaml
   values:
     fullnameOverride: ebrains-custom
     global:
@@ -54,6 +60,10 @@ targetCustomizations:
       matchLabels:
         stage: production
     helm:
+      valuesFiles:
+        - ../../base-values/custom/hubLivenessCheckOn.yaml
+        - ../../base-values/custom/metricsOn.yaml
+        - ../../base-values/custom/sysLogOn.yaml
       values:
         global:
           # hostname: zam12246.zam.kfa-juelich.de

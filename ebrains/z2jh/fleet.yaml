@@ -23,7 +23,7 @@ helm:
   # chart: jupyterhub
   # version: 3.1.0
   chart:
-    https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-4.3.2.tgz
+    https://github.com/jupyterhub/helm-chart/raw/gh-pages/jupyterhub-4.3.3.tgz
   valuesFiles:
     - ../../base-values/extraConfig.yaml
     - ../../base-values/image.yaml

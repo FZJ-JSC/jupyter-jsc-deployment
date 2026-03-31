@@ -1,0 +1,7 @@
+global:
+  images:
+    hub:
+      sidecar:
+        tag: sidecar-5.4.4-post.1
+      main:
+        tag: 5.4.4-post.1

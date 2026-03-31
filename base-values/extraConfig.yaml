@@ -107,6 +107,7 @@ hub:
       from jsc_custom.misc import get_incidents
       from jsc_custom.misc import get_reservations
       from jsc_custom.misc import get_custom_config
+      from jsc_custom.misc import check_aup_acceptances
 
       def frontendCollection(user=None):
           custom_config = get_custom_config()
@@ -124,11 +125,13 @@ hub:
               "incidents": {},
               "reservations": {},
               "decrypted_user_options": {},
-              "userage": 0
+              "userage": 0,
+              "aup_name": "",
           }
           if user:
               from jupyterhub.utils import utcnow
               from functools import partial
+              _, aup_name = check_aup_acceptances(user.db, user.orm_user.id, {})
               utcnow = partial(utcnow, with_tz=False)
               ret.update({
                   "mapSystems": custom_config.get("mapSystems", {}),
@@ -141,7 +144,8 @@ hub:
                   "incidents": get_incidents(),
                   "reservations": get_reservations(),
                   "decrypted_user_options": jsc_custom.spawner.utils.decrypted_user_options(user),
-                  "userage": (utcnow() - user.orm_user.created).total_seconds()
+                  "userage": (utcnow() - user.orm_user.created).total_seconds(),
+                  "aup_name": aup_name,
               })
           return ret
 
@@ -166,13 +170,13 @@ hub:
       class Authenticator(jsc_custom.authenticator.CustomGenericOAuthenticator, CreditsAuthenticator):
           cull_task = None
 
-          # Check every 5 minutes
-          cull_task_sleep = 300
+          # Check every 2 minutes
+          cull_task_sleep = 120
 
           # Total max idle time: 3 / 5 days
           global_max_idle_time = 3 * 24 * 3600
           global_user_max_idle_time = 5 * 24 * 3600
-          
+
           # Return list because sets are not JSON serializable
           async def get_user_groups(self, auth_state: dict):
               groups = await super().get_user_groups(auth_state)
@@ -317,7 +321,27 @@ hub:
                       )
           except:
               authenticator.log.exception("OutpostCredits user specific - Could not load credits")
-          
+
+          if "service-account" in user_groups:
+              try:
+                  service_name = user_name.split("service:")[1].split(":")[0]
+                  user_suffix = user_name.lstrip(f"service:{service_name}:")
+                  service_credits = custom_config.get("serviceaccounts", {}).get(service_name, {}).get(user_suffix, {}).get("credits", {})
+                  if not service_credits:
+                      service_credits = custom_config.get("serviceaccounts", {}).get(service_name, {}).get("default", {}).get("credits", {})
+                  if service_credits:
+                      for cuv in ret:
+                          if cuv.get("user_options", {}).get("system", "") == service_credits.get("user_options", {}).get("system", ""):
+                              cuv["project"] = {
+                                  "name": service_credits.get("name", service_name),
+                                  "cap": service_credits.get("cap", 0),
+                                  "grant_value": service_credits.get("grant_value", 0),
+                                  "grant_interval": service_credits.get("grant_interval", 0)
+                              }
+              except:
+                  authenticator.log.exception(f"Could not parse service name from user name {user_name}")
+              return ret
+
           workshops_configured = get_custom_config().get("workshopcredits", {})
           if not workshops_configured:
               return ret
@@ -359,6 +383,12 @@ hub:
                               }
           return ret
 
+      c.JupyterHub.load_roles.append(
+          {
+              "name": "user",
+              "scopes": ["self", "shares!user"],
+          },
+      )
       c.JupyterHub.authenticator_class = Authenticator
 
       c.Authenticator.credits_task_interval = 180
@@ -366,6 +396,7 @@ hub:
       c.Authenticator.credits_task_post_hook = task_hook
       c.Authenticator.credits_user = credits_user
       c.Authenticator.manage_groups = True
+      c.Authenticator.manage_roles = True
       c.Authenticator.basic_auth = True
       c.Authenticator.enable_auth_state = True
       c.Authenticator.refresh_pre_spawn = True
@@ -637,28 +668,45 @@ hub:
       #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterhdfaaiAuthn.hbp
       #https://jupyter-jsc.fz-juelich.de/hub/oauth_login?extra_param_uy_select_authn=jupyterldapAuthn.password
 
-      # RTC
-      # allow_global_rtc = namespace in ["nfdigeneral", "jupyterjsc"]
-      allow_global_rtc = True
-      if allow_global_rtc:
-          c.JupyterHub.load_roles.append(
-              {
-                  "name": "user",
-                  "scopes": ["self", "shares!user"],
-              },
-          )
-      else:
-          c.JupyterHub.load_roles.append(
-              {
-                  "name": "user",
-                  "scopes": ["self"],
-              },
-          )
 
       ## Spawner
       from jupyterhub_credit_service import CreditsSpawner
+      from jupyterhub_credit_service.spawner import CreditsException
+
       class Spawner(jsc_custom.spawner.CustomJSCSpawner, CreditsSpawner):
-          pass
+          async def run_pre_spawn_hook(self):
+              try:
+                  result = super().run_pre_spawn_hook()
+                  if inspect.isawaitable(result):
+                      result = await result
+              except CreditsException as e:
+                  self.log.warning(f"User {self.user.name} - CreditsException in pre spawn hook: {e}")
+                  if hasattr(self, "events"):
+                      now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+                      self.events.append(
+                          {
+                              "failed": True,
+                              "ready": False,
+                              "progress": 100,
+                              "html_message": f"{now}: <span style='color:red;'>{e.jupyterhub_html_message}</span>",
+                          }
+                      )
+                  raise
+              except Exception as e:
+                  self.log.exception("Error in pre spawn hook")
+                  if hasattr(self, "events"):
+                      now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+                      self.events.append(
+                          {
+                              "failed": True,
+                              "ready": False,
+                              "progress": 100,
+                              "html_message": f"{now}: <span style='color:red;'>Error: {str(e)}</span>",
+                          }
+                      )
+                  raise
+              return result
+
       c.JupyterHub.spawner_class = Spawner
 
       async def billing_value(spawner):

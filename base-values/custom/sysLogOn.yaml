@@ -1,0 +1,4 @@
+logging:
+  syslog:
+    enabled: true
+    level: 10
