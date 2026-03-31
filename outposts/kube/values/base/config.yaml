@@ -630,15 +630,18 @@ outpostConfig: |
       jupyter_config_path_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX1BBVEg9IiR7SlVQWVRFUl9DT05GSUdfUEFUSDorJEpVUFlURVJfQ09ORklHX1BBVEg6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
       return """#!/bin/sh
   # Cleanup potentially existing old paths
-  if [[ -z $JUPYTERHUB_WORKSHOP ]]; then
-      if [[ -d /home/jovyan/workshop ]]; then
+  if [ -z $JUPYTERHUB_WORKSHOP ]; then
+      echo "[INFO] No workshop environment detected, remove old workshop paths if existing"
+      if [ -d /home/jovyan/workshop ]; then
           echo "[INFO] Removing old workshop paths"
           rmdir /home/jovyan/workshop || true
       fi
-      if [[ -d /home/jovyan/workshopREADME ]]; then
+      if [ -d /home/jovyan/workshopREADME ]; then
           echo "[INFO] Removing old workshop README paths"
           rmdir /home/jovyan/workshopREADME || true
       fi
+  else
+      echo "[INFO] Detected workshop environment, keep workshop paths if existing"
   fi
   {jupyter_config_path_b64}
   jupyter labextension disable @jupyter/collaboration-extension:shared-link
@@ -713,12 +716,12 @@ outpostConfig: |
       echo "[ERROR] pip not found. Cannot install jupyterhub-singleuser. Please install jupyterhub or pip in your environment."
   fi
   # Cleanup potentially existing old paths
-  if [[ -z $JUPYTERHUB_WORKSHOP ]]; then
-      if [[ -d /home/jovyan/workshop ]]; then
+  if [ -z $JUPYTERHUB_WORKSHOP ]; then
+      if [ -d /home/jovyan/workshop ]; then
           echo "[INFO] Removing old workshop paths"
           rmdir /home/jovyan/workshop || true
       fi
-      if [[ -d /home/jovyan/workshopREADME ]]; then
+      if [ -d /home/jovyan/workshopREADME ]; then
           echo "[INFO] Removing old workshop README paths"
           rmdir /home/jovyan/workshopREADME || true
       fi
@@ -824,12 +827,12 @@ outpostConfig: |
   fi
 
   # Cleanup potentially existing old paths
-  if [[ -z $JUPYTERHUB_WORKSHOP ]]; then
-      if [[ -d /home/jovyan/workshop ]]; then
+  if [ -z $JUPYTERHUB_WORKSHOP ]; then
+      if [ -d /home/jovyan/workshop ]; then
           echo "[INFO] Removing old workshop paths"
           rmdir /home/jovyan/workshop || true
       fi
-      if [[ -d /home/jovyan/workshopREADME ]]; then
+      if [ -d /home/jovyan/workshopREADME ]; then
           echo "[INFO] Removing old workshop README paths"
           rmdir /home/jovyan/workshopREADME || true
       fi
