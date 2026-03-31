@@ -631,7 +631,6 @@ outpostConfig: |
       return """#!/bin/sh
   # Cleanup potentially existing old paths
   if [ -z $JUPYTERHUB_WORKSHOP ]; then
-      echo "[INFO] No workshop environment detected, remove old workshop paths if existing"
       if [ -d /home/jovyan/workshop ]; then
           echo "[INFO] Removing old workshop paths"
           rmdir /home/jovyan/workshop || true
@@ -640,8 +639,6 @@ outpostConfig: |
           echo "[INFO] Removing old workshop README paths"
           rmdir /home/jovyan/workshopREADME || true
       fi
-  else
-      echo "[INFO] Detected workshop environment, keep workshop paths if existing"
   fi
   {jupyter_config_path_b64}
   jupyter labextension disable @jupyter/collaboration-extension:shared-link
