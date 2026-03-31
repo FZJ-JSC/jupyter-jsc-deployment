@@ -629,6 +629,17 @@ outpostConfig: |
   def lmod_image_start_script(spawner):
       jupyter_config_path_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX1BBVEg9IiR7SlVQWVRFUl9DT05GSUdfUEFUSDorJEpVUFlURVJfQ09ORklHX1BBVEg6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
       return """#!/bin/sh
+  # Cleanup potentially existing old paths
+  if [[ -z $JUPYTERHUB_WORKSHOP ]]; then
+      if [[ -d /home/jovyan/workshop ]]; then
+          echo "[INFO] Removing old workshop paths"
+          rmdir /home/jovyan/workshop || true
+      fi
+      if [[ -d /home/jovyan/workshopREADME ]]; then
+          echo "[INFO] Removing old workshop README paths"
+          rmdir /home/jovyan/workshopREADME || true
+      fi
+  fi
   {jupyter_config_path_b64}
   jupyter labextension disable @jupyter/collaboration-extension:shared-link
   command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
@@ -701,7 +712,17 @@ outpostConfig: |
   elif ! command -v jupyterhub-singleuser >/dev/null 2>&1; then
       echo "[ERROR] pip not found. Cannot install jupyterhub-singleuser. Please install jupyterhub or pip in your environment."
   fi
-
+  # Cleanup potentially existing old paths
+  if [[ -z $JUPYTERHUB_WORKSHOP ]]; then
+      if [[ -d /home/jovyan/workshop ]]; then
+          echo "[INFO] Removing old workshop paths"
+          rmdir /home/jovyan/workshop || true
+      fi
+      if [[ -d /home/jovyan/workshopREADME ]]; then
+          echo "[INFO] Removing old workshop README paths"
+          rmdir /home/jovyan/workshopREADME || true
+      fi
+  fi
   jupyter labextension disable @jupyter/collaboration-extension:shared-link
   command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
   """.replace("{python_packages}", python_packages).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
@@ -802,8 +823,19 @@ outpostConfig: |
       echo "[ERROR] pip not found. Cannot install jupyterhub-singleuser. Please install jupyterhub or pip in your environment."
   fi
 
-  # 9. Set config path
+  # Cleanup potentially existing old paths
+  if [[ -z $JUPYTERHUB_WORKSHOP ]]; then
+      if [[ -d /home/jovyan/workshop ]]; then
+          echo "[INFO] Removing old workshop paths"
+          rmdir /home/jovyan/workshop || true
+      fi
+      if [[ -d /home/jovyan/workshopREADME ]]; then
+          echo "[INFO] Removing old workshop README paths"
+          rmdir /home/jovyan/workshopREADME || true
+      fi
+  fi
 
+  # 9. Set config path
   {jupyter_config_path_b64}
 
   # 10. Launch
