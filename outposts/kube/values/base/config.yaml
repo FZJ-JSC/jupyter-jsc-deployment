@@ -430,30 +430,36 @@ outpostConfig: |
           "volumes": []
       }
 
-      # First we add the local persistent storage for the user
-      if spawner.user_options["service"] == "jupyterlab" and ( spawner.user_options["option"] in lmod_options or spawner.user_options["option"] == "default" ):
-          # For these "preconfigured" JupyterLabs, we always have to set the localstoragepath to the userhome
-          if "storage" not in spawner.user_options:
-              spawner.user_options["storage"] = {}
-          spawner.user_options["storage"]["localstoragepath"] = "/home/jovyan"
+      is_service_account = False
+      try:
+          is_service_account = spawner.user.name.startswith("service:")
+      except:
+          spawner.log.exception(f"{spawner._log_name} - Could not determine if user is a service account")
+      if not is_service_account:
+          # First we add the local persistent storage for the user
+          if spawner.user_options["service"] == "jupyterlab" and ( spawner.user_options["option"] in lmod_options or spawner.user_options["option"] == "default" ):
+              # For these "preconfigured" JupyterLabs, we always have to set the localstoragepath to the userhome
+              if "storage" not in spawner.user_options:
+                  spawner.user_options["storage"] = {}
+              spawner.user_options["storage"]["localstoragepath"] = "/home/jovyan"
 
-      if "localstoragepath" in spawner.user_options.get("storage", {}).keys():
-          # Attach the local JSC-Cloud NFS-Server storage to the server
-          local_storage = await contact_storage_manager(spawner, spawner.user_options["storage"]["localstoragepath"])
-          if local_storage:
-              ret["volume_mounts"].extend(local_storage["volume_mounts"])
-              ret["volumes"].extend(local_storage["volumes"])
+          if "localstoragepath" in spawner.user_options.get("storage", {}).keys():
+              # Attach the local JSC-Cloud NFS-Server storage to the server
+              local_storage = await contact_storage_manager(spawner, spawner.user_options["storage"]["localstoragepath"])
+              if local_storage:
+                  ret["volume_mounts"].extend(local_storage["volume_mounts"])
+                  ret["volumes"].extend(local_storage["volumes"])
 
-      if "workshop_id" in spawner.user_options.keys():
-          jupyter_path = spawner.environment.get("JUPYTER_PATH", "")
-          if jupyter_path:
-              spawner.environment["JUPYTER_PATH"] = f"{jupyter_path}:/home/jovyan/workshop/share/jupyter"
-          else:
-              spawner.environment["JUPYTER_PATH"] = "/home/jovyan/workshop/share/jupyter"
-          workshop_storage = await contact_storage_manager(spawner, f"/home/jovyan/workshop", type="workshop")
-          if workshop_storage:
-              ret["volume_mounts"].extend(workshop_storage["volume_mounts"])
-              ret["volumes"].extend(workshop_storage["volumes"])
+          if "workshop_id" in spawner.user_options.keys():
+              jupyter_path = spawner.environment.get("JUPYTER_PATH", "")
+              if jupyter_path:
+                  spawner.environment["JUPYTER_PATH"] = f"{jupyter_path}:/home/jovyan/workshop/share/jupyter"
+              else:
+                  spawner.environment["JUPYTER_PATH"] = "/home/jovyan/workshop/share/jupyter"
+              workshop_storage = await contact_storage_manager(spawner, f"/home/jovyan/workshop", type="workshop")
+              if workshop_storage:
+                  ret["volume_mounts"].extend(workshop_storage["volume_mounts"])
+                  ret["volumes"].extend(workshop_storage["volumes"])
 
       # Then we add configmaps, which might be required by the defined option
       option_storage = await get_option_storage(spawner, spawner.user_options["service"], spawner.user_options["option"])
@@ -629,29 +635,89 @@ outpostConfig: |
   """.replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
 
   def default_image_start_script(spawner):
-      datamount_version = f"=={spawner.data_mount_extension_version}" if spawner.data_mount_extension_version else ""
+      python_packages = "jupyter-collaboration jupyterlab-hub-credit-extension"
+      if spawner.user_options.get("data_mount_enabled", True):
+          datamount_version = f"=={spawner.data_mount_extension_version}" if spawner.data_mount_extension_version else ""
+          python_packages += f" jupyterlab-data-mount{datamount_version}"
       jupyter_config_path_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX1BBVEg9IiR7SlVQWVRFUl9DT05GSUdfUEFUSDorJEpVUFlURVJfQ09ORklHX1BBVEg6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
       return """#!/bin/sh
   {jupyter_config_path_b64}
-  if command -v pip >/dev/null 2>&1; then
-      if [ -n "$VIRTUAL_ENV" ]; then
-          pip install jupyterlab-data-mount{datamount_version} jupyter-collaboration jupyterlab-hub-credit-extension
-      else
-          pip install --user jupyterlab-data-mount{datamount_version} jupyter-collaboration jupyterlab-hub-credit-extension
+  echo "[INFO] Running default Start Script"
+  if [ "$(id -u)" -eq 0 ]; then
+      echo "[INFO] Running as root."
+
+      env | grep -vE '^(PWD|HOME|SHLVL|OLDPWD|_)=|SCOPE' > /tmp/jovyan.env
+      printf "$JUPYTERHUB_OAUTH_SCOPES" > /tmp/jovyan_JUPYTERHUB_OAUTH_SCOPES.env
+      printf "$JUPYTERHUB_OAUTH_ACCESS_SCOPES" > /tmp/jovyan_JUPYTERHUB_OAUTH_ACCESS_SCOPES.env
+      printf "$JUPYTERHUB_OAUTH_CLIENT_ALLOWED_SCOPES" > /tmp/jovyan_JUPYTERHUB_OAUTH_CLIENT_ALLOWED_SCOPES.env
+      SCRIPT="$(realpath "$0")"
+      # 1. Create jovyan user if missing
+      if ! id jovyan >/dev/null 2>&1; then
+          echo "[INFO] Creating user jovyan..."
+          useradd -m jovyan 2>/dev/null || adduser -D jovyan
+          if [ -d /etc/skel ]; then
+              cp -a /etc/skel/. /home/jovyan/
+          fi
+          chown -R jovyan:jovyan /home/jovyan
+          python3 -m venv /tmp/jupyterhub_venv
+
+          chown -R jovyan:jovyan /tmp/jupyterhub_venv
       fi
+      echo "[INFO] Switching to user jovyan..."
+      exec su - jovyan -c "$SCRIPT"
   fi
+  echo "[INFO] Running as user $(whoami)"
+
+  if [ -f /tmp/jovyan.env ]; then
+      set -a
+      . /tmp/jovyan.env
+      set +a
+      export JUPYTERHUB_OAUTH_SCOPES="$(cat /tmp/jovyan_JUPYTERHUB_OAUTH_SCOPES.env)"
+      export JUPYTERHUB_OAUTH_ACCESS_SCOPES="$(cat /tmp/jovyan_JUPYTERHUB_OAUTH_ACCESS_SCOPES.env)"
+      export JUPYTERHUB_OAUTH_CLIENT_ALLOWED_SCOPES="$(cat /tmp/jovyan_JUPYTERHUB_OAUTH_CLIENT_ALLOWED_SCOPES.env)"
+  fi
+
+  if command -v pip >/dev/null 2>&1; then
+      if [ ! -n "$VIRTUAL_ENV" ]; then
+          export PATH=$HOME/.local/bin:$PATH
+      fi
+      pip install -q --upgrade pip
+      if ! command -v jupyterhub-singleuser >/dev/null 2>&1; then
+          if [ -n "$VIRTUAL_ENV" ]; then
+              echo "[INFO] Installing jupyterhub-singleuser in virtual environment..."
+              pip install -q jupyterhub jupyterlab
+          else
+              echo "[INFO] Installing jupyterhub-singleuser for user..."
+              pip install -q --user jupyterhub jupyterlab
+          fi
+      fi
+      if [ -n "$VIRTUAL_ENV" ]; then
+          echo "[INFO] Installing {python_packages} in virtual environment..."
+          pip install -q {python_packages}
+      else
+          echo "[INFO] Installing {python_packages} for user..."
+          pip install -q --user {python_packages}
+      fi
+  elif ! command -v jupyterhub-singleuser >/dev/null 2>&1; then
+      echo "[ERROR] pip not found. Cannot install jupyterhub-singleuser. Please install jupyterhub or pip in your environment."
+  fi
+
   jupyter labextension disable @jupyter/collaboration-extension:shared-link
   command -v start-singleuser.sh >/dev/null 2>&1 && exec start-singleuser.sh || exec jupyterhub-singleuser
-  """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
+  """.replace("{python_packages}", python_packages).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
 
   def custom_image_start_script(spawner):
-      datamount_version = f"=={spawner.data_mount_extension_version}" if spawner.data_mount_extension_version else ""
+      python_packages = "jupyter-collaboration jupyterlab-hub-credit-extension"
+      if spawner.user_options.get("data_mount_enabled", True):
+          datamount_version = f"=={spawner.data_mount_extension_version}" if spawner.data_mount_extension_version else ""
+          python_packages += f" jupyterlab-data-mount{datamount_version}"
 
       # export JUPYTER_CONFIG_PATH="..JUPYTER_CONFIG_PATH....JUPYTER_CONFIG_PATH:.../mnt/datamount_start" in b64, so helm can handle it
       jupyter_config_path_b64 = base64.b64decode("ZXhwb3J0IEpVUFlURVJfQ09ORklHX1BBVEg9IiR7SlVQWVRFUl9DT05GSUdfUEFUSDorJEpVUFlURVJfQ09ORklHX1BBVEg6fS9tbnQvZGF0YW1vdW50X3N0YXJ0Igo=").decode()
       return """#!/bin/sh
 
   # 1. Check if user is root
+  echo "[INFO] Running custom image Start Script"
   if [ "$(id -u)" -eq 0 ]; then
       echo "[INFO] Running as root."
 
@@ -689,8 +755,8 @@ outpostConfig: |
 
           chown -R jovyan:jovyan /tmp/jupyterhub_venv
       fi
+      echo "[INFO] Switching to user jovyan..."
       exec su - jovyan -c "$SCRIPT"
-
   fi
 
   echo "[INFO] Running as user $(whoami)"
@@ -708,24 +774,32 @@ outpostConfig: |
       . /tmp/jupyterhub_venv/bin/activate
   fi
 
-  # 7. Ensure jupyterhub-singleuser in desired version range
+  # 7. Ensure jupyterhub-singleuser is installed
   if command -v pip >/dev/null 2>&1; then
+      if [ ! -n "$VIRTUAL_ENV" ]; then
+          export PATH=$HOME/.local/bin:$PATH
+      fi
+      pip install -q --upgrade pip
       if ! command -v jupyterhub-singleuser >/dev/null 2>&1; then
-          echo "[INFO] Installing jupyterhub-singleuser (current: $version)"
           if [ -n "$VIRTUAL_ENV" ]; then
-              pip install jupyterhub jupyterlab jupyterlab-hub-credit-extension
+              echo "[INFO] Installing jupyterhub-singleuser in virtual environment..."
+              pip install -q jupyterhub jupyterlab
           else
-              pip install --user jupyterhub jupyterlab jupyterlab-hub-credit-extension
+              echo "[INFO] Installing jupyterhub-singleuser for user..."
+              pip install -q --user jupyterhub jupyterlab
           fi
       fi
 
       # 8. Install jupyterlab-data-mount
-      echo "[INFO] Installing jupyterlab-data-mount..."
       if [ -n "$VIRTUAL_ENV" ]; then
-          pip install jupyterlab-data-mount{datamount_version} jupyter-collaboration jupyterlab-hub-credit-extension
+          echo "[INFO] Installing {python_packages} in virtual environment..."
+          pip install -q {python_packages}
       else
-          pip install --user jupyterlab-data-mount{datamount_version} jupyter-collaboration jupyterlab-hub-credit-extension
+          echo "[INFO] Installing {python_packages} for user..."
+          pip install -q --user {python_packages}
       fi
+  elif ! command -v jupyterhub-singleuser >/dev/null 2>&1; then
+      echo "[ERROR] pip not found. Cannot install jupyterhub-singleuser. Please install jupyterhub or pip in your environment."
   fi
 
   # 9. Set config path
@@ -740,7 +814,7 @@ outpostConfig: |
   else
       exec jupyterhub-singleuser
   fi
-  """.replace("{datamount_version}", datamount_version).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
+  """.replace("{python_packages}", python_packages).replace("{jupyter_config_path_b64}", jupyter_config_path_b64)
 
 
   async def profile_list(spawner):
@@ -762,8 +836,6 @@ outpostConfig: |
 
       node_selector = get_node_selector(spawner, jupyterhub_name, resources, flavor)
       image = get_image(spawner)
-      data_mount_config = None
-      init_mounts = []
       data_mount_enabled = spawner.user_options.get("data_mount_enabled", True)
 
       common_labels = {
@@ -778,7 +850,6 @@ outpostConfig: |
           "node_selector": node_selector,
           "image": image,
           "slug": option,
-          "data_mount_start": default_image_start_script,
           "data_mount_enabled": data_mount_enabled,
           "common_labels": common_labels,
           "env": env
@@ -789,6 +860,14 @@ outpostConfig: |
           init_mounts = get_init_mounts(spawner, spawner.user_options)
           kubespawner_override["data_mount_config"] = data_mount_config
           kubespawner_override["init_mounts"] = init_mounts
+          if spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] == "custom":
+              kubespawner_override["data_mount_start"] = custom_image_start_script
+          elif spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] in lmod_options:
+              kubespawner_override["data_mount_start"] = lmod_image_start_script
+          else:
+              kubespawner_override["data_mount_start"] = default_image_start_script
+      else:
+          kubespawner_override["cmd"] = ["jupyterhub-singleuser"]
 
       gpu = False
       if "gpu_guarantee" in resources.keys():
@@ -804,20 +883,15 @@ outpostConfig: |
           }
           kubespawner_override["node_selector"] = {"usernode-gpu": "true"}
 
-      if spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] == "custom":
-          kubespawner_override["data_mount_start"] = custom_image_start_script
-      elif spawner.user_options["service"] == "jupyterlab" and spawner.user_options["option"] in lmod_options:
-          kubespawner_override["data_mount_start"] = lmod_image_start_script
-
       storage = await get_storage(spawner)
       if storage:
           kubespawner_override.update(storage)
       return [
-        {
-          "display_name": f"{service}/{option}",
-          "slug": option,
-          "kubespawner_override": kubespawner_override
-        }
+          {
+              "display_name": f"{service}/{option}",
+              "slug": option,
+              "kubespawner_override": kubespawner_override
+          }
       ]
 
   c.KubeSpawner.profile_list = profile_list
