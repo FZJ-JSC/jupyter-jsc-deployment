@@ -15,13 +15,6 @@ patches:
         value:
           - secretRef:
               name: generics
-  - target:
-      kind: Service
-      labelSelector: component=hub
-    patch: |-
-      - op: replace
-        path: /spec/selector/component
-        value: maintenance
 patchesStrategicMerge:
   - |
     apiVersion: apps/v1
