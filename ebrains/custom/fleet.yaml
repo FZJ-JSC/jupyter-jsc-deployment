@@ -15,7 +15,7 @@ helm:
   releaseName: ebrains-custom
   repo: https://kaas.pages.jsc.fz-juelich.de/helm-charts
   chart: jupyter-hub-customizations
-  version: 0.27.2
+  version: 0.27.1
   valuesFiles:
     - ../../base-values/custom/image.yaml
     - ../../base-values/custom/ljupyterProxyOn.yaml
