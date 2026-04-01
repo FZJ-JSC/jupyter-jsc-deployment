@@ -3,4 +3,5 @@ dailyRestartEnabled: true
 # kubectl -n <hub> patch svc hub -p '{"spec":{"selector":{"component":"maintenance"}}}'
 # And disable it later with
 # kubectl -n <hub> patch svc hub -p '{"spec":{"selector":{"component":"hub"}}}'
-cronjobEnabled: false
+dailyrestart:
+  cronjobEnabled: false
