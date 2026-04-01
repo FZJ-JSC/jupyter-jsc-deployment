@@ -1,0 +1,6 @@
+dailyRestartEnabled: true
+# With this setup we will have a maintenance deployment ready and can activate it with
+# kubectl -n <hub> patch svc hub -p '{"spec":{"selector":{"component":"maintenance"}}}'
+# And disable it later with
+# kubectl -n <hub> patch svc hub -p '{"spec":{"selector":{"component":"hub"}}}'
+cronjobEnabled: false
